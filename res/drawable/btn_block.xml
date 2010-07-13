@@ -1,0 +1,5 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/btn_block_color_target"/>
+    <item android:drawable="@drawable/btn_block_star"/>
+    <item android:drawable="@drawable/btn_block_border"/>
+</layer-list>

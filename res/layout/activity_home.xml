@@ -1,0 +1,43 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/ScrollView01" android:layout_height="match_parent"
+	android:layout_width="match_parent" android:background="@color/background1">
+	<LinearLayout android:layout_width="match_parent"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		<TextView android:id="@+id/home_label_functions"
+			android:layout_height="wrap_content" style="@style/GroupLabel"
+			android:text="@string/title_group_functions" android:layout_width="match_parent" />
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+			<Button style="@style/HomeButton" android:id="@+id/home_btn_sleep"
+				android:onClick="onSleepClick" android:drawableTop="@drawable/home_btn_sleep"
+				android:text="@string/title_sleep" />
+			<Button android:id="@+id/home_btn_test" style="@style/HomeButton"
+				android:onClick="onTestClick" android:drawableTop="@drawable/home_btn_test"
+				android:text="@string/title_test" />
+		</LinearLayout>
+		<TextView android:layout_width="match_parent"
+			android:layout_height="wrap_content" style="@style/GroupLabel"
+			android:id="@+id/home_label_configuration" android:text="@string/title_group_configuration" />
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="match_parent" android:layout_height="wrap_content">
+			<Button android:id="@+id/home_btn_alarms" style="@style/HomeButton"
+				android:onClick="onAlarmsClick" android:text="@string/title_alarms"
+				android:drawableTop="@drawable/home_btn_alarms" />
+			<Button android:id="@+id/home_btn_settings" style="@style/HomeButton"
+				android:onClick="onSettingsClick" android:text="@string/title_settings"
+				android:drawableTop="@drawable/home_btn_settings" />
+		</LinearLayout>
+		<TextView android:layout_width="match_parent"
+			android:layout_height="wrap_content" style="@style/GroupLabel"
+			android:id="@+id/home_label_statistics" android:text="@string/title_group_statistics" />
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="match_parent" android:layout_height="wrap_content">
+			<Button android:id="@+id/home_btn_history" style="@style/HomeButton"
+				android:onClick="onHistoryClick" android:text="@string/title_history"
+				android:drawableTop="@drawable/home_btn_history" />
+			<Button android:id="@+id/home_btn_cloud" style="@style/HomeButton"
+				android:onClick="onCloudClick" android:text="@string/title_cloud"
+				android:drawableTop="@drawable/home_btn_cloud" />
+		</LinearLayout>
+	</LinearLayout>
+</ScrollView>
