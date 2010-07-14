@@ -10,7 +10,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.SleepActivity" android:label="@string/title_sleep">
-
+		
 		</activity>
 		<activity android:name=".ui.TestActivity" android:label="@string/title_test">
 		</activity>

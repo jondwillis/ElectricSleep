@@ -110,16 +110,9 @@ public class SleepAccelerometerService extends Service implements
 		if (diff1 > sensitivity || diff2 > sensitivity || diff3 > sensitivity)
 			notifyMovement(diff1 + " | " + diff2 + " | " + diff3);
 		lastAccel = currentAccel;*/
-		try {
-			PendingIntent.getBroadcast(
-					getApplicationContext(),
-					0,
-					new Intent(SleepActivity.UPDATE_CHART),
-					0).send();
-		} catch (CanceledException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Intent i = new Intent(SleepActivity.UPDATE_CHART);
+		i.putExtra("accelValues", currentAccel);
+		this.sendBroadcast(i);
 	}
 
 	@Override

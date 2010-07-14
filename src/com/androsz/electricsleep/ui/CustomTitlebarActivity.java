@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 public abstract class CustomTitlebarActivity extends Activity {
 
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -29,19 +30,12 @@ public abstract class CustomTitlebarActivity extends Activity {
 		View.inflate(this, getContentAreaLayoutId(),
 				(ViewGroup) findViewById(R.id.custom_titlebar_container));
 	}
-
+	
+	@Override
 	public void setContentView(int layoutResID) {
 		super.setContentView(layoutResID);
 
 		((TextView) findViewById(R.id.title_text)).setText(getTitle());
-		/*
-		 * if(!isHomeActivity()) { ((ImageButton)
-		 * findViewById(R.id.title_home_button)) .setOnClickListener(new
-		 * OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) { v.getContext().startActivity(
-		 * new Intent(v.getContext(), HomeActivity.class)); } }); }
-		 */
 	}
 
 	public abstract int getContentAreaLayoutId();

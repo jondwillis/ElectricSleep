@@ -16,8 +16,9 @@
 
 package com.androsz.electricsleep.chart;
 
+import org.achartengine.GraphicalView;
+
 import android.content.Context;
-import android.content.Intent;
 
 /**
  * Defines the demo charts.
@@ -43,11 +44,11 @@ public interface IChart {
   String getDesc();
 
   /**
-   * Executes the chart demo.
+   * Builds the chart's graphical view
    * 
    * @param context the context
-   * @return the built intent
+   * @return the built graphical view
    */
-  Intent execute(Context context);
+  GraphicalView build(Context context);
 
 }
