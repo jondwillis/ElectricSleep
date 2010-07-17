@@ -28,16 +28,34 @@ public class SleepAccelerometerService extends Service implements
 	private WakeLock partialWakeLock;
 
 	private NotificationManager notificationManager;
-	private Notification notification;
 
 	public void onCreate() {
 		super.onCreate();
 		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		partialWakeLock = powerManager.newWakeLock(
-				PowerManager.PARTIAL_WAKE_LOCK,
-				"Electric Sleep Accelerometer WakeLock");
+				PowerManager.PARTIAL_WAKE_LOCK, toString());
 
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+		int icon = R.drawable.icon;
+		CharSequence tickerText = getText(R.string.notification_sleep_started);
+		long when = System.currentTimeMillis();
+
+		Notification notification = new Notification(icon, tickerText, when);
+
+		notification.flags = Notification.FLAG_ONGOING_EVENT;
+
+		Context context = getApplicationContext();
+		CharSequence contentTitle = getText(R.string.notification_sleep_title);
+		CharSequence contentText = getText(R.string.notification_sleep_text);
+		Intent notificationIntent = new Intent(this, SleepActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				notificationIntent, 0);
+
+		notification.setLatestEventInfo(context, contentTitle, contentText,
+				contentIntent);
+
+		notificationManager.notify(1, notification);
 
 	}
 
@@ -55,29 +73,9 @@ public class SleepAccelerometerService extends Service implements
 
 		// Register for events.
 		sensorManager.registerListener(this, accelerometer,
-				SensorManager.SENSOR_DELAY_NORMAL);
+				SensorManager.SENSOR_DELAY_GAME);
 
 		return super.onStartCommand(intent, flags, startId);
-	}
-
-	private void notifyMovement(String poop) {
-		int icon = R.drawable.icon;
-		CharSequence tickerText = poop;
-		long when = System.currentTimeMillis();
-
-		Notification notification = new Notification(icon, tickerText, when);
-
-		Context context = getApplicationContext();
-		CharSequence contentTitle = poop;
-		CharSequence contentText = poop;
-		Intent notificationIntent = new Intent(this, SleepActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
-
-		notification.setLatestEventInfo(context, contentTitle, contentText,
-				contentIntent);
-
-		notificationManager.notify(1, notification);
 	}
 
 	public void onDestroy() {
@@ -87,6 +85,8 @@ public class SleepAccelerometerService extends Service implements
 		sensorManager.unregisterListener(this);
 
 		partialWakeLock.release();
+
+		notificationManager.cancel(1);
 	}
 
 	@Override
@@ -94,7 +94,9 @@ public class SleepAccelerometerService extends Service implements
 		// TODO Auto-generated method stub
 	}
 
-	private float[] lastAccel = { 0, 0, 0 };
+	private float[] lastAccel;
+	private float diffTotal = 0;
+	private long lastSensorUpdateTime = 0;
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -103,16 +105,25 @@ public class SleepAccelerometerService extends Service implements
 
 		float[] currentAccel = event.values;
 
-		/*float diff1 = java.lang.Math.abs(currentAccel[0] - lastAccel[0]);
-		float diff2 = java.lang.Math.abs(currentAccel[1] - lastAccel[1]);
-		float diff3 = java.lang.Math.abs(currentAccel[2] - lastAccel[2]);
-		float sensitivity = 0.01f;
-		if (diff1 > sensitivity || diff2 > sensitivity || diff3 > sensitivity)
-			notifyMovement(diff1 + " | " + diff2 + " | " + diff3);
-		lastAccel = currentAccel;*/
-		Intent i = new Intent(SleepActivity.UPDATE_CHART);
-		i.putExtra("accelValues", currentAccel);
-		this.sendBroadcast(i);
+		if (lastAccel == null) {
+			lastAccel = currentAccel;
+			return;
+		}
+
+		diffTotal += java.lang.Math.abs((currentAccel[0] - lastAccel[0])
+				+ (currentAccel[1] - lastAccel[1])
+				+ (currentAccel[2] - lastAccel[2]));
+
+		long curTime = System.currentTimeMillis();
+		lastAccel = currentAccel;
+
+		if ((curTime - lastSensorUpdateTime) > 60000f) {
+			Intent i = new Intent(SleepActivity.UPDATE_CHART);
+			i.putExtra("movement", java.lang.Math.min(diffTotal, 1f));
+			sendBroadcast(i);
+			diffTotal = 0;
+			lastSensorUpdateTime = curTime;
+		}
 	}
 
 	@Override

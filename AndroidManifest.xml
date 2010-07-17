@@ -24,12 +24,12 @@
 		</activity>
 
 
-		<!-- <receiver android:name=".ui.SleepActivity.ChartUpdateReceiver"
+		<receiver android:name=".receiver.SleepMovementReceiver"
 			android:label="@string/app_name" android:icon="@drawable/icon">
 			<intent-filter>
-				<action android:name="com.androsz.ramdroid.activty.READY_TAP" />
+				<action android:name="com.androsz.electricsleep.UPDATE_CHART" />
 			</intent-filter>
-		</receiver>-->
+		</receiver>
 
 		<service android:name=".service.SleepAccelerometerService"
 			android:icon="@drawable/icon" android:label="@string/app_name">

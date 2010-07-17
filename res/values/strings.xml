@@ -115,4 +115,7 @@
 <string name="title_group_statistics">Statistics</string>
 <string name="title_group_configuration">Configuration</string>
 <string name="title_home">Electric Sleep Home</string>
+<string name="notification_sleep_started">ElectricSleep is monitoring movements</string>
+<string name="notification_sleep_title">ElectricSleep is active</string>
+<string name="notification_sleep_text">Select to interrupt or view progress</string>
 </resources>
