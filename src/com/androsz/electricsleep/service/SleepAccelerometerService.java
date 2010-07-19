@@ -14,6 +14,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -28,6 +29,9 @@ public class SleepAccelerometerService extends Service implements
 	private WakeLock partialWakeLock;
 
 	private NotificationManager notificationManager;
+
+	private UpdateSensorRunnable updateSensorRunnable;
+	private Handler serviceHandler;
 
 	public void onCreate() {
 		super.onCreate();
@@ -75,6 +79,9 @@ public class SleepAccelerometerService extends Service implements
 		sensorManager.registerListener(this, accelerometer,
 				SensorManager.SENSOR_DELAY_GAME);
 
+		updateSensorRunnable = new UpdateSensorRunnable();
+		serviceHandler = new Handler();
+
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -86,6 +93,8 @@ public class SleepAccelerometerService extends Service implements
 
 		partialWakeLock.release();
 
+		serviceHandler.removeCallbacks(updateSensorRunnable);
+
 		notificationManager.cancel(1);
 	}
 
@@ -94,37 +103,47 @@ public class SleepAccelerometerService extends Service implements
 		// TODO Auto-generated method stub
 	}
 
-	private float[] lastAccel;
+	private float[] lastAccel = { 0, 0, 0 };
+	private float[] currentAccel = { 0, 0, 0 };
 	private float diffTotal = 0;
-	private long lastSensorUpdateTime = 0;
+	private long lastChartUpdateTime = 0;
+	private long lastTime = System.currentTimeMillis();
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
 			return;
 
-		float[] currentAccel = event.values;
+		currentAccel = event.values;
+		serviceHandler.post(updateSensorRunnable);
+	}
 
-		if (lastAccel == null) {
-			lastAccel = currentAccel;
-			return;
-		}
+	private class UpdateSensorRunnable implements Runnable {
+		@Override
+		public void run() {
+			long curTime = System.currentTimeMillis();
+			long diffTime = curTime - lastTime;
+			float rawDiff = (java.lang.Math.abs((currentAccel[0] - lastAccel[0])
+					+ (currentAccel[1] - lastAccel[1])
+					+ (currentAccel[2] - lastAccel[2])));
+			
+			diffTotal += (rawDiff * (diffTime));
+lastAccel = currentAccel;
+			lastTime = curTime;
 
-		diffTotal += java.lang.Math.abs((currentAccel[0] - lastAccel[0])
-				+ (currentAccel[1] - lastAccel[1])
-				+ (currentAccel[2] - lastAccel[2]));
-
-		long curTime = System.currentTimeMillis();
-		lastAccel = currentAccel;
-
-		if ((curTime - lastSensorUpdateTime) > 60000f) {
-			Intent i = new Intent(SleepActivity.UPDATE_CHART);
-			i.putExtra("movement", java.lang.Math.min(diffTotal, 1f));
-			sendBroadcast(i);
-			diffTotal = 0;
-			lastSensorUpdateTime = curTime;
+			if ((curTime - lastChartUpdateTime) > UPDATE_FREQUENCY) {
+				Intent i = new Intent(SleepActivity.UPDATE_CHART);
+				i.putExtra("movement",
+						java.lang.Math.min(diffTotal, MAX_SENSITIVITY));
+				sendBroadcast(i);
+				diffTotal = 0;
+				lastChartUpdateTime = curTime;
+			}
 		}
 	}
+
+	public static final long UPDATE_FREQUENCY = 1000;
+	public static final float MAX_SENSITIVITY = (float) (UPDATE_FREQUENCY/50f);
 
 	@Override
 	public IBinder onBind(Intent intent) {

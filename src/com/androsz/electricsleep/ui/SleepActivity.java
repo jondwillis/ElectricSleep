@@ -1,5 +1,7 @@
 package com.androsz.electricsleep.ui;
 
+import java.util.Date;
+
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -27,17 +30,13 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	public static final String UPDATE_CHART = "com.androsz.electricsleep.UPDATE_CHART";
 
-	public static final String TYPE = "type";
-
-	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
+	private static XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 
 	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
 
-	private XYSeries mCurrentSeries;
+	private static XYSeries mCurrentSeries;
 
 	private XYSeriesRenderer mCurrentRenderer;
-
-	private String mDateFormat;
 
 	private GraphicalView mChartView;
 
@@ -46,6 +45,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
 		super.onRestoreInstanceState(savedState);
+		
 		mDataset = (XYMultipleSeriesDataset) savedState
 				.getSerializable("dataset");
 		mRenderer = (XYMultipleSeriesRenderer) savedState
@@ -59,6 +59,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		
 		outState.putSerializable("dataset", mDataset);
 		outState.putSerializable("renderer", mRenderer);
 		outState.putSerializable("current_series", mCurrentSeries);
@@ -70,43 +71,47 @@ public class SleepActivity extends CustomTitlebarActivity {
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
-		
+
 		if (!started) {
 			registerReceiver(chartUpdateReceiver,
 					new IntentFilter(UPDATE_CHART));
 
 			startService(new Intent(this, SleepAccelerometerService.class));
-
-			String seriesTitle = "Series " + (mDataset.getSeriesCount() + 1);
-			XYSeries series = new XYSeries(seriesTitle);
-			mDataset.addSeries(series);
-			mCurrentSeries = series;
+			
+				String seriesTitle = "Series "
+						+ (mDataset.getSeriesCount() + 1);
+				XYSeries series = new XYSeries(seriesTitle);
+				mDataset.addSeries(series);
+				mCurrentSeries = series;
 			XYSeriesRenderer renderer = new XYSeriesRenderer();
 			renderer.setFillBelowLine(true);
-			renderer.setFillBelowLineColor(R.color.background_transparent_lighten);
+			renderer
+					.setFillBelowLineColor(R.color.background_transparent_lighten);
 			renderer.setColor(R.color.title_separator);
-			 //mRenderer.setBackgroundColor(R.color.background_transparent_darken);
-			//	mRenderer.setApplyBackgroundColor(true);
+			// mRenderer.setBackgroundColor(R.color.background_transparent_darken);
+			// mRenderer.setApplyBackgroundColor(true);
 			mRenderer.setShowLegend(false);
 			mRenderer.setLabelsTextSize(20f);
 			mRenderer.setAntialiasing(true);
 			mRenderer.setYLabels(0);
-			mRenderer.setYAxisMax(1f);
+			mRenderer.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
 			mRenderer.setYAxisMin(0f);
-			//mRenderer.setXAxisMax(System.currentTimeMillis()+(1000*60*60));
+			// mRenderer.setXAxisMax(System.currentTimeMillis()+(1000*60*60));
 			mRenderer.setYTitle("Movement level during sleep");
-			//mRenderer.setShowGrid(true);\
+			mRenderer.setShowGrid(true);
+			mRenderer.setAxesColor(android.R.color.background_dark);
 			mRenderer.setChartTitleTextSize(20f);
+			mRenderer.setChartTitle("Sleep Movement "
+					+ DateFormat.getDateFormat(this).format(new Date()));
 			mRenderer.addSeriesRenderer(renderer);
 			mCurrentRenderer = renderer;
 
 			started = true;
 		}
 	}
-	
+
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		started = false;
 	}
@@ -114,7 +119,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		if (mChartView != null) {
 			mChartView.repaint();
 		} else {
