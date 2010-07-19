@@ -5,6 +5,7 @@ import java.util.Date;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
+import org.achartengine.chart.BarChart.Type;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
@@ -30,11 +31,11 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	public static final String UPDATE_CHART = "com.androsz.electricsleep.UPDATE_CHART";
 
-	private static XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
+	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
 
 	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
 
-	private static XYSeries mCurrentSeries;
+	private XYSeries mCurrentSeries;
 
 	private XYSeriesRenderer mCurrentRenderer;
 
@@ -45,7 +46,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
 		super.onRestoreInstanceState(savedState);
-		
+
 		mDataset = (XYMultipleSeriesDataset) savedState
 				.getSerializable("dataset");
 		mRenderer = (XYMultipleSeriesRenderer) savedState
@@ -59,7 +60,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		
+
 		outState.putSerializable("dataset", mDataset);
 		outState.putSerializable("renderer", mRenderer);
 		outState.putSerializable("current_series", mCurrentSeries);
@@ -68,21 +69,17 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		this.setTitle("Recording Sleep Movement ("
+				+ DateFormat.getDateFormat(this).format(new Date()) + ")");
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
-
 		if (!started) {
-			registerReceiver(chartUpdateReceiver,
-					new IntentFilter(UPDATE_CHART));
 
-			startService(new Intent(this, SleepAccelerometerService.class));
-			
-				String seriesTitle = "Series "
-						+ (mDataset.getSeriesCount() + 1);
-				XYSeries series = new XYSeries(seriesTitle);
-				mDataset.addSeries(series);
-				mCurrentSeries = series;
+			String seriesTitle = "Series " + (mDataset.getSeriesCount() + 1);
+			XYSeries series = new XYSeries(seriesTitle);
+			mDataset.addSeries(series);
+			mCurrentSeries = series;
 			XYSeriesRenderer renderer = new XYSeriesRenderer();
 			renderer.setFillBelowLine(true);
 			renderer
@@ -94,18 +91,23 @@ public class SleepActivity extends CustomTitlebarActivity {
 			mRenderer.setLabelsTextSize(20f);
 			mRenderer.setAntialiasing(true);
 			mRenderer.setYLabels(0);
-			mRenderer.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
-			mRenderer.setYAxisMin(0f);
-			// mRenderer.setXAxisMax(System.currentTimeMillis()+(1000*60*60));
+			// mRenderer.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
+			// mRenderer.setYAxisMin(0.5f);
+			// mRenderer.setXAxisMax(System.currentTimeMillis()
+			// + (1000 * 60 * 60));
 			mRenderer.setYTitle("Movement level during sleep");
 			mRenderer.setShowGrid(true);
 			mRenderer.setAxesColor(android.R.color.background_dark);
-			mRenderer.setChartTitleTextSize(20f);
-			mRenderer.setChartTitle("Sleep Movement "
-					+ DateFormat.getDateFormat(this).format(new Date()));
+			// mRenderer.setChartTitleTextSize(20f);
+			// mRenderer.setChartTitle("Sleep Movement "
+			// + DateFormat.getDateFormat(this).format(new Date()));
 			mRenderer.addSeriesRenderer(renderer);
 			mCurrentRenderer = renderer;
 
+			registerReceiver(chartUpdateReceiver,
+					new IntentFilter(UPDATE_CHART));
+
+			startService(new Intent(this, SleepAccelerometerService.class));
 			started = true;
 		}
 	}
@@ -124,8 +126,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			mChartView.repaint();
 		} else {
 			LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-			mChartView = ChartFactory.getTimeChartView(this, mDataset,
-					mRenderer, "hh:mm a");
+			mChartView = ChartFactory.getTimeChartView(this, mDataset, mRenderer, "hh:mm a");
 			layout.addView(mChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		}

@@ -23,14 +23,6 @@
 		<activity android:name=".ui.CloudActivity" android:label="@string/title_cloud">
 		</activity>
 
-
-		<receiver android:name=".receiver.SleepMovementReceiver"
-			android:label="@string/app_name" android:icon="@drawable/icon">
-			<intent-filter>
-				<action android:name="com.androsz.electricsleep.UPDATE_CHART" />
-			</intent-filter>
-		</receiver>
-
 		<service android:name=".service.SleepAccelerometerService"
 			android:icon="@drawable/icon" android:label="@string/app_name">
 		</service>
