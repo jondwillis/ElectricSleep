@@ -151,7 +151,7 @@ public class SleepAccelerometerService extends Service implements
 
 	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_GAME;
 	public static final long UPDATE_FREQUENCY = 60000;
-	public static final float MAX_SENSITIVITY = (float) (UPDATE_FREQUENCY / (100f * SENSOR_DELAY + 1));
+	public static final float MAX_SENSITIVITY = (float) (UPDATE_FREQUENCY / (100f * (SENSOR_DELAY + 1)));
 
 	@Override
 	public IBinder onBind(Intent intent) {
