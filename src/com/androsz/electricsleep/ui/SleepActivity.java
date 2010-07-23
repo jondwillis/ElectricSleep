@@ -3,6 +3,7 @@ package com.androsz.electricsleep.ui;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -12,11 +13,15 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
+import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.format.DateFormat;
@@ -32,18 +37,17 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
 public class SleepActivity extends CustomTitlebarActivity {
 
 	public static final String UPDATE_CHART = "com.androsz.electricsleep.UPDATE_CHART";
+	public static final String SYNC_CHART = "com.androsz.electricsleep.SYNC_CHART";
 
-	private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
+	private XYMultipleSeriesDataset mDataset;
 
-	private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+	private XYMultipleSeriesRenderer mRenderer;
 
 	private XYSeries mCurrentSeries;
 
 	private XYSeriesRenderer mCurrentRenderer;
 
 	private GraphicalView mChartView;
-
-	private boolean isRegistered = false;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
@@ -72,60 +76,80 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+		startService(new Intent(this, SleepAccelerometerService.class));
+
 		this.setTitle("Monitoring Sleep ("
 				+ DateFormat.getDateFormat(this).format(new Date()) + ")");
 		super.onCreate(savedInstanceState);
-			
-		startService(new Intent(this, SleepAccelerometerService.class));
 
 		showTitleButton1(R.drawable.ic_title_export);
-		
-		if (mChartView == null) {
-			String seriesTitle = "Series " + (mDataset.getSeriesCount() + 1);
-			XYSeries series = new XYSeries(seriesTitle);
+
+		buildChart();
+
+	}
+
+	private void buildChart() {
+		if (mCurrentSeries == null) {
+			XYSeries series = new XYSeries("sleep");
 			mCurrentSeries = series;
+
+			mDataset = new XYMultipleSeriesDataset();
 			mDataset.addSeries(mCurrentSeries);
+
 			XYSeriesRenderer renderer = new XYSeriesRenderer();
 			renderer.setFillBelowLine(true);
-			renderer
-					.setFillBelowLineColor(R.color.background_transparent_lighten);
-			renderer.setColor(R.color.title_separator);
+			renderer.setFillBelowLineColor(getResources().getColor(
+					R.color.foreground1));
+			renderer.setColor(Color.TRANSPARENT);
 			mCurrentRenderer = renderer;
+
+			mRenderer = new XYMultipleSeriesRenderer();
 			mRenderer.addSeriesRenderer(mCurrentRenderer);
-			// mRenderer.setBackgroundColor(R.color.background_transparent_darken);
-			// mRenderer.setApplyBackgroundColor(true);
 			mRenderer.setShowLegend(false);
-			mRenderer.setLabelsTextSize(20f);
+			mRenderer.setAxisTitleTextSize(22);
+			mRenderer.setLabelsTextSize(17);
 			mRenderer.setAntialiasing(true);
+			if (mRenderer.getOrientation() == Orientation.HORIZONTAL) {
+				mRenderer.setXLabels(8);
+			} else {
+				mRenderer.setXLabels(4);
+			}
 			mRenderer.setYLabels(0);
-			// mRenderer.setXAxisMax(System.currentTimeMillis()
-			// + (1000 * 60 * 60));
 			mRenderer.setYTitle("Movement level during sleep");
 			mRenderer.setShowGrid(true);
-			mRenderer.setAxesColor(android.R.color.background_dark);
-			// mRenderer.setChartTitleTextSize(20f);
-			// mRenderer.setChartTitle("Sleep Movement "
-			// + DateFormat.getDateFormat(this).format(new Date()));
-			mCurrentRenderer = renderer;
+			mRenderer.setAxesColor(Color.WHITE);
+			mRenderer.setLabelsColor(Color.WHITE);
 		}
 	}
 
+	private ProgressDialog waitForSeriesData;
+
 	protected void onResume() {
 		super.onResume();
-		if (mChartView == null) {
-			LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
+		addChartView();
+		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
+		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
+		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
+		waitForSeriesData = new ProgressDialog(this);
+		waitForSeriesData
+				.setMessage(getText(R.string.message_wait_for_sleep_data));
+		waitForSeriesData.show();
+	}
+
+	private void addChartView() {
+		LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
+		if (layout.getChildCount() == 0) {
 			mChartView = ChartFactory.getTimeChartView(this, mDataset,
-					mRenderer, "hh:mm a");
+					mRenderer, "h:mm a");
 			layout.addView(mChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		}
-		registerReceiver(updateChartReceiver,
-				new IntentFilter(UPDATE_CHART));
-		sendBroadcast(new Intent(SleepAccelerometerService.POKE_UPDATE_CHART));
 	}
 
 	protected void onPause() {
 		unregisterReceiver(updateChartReceiver);
+		unregisterReceiver(syncChartReceiver);
 		super.onPause();
 	}
 
@@ -138,33 +162,42 @@ public class SleepActivity extends CustomTitlebarActivity {
 		return R.layout.activity_sleep;
 	}
 
+	private void redrawChart() {
+		if (mCurrentSeries.mX.size() > 1 && mCurrentSeries.mY.size() > 1) {
+			waitForSeriesData.dismiss();
+
+			mRenderer.setXAxisMin(mCurrentSeries.mX.get(0));
+			mRenderer.setXAxisMax(mCurrentSeries.mX.get(mCurrentSeries.mX
+					.size() - 1));
+			mRenderer.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
+			mRenderer.setYAxisMin(1);
+
+			mChartView.repaint();
+		}
+	}
+
 	private BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent != null) {
-				// mCurrentSeries.mX.clear();
-				mCurrentSeries.mX = ((ArrayList<Double>) intent
-						.getSerializableExtra("currentSeriesX"));
+			mCurrentSeries.mX.add(intent.getDoubleExtra("x", 0));
+			mCurrentSeries.mY.add(intent.getDoubleExtra("y", 0));
 
-				// mCurrentSeries.mY.clear();
-				mCurrentSeries.mY = ((ArrayList<Double>) intent
-						.getSerializableExtra("currentSeriesY"));
-				mRenderer.setXAxisMin(mCurrentSeries.mX.get(0));
-				mRenderer.setXAxisMax(mCurrentSeries.mX.get(mCurrentSeries.mX
-						.size() - 1));
-				mRenderer
-						.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
-				mRenderer.setYAxisMin(0);
-				/*
-				 * mCurrentSeries.clear();
-				 * 
-				 * for (double[] xyPair : currentSeriesMap) {
-				 * mCurrentSeries.add(xyPair[0], xyPair[1]); }
-				 */
+			redrawChart();
+		}
+	};
 
-				mChartView.repaint();
-			}
+	private BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			mCurrentSeries.mX = ((List<Double>) intent
+					.getSerializableExtra("currentSeriesX"));
+
+			mCurrentSeries.mY = ((List<Double>) intent
+					.getSerializableExtra("currentSeriesY"));
+
+			redrawChart();
 		}
 	};
 }

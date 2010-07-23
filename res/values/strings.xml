@@ -118,4 +118,5 @@
 <string name="notification_sleep_started">ElectricSleep is monitoring movements</string>
 <string name="notification_sleep_title">ElectricSleep is active</string>
 <string name="notification_sleep_text">Select to interrupt or view progress</string>
+<string name="message_wait_for_sleep_data">Your sleep movement chart will not be displayed until two data points have been recorded.</string>
 </resources>
