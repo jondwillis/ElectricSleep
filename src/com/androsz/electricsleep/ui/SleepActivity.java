@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.chart.SleepMovementChart;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 
 public class SleepActivity extends CustomTitlebarActivity {
@@ -76,7 +75,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		startService(new Intent(this, SleepAccelerometerService.class));
 
 		this.setTitle("Monitoring Sleep ("
@@ -86,7 +84,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 		showTitleButton1(R.drawable.ic_title_export);
 
 		buildChart();
-
 	}
 
 	private void buildChart() {
@@ -131,15 +128,15 @@ public class SleepActivity extends CustomTitlebarActivity {
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
-		waitForSeriesData = new ProgressDialog(this);
-		waitForSeriesData
-				.setMessage(getText(R.string.message_wait_for_sleep_data));
-		waitForSeriesData.show();
 	}
 
 	private void addChartView() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
+			waitForSeriesData = new ProgressDialog(this);
+			waitForSeriesData
+					.setMessage(getText(R.string.message_wait_for_sleep_data));
+			waitForSeriesData.show();
 			mChartView = ChartFactory.getTimeChartView(this, mDataset,
 					mRenderer, "h:mm a");
 			layout.addView(mChartView, new LayoutParams(
@@ -177,7 +174,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	private BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
-
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			mCurrentSeries.mX.add(intent.getDoubleExtra("x", 0));
@@ -188,7 +184,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 	};
 
 	private BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
-
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			mCurrentSeries.mX = ((List<Double>) intent

@@ -50,8 +50,6 @@ public class SleepAccelerometerService extends Service implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent != null) {
-				// ONLY update if we have series data. prevents crash on new
-				// service startup
 				if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
 					final Intent i = new Intent(SleepActivity.SYNC_CHART);
 					i.putExtra("currentSeriesX", currentSeriesX);
@@ -97,7 +95,7 @@ public class SleepAccelerometerService extends Service implements
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
+		// not used
 	}
 
 	@Override
@@ -134,7 +132,6 @@ public class SleepAccelerometerService extends Service implements
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-
 		final long currentTime = System.currentTimeMillis();
 		final long timeSinceLastSensorChange = currentTime
 				- lastOnSensorChangedTime;
