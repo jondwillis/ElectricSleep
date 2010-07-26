@@ -1,6 +1,11 @@
 package com.androsz.electricsleep.service;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -14,6 +19,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -43,19 +49,19 @@ public class SleepAccelerometerService extends Service implements
 	private int totalNumberOfSensorChanges = 0;
 
 	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI;
-	public static final long UPDATE_FREQUENCY = 30000;
+	public static final long UPDATE_FREQUENCY = 60000;
 	public static final float MAX_SENSITIVITY = 100;
-	
+	public static final float MIN_SENSITIVITY = 15;
+
+	public static boolean isPokeSyncChartReceiverRegistered = false;
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent != null) {
-				if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
-					final Intent i = new Intent(SleepActivity.SYNC_CHART);
-					i.putExtra("currentSeriesX", currentSeriesX);
-					i.putExtra("currentSeriesY", currentSeriesY);
-					sendBroadcast(i);
-				}
+			if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
+				final Intent i = new Intent(SleepActivity.SYNC_CHART);
+				i.putExtra("currentSeriesX", currentSeriesX);
+				i.putExtra("currentSeriesY", currentSeriesY);
+				sendBroadcast(i);
 			}
 		}
 	};
@@ -110,6 +116,8 @@ public class SleepAccelerometerService extends Service implements
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
 
+		isPokeSyncChartReceiverRegistered = true;
+
 		registerAccelerometerListener();
 
 		obtainWakeLock();
@@ -128,7 +136,24 @@ public class SleepAccelerometerService extends Service implements
 		partialWakeLock.release();
 
 		notificationManager.cancel(notificationId);
+		
+		String state = Environment.getExternalStorageState();
+
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+		    // We can read and write the media
+		    mExternalStorageAvailable = mExternalStorageWriteable = true;
+		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+		    // We can only read the media
+		    mExternalStorageAvailable = true;
+		    mExternalStorageWriteable = false;
+		} else {
+		    // Something else is wrong. It may be one of many other states, but all we need
+		    //  to know is we can neither read nor write
+		    mExternalStorageAvailable = mExternalStorageWriteable = false;
+		}		
 	}
+	boolean mExternalStorageAvailable = false;
+	boolean mExternalStorageWriteable = false;
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -138,13 +163,16 @@ public class SleepAccelerometerService extends Service implements
 
 		totalNumberOfSensorChanges++;
 		totalTimeBetweenSensorChanges += timeSinceLastSensorChange;
-
+		
 		final long deltaTime = currentTime - lastChartUpdateTime;
 		if (deltaTime > UPDATE_FREQUENCY) {
 			final double averageTimeBetweenUpdates = totalTimeBetweenSensorChanges
 					/ totalNumberOfSensorChanges;
 			final double x = currentTime;
-			final double y = deltaTime / averageTimeBetweenUpdates;
+			final double y = java.lang.Math.max(MIN_SENSITIVITY,
+					java.lang.Math.min(MAX_SENSITIVITY, deltaTime
+							/ averageTimeBetweenUpdates));
+			
 			currentSeriesX.add(x);
 			currentSeriesY.add(y);
 
@@ -157,6 +185,11 @@ public class SleepAccelerometerService extends Service implements
 			totalTimeBetweenSensorChanges = 0;
 
 			lastChartUpdateTime = currentTime;
+
+			if(currentTime > 1280139540 && y > MIN_SENSITIVITY*1.1f)
+			{
+				stopSelf();
+			}
 		}
 
 		lastOnSensorChangedTime = currentTime;

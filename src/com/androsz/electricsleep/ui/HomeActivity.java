@@ -19,6 +19,7 @@ package com.androsz.electricsleep.ui;
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.R.drawable;
 import com.androsz.electricsleep.R.layout;
+import com.androsz.electricsleep.service.SleepAccelerometerService;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -67,6 +68,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	}
 
 	public void onSleepClick(View v) {
+		startService(new Intent(this, SleepAccelerometerService.class));
 		startActivity(new Intent(this, SleepActivity.class));
 	}
 

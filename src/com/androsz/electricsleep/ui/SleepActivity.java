@@ -75,7 +75,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		startService(new Intent(this, SleepAccelerometerService.class));
 
 		this.setTitle("Monitoring Sleep ("
 				+ DateFormat.getDateFormat(this).format(new Date()) + ")");
@@ -115,8 +114,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 			mRenderer.setYLabels(0);
 			mRenderer.setYTitle("Movement level during sleep");
 			mRenderer.setShowGrid(true);
-			mRenderer.setAxesColor(Color.WHITE);
-			mRenderer.setLabelsColor(Color.WHITE);
+			mRenderer.setAxesColor(getResources().getColor(R.color.title_text));
+			mRenderer.setLabelsColor(R.color.title_text);
 		}
 	}
 
@@ -133,10 +132,12 @@ public class SleepActivity extends CustomTitlebarActivity {
 	private void addChartView() {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
-			waitForSeriesData = new ProgressDialog(this);
-			waitForSeriesData
-					.setMessage(getText(R.string.message_wait_for_sleep_data));
-			waitForSeriesData.show();
+			if (mCurrentSeries.getItemCount() < 2) {
+				waitForSeriesData = new ProgressDialog(this);
+				waitForSeriesData
+						.setMessage(getText(R.string.message_wait_for_sleep_data));
+				waitForSeriesData.show();
+			}
 			mChartView = ChartFactory.getTimeChartView(this, mDataset,
 					mRenderer, "h:mm a");
 			layout.addView(mChartView, new LayoutParams(
@@ -161,13 +162,16 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	private void redrawChart() {
 		if (mCurrentSeries.mX.size() > 1 && mCurrentSeries.mY.size() > 1) {
-			waitForSeriesData.dismiss();
+			if (waitForSeriesData != null) {
+				waitForSeriesData.dismiss();
+				waitForSeriesData = null;
+			}
 
 			mRenderer.setXAxisMin(mCurrentSeries.mX.get(0));
 			mRenderer.setXAxisMax(mCurrentSeries.mX.get(mCurrentSeries.mX
 					.size() - 1));
 			mRenderer.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
-			mRenderer.setYAxisMin(1);
+			mRenderer.setYAxisMin(SleepAccelerometerService.MIN_SENSITIVITY);
 
 			mChartView.repaint();
 		}
