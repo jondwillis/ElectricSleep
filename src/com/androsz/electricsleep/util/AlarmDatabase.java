@@ -284,7 +284,7 @@ public class AlarmDatabase {
 				.getInstalledApplications(0);
 		List<ApplicationInfo> clockApps = new ArrayList<ApplicationInfo>();
 		for (ApplicationInfo appInfo : appsInfo) {
-			String x = appInfo.packageName.toLowerCase();
+			String x = appInfo.dataDir.toLowerCase();
 			if (x.contains("clock") || x.contains("alarm")) {
 				clockApps.add(appInfo);
 			}

@@ -3,6 +3,8 @@ package com.androsz.electricsleep.service;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +17,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -23,6 +26,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.ui.SleepActivity;
@@ -48,12 +52,13 @@ public class SleepAccelerometerService extends Service implements
 	private long totalTimeBetweenSensorChanges = 0;
 	private int totalNumberOfSensorChanges = 0;
 
-	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI;
-	public static final long UPDATE_FREQUENCY = 60000;
-	public static final float MAX_SENSITIVITY = 100;
-	public static final float MIN_SENSITIVITY = 15;
+	private int maximumSensitivity;
+	private int minimumSensitivity;
+	private int alarmTriggerSensitivity;
 
-	public static boolean isPokeSyncChartReceiverRegistered = false;
+	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI;
+	public static final long UPDATE_FREQUENCY = 10000;
+
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -61,6 +66,8 @@ public class SleepAccelerometerService extends Service implements
 				final Intent i = new Intent(SleepActivity.SYNC_CHART);
 				i.putExtra("currentSeriesX", currentSeriesX);
 				i.putExtra("currentSeriesY", currentSeriesY);
+				i.putExtra("max", maximumSensitivity);
+				i.putExtra("min", minimumSensitivity);
 				sendBroadcast(i);
 			}
 		}
@@ -113,10 +120,21 @@ public class SleepAccelerometerService extends Service implements
 	public void onCreate() {
 		super.onCreate();
 
+		try {
+			SharedPreferences userPrefs = PreferenceManager
+					.getDefaultSharedPreferences(getBaseContext());
+			maximumSensitivity = userPrefs.getInt(
+					getString(R.string.pref_maximum_sensitivity), 100);
+			minimumSensitivity = userPrefs.getInt(
+					getString(R.string.pref_minimum_sensitivity), 0);
+			alarmTriggerSensitivity = userPrefs.getInt(
+					getString(R.string.pref_alarm_trigger_sensitivity), 30);
+		} catch (Exception e) {
+			stopSelf();
+		}
+
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
-
-		isPokeSyncChartReceiverRegistered = true;
 
 		registerAccelerometerListener();
 
@@ -136,22 +154,24 @@ public class SleepAccelerometerService extends Service implements
 		partialWakeLock.release();
 
 		notificationManager.cancel(notificationId);
-		
+
 		String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
-		    // We can read and write the media
-		    mExternalStorageAvailable = mExternalStorageWriteable = true;
+			// We can read and write the media
+			mExternalStorageAvailable = mExternalStorageWriteable = true;
 		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-		    // We can only read the media
-		    mExternalStorageAvailable = true;
-		    mExternalStorageWriteable = false;
+			// We can only read the media
+			mExternalStorageAvailable = true;
+			mExternalStorageWriteable = false;
 		} else {
-		    // Something else is wrong. It may be one of many other states, but all we need
-		    //  to know is we can neither read nor write
-		    mExternalStorageAvailable = mExternalStorageWriteable = false;
-		}		
+			// Something else is wrong. It may be one of many other states, but
+			// all we need
+			// to know is we can neither read nor write
+			mExternalStorageAvailable = mExternalStorageWriteable = false;
+		}
 	}
+
 	boolean mExternalStorageAvailable = false;
 	boolean mExternalStorageWriteable = false;
 
@@ -163,22 +183,24 @@ public class SleepAccelerometerService extends Service implements
 
 		totalNumberOfSensorChanges++;
 		totalTimeBetweenSensorChanges += timeSinceLastSensorChange;
-		
+
 		final long deltaTime = currentTime - lastChartUpdateTime;
 		if (deltaTime > UPDATE_FREQUENCY) {
 			final double averageTimeBetweenUpdates = totalTimeBetweenSensorChanges
 					/ totalNumberOfSensorChanges;
 			final double x = currentTime;
-			final double y = java.lang.Math.max(MIN_SENSITIVITY,
-					java.lang.Math.min(MAX_SENSITIVITY, deltaTime
+			final double y = java.lang.Math.max(minimumSensitivity,
+					java.lang.Math.min(maximumSensitivity, deltaTime
 							/ averageTimeBetweenUpdates));
-			
+
 			currentSeriesX.add(x);
 			currentSeriesY.add(y);
 
 			final Intent i = new Intent(SleepActivity.UPDATE_CHART);
 			i.putExtra("x", x);
 			i.putExtra("y", y);
+			i.putExtra("max", maximumSensitivity);
+			i.putExtra("min", minimumSensitivity);
 			sendBroadcast(i);
 
 			totalNumberOfSensorChanges = 0;
@@ -186,10 +208,10 @@ public class SleepAccelerometerService extends Service implements
 
 			lastChartUpdateTime = currentTime;
 
-			if(currentTime > 1280139540 && y > MIN_SENSITIVITY*1.1f)
-			{
-				stopSelf();
-			}
+//			if (currentTime > 1280125500000L && y > MIN_SENSITIVITY * 1.5f) {
+		/*if (currentTime > 12801395400L && y > alarmTriggerSensitivity) {
+			stopSelf();
+			}*/
 		}
 
 		lastOnSensorChangedTime = currentTime;

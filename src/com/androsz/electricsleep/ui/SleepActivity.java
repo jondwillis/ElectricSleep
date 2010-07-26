@@ -76,8 +76,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		this.setTitle("Monitoring Sleep ("
-				+ DateFormat.getDateFormat(this).format(new Date()) + ")");
+		this.setTitle("Monitoring Sleep");
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
@@ -89,7 +88,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		if (mCurrentSeries == null) {
 			XYSeries series = new XYSeries("sleep");
 			mCurrentSeries = series;
-
+			
 			mDataset = new XYMultipleSeriesDataset();
 			mDataset.addSeries(mCurrentSeries);
 
@@ -160,7 +159,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		return R.layout.activity_sleep;
 	}
 
-	private void redrawChart() {
+	private void redrawChart(int min, int max) {
 		if (mCurrentSeries.mX.size() > 1 && mCurrentSeries.mY.size() > 1) {
 			if (waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
@@ -170,9 +169,9 @@ public class SleepActivity extends CustomTitlebarActivity {
 			mRenderer.setXAxisMin(mCurrentSeries.mX.get(0));
 			mRenderer.setXAxisMax(mCurrentSeries.mX.get(mCurrentSeries.mX
 					.size() - 1));
-			mRenderer.setYAxisMax(SleepAccelerometerService.MAX_SENSITIVITY);
-			mRenderer.setYAxisMin(SleepAccelerometerService.MIN_SENSITIVITY);
-
+			
+			mRenderer.setYAxisMax(max);
+			mRenderer.setYAxisMin(min);
 			mChartView.repaint();
 		}
 	}
@@ -182,8 +181,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 		public void onReceive(Context context, Intent intent) {
 			mCurrentSeries.mX.add(intent.getDoubleExtra("x", 0));
 			mCurrentSeries.mY.add(intent.getDoubleExtra("y", 0));
-
-			redrawChart();
+			
+			redrawChart(intent.getIntExtra("min", 0), intent.getIntExtra("max", 100));
 		}
 	};
 
@@ -196,7 +195,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			mCurrentSeries.mY = ((List<Double>) intent
 					.getSerializableExtra("currentSeriesY"));
 
-			redrawChart();
+			redrawChart(intent.getIntExtra("min", 0), intent.getIntExtra("max", 100));
 		}
 	};
 }

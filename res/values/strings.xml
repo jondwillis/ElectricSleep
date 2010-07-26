@@ -119,4 +119,13 @@
 <string name="notification_sleep_title">ElectricSleep is active</string>
 <string name="notification_sleep_text">Select to interrupt or view progress</string>
 <string name="message_wait_for_sleep_data">Your sleep movement chart will not be displayed until two data points have been recorded.</string>
+<string name="pref_minimum_sensitivity">minimum_sensitivity</string>
+<string name="pref_maximum_sensitivity">maximum_sensitivity</string>
+<string name="pref_alarm_trigger_sensitivity">alarmTriggerSensitivity</string>
+<string name="title_pref_minimum_sensitivity">Min. movement sensitivity</string>
+<string name="title_pref_maximum_sensitivity">Max. movement sensitivity</string>
+<string name="title_pref_alarm_trigger_sensitivity">Alarm trigger sensitivity</string>
+<string name="summary_minimum_sensitivity">Filters out \'noise\' non-movements so they do not visually distort movement charts. Change ONLY if automatic calibration is not acceptable.</string>
+<string name="summary_maximum_sensitivity">Limits large movements so they do not visually distort movement charts. Change ONLY if automatic calibration is not acceptable.</string>
+<string name="summary_alarm_trigger_sensitivity">Minimum level of movement that will trigger alarm to go off. Change ONLY if automatic calibration is not acceptable.</string>
 </resources>
