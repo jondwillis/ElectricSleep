@@ -38,7 +38,7 @@ public abstract class CustomTitlebarActivity extends Activity {
 		((TextView) findViewById(R.id.title_text)).setText(getTitle());
 	}
 
-	public abstract int getContentAreaLayoutId();
+	protected abstract int getContentAreaLayoutId();
 
 	public void onHomeClick(View v) {
 		final Intent intent = new Intent(v.getContext(), HomeActivity.class);

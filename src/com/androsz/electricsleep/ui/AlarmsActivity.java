@@ -11,7 +11,6 @@ import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.util.AlarmDatabase;
 
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,7 +36,7 @@ public class AlarmsActivity extends CustomTitlebarActivity {
 	}
 	
 	@Override
-	public int getContentAreaLayoutId() {
+	protected int getContentAreaLayoutId() {
 		// TODO Auto-generated method stub
 		return R.layout.activity_alarms;
 	}

@@ -1,13 +1,6 @@
 package com.androsz.electricsleep.service;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,7 +18,6 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.preference.PreferenceManager;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.ui.SleepActivity;
@@ -52,12 +43,13 @@ public class SleepAccelerometerService extends Service implements
 	private long totalTimeBetweenSensorChanges = 0;
 	private int totalNumberOfSensorChanges = 0;
 
-	private int maximumSensitivity;
-	private int minimumSensitivity;
-	private int alarmTriggerSensitivity;
+	private int minSensitivity = 0;
+	private int maxSensitivity = 100;
+	private int alarmTriggerSensitivity = -1;
+
+	private int updateInterval = 60000;
 
 	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI;
-	public static final long UPDATE_FREQUENCY = 10000;
 
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
@@ -66,12 +58,16 @@ public class SleepAccelerometerService extends Service implements
 				final Intent i = new Intent(SleepActivity.SYNC_CHART);
 				i.putExtra("currentSeriesX", currentSeriesX);
 				i.putExtra("currentSeriesY", currentSeriesY);
-				i.putExtra("max", maximumSensitivity);
-				i.putExtra("min", minimumSensitivity);
+				i.putExtra("min", minSensitivity);
+				i.putExtra("max", maxSensitivity);
 				sendBroadcast(i);
 			}
 		}
 	};
+
+	boolean mExternalStorageAvailable = false;
+
+	boolean mExternalStorageWriteable = false;
 
 	private void createNotification() {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -120,19 +116,6 @@ public class SleepAccelerometerService extends Service implements
 	public void onCreate() {
 		super.onCreate();
 
-		try {
-			SharedPreferences userPrefs = PreferenceManager
-					.getDefaultSharedPreferences(getBaseContext());
-			maximumSensitivity = userPrefs.getInt(
-					getString(R.string.pref_maximum_sensitivity), 100);
-			minimumSensitivity = userPrefs.getInt(
-					getString(R.string.pref_minimum_sensitivity), 0);
-			alarmTriggerSensitivity = userPrefs.getInt(
-					getString(R.string.pref_alarm_trigger_sensitivity), 30);
-		} catch (Exception e) {
-			stopSelf();
-		}
-
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
 
@@ -155,7 +138,7 @@ public class SleepAccelerometerService extends Service implements
 
 		notificationManager.cancel(notificationId);
 
-		String state = Environment.getExternalStorageState();
+		final String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			// We can read and write the media
@@ -172,9 +155,6 @@ public class SleepAccelerometerService extends Service implements
 		}
 	}
 
-	boolean mExternalStorageAvailable = false;
-	boolean mExternalStorageWriteable = false;
-
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		final long currentTime = System.currentTimeMillis();
@@ -185,13 +165,13 @@ public class SleepAccelerometerService extends Service implements
 		totalTimeBetweenSensorChanges += timeSinceLastSensorChange;
 
 		final long deltaTime = currentTime - lastChartUpdateTime;
-		if (deltaTime > UPDATE_FREQUENCY) {
+		if (deltaTime > updateInterval) {
 			final double averageTimeBetweenUpdates = totalTimeBetweenSensorChanges
 					/ totalNumberOfSensorChanges;
 			final double x = currentTime;
-			final double y = java.lang.Math.max(minimumSensitivity,
-					java.lang.Math.min(maximumSensitivity, deltaTime
-							/ averageTimeBetweenUpdates));
+			final double y = java.lang.Math
+					.max(minSensitivity, java.lang.Math.min(maxSensitivity,
+							deltaTime / averageTimeBetweenUpdates));
 
 			currentSeriesX.add(x);
 			currentSeriesY.add(y);
@@ -199,8 +179,8 @@ public class SleepAccelerometerService extends Service implements
 			final Intent i = new Intent(SleepActivity.UPDATE_CHART);
 			i.putExtra("x", x);
 			i.putExtra("y", y);
-			i.putExtra("max", maximumSensitivity);
-			i.putExtra("min", minimumSensitivity);
+			i.putExtra("min", minSensitivity);
+			i.putExtra("max", maxSensitivity);
 			sendBroadcast(i);
 
 			totalNumberOfSensorChanges = 0;
@@ -208,13 +188,36 @@ public class SleepAccelerometerService extends Service implements
 
 			lastChartUpdateTime = currentTime;
 
-//			if (currentTime > 1280125500000L && y > MIN_SENSITIVITY * 1.5f) {
-		/*if (currentTime > 12801395400L && y > alarmTriggerSensitivity) {
-			stopSelf();
-			}*/
+			// if (currentTime > 1280125500000L && y > MIN_SENSITIVITY * 1.5f) {
+			/*
+			 * if (currentTime > 12801395400L && y > alarmTriggerSensitivity) {
+			 * stopSelf(); }
+			 */
 		}
 
 		lastOnSensorChangedTime = currentTime;
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		updateInterval = intent.getIntExtra("interval", updateInterval);
+		minSensitivity = intent.getIntExtra("min", minSensitivity);
+		maxSensitivity = intent.getIntExtra("max", maxSensitivity);
+		alarmTriggerSensitivity = intent.getIntExtra("alarm",
+				alarmTriggerSensitivity);
+
+		// correct the raw calibration to work at this specific update
+		// frequency.
+		// *should* work pretty well but needs testing.
+		minSensitivity *= updateInterval / 30000;
+		minSensitivity = Math.min(minSensitivity, maxSensitivity);
+		if (alarmTriggerSensitivity > 0) {
+			alarmTriggerSensitivity = minSensitivity + alarmTriggerSensitivity;
+			alarmTriggerSensitivity = Math.min(alarmTriggerSensitivity,
+					maxSensitivity);
+		}
+
+		return startId;
 	}
 
 	private void registerAccelerometerListener() {

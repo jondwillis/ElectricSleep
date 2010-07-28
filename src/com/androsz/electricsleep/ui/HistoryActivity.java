@@ -3,7 +3,7 @@ package com.androsz.electricsleep.ui;
 public class HistoryActivity extends CustomTitlebarActivity {
 
 	@Override
-	public int getContentAreaLayoutId() {
+	protected int getContentAreaLayoutId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

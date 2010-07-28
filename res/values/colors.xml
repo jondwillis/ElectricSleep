@@ -7,7 +7,7 @@
     <color name="foreground2">#ff97c03d</color>
     <color name="background1">#ff97c03d</color>
     <color name="background2">#ffd5ddeb</color>
-    <color name="background_transparent_darken">#66000000</color><color name="background_transparent_lighten">#90ffffff</color>
+    <color name="background_transparent_darken">#33000000</color><color name="background_transparent_lighten">#33ffffff</color>
     <color name="title_separator">#ffffffff</color>
 
     <color name="pinned_header_background">#ff202020</color>

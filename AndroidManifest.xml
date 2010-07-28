@@ -10,9 +10,9 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.SleepActivity" android:label="@string/title_sleep">
-		
+
 		</activity>
-		<activity android:name=".ui.TestActivity" android:label="@string/title_test">
+		<activity android:name=".ui.CalibrationWizardActivity" android:label="@string/title_calibrate">
 		</activity>
 		<activity android:name=".ui.AlarmsActivity" android:label="@string/title_alarms">
 		</activity>
@@ -21,6 +21,11 @@
 		<activity android:name=".ui.HistoryActivity" android:label="@string/title_history">
 		</activity>
 		<activity android:name=".ui.CloudActivity" android:label="@string/title_cloud">
+		</activity>
+
+		<activity android:name=".ui.CalibrateForResultActivity"
+			android:label="@string/calibrating"
+			android:theme="@android:style/Theme.Dialog">
 		</activity>
 
 		<service android:name=".service.SleepAccelerometerService"

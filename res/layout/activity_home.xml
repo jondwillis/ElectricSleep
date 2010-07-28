@@ -11,9 +11,8 @@
 			<Button style="@style/HomeButton" android:id="@+id/home_btn_sleep"
 				android:onClick="onSleepClick" android:drawableTop="@drawable/home_btn_sleep"
 				android:text="@string/title_sleep" />
-			<Button android:id="@+id/home_btn_test" style="@style/HomeButton"
-				android:onClick="onTestClick" android:drawableTop="@drawable/home_btn_test"
-				android:text="@string/title_test" />
+			<Button style="@style/HomeButton"
+				android:id="@+id/home_btn_calibrate" android:drawableTop="@drawable/home_btn_calibrate" android:onClick="onCalibrateClick" android:text="@string/title_calibrate"/>
 		</LinearLayout>
 		<TextView android:layout_width="match_parent"
 			android:layout_height="wrap_content" style="@style/GroupLabel"
