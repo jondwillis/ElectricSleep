@@ -1,0 +1,246 @@
+/**
+ * Copyright (C) 2009, 2010 SC 4ViewSoft SRL
+ *  
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.androsz.electricsleep.achartengine.util;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Utility class for math operations.
+ */
+public class MathHelper {
+	/**
+	 * The maximum angle value for which the sin and cos values are calculated
+	 * and cached.
+	 */
+	public static final int ANGLE = 360;
+	/** The 0 to ANGLE values in radians. */
+	public static final double[] RADIANS = new double[ANGLE + 1];
+	/** The 0 to ANGLE sin values. */
+	public static final double[] SIN = new double[ANGLE + 1];
+	/** The 0 to ANGLE cos values. */
+	public static final double[] COS = new double[ANGLE + 1];
+	/** A value that is used a null value. */
+	public static final double NULL_VALUE = Double.MAX_VALUE;
+	/**
+	 * A number formatter to be used to make sure we have a maximum number of
+	 * fraction digits in the labels.
+	 */
+	private static final NumberFormat FORMAT = NumberFormat.getNumberInstance();
+
+	static {
+		calculateValues();
+	}
+
+	/**
+	 * Calculates and cache the radians, sin and cos values.
+	 */
+	public static void calculateValues() {
+		for (int i = 0; i <= ANGLE; i++) {
+			final double radians = Math.toRadians(i);
+			RADIANS[i] = radians;
+			SIN[i] = Math.sin(radians);
+			COS[i] = Math.cos(radians);
+		}
+	}
+
+	/**
+	 * Computes a reasonable number of labels for a data range.
+	 * 
+	 * @param start
+	 *            start value
+	 * @param end
+	 *            final value
+	 * @param approxNumLabels
+	 *            desired number of labels
+	 * @return double[] array containing {start value, end value, increment}
+	 */
+	private static double[] computeLabels(final double start, final double end,
+			final int approxNumLabels) {
+		if (Math.abs(start - end) < 0.0000001f) {
+			return new double[] { start, start, 0 };
+		}
+		double s = start;
+		double e = end;
+		boolean switched = false;
+		if (s > e) {
+			switched = true;
+			final double tmp = s;
+			s = e;
+			e = tmp;
+		}
+		final double xStep = roundUp(Math.abs(s - e) / approxNumLabels);
+		// Compute x starting point so it is a multiple of xStep.
+		final double xStart = xStep * Math.ceil(s / xStep);
+		final double xEnd = xStep * Math.floor(e / xStep);
+		if (switched) {
+			return new double[] { xEnd, xStart, -1.0 * xStep };
+		}
+		return new double[] { xStart, xEnd, xStep };
+	}
+
+	/**
+	 * Calculates the angle value such as it is included in the [0..360) degrees
+	 * interval.
+	 * 
+	 * @param angle
+	 *            the input angle value
+	 * @return the output value in the [0..360) interval
+	 */
+	public static int getAngle(int angle) {
+		if (angle < 0) {
+			return ANGLE + angle;
+		}
+		if (angle > ANGLE) {
+			return angle - ANGLE;
+		}
+		return angle;
+	}
+
+	/**
+	 * Transforms an array of Object into an array of double if the objects are
+	 * Doubles actually.
+	 * 
+	 * @param o
+	 *            the array of objects
+	 * @return the array of doubles
+	 */
+	public static double[] getDoubles(Object[] o) {
+		final int length = o.length;
+		final double[] values = new double[length];
+		for (int i = 0; i < length; i++) {
+			values[i] = ((Double) o[i]).doubleValue();
+		}
+		return values;
+	}
+
+	/**
+	 * Transforms an array of Object into an array of float if the objects are
+	 * Floats actually.
+	 * 
+	 * @param o
+	 *            the array of objects
+	 * @return the array of floats
+	 */
+	public static float[] getFloats(Object[] o) {
+		final int length = o.length;
+		final float[] values = new float[length];
+		for (int i = 0; i < length; i++) {
+			values[i] = ((Float) o[i]).floatValue();
+		}
+		return values;
+	}
+
+	/**
+	 * Computes a reasonable set of labels for a data interval and number of
+	 * labels.
+	 * 
+	 * @param start
+	 *            start value
+	 * @param end
+	 *            final value
+	 * @param approxNumLabels
+	 *            desired number of labels
+	 * @return collection containing {start value, end value, increment}
+	 */
+	public static List<Double> getLabels(final double start, final double end,
+			final int approxNumLabels) {
+		FORMAT.setMaximumFractionDigits(5);
+		final List<Double> labels = new ArrayList<Double>();
+		final double[] labelParams = computeLabels(start, end, approxNumLabels);
+		// when the start > end the inc will be negative so it will still work
+		final int numLabels = 1 + (int) ((labelParams[1] - labelParams[0]) / labelParams[2]);
+		// we want the range to be inclusive but we don't want to blow up when
+		// looping for the case where the min and max are the same. So we loop
+		// on
+		// numLabels not on the values.
+		for (int i = 0; i < numLabels; i++) {
+			double z = labelParams[0] + i * labelParams[2];
+			try {
+				// this way, we avoid a label value like 0.4000000000000000001
+				// instead of 0.4
+				z = FORMAT.parse(FORMAT.format(z)).doubleValue();
+			} catch (final ParseException e) {
+				// do nothing here
+			}
+			labels.add(z);
+		}
+		return labels;
+	}
+
+	/**
+	 * Calculate the minimum and maximum values out of a list of doubles.
+	 * 
+	 * @param values
+	 *            the input values
+	 * @return an array with the minimum and maximum values
+	 */
+	public static double[] minmax(List<Double> values) {
+		if (values.size() == 0) {
+			return new double[2];
+		}
+		double min = values.get(0);
+		double max = min;
+		final int length = values.size();
+		for (int i = 1; i < length; i++) {
+			final double value = values.get(i);
+			min = Math.min(min, value);
+			max = Math.max(max, value);
+		}
+		return new double[] { min, max };
+	}
+
+	/**
+	 * Given a number, round up to the nearest power of ten times 1, 2, or 5.
+	 * The argument must be strictly positive.
+	 */
+	private static double roundUp(final double val) {
+		final int exponent = (int) Math.floor(Math.log10(val));
+		double rval = val * Math.pow(10, -exponent);
+		if (rval > 5.0) {
+			rval = 10.0;
+		} else if (rval > 2.0) {
+			rval = 5.0;
+		} else if (rval > 1.0) {
+			rval = 2.0;
+		}
+		rval *= Math.pow(10, exponent);
+		return rval;
+	}
+
+	/**
+	 * Calculates the sum of a list of doubles.
+	 * 
+	 * @param values
+	 *            the input values
+	 * @return the sum of the values
+	 */
+	public static double sum(List<Double> values) {
+		double sum = 0;
+		final int length = values.size();
+		for (int i = 0; i < length; i++) {
+			sum += values.get(i);
+		}
+		return sum;
+	}
+
+	private MathHelper() {
+		// empty constructor
+	}
+
+}
