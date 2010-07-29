@@ -168,8 +168,7 @@
 	<string name="notification_sleep_started">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
-	<string name="message_wait_for_sleep_data">Your sleep movement chart does not have enough data
-		to be meaningful yet. Please wait.</string>
+	<string name="dialog_wait_for_sleep_data_message">ElectricSleep has not been recording movement long enough for this chart to be meaningful yet. Please wait.</string>
 	<string name="pref_minimum_sensitivity">minimum_sensitivity</string>
 	<string name="pref_maximum_sensitivity">maximum_sensitivity</string>
 	<string name="pref_alarm_trigger_sensitivity">alarmTriggerSensitivity</string>
@@ -200,4 +199,5 @@
 		move, roll, and flop about until you are informed by a voice that the
 		test is over. Press next when you are ready.</string>
 	<string name="calibrating">Calibrating...</string>
+<string name="prefs_version">prefsVersion</string>
 </resources>

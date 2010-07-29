@@ -17,6 +17,9 @@
 package com.androsz.electricsleep.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,6 +35,51 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
  * offers to users.
  */
 public class HomeActivity extends CustomTitlebarActivity {
+
+	private void enforceCalibrationBeforeStartingSleep(final Intent service,
+			final Intent activity) {
+		final SharedPreferences userPrefs = getSharedPreferences(
+				getString(R.string.prefs_version), Context.MODE_PRIVATE);
+		final int prefsVersion = userPrefs.getInt(
+				getString(R.string.prefs_version), 0);
+		String message = "";
+		if (prefsVersion == 0) {
+			message = "You have not yet calibrated ElectricSleep to work on your device.";
+		} else if (prefsVersion != getResources().getInteger(
+				R.integer.prefs_version)) {
+			message = "Your preferences are not compatible with this version of ElectricSleep.";
+		}
+
+		if (message.length() > 0) {
+			message += "\n\nIt is recommended that you run the Calibration Wizard or manually configure your Settings now.";
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+					.setMessage(message).setCancelable(false)
+					.setPositiveButton("Calibrate",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									onCalibrateClick(null);
+								}
+							}).setNeutralButton("Manual",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									onSettingsClick(null);
+								}
+							}).setNegativeButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			dialog.show();
+		} else if (service != null && activity != null) {
+			startService(service);
+			startActivity(activity);
+		}
+	}
+
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_home;
@@ -47,7 +95,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 	public void onCloudClick(View v) {
 		startActivity(new Intent(this, CloudActivity.class));
-		// startActivity(new Intent(Intent.ACTION_VIEW, CloudAc));
 	}
 
 	@Override
@@ -60,6 +107,8 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 		showTitleButton1(R.drawable.ic_title_export);
 		showTitleButton2(R.drawable.ic_title_refresh);
+
+		enforceCalibrationBeforeStartingSleep(null, null);
 	}
 
 	public void onHistoryClick(View v) {
@@ -68,7 +117,8 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 	@Override
 	public void onHomeClick(View v) {
-	}// do nothing b/c home is home!
+		// do nothing b/c home is home!
+	}
 
 	public void onSettingsClick(View v) {
 		startActivity(new Intent(this, SettingsActivity.class));
@@ -87,15 +137,38 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 		if (maxSensitivity < 0 || minSensitivity < 0
 				|| alarmTriggerSensitivity < 0) {
-			throw new Exception("hey, listen");
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+					.setMessage(
+							"Your calibration settings are invalid. Please manually configure settings or run the Calibration Wizard.")
+					.setCancelable(false).setPositiveButton("Calibrate",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									onCalibrateClick(null);
+								}
+							}).setNeutralButton("Manual",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									onSettingsClick(null);
+								}
+							}).setNegativeButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			dialog.show();
+			return;
 		}
 
 		final Intent i = new Intent(this, SleepAccelerometerService.class);
 		i.putExtra("min", minSensitivity);
 		i.putExtra("max", maxSensitivity);
 		i.putExtra("alarm", alarmTriggerSensitivity);
-		startService(i);
-		startActivity(new Intent(this, SleepActivity.class));
+		enforceCalibrationBeforeStartingSleep(i, new Intent(this,
+				SleepActivity.class));
 	}
 
 	public void onTitleButton1Click(View v) {

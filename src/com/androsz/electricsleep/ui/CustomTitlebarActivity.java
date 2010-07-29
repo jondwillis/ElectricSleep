@@ -1,8 +1,5 @@
 package com.androsz.electricsleep.ui;
 
-import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.R.id;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -10,14 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.androsz.electricsleep.R;
 
 public abstract class CustomTitlebarActivity extends Activity {
+
+	protected abstract int getContentAreaLayoutId();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +27,6 @@ public abstract class CustomTitlebarActivity extends Activity {
 		View.inflate(this, getContentAreaLayoutId(),
 				(ViewGroup) findViewById(R.id.custom_titlebar_container));
 	}
-	
-	@Override
-	public void setContentView(int layoutResID) {
-		super.setContentView(layoutResID);
-
-		((TextView) findViewById(R.id.title_text)).setText(getTitle());
-	}
-
-	protected abstract int getContentAreaLayoutId();
 
 	public void onHomeClick(View v) {
 		final Intent intent = new Intent(v.getContext(), HomeActivity.class);
@@ -46,15 +34,22 @@ public abstract class CustomTitlebarActivity extends Activity {
 		v.getContext().startActivity(intent);
 	}
 
+	@Override
+	public void setContentView(int layoutResID) {
+		super.setContentView(layoutResID);
+
+		((TextView) findViewById(R.id.title_text)).setText(getTitle());
+	}
+
 	public void showTitleButton1(int drawableResourceId) {
-		ImageButton btn1 = (ImageButton) findViewById(R.id.title_button_1);
+		final ImageButton btn1 = (ImageButton) findViewById(R.id.title_button_1);
 		btn1.setVisibility(View.VISIBLE);
 		btn1.setImageResource(drawableResourceId);
 		findViewById(R.id.title_sep_1).setVisibility(View.VISIBLE);
 	}
 
 	public void showTitleButton2(int drawableResourceId) {
-		ImageButton btn2 = (ImageButton) findViewById(R.id.title_button_2);
+		final ImageButton btn2 = (ImageButton) findViewById(R.id.title_button_2);
 		btn2.setVisibility(View.VISIBLE);
 		btn2.setImageResource(drawableResourceId);
 		findViewById(R.id.title_sep_2).setVisibility(View.VISIBLE);

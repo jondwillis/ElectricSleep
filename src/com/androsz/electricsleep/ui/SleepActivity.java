@@ -2,14 +2,6 @@ package com.androsz.electricsleep.ui;
 
 import java.util.List;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
-import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +16,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.achartengine.ChartFactory;
+import com.androsz.electricsleep.achartengine.GraphicalView;
+import com.androsz.electricsleep.achartengine.model.XYMultipleSeriesDataset;
+import com.androsz.electricsleep.achartengine.model.XYSeries;
+import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
+import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 
 public class SleepActivity extends CustomTitlebarActivity {
@@ -31,6 +29,11 @@ public class SleepActivity extends CustomTitlebarActivity {
 	private class WaitForSeriesDataProgressDialog extends ProgressDialog {
 		public WaitForSeriesDataProgressDialog(Context context) {
 			super(context);
+		}
+
+		public WaitForSeriesDataProgressDialog(Context context, int theme) {
+			// super(context);
+			super(context, theme);
 		}
 
 		@Override
@@ -91,7 +94,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			if (xySeriesMovement.getItemCount() < 2) {
 				waitForSeriesData = new WaitForSeriesDataProgressDialog(this);
 				waitForSeriesData
-						.setMessage(getText(R.string.message_wait_for_sleep_data));
+						.setMessage(getText(R.string.dialog_wait_for_sleep_data_message));
 
 				waitForSeriesData.show();
 			}
@@ -137,8 +140,9 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(22);
 			xyMultipleSeriesRenderer.setLabelsTextSize(17);
 			xyMultipleSeriesRenderer.setAntialiasing(true);
-			Display defaultDisplay = getWindowManager().getDefaultDisplay();
-			if ( defaultDisplay.getWidth() > defaultDisplay.getHeight()) {
+			final Display defaultDisplay = getWindowManager()
+					.getDefaultDisplay();
+			if (defaultDisplay.getWidth() > defaultDisplay.getHeight()) {
 				// landscape
 				xyMultipleSeriesRenderer.setXLabels(10);
 			} else {
@@ -186,12 +190,12 @@ public class SleepActivity extends CustomTitlebarActivity {
 				.getSerializable("dataset");
 		xyMultipleSeriesRenderer = (XYMultipleSeriesRenderer) savedState
 				.getSerializable("renderer");
-		
+
 		xySeriesMovement = (XYSeries) savedState
 				.getSerializable("seriesMovement");
 		xySeriesMovementRenderer = (XYSeriesRenderer) savedState
 				.getSerializable("rendererMovement");
-		
+
 		xySeriesAlarmTrigger = (XYSeries) savedState
 				.getSerializable("seriesAlarmTrigger");
 		xySeriesAlarmTriggerRenderer = (XYSeriesRenderer) savedState
@@ -213,12 +217,13 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 		outState.putSerializable("dataset", xyMultipleSeriesDataset);
 		outState.putSerializable("renderer", xyMultipleSeriesRenderer);
-		
+
 		outState.putSerializable("seriesMovement", xySeriesMovement);
 		outState.putSerializable("rendererMovement", xySeriesMovementRenderer);
-		
+
 		outState.putSerializable("seriesAlarmTrigger", xySeriesAlarmTrigger);
-		outState.putSerializable("rendererAlarmTrigger", xySeriesAlarmTriggerRenderer);
+		outState.putSerializable("rendererAlarmTrigger",
+				xySeriesAlarmTriggerRenderer);
 	}
 
 	public void onTitleButton1Click(View v) {
@@ -232,9 +237,9 @@ public class SleepActivity extends CustomTitlebarActivity {
 				waitForSeriesData = null;
 			}
 
-			double firstX = xySeriesMovement.mX.get(0);
-			double lastX = xySeriesMovement.mX
-					.get(xySeriesMovement.mX.size() - 1);
+			final double firstX = xySeriesMovement.mX.get(0);
+			final double lastX = xySeriesMovement.mX.get(xySeriesMovement.mX
+					.size() - 1);
 			xyMultipleSeriesRenderer.setXAxisMin(firstX);
 			xyMultipleSeriesRenderer.setXAxisMax(lastX);
 
@@ -243,9 +248,10 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 			// reconfigure the alarm trigger line..
 			xySeriesAlarmTrigger.clear();
-			int alarmTrigger = PreferenceManager.getDefaultSharedPreferences(
-					getBaseContext()).getInt(
-					getString(R.string.pref_alarm_trigger_sensitivity), -1);
+			final int alarmTrigger = PreferenceManager
+					.getDefaultSharedPreferences(getBaseContext()).getInt(
+							getString(R.string.pref_alarm_trigger_sensitivity),
+							-1);
 			xySeriesAlarmTrigger.add(firstX, alarmTrigger);
 			xySeriesAlarmTrigger.add(lastX, alarmTrigger);
 

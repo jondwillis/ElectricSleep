@@ -1,5 +1,9 @@
 package com.androsz.electricsleep.util;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -10,10 +14,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 /**
  * Helper class provides interoperability with Android AlarmClock database.
@@ -29,19 +29,6 @@ import java.util.List;
 public class AlarmDatabase {
 	// public static final Uri ALARM_URI =
 	// Uri.parse("content://com.android.alarmclock/alarm");
-
-	private final Uri mAlarmUri;
-
-	private final ContentResolver mContentResolver;
-	private final ContentObserver mContentObserver;
-
-	private static int column_id = -1;
-	private static int column_hour;
-	private static int column_minutes;
-	private static int column_daysofweek;
-	private static int column_vibrate;
-	private static int column_message;
-	private static int column_alert;
 
 	/**
 	 * Represents single Alarm Clock record in a database. Immutable
@@ -70,50 +57,59 @@ public class AlarmDatabase {
 			}
 
 			// Get the field values
-			this.hour = cur.getInt(column_hour);
-			this.minute = cur.getInt(column_minutes);
-			this.daysOfWeek = cur.getInt(column_daysofweek);
-			this.id = cur.getInt(column_id);
-			this.vibrate = cur.getInt(column_vibrate) == 1;
-			this.message = cur.getString(column_message);
-			this.audio = cur.getString(column_alert);
-		}
-
-		public Calendar getNearestAlarmDate() {
-			if (nearestAlarmDate == null) {
-				this.nearestAlarmDate = calculateNextAlarm(hour, minute,
-						daysOfWeek, System.currentTimeMillis());
-			}
-			return nearestAlarmDate;
+			hour = cur.getInt(column_hour);
+			minute = cur.getInt(column_minutes);
+			daysOfWeek = cur.getInt(column_daysofweek);
+			id = cur.getInt(column_id);
+			vibrate = cur.getInt(column_vibrate) == 1;
+			message = cur.getString(column_message);
+			audio = cur.getString(column_alert);
 		}
 
 		@Override
 		public boolean equals(Object o) {
-			if (this == o)
+			if (this == o) {
 				return true;
-			if (o == null || getClass() != o.getClass())
+			}
+			if (o == null || getClass() != o.getClass()) {
 				return false;
+			}
 
-			Record record = (Record) o;
+			final Record record = (Record) o;
 
-			if (daysOfWeek != record.daysOfWeek)
+			if (daysOfWeek != record.daysOfWeek) {
 				return false;
-			if (hour != record.hour)
+			}
+			if (hour != record.hour) {
 				return false;
-			if (id != record.id)
+			}
+			if (id != record.id) {
 				return false;
-			if (minute != record.minute)
+			}
+			if (minute != record.minute) {
 				return false;
-			if (vibrate != record.vibrate)
+			}
+			if (vibrate != record.vibrate) {
 				return false;
+			}
 			if (audio != null ? !audio.equals(record.audio)
-					: record.audio != null)
+					: record.audio != null) {
 				return false;
+			}
 			if (message != null ? !message.equals(record.message)
-					: record.message != null)
+					: record.message != null) {
 				return false;
+			}
 
 			return true;
+		}
+
+		public Calendar getNearestAlarmDate() {
+			if (nearestAlarmDate == null) {
+				nearestAlarmDate = calculateNextAlarm(hour, minute, daysOfWeek,
+						System.currentTimeMillis());
+			}
+			return nearestAlarmDate;
 		}
 
 		@Override
@@ -129,15 +125,189 @@ public class AlarmDatabase {
 		}
 	}
 
+	public static Calendar calculateNextAlarm(int hour, int minute,
+			int daysOfWeek, long minimumTime) {
+
+		// newRecord with now
+		final Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(minimumTime);
+
+		final int nowHour = c.get(Calendar.HOUR_OF_DAY);
+		final int nowMinute = c.get(Calendar.MINUTE);
+
+		// if alarmclock is behind current time, advance one day
+		if (hour < nowHour || hour == nowHour && minute <= nowMinute) {
+			c.add(Calendar.DAY_OF_YEAR, 1);
+		}
+		c.set(Calendar.HOUR_OF_DAY, hour);
+		c.set(Calendar.MINUTE, minute);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+
+		final int addDays = getNextAlarm(c, daysOfWeek);
+		/*
+		 * Log.v("** TIMES * " + c.getTimeInMillis() + " hour " + hour +
+		 * " minute " + minute + " dow " + c.get(Calendar.DAY_OF_WEEK) +
+		 * " from now " + addDays);
+		 */
+		if (addDays > 0) {
+			c.add(Calendar.DAY_OF_WEEK, addDays);
+		}
+		return c;
+	}
+
+	@Deprecated
+	public static Intent changeAlarmSettings() {
+		return changeAlarmSettings(null);
+	}
+
 	/**
-	 * Creates database connection with no updates subscription. You'd probably
-	 * need to subscribe for updates
+	 * Call startActivity() on result of this method to show default UI for
+	 * changing Alarm Clock settings
+	 * 
+	 * @param packageManager
+	 *            may be null
+	 * @return Intent for changing alarmclock settings
+	 */
+	public static Intent changeAlarmSettings(PackageManager packageManager) {
+		final Intent i = new Intent();
+		i.setAction(Intent.ACTION_MAIN);
+		i.setClassName("com.android.alarmclock",
+				"com.android.alarmclock.AlarmClock");
+		if (packageManager == null) {
+			return i;
+		}
+
+		ResolveInfo resolved = packageManager.resolveActivity(i,
+				PackageManager.MATCH_DEFAULT_ONLY);
+		if (resolved != null) {
+			return i; // < 2.1
+		}
+
+		i.setClassName("com.android.deskclock",
+				"com.android.deskclock.AlarmClock");
+		resolved = packageManager.resolveActivity(i,
+				PackageManager.MATCH_DEFAULT_ONLY);
+		if (resolved != null) {
+			return i; // 2.1?
+		}
+
+		i.setClassName("com.google.android.deskclock",
+				"com.android.deskclock.AlarmClock");
+		resolved = packageManager.resolveActivity(i,
+				PackageManager.MATCH_DEFAULT_ONLY);
+		if (resolved != null) {
+			return i; // 2.2?
+		}
+
+		i.setClassName("com.htc.android.worldclock",
+				"com.htc.android.worldclock.WorldClockTabControl");
+		resolved = packageManager.resolveActivity(i,
+				PackageManager.MATCH_DEFAULT_ONLY);
+		if (resolved != null) {
+			return i; // HTC custom UI
+		}
+
+		i.setClassName("com.motorola.blur.alarmclock",
+				"com.motorola.blur.alarmclock.AlarmClock");
+		resolved = packageManager.resolveActivity(i,
+				PackageManager.MATCH_DEFAULT_ONLY);
+		if (resolved != null) {
+			return i; // Motoblur clock
+		}
+
+		Log.e("AlarmDatabase", "No known Alarm Clock UI provider");
+		return null;
+
+		// i.setClassName("com.android.alarmclock",
+		// "com.android.alarmclock.SetAlarm"); - private access
+		// i.putExtra(Alarms.ID, next_alarm_id);
+	}
+
+	/**
+	 * returns number of days from today until next alarmclock
+	 * 
+	 * @param c
+	 *            must be set to today
+	 * @param mDays
+	 *            alarmclock-clock internal days representation
+	 * @return days count
+	 */
+	private static int getNextAlarm(Calendar c, int mDays) {
+		if (mDays == 0) {
+			return -1;
+		}
+		final int today = (c.get(Calendar.DAY_OF_WEEK) + 5) % 7;
+
+		int day, dayCount;
+		for (dayCount = 0; dayCount < 7; dayCount++) {
+			day = (today + dayCount) % 7;
+			if ((mDays & 1 << day) > 0) {
+				break;
+			}
+		}
+		return dayCount;
+	}
+
+	public static List<ApplicationInfo> getPossibleAlarmClocks(
+			PackageManager packageManager) {
+		final List<ApplicationInfo> appsInfo = packageManager
+				.getInstalledApplications(0);
+		final List<ApplicationInfo> clockApps = new ArrayList<ApplicationInfo>();
+		for (final ApplicationInfo appInfo : appsInfo) {
+			final String x = appInfo.dataDir.toLowerCase();
+			if (x.contains("clock") || x.contains("alarm")) {
+				clockApps.add(appInfo);
+			}
+		}
+		return clockApps;
+	}
+
+	public static Intent startNightClock() {
+		final Intent i = new Intent();
+		i.setAction("android.alarmclock.NightClockUI");
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		return i;
+	}
+
+	private final Uri mAlarmUri;
+	private final ContentResolver mContentResolver;
+	private final ContentObserver mContentObserver;
+
+	private static int column_id = -1;
+
+	private static int column_hour;
+
+	private static int column_minutes;
+
+	private static int column_daysofweek;
+
+	private static int column_vibrate;
+
+	private static int column_message;
+
+	private static int column_alert;
+
+	/**
+	 * Creates database connection and subscribes for updates
 	 * 
 	 * @param contentResolver
 	 *            get from context
+	 * @param contentObserver
+	 *            will be called for external database updates
 	 */
-	public AlarmDatabase(ContentResolver contentResolver, String packageName) {
-		this(contentResolver, (ContentObserver) null, packageName);
+	public AlarmDatabase(ContentResolver contentResolver,
+			ContentObserver contentObserver, String packageName) {
+		mContentResolver = contentResolver;
+		mAlarmUri = Uri.parse("content://" + packageName + "/alarm");
+
+		if (contentObserver != null) {
+			mContentObserver = contentObserver;
+			contentResolver.registerContentObserver(mAlarmUri, true,
+					mContentObserver);
+		} else {
+			mContentObserver = null;
+		}
 	}
 
 	/**
@@ -150,7 +320,8 @@ public class AlarmDatabase {
 	 * @param handler
 	 */
 	public AlarmDatabase(ContentResolver contentResolver,
-			final Runnable contentObserver, final Handler handler, String packageName) {
+			final Runnable contentObserver, final Handler handler,
+			String packageName) {
 		this(contentResolver, new ContentObserver(handler) {
 			@Override
 			public boolean deliverSelfNotifications() {
@@ -165,25 +336,22 @@ public class AlarmDatabase {
 	}
 
 	/**
-	 * Creates database connection and subscribes for updates
+	 * Creates database connection with no updates subscription. You'd probably
+	 * need to subscribe for updates
 	 * 
 	 * @param contentResolver
 	 *            get from context
-	 * @param contentObserver
-	 *            will be called for external database updates
 	 */
-	public AlarmDatabase(ContentResolver contentResolver,
-			ContentObserver contentObserver, String packageName) {
-		this.mContentResolver = contentResolver;
-		this.mAlarmUri = Uri.parse("content://" + packageName + "/alarm");
+	public AlarmDatabase(ContentResolver contentResolver, String packageName) {
+		this(contentResolver, (ContentObserver) null, packageName);
+	}
 
-		if (contentObserver != null) {
-			this.mContentObserver = contentObserver;
-			contentResolver.registerContentObserver(mAlarmUri, true,
-					this.mContentObserver);
-		} else {
-			this.mContentObserver = null;
+	@Override
+	protected void finalize() throws Throwable {
+		if (mContentResolver != null && mContentObserver != null) {
+			mContentResolver.unregisterContentObserver(mContentObserver);
 		}
+		super.finalize();
 	}
 
 	public Record getAlarmById(int alarmId) {
@@ -194,7 +362,7 @@ public class AlarmDatabase {
 			Log.w("AlarmDatabase", "no record for id " + alarmId);
 			return null;
 		}
-		Record entity = new Record(cur);
+		final Record entity = new Record(cur);
 		cur.close();
 
 		return entity;
@@ -224,9 +392,9 @@ public class AlarmDatabase {
 
 		do {
 			// Get the field values
-			int hour = cur.getInt(column_hour);
-			int minute = cur.getInt(column_minutes);
-			int daysOfWeek = cur.getInt(column_daysofweek);
+			final int hour = cur.getInt(column_hour);
+			final int minute = cur.getInt(column_minutes);
+			final int daysOfWeek = cur.getInt(column_daysofweek);
 
 			final Calendar cal = calculateNextAlarm(hour, minute, daysOfWeek,
 					minimumTime);
@@ -241,149 +409,5 @@ public class AlarmDatabase {
 		} while (cur.moveToNext());
 		cur.close();
 		return nearest;
-	}
-
-	public static Calendar calculateNextAlarm(int hour, int minute,
-			int daysOfWeek, long minimumTime) {
-
-		// newRecord with now
-		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(minimumTime);
-
-		int nowHour = c.get(Calendar.HOUR_OF_DAY);
-		int nowMinute = c.get(Calendar.MINUTE);
-
-		// if alarmclock is behind current time, advance one day
-		if (hour < nowHour || hour == nowHour && minute <= nowMinute) {
-			c.add(Calendar.DAY_OF_YEAR, 1);
-		}
-		c.set(Calendar.HOUR_OF_DAY, hour);
-		c.set(Calendar.MINUTE, minute);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-
-		int addDays = getNextAlarm(c, daysOfWeek);
-		/*
-		 * Log.v("** TIMES * " + c.getTimeInMillis() + " hour " + hour +
-		 * " minute " + minute + " dow " + c.get(Calendar.DAY_OF_WEEK) +
-		 * " from now " + addDays);
-		 */
-		if (addDays > 0)
-			c.add(Calendar.DAY_OF_WEEK, addDays);
-		return c;
-	}
-
-	@Deprecated
-	public static Intent changeAlarmSettings() {
-		return changeAlarmSettings(null);
-	}
-
-	public static List<ApplicationInfo> getPossibleAlarmClocks(
-			PackageManager packageManager) {
-		List<ApplicationInfo> appsInfo = packageManager
-				.getInstalledApplications(0);
-		List<ApplicationInfo> clockApps = new ArrayList<ApplicationInfo>();
-		for (ApplicationInfo appInfo : appsInfo) {
-			String x = appInfo.dataDir.toLowerCase();
-			if (x.contains("clock") || x.contains("alarm")) {
-				clockApps.add(appInfo);
-			}
-		}
-		return clockApps;
-	}
-
-	/**
-	 * Call startActivity() on result of this method to show default UI for
-	 * changing Alarm Clock settings
-	 * 
-	 * @param packageManager
-	 *            may be null
-	 * @return Intent for changing alarmclock settings
-	 */
-	public static Intent changeAlarmSettings(PackageManager packageManager) {
-		final Intent i = new Intent();
-		i.setAction(Intent.ACTION_MAIN);
-		i.setClassName("com.android.alarmclock",
-				"com.android.alarmclock.AlarmClock");
-		if (packageManager == null)
-			return i;
-
-		ResolveInfo resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null)
-			return i; // < 2.1
-
-		i.setClassName("com.android.deskclock",
-				"com.android.deskclock.AlarmClock");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null)
-			return i; // 2.1?
-
-		i.setClassName("com.google.android.deskclock",
-				"com.android.deskclock.AlarmClock");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null)
-			return i; // 2.2?
-
-		i.setClassName("com.htc.android.worldclock",
-				"com.htc.android.worldclock.WorldClockTabControl");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null)
-			return i; // HTC custom UI
-
-		i.setClassName("com.motorola.blur.alarmclock",
-				"com.motorola.blur.alarmclock.AlarmClock");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null)
-			return i; // Motoblur clock
-
-		Log.e("AlarmDatabase", "No known Alarm Clock UI provider");
-		return null;
-
-		// i.setClassName("com.android.alarmclock",
-		// "com.android.alarmclock.SetAlarm"); - private access
-		// i.putExtra(Alarms.ID, next_alarm_id);
-	}
-
-	public static Intent startNightClock() {
-		final Intent i = new Intent();
-		i.setAction("android.alarmclock.NightClockUI");
-		i.addCategory(Intent.CATEGORY_DEFAULT);
-		return i;
-	}
-
-	/**
-	 * returns number of days from today until next alarmclock
-	 * 
-	 * @param c
-	 *            must be set to today
-	 * @param mDays
-	 *            alarmclock-clock internal days representation
-	 * @return days count
-	 */
-	private static int getNextAlarm(Calendar c, int mDays) {
-		if (mDays == 0)
-			return -1;
-		int today = (c.get(Calendar.DAY_OF_WEEK) + 5) % 7;
-
-		int day, dayCount;
-		for (dayCount = 0; dayCount < 7; dayCount++) {
-			day = (today + dayCount) % 7;
-			if ((mDays & (1 << day)) > 0) {
-				break;
-			}
-		}
-		return dayCount;
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		if (mContentResolver != null && mContentObserver != null)
-			mContentResolver.unregisterContentObserver(mContentObserver);
-		super.finalize();
 	}
 }

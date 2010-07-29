@@ -7,6 +7,7 @@ import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class SeekBarPreference extends DialogPreference {
 
-	private Context context;
+	private final Context context;
 	private SeekBar seekBar;
 	private TextView textView;
 
@@ -23,12 +24,21 @@ public class SeekBarPreference extends DialogPreference {
 		this.context = context;
 	}
 
+	@Override
+	protected void onDialogClosed(boolean positiveResult) {
+		if (positiveResult) {
+			persistInt(seekBar.getProgress());
+			// setSummary(String.format("The value is %d",
+			// seekBar.getProgress()));
+		}
+	}
+
+	@Override
 	protected void onPrepareDialogBuilder(Builder builder) {
 
-		LinearLayout layout = new LinearLayout(context);
+		final LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT));
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		layout.setMinimumWidth(400);
 		layout.setPadding(20, 20, 20, 20);
 
@@ -56,10 +66,12 @@ public class SeekBarPreference extends DialogPreference {
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
 		});
 		layout.addView(seekBar);
 
@@ -70,15 +82,8 @@ public class SeekBarPreference extends DialogPreference {
 	}
 
 	private void syncTextViewText(int progress) {
-		NumberFormat nf = NumberFormat.getIntegerInstance();
+		final NumberFormat nf = NumberFormat.getIntegerInstance();
 		nf.setMinimumIntegerDigits(3);
 		textView.setText(nf.format(progress));
-	}
-
-	protected void onDialogClosed(boolean positiveResult) {
-		if (positiveResult) {
-			persistInt(seekBar.getProgress());
-			//setSummary(String.format("The value is %d", seekBar.getProgress()));
-		}
 	}
 }
