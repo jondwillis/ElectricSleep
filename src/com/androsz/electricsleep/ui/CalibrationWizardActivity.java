@@ -5,7 +5,9 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -32,42 +34,148 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 
 	private static final int TEST_TTS_INSTALLED = 0x1337;
 
-	private boolean doWizardActivity() {
-		boolean didActivity = false;
-		final int currentChildId = viewFlipper.getCurrentView().getId();
-		final Intent i = new Intent(this, SleepAccelerometerService.class);
-		switch (currentChildId) {
-		case R.id.minTest:
+	private class DelayedStartMinCalibrationTask extends
+			AsyncTask<Void, Void, Void> {
+
+		protected void onPreExecute() {
+			startActivityForResult(new Intent(CalibrationWizardActivity.this,
+					CalibrateForResultActivity.class), R.id.minTest);
+
+			notifyUser(CalibrationWizardActivity.this
+					.getString(R.string.starting_in), false);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			Looper.prepare();
+			for (int i = 5; i > 0; i--) {
+				notifyUser(i + "", false);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+			notifyUser(CalibrationWizardActivity.this
+					.getString(R.string.remain_still));
+			final Intent i = new Intent(CalibrationWizardActivity.this,
+					SleepAccelerometerService.class);
 			stopService(i);
 			i.putExtra("interval", 10000);
 			i.putExtra("min", 0);
 			i.putExtra("max", 100);
-
 			startService(i);
-			startActivityForResult(new Intent(this,
-					CalibrateForResultActivity.class), R.id.minTest);
-			didActivity = true;
-			break;
-		case R.id.maxTest:
+		}
+	}
+
+	private class DelayedStartMaxCalibrationTask extends
+			AsyncTask<Void, Void, Void> {
+
+		protected void onPreExecute() {
+			startActivityForResult(new Intent(CalibrationWizardActivity.this,
+					CalibrateForResultActivity.class), R.id.maxTest);
+
+			notifyUser(CalibrationWizardActivity.this
+					.getString(R.string.starting_in), false);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			Looper.prepare();
+			for (int i = 5; i > 0; i--) {
+				notifyUser(i + "", false);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+			notifyUser(CalibrationWizardActivity.this.getString(R.string.start_moving));
+			final Intent i = new Intent(CalibrationWizardActivity.this,
+					SleepAccelerometerService.class);
 			stopService(i);
 			i.putExtra("interval", 5000);
 			i.putExtra("min", minCalibration);
 			i.putExtra("max", 100);
-
 			startService(i);
-			startActivityForResult(new Intent(this,
-					CalibrateForResultActivity.class), R.id.maxTest);
-			didActivity = true;
-			break;
-		case R.id.alarmTest:
+		}
+	}
+
+	private class DelayedStartAlarmCalibrationTask extends
+			AsyncTask<Void, Void, Void> {
+
+		protected void onPreExecute() {
+			startActivityForResult(new Intent(CalibrationWizardActivity.this,
+					CalibrateForResultActivity.class), R.id.alarmTest);
+
+			notifyUser(CalibrationWizardActivity.this
+					.getString(R.string.starting_in), false);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			Looper.prepare();
+			for (int i = 5; i > 0; i--) {
+				notifyUser(i + "", false);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+			notifyUser(CalibrationWizardActivity.this.getString(R.string.move_once));
+			final Intent i = new Intent(CalibrationWizardActivity.this,
+					SleepAccelerometerService.class);
 			stopService(i);
 			i.putExtra("interval", 2500);
 			i.putExtra("min", minCalibration);
 			i.putExtra("max", maxCalibration);
-
 			startService(i);
-			startActivityForResult(new Intent(this,
-					CalibrateForResultActivity.class), R.id.alarmTest);
+
+		}
+	}
+
+	private boolean doWizardActivity() {
+		boolean didActivity = false;
+		final int currentChildId = viewFlipper.getCurrentView().getId();
+		switch (currentChildId) {
+		case R.id.minTest:
+			new DelayedStartMinCalibrationTask().execute(null, null, null);
+			didActivity = true;
+			break;
+		case R.id.maxTest:
+			new DelayedStartMaxCalibrationTask().execute(null, null, null);
+			didActivity = true;
+			break;
+		case R.id.alarmTest:
+			new DelayedStartAlarmCalibrationTask().execute(null, null, null);
 			didActivity = true;
 			break;
 		}
@@ -81,10 +189,16 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	private void notifyUser(String message) {
+		notifyUser(message, true);
+	}
+
+	private void notifyUser(String message, boolean toast) {
 		if (ttsAvailable) {
-			textToSpeech.speak(message, TextToSpeech.QUEUE_ADD, null);
+			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
 		}
-		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		if (toast) {
+			Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -95,23 +209,24 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == -0x1337) {
-			notifyUser("Calibration failed. Try again.");
+			notifyUser(getString(R.string.calibration_failed));
 			return;
 		}
 		switch (requestCode) {
 		case R.id.minTest:
 			minCalibration = resultCode;
-			notifyUser("Calibration succeeded with result: " + minCalibration);
+			notifyUser(getString(R.string.minimum_sensitivity_set_to) + minCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));
 			break;
 		case R.id.maxTest:
 			maxCalibration = resultCode;
-			notifyUser("Calibration succeeded with result: " + maxCalibration);
+			notifyUser(getString(R.string.maximum_sensitivity_set_to) + maxCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));
 			break;
 		case R.id.alarmTest:
 			alarmTriggerCalibration = resultCode;
-			notifyUser("Calibration succeeded with result: ");
+			notifyUser(getString(R.string.alarm_trigger_sensitivity_set_to)
+					+ alarmTriggerCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));
 			break;
 		case TEST_TTS_INSTALLED:

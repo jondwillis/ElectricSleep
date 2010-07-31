@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="invalid_settings">Your calibration settings are invalid. Please manually configure settings or run the Calibration Wizard.</string>
+    <string name="message_recommend_calibration">
+
+It is recommended that you run the Calibration Wizard or manually configure your Settings now.</string>
+    <string name="message_prefs_not_compatible">Your preferences are not compatible with this version of ElectricSleep.</string>
+    <string name="message_not_calibrated">You have not yet calibrated ElectricSleep to work on your device.</string>
+    <string name="alarm_trigger_sensitivity_set_to">Alarm trigger sensitivity set to: </string>
+    <string name="maximum_sensitivity_set_to">Maximum sensitivity set to: </string>
+    <string name="minimum_sensitivity_set_to">Minimum sensitivity set to: </string>
+    <string name="move_once">Move once.</string>
+    <string name="start_moving">Start moving.</string>
+    <string name="remain_still">Remain still.</string>
+    <string name="calibration_failed">Calibration failed. Try again.</string>
+    <string name="starting_in">Starting in</string>
 	<string name="calibrate_title_results">Calibration Results</string>
 	<string name="calibrate_directions_alarm">The calibration will begin after a 5 second delay,
 		and will last exactly 10 seconds if everything works. Gently move ONCE

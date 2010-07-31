@@ -44,14 +44,14 @@ public class HomeActivity extends CustomTitlebarActivity {
 				getString(R.string.prefs_version), 0);
 		String message = "";
 		if (prefsVersion == 0) {
-			message = "You have not yet calibrated ElectricSleep to work on your device.";
+			message = getString(R.string.message_not_calibrated);
 		} else if (prefsVersion != getResources().getInteger(
 				R.integer.prefs_version)) {
-			message = "Your preferences are not compatible with this version of ElectricSleep.";
+			message = getString(R.string.message_prefs_not_compatible);
 		}
 
 		if (message.length() > 0) {
-			message += "\n\nIt is recommended that you run the Calibration Wizard or manually configure your Settings now.";
+			message += getString(R.string.message_recommend_calibration);
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 					.setMessage(message).setCancelable(false)
 					.setPositiveButton("Calibrate",
@@ -139,7 +139,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 				|| alarmTriggerSensitivity < 0) {
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 					.setMessage(
-							"Your calibration settings are invalid. Please manually configure settings or run the Calibration Wizard.")
+							getString(R.string.invalid_settings))
 					.setCancelable(false).setPositiveButton("Calibrate",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
