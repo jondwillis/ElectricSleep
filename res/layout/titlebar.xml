@@ -5,7 +5,7 @@
 
 	<RelativeLayout android:id="@+id/titlebar_container"
 		android:layout_width="fill_parent" android:layout_height="@dimen/title_height"
-		android:padding="0dip" android:background="@color/title_background">
+		android:padding="0dip" android:background="@drawable/gradient_titlebar">
 
 		<!-- Home button and title -->
 		<ImageButton android:id="@+id/title_home_button"
@@ -18,12 +18,12 @@
 			android:layout_width="1px" android:layout_height="fill_parent"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentBottom="true" android:layout_toRightOf="@id/title_home_button"
-			android:background="@color/title_separator" />
+			android:background="@color/titlebar_separator" />
 		<TextView android:id="@+id/title_text" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_alignParentTop="true"
 			android:layout_alignParentBottom="true" android:layout_toRightOf="@id/title_home_button_sep"
 			android:textSize="@dimen/text_size_medium" android:paddingLeft="12dip"
-			android:textStyle="bold" android:textColor="@color/title_text"
+			android:textStyle="bold" android:textColor="@color/titlebar_text"
 			android:gravity="center_vertical" />
 
 		<!-- Right buttons -->
@@ -31,7 +31,7 @@
 			android:layout_width="1px" android:layout_height="fill_parent"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/title_button_1"
-			android:background="@color/title_separator" android:visibility="gone" />
+			android:background="@color/titlebar_separator" android:visibility="gone" />
 		<ImageButton android:id="@+id/title_button_1"
 			android:layout_width="@dimen/title_height" android:layout_height="fill_parent"
 			android:layout_toLeftOf="@+id/title_sep_2"
@@ -52,7 +52,7 @@
 			android:layout_width="1px" android:layout_height="fill_parent"
 			android:layout_alignParentTop="true"
 			android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/title_button_2"
-			android:background="@color/title_separator" android:visibility="gone" />
+			android:background="@color/titlebar_separator" android:visibility="gone" />
 		<ImageButton android:id="@+id/title_button_2"
 			android:layout_width="@dimen/title_height" android:layout_height="fill_parent"
 			android:layout_alignWithParentIfMissing="true"

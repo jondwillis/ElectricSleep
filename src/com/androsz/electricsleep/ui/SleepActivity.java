@@ -114,7 +114,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xySeriesMovementRenderer = new XYSeriesRenderer();
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(getResources()
-					.getColor(R.color.foreground1));
+					.getColor(R.color.primary1));
 			xySeriesMovementRenderer.setColor(Color.TRANSPARENT);
 
 			// set up alarm trigger series/renderer
@@ -153,7 +153,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xyMultipleSeriesRenderer.setYTitle("Movement level during sleep");
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(
-					R.color.title_text));
+					R.color.titlebar_text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer
 					.getAxesColor());
 		}

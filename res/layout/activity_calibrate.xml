@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="match_parent" android:layout_width="match_parent"
-	android:background="@color/background1" android:orientation="vertical">
+	android:background="@drawable/gradient_background" android:orientation="vertical">
 
 	<ViewFlipper android:id="@+id/wizardViewFlipper"
 		android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_weight="1" android:padding="8dip">

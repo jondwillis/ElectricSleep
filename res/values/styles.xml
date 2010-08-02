@@ -17,7 +17,7 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/foreground1</item>
+        <item name="android:textColor">@color/primary1</item>
         <item name="android:background">@null</item>
     </style>
 
@@ -26,7 +26,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/title_height</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@color/title_background</item>
+        <item name="android:background">@drawable/gradient_titlebar</item>
     </style>
 
     <style name="TitleBarAction">
@@ -47,7 +47,7 @@
     <style name="TitleBarSeparator">
         <item name="android:layout_width">1px</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@color/title_separator</item>
+        <item name="android:background">@color/titlebar_separator</item>
     </style>
 
     <style name="TitleBarLogo">
@@ -73,7 +73,7 @@
         <item name="android:paddingLeft">12dip</item>
         <item name="android:paddingRight">12dip</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/title_text</item>
+        <item name="android:textColor">@color/titlebar_text</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
@@ -82,7 +82,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/text_size_large</item>
-        <item name="android:textColor">@color/foreground1</item>
+        <item name="android:textColor">@color/primary1</item>
         <item name="android:background">@drawable/gradient_lighten</item>
     </style>
 

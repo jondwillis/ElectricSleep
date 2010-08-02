@@ -1,6 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/ScrollView01" android:layout_height="match_parent"
-	android:layout_width="match_parent" android:background="@color/background1">
+	android:layout_width="match_parent" android:background="@drawable/gradient_background">
 	<LinearLayout android:layout_width="match_parent"
 		android:layout_height="wrap_content" android:orientation="vertical">
 		<TextView android:id="@+id/home_label_functions"
