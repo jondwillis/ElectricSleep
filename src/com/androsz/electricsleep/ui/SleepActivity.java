@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -95,7 +96,16 @@ public class SleepActivity extends CustomTitlebarActivity {
 				waitForSeriesData = new WaitForSeriesDataProgressDialog(this);
 				waitForSeriesData
 						.setMessage(getText(R.string.dialog_wait_for_sleep_data_message));
+				// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
+				waitForSeriesData.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.exit),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
 
+								stopService(new Intent(SleepActivity.this, SleepAccelerometerService.class));
+								SleepActivity.this.finish();
+							}
+						});
 				waitForSeriesData.show();
 			}
 			mChartView = ChartFactory
@@ -153,7 +163,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xyMultipleSeriesRenderer.setYTitle("Movement level during sleep");
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(
-					R.color.titlebar_text));
+					R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer
 					.getAxesColor());
 		}
@@ -243,15 +253,15 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xyMultipleSeriesRenderer.setXAxisMin(firstX);
 			xyMultipleSeriesRenderer.setXAxisMax(lastX);
 
-			xyMultipleSeriesRenderer.setYAxisMax(max);
 			xyMultipleSeriesRenderer.setYAxisMin(min);
+			xyMultipleSeriesRenderer.setYAxisMax(max);
 
 			// reconfigure the alarm trigger line..
 			xySeriesAlarmTrigger.clear();
+
 			final int alarmTrigger = PreferenceManager
 					.getDefaultSharedPreferences(getBaseContext()).getInt(
-							getString(R.string.pref_alarm_trigger_sensitivity),
-							-1);
+							getString(R.string.pref_alarm_trigger_sensitivity), -1);
 			xySeriesAlarmTrigger.add(firstX, alarmTrigger);
 			xySeriesAlarmTrigger.add(lastX, alarmTrigger);
 

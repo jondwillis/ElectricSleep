@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="titlebar_background_one">#ff30587c</color>
-    <color name="titlebar_text">#ffffffff</color>
-    <color name="titlebar_text_alt">#ff000000</color>
-    <color name="primary1">#ff30587c</color>
-    <color name="secondary1">#ff97c03d</color>
-    
-    
-    <color name="background_transparent_darken">#33000000</color><color name="background_transparent_lighten">#33ffffff</color>
-    <color name="titlebar_separator">#ffffffff</color>
-
-    
-
-<string name="titlebar_background_two"></string>
-<string name="primary2">#ffffffff</string>
-<string name="secondary2">#ff000000</string>
+	<color name="text">#ffffffff</color>
+	<color name="text_alt">#ff97c03d</color>
+	<color name="titlebar_separator">#ffffffff</color>
+	<color name="secondary1">#ff363636</color><!-- ff30587c  ff97c03d-->
+	<color name="secondary2">#ffcccccc</color>
+	<color name="secondary3">#ff111111</color>
+	<color name="primary1">#ff97c03d</color>
+	<color name="primary2">#ff000000</color>
+	<color name="primary3">#ffAFFF00</color>
+	<color name="background_transparent_darken">#66000000</color>
+	<color name="background_transparent_lighten">#66ffffff</color>
 </resources>

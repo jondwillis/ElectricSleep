@@ -41,6 +41,11 @@ public abstract class CustomTitlebarActivity extends Activity {
 		((TextView) findViewById(R.id.title_text)).setText(getTitle());
 	}
 
+	public void setHomeButtonAsLogo() {
+		final ImageButton btnHome = (ImageButton) findViewById(R.id.title_home_button);
+		btnHome.setImageResource(R.drawable.logo);
+	}
+
 	public void showTitleButton1(int drawableResourceId) {
 		final ImageButton btn1 = (ImageButton) findViewById(R.id.title_button_1);
 		btn1.setVisibility(View.VISIBLE);
@@ -48,10 +53,22 @@ public abstract class CustomTitlebarActivity extends Activity {
 		findViewById(R.id.title_sep_1).setVisibility(View.VISIBLE);
 	}
 
+	public void hideTitleButton1() {
+		final ImageButton btn1 = (ImageButton) findViewById(R.id.title_button_1);
+		btn1.setVisibility(View.INVISIBLE);
+		findViewById(R.id.title_sep_1).setVisibility(View.INVISIBLE);
+	}
+
 	public void showTitleButton2(int drawableResourceId) {
 		final ImageButton btn2 = (ImageButton) findViewById(R.id.title_button_2);
 		btn2.setVisibility(View.VISIBLE);
 		btn2.setImageResource(drawableResourceId);
 		findViewById(R.id.title_sep_2).setVisibility(View.VISIBLE);
+	}
+
+	public void hideTitleButton2() {
+		final ImageButton btn2 = (ImageButton) findViewById(R.id.title_button_2);
+		btn2.setVisibility(View.INVISIBLE);
+		findViewById(R.id.title_sep_2).setVisibility(View.INVISIBLE);
 	}
 }

@@ -15,6 +15,7 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
 
 public class CalibrateForResultActivity extends Activity {
 
+	public static final int CALIBRATION_FAILED = -0x1337;
 	private PowerManager powerManager;
 	private WakeLock partialWakeLock;
 
@@ -78,7 +79,7 @@ public class CalibrateForResultActivity extends Activity {
 	}*/
 
 	private void setFailed() {
-		this.setResult(-0x1337);
+		this.setResult(CALIBRATION_FAILED);
 		stopService(new Intent(this, SleepAccelerometerService.class));
 		finish();
 	}

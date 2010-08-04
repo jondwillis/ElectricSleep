@@ -13,7 +13,7 @@ It is recommended that you run the Calibration Wizard or manually configure your
     <string name="start_moving">Start moving.</string>
     <string name="remain_still">Remain still.</string>
     <string name="calibration_failed">Calibration failed. Try again.</string>
-    <string name="starting_in">Starting in</string>
+    <string name="starting_in">Starting in 5 seconds</string>
 	<string name="calibrate_title_results">Calibration Results</string>
 	<string name="calibrate_directions_alarm">The calibration will begin after a 5 second delay,
 		and will last exactly 10 seconds if everything works. Gently move ONCE
@@ -67,7 +67,7 @@ It is recommended that you run the Calibration Wizard or manually configure your
 	</string>
 
 	<string name="title_sleep">Sleep</string>
-	<string name="title_calibrate">Calibration Wizard</string>
+	<string name="title_calibrate">Calibration</string>
 	<string name="title_alarms">Alarms</string>
 	<string name="title_settings">Settings</string>
 	<string name="title_history">History</string>
