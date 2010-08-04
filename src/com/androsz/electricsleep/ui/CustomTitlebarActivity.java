@@ -31,7 +31,7 @@ public abstract class CustomTitlebarActivity extends Activity {
 	public void onHomeClick(View v) {
 		final Intent intent = new Intent(v.getContext(), HomeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		v.getContext().startActivity(intent);
+		startActivity(intent);
 	}
 
 	@Override

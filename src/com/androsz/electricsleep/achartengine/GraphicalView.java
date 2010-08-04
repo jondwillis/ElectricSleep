@@ -61,7 +61,7 @@ public class GraphicalView extends View {
 		}
 	}
 
-	public void handleTouch(MotionEvent event) {
+	/*public void handleTouch(MotionEvent event) {
 		final int action = event.getAction();
 		if (mRenderer != null && action == MotionEvent.ACTION_MOVE) {
 			if (oldX >= 0 || oldY >= 0) {
@@ -78,34 +78,35 @@ public class GraphicalView extends View {
 						|| maxX == maxY && calcRange[2] == calcRange[3]) {
 					return;
 				}
+				
 				if (!mRenderer.isMinXSet()) {
 					minX = calcRange[0];
-					mRenderer.setXAxisMin(minX);
+					//mRenderer.setXAxisMin(minX);
 				}
 				if (!mRenderer.isMaxXSet()) {
 					maxX = calcRange[1];
-					mRenderer.setXAxisMax(maxX);
+					//mRenderer.setXAxisMax(maxX);
 				}
 				if (!mRenderer.isMinYSet()) {
 					minY = calcRange[2];
-					mRenderer.setYAxisMin(minY);
+					//mRenderer.setYAxisMin(minY);
 				}
 				if (!mRenderer.isMaxYSet()) {
 					maxY = calcRange[3];
-					mRenderer.setYAxisMax(maxY);
+					//mRenderer.setYAxisMax(maxY);
 				}
 
 				final PointF realPoint = chart.toRealPoint(oldX, oldY);
 				final PointF realPoint2 = chart.toRealPoint(newX, newY);
 				final double deltaX = realPoint.x - realPoint2.x;
 				final double deltaY = realPoint.y - realPoint2.y;
-				mRenderer.setXAxisMin(minX + deltaX);
-				mRenderer.setXAxisMax(maxX + deltaX);
-				mRenderer.setYAxisMin(minY + deltaY);
-				mRenderer.setYAxisMax(maxY + deltaY);
+				//mRenderer.setXAxisMin(minX + deltaX);
+				//mRenderer.setXAxisMax(maxX + deltaX);
+				//mRenderer.setYAxisMin(minY + deltaY);
+				//mRenderer.setYAxisMax(maxY + deltaY);
 				oldX = newX;
 				oldY = newY;
-				repaint();
+				//repaint();
 			}
 		} else if (action == MotionEvent.ACTION_DOWN) {
 			oldX = event.getX();
@@ -114,7 +115,7 @@ public class GraphicalView extends View {
 			oldX = 0;
 			oldY = 0;
 		}
-	}
+	}*/
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -127,11 +128,12 @@ public class GraphicalView extends View {
 		mChart.draw(canvas, left, top, width, height);
 	}
 
+	/*
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		handleTouch(event);
 		return true;
-	}
+	}*/
 
 	/**
 	 * Schedule a user interface repaint.

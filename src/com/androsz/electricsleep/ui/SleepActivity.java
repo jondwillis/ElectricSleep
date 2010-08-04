@@ -92,27 +92,37 @@ public class SleepActivity extends CustomTitlebarActivity {
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
-			if (xySeriesMovement.getItemCount() < 2) {
-				waitForSeriesData = new WaitForSeriesDataProgressDialog(this);
-				waitForSeriesData
-						.setMessage(getText(R.string.dialog_wait_for_sleep_data_message));
-				// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
-				waitForSeriesData.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.exit),
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
-
-								stopService(new Intent(SleepActivity.this, SleepAccelerometerService.class));
-								SleepActivity.this.finish();
-							}
-						});
-				waitForSeriesData.show();
-			}
 			mChartView = ChartFactory
 					.getTimeChartView(this, xyMultipleSeriesDataset,
 							xyMultipleSeriesRenderer, "h:mm a");
 			layout.addView(mChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		}
+	}
+
+	private void showWaitForSeriesDataIfNeeded() {
+		if (xySeriesMovement.getItemCount() < 2) {
+			if (waitForSeriesData == null || !waitForSeriesData.isShowing()) {
+				waitForSeriesData = new WaitForSeriesDataProgressDialog(
+						this);
+				waitForSeriesData
+						.setMessage(getText(R.string.dialog_wait_for_sleep_data_message));
+				// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
+				waitForSeriesData.setButton(
+						DialogInterface.BUTTON_NEGATIVE,
+						getString(R.string.exit),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0,
+									int arg1) {
+
+								stopService(new Intent(SleepActivity.this,
+										SleepAccelerometerService.class));
+								SleepActivity.this.finish();
+							}
+						});
+				waitForSeriesData.show();
+			}
 		}
 	}
 
@@ -187,6 +197,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onPause() {
+		if (waitForSeriesData != null && waitForSeriesData.isShowing())
+			waitForSeriesData.dismiss();
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(syncChartReceiver);
 		super.onPause();
@@ -216,6 +228,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	protected void onResume() {
 		super.onResume();
 		addChartView();
+		showWaitForSeriesDataIfNeeded();
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
@@ -261,7 +274,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 			final int alarmTrigger = PreferenceManager
 					.getDefaultSharedPreferences(getBaseContext()).getInt(
-							getString(R.string.pref_alarm_trigger_sensitivity), -1);
+							getString(R.string.pref_alarm_trigger_sensitivity),
+							-1);
 			xySeriesAlarmTrigger.add(firstX, alarmTrigger);
 			xySeriesAlarmTrigger.add(lastX, alarmTrigger);
 

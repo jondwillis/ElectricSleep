@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="invalid_settings">Your calibration settings are invalid. Please manually configure settings or run the Calibration Wizard.</string>
-    <string name="message_recommend_calibration">
+	<string name="invalid_settings">Your calibration settings are invalid. Please
+		manually configure settings or run the Calibration Wizard.</string>
+	<string name="message_recommend_calibration">
 
-It is recommended that you run the Calibration Wizard or manually configure your Settings now.</string>
-    <string name="message_prefs_not_compatible">Your preferences are not compatible with this version of ElectricSleep.</string>
-    <string name="message_not_calibrated">You have not yet calibrated ElectricSleep to work on your device.</string>
-    <string name="alarm_trigger_sensitivity_set_to">Alarm trigger sensitivity set to: </string>
-    <string name="maximum_sensitivity_set_to">Maximum sensitivity set to: </string>
-    <string name="minimum_sensitivity_set_to">Minimum sensitivity set to: </string>
-    <string name="move_once">Move once.</string>
-    <string name="start_moving">Start moving.</string>
-    <string name="remain_still">Remain still.</string>
-    <string name="calibration_failed">Calibration failed. Try again.</string>
-    <string name="starting_in">Starting in 5 seconds</string>
+		It is recommended that you run the Calibration Wizard or manually
+		configure your Settings now.</string>
+	<string name="message_prefs_not_compatible">Your preferences are not compatible with this
+		version of ElectricSleep.</string>
+	<string name="message_not_calibrated">You have not yet calibrated ElectricSleep to work
+		on your device.</string>
+	<string name="alarm_trigger_sensitivity_set_to">Alarm trigger sensitivity set to: </string>
+	<string name="maximum_sensitivity_set_to">Maximum sensitivity set to: </string>
+	<string name="minimum_sensitivity_set_to">Minimum sensitivity set to: </string>
+	<string name="move_once">Move once.</string>
+	<string name="start_moving">Start moving.</string>
+	<string name="remain_still">Remain still.</string>
+	<string name="calibration_failed">Calibration failed. Try again.</string>
+	<string name="starting_in">Starting in 5 seconds</string>
 	<string name="calibrate_title_results">Calibration Results</string>
 	<string name="calibrate_directions_alarm">The calibration will begin after a 5 second delay,
 		and will last exactly 10 seconds if everything works. Gently move ONCE
@@ -113,8 +117,8 @@ It is recommended that you run the Calibration Wizard or manually configure your
 	<string name="starred_sessions">Sessions</string>
 	<string name="starred_vendors">Sandbox</string>
 
-	<string name="search_label">Google I/O</string>
-	<string name="search_hint">Session keywords</string>
+	<string name="search_label">ElectricSleep</string>
+	<string name="search_hint">Date of Sleep</string>
 
 	<string name="share_template">
 		Checking out \'
@@ -182,7 +186,8 @@ It is recommended that you run the Calibration Wizard or manually configure your
 	<string name="notification_sleep_started">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
-	<string name="dialog_wait_for_sleep_data_message">ElectricSleep has not been recording movement long enough for this chart to be meaningful yet. Please wait.</string>
+	<string name="dialog_wait_for_sleep_data_message">ElectricSleep has not been recording movement long
+		enough for this chart to be meaningful yet. Please wait.</string>
 	<string name="pref_minimum_sensitivity">minimum_sensitivity</string>
 	<string name="pref_maximum_sensitivity">maximum_sensitivity</string>
 	<string name="pref_alarm_trigger_sensitivity">alarmTriggerSensitivity</string>
@@ -213,5 +218,19 @@ It is recommended that you run the Calibration Wizard or manually configure your
 		move, roll, and flop about until you are informed by a voice that the
 		test is over. Press next when you are ready.</string>
 	<string name="calibrating">Calibrating...</string>
-<string name="prefs_version">prefsVersion</string>
+	<string name="prefs_version">prefsVersion</string>
+
+	<string name="settings_description">Sleep results</string>
+
+	<!-- General instructions in the main activity. -->
+	<string name="search_instructions">Tap search to search for previous sleep results</string>
+
+	<!-- Shown above search results when we receive a search request. -->
+	<plurals name="search_results">
+		<item quantity="one">%d result for \"%s\": </item>
+		<item quantity="other">%d results for \"%s\": </item>
+	</plurals>
+
+	<!-- Search failure message. -->
+	<string name="no_results">No results found for \"%s\"</string>
 </resources>

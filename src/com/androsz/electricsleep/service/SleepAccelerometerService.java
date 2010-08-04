@@ -1,5 +1,6 @@
 package com.androsz.electricsleep.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Notification;
@@ -65,10 +66,6 @@ public class SleepAccelerometerService extends Service implements
 		}
 	};
 
-	boolean mExternalStorageAvailable = false;
-
-	boolean mExternalStorageWriteable = false;
-
 	private void createNotification() {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -85,7 +82,8 @@ public class SleepAccelerometerService extends Service implements
 		final CharSequence contentTitle = getText(R.string.notification_sleep_title);
 		final CharSequence contentText = getText(R.string.notification_sleep_text);
 		final Intent notificationIntent = new Intent(this, SleepActivity.class);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+				| Intent.FLAG_ACTIVITY_NEW_TASK);
 		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, 0);
 
@@ -132,7 +130,7 @@ public class SleepAccelerometerService extends Service implements
 
 		unregisterReceiver(pokeSyncChartReceiver);
 
-		sensorManager.unregisterListener(this);
+		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
 		partialWakeLock.release();
 
@@ -142,16 +140,11 @@ public class SleepAccelerometerService extends Service implements
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			// We can read and write the media
-			mExternalStorageAvailable = mExternalStorageWriteable = true;
+
 		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
 			// We can only read the media
-			mExternalStorageAvailable = true;
-			mExternalStorageWriteable = false;
 		} else {
-			// Something else is wrong. It may be one of many other states, but
-			// all we need
-			// to know is we can neither read nor write
-			mExternalStorageAvailable = mExternalStorageWriteable = false;
+			// We can neither read nor write
 		}
 	}
 
@@ -205,17 +198,6 @@ public class SleepAccelerometerService extends Service implements
 		maxSensitivity = intent.getIntExtra("max", maxSensitivity);
 		alarmTriggerSensitivity = intent.getIntExtra("alarm",
 				alarmTriggerSensitivity);
-
-		// correct the raw calibration to work at this specific update
-		// frequency.
-		// *should* work pretty well but needs testing.
-		minSensitivity *= updateInterval / 30000;
-		minSensitivity = Math.min(minSensitivity, maxSensitivity);
-		if (alarmTriggerSensitivity > 0) {
-			alarmTriggerSensitivity = minSensitivity + alarmTriggerSensitivity;
-			alarmTriggerSensitivity = Math.min(alarmTriggerSensitivity,
-					maxSensitivity);
-		}
 
 		return startId;
 	}

@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 							});
 			dialog.show();
 		} else if (service != null && activity != null) {
+
 			startService(service);
 			startActivity(activity);
 		}
@@ -101,19 +103,19 @@ public class HomeActivity extends CustomTitlebarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// change title in titlebar without changing the app's name in the
 		// launcher
-		//this.setTitle(R.string.title_home);
+		// this.setTitle(R.string.title_home);
 
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
-		showTitleButton2(R.drawable.ic_title_refresh);
+		// showTitleButton2(R.drawable.ic_title_refresh);
 		setHomeButtonAsLogo();
 
 		enforceCalibrationBeforeStartingSleep(null, null);
 	}
 
 	public void onHistoryClick(View v) {
-		startActivity(new Intent(this, SettingsActivity.class));
+		startActivity(new Intent(this, HistoryActivity.class));
 	}
 
 	@Override
@@ -126,7 +128,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 	}
 
 	public void onSleepClick(View v) throws Exception {
-
 		final SharedPreferences userPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		final int maxSensitivity = userPrefs.getInt(
@@ -138,10 +139,10 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 		if (maxSensitivity < 0 || minSensitivity < 0
 				|| alarmTriggerSensitivity < 0) {
-			final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-					.setMessage(
-							getString(R.string.invalid_settings))
-					.setCancelable(false).setPositiveButton("Calibrate",
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(
+					HomeActivity.this).setMessage(
+					getString(R.string.invalid_settings)).setCancelable(false)
+					.setPositiveButton("Calibrate",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
@@ -164,15 +165,16 @@ public class HomeActivity extends CustomTitlebarActivity {
 			return;
 		}
 
-		final Intent i = new Intent(this, SleepAccelerometerService.class);
+		final Intent i = new Intent(HomeActivity.this,
+				SleepAccelerometerService.class);
 		i.putExtra("min", minSensitivity);
 		i.putExtra("max", maxSensitivity);
 		i.putExtra("alarm", alarmTriggerSensitivity);
-		enforceCalibrationBeforeStartingSleep(i, new Intent(this,
+		enforceCalibrationBeforeStartingSleep(i, new Intent(HomeActivity.this,
 				SleepActivity.class));
 	}
 
 	public void onTitleButton1Click(View v) {
-		Toast.makeText(this, "ohhh", Toast.LENGTH_SHORT);
+		Toast.makeText(this, "ohhh", Toast.LENGTH_SHORT).show();
 	}
 }
