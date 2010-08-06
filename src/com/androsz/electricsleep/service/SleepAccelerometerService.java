@@ -1,7 +1,9 @@
 package com.androsz.electricsleep.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -21,6 +23,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.SleepActivity;
 
 public class SleepAccelerometerService extends Service implements
@@ -50,7 +53,7 @@ public class SleepAccelerometerService extends Service implements
 
 	private int updateInterval = 60000;
 
-	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI;
+	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_NORMAL;
 
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
@@ -138,6 +141,14 @@ public class SleepAccelerometerService extends Service implements
 
 		final String state = Environment.getExternalStorageState();
 
+		
+		SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
+		try {
+			shdb.addSleep(SimpleDateFormat.getDateTimeInstance().format(new Date()), currentSeriesX, currentSeriesY, minSensitivity, maxSensitivity, alarmTriggerSensitivity);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			// We can read and write the media
 

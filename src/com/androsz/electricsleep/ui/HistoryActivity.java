@@ -31,7 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
-import com.androsz.electricsleep.db.SleepDatabase;
+import com.androsz.electricsleep.db.SleepHistoryDatabase;
 
 public class HistoryActivity extends CustomTitlebarActivity {
 
@@ -65,6 +65,12 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			showResults(query);
 		}
 	}
+	
+	public boolean onSearchRequested()
+	{
+		showResults("");
+		return super.onSearchRequested();
+	}
 
 	/**
 	 * Searches the dictionary and displays results for the given query.
@@ -90,12 +96,11 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			mTextView.setText(countString);
 
 			// Specify the columns we want to display in the result
-			String[] from = new String[] { SleepDatabase.KEY_WORD,
-					SleepDatabase.KEY_DEFINITION };
+			String[] from = new String[] { SleepHistoryDatabase.KEY_SLEEP_DATE_TIME };
 
 			// Specify the corresponding layout elements where we want the
 			// columns to go
-			int[] to = new int[] { R.id.word, R.id.definition };
+			int[] to = new int[] { R.id.word };
 
 			// Create a simple cursor adapter for the definitions and apply them
 			// to the ListView
