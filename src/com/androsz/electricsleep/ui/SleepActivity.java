@@ -59,7 +59,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	private XYSeriesRenderer xySeriesAlarmTriggerRenderer;
 
-	private GraphicalView mChartView;
+	private GraphicalView chartGraphicalView;
 
 	private ProgressDialog waitForSeriesData;
 
@@ -92,10 +92,10 @@ public class SleepActivity extends CustomTitlebarActivity {
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
-			mChartView = ChartFactory
+			chartGraphicalView = ChartFactory
 					.getTimeChartView(this, xyMultipleSeriesDataset,
 							xyMultipleSeriesRenderer, "h:mm a");
-			layout.addView(mChartView, new LayoutParams(
+			layout.addView(chartGraphicalView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		}
 	}
@@ -170,7 +170,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 				xyMultipleSeriesRenderer.setXLabels(5);
 			}
 			xyMultipleSeriesRenderer.setYLabels(0);
-			xyMultipleSeriesRenderer.setYTitle("Movement level during sleep");
+			xyMultipleSeriesRenderer.setYTitle(getString(R.string.movement_level_during_sleep));
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(
 					R.color.text));
@@ -187,7 +187,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		this.setTitle("Monitoring Sleep");
+		this.setTitle(R.string.monitoring_sleep);
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
@@ -279,7 +279,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xySeriesAlarmTrigger.add(firstX, alarmTrigger);
 			xySeriesAlarmTrigger.add(lastX, alarmTrigger);
 
-			mChartView.repaint();
+			chartGraphicalView.repaint();
 		}
 	}
 }

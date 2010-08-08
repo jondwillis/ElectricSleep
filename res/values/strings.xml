@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="monitoring_sleep">Monitoring Sleep</string>
+    <string name="movement_level_during_sleep">Movement level during sleep</string>
+    <string name="search">Search</string>
 	<string name="invalid_settings">Your calibration settings are invalid. Please
 		manually configure settings or run the Calibration Wizard.</string>
 	<string name="message_recommend_calibration">
@@ -44,7 +47,7 @@
 	<string name="finish">Finish</string>
 	<string name="previous">Previous</string>
 	<string name="next">Next</string>
-	<string name="app_name">Electric Sleep</string>
+	<string name="app_name">ElectricSleep</string>
 
 	<string name="description_logo">Electric Sleep</string>
 	<string name="description_home">Home</string>

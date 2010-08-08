@@ -64,11 +64,15 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			showResults(query);
 		}
+		else
+		{
+			showResults("to");
+		}
 	}
 	
 	public boolean onSearchRequested()
 	{
-		showResults("");
+		showResults("to");
 		return super.onSearchRequested();
 	}
 
@@ -79,9 +83,9 @@ public class HistoryActivity extends CustomTitlebarActivity {
 	 *            The search query
 	 */
 	private void showResults(String query) {
-		
+
 		Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI, null,
-				null, new String[] { query }, null);
+				null, new String[] { query }, SleepHistoryDatabase.KEY_SLEEP_DATE_TIME + " DESC");
 
 		if (cursor == null) {
 			// There are no results
@@ -107,6 +111,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			SimpleCursorAdapter sleepHistory = new SimpleCursorAdapter(this,
 					R.layout.list_item_sleep_history, cursor, from, to);
 			mListView.setAdapter(sleepHistory);
+			//mListView.setBackgroundColor(android.R.color.transparent);
 
 			// Define the on-click listener for the list items
 			mListView.setOnItemClickListener(new OnItemClickListener() {

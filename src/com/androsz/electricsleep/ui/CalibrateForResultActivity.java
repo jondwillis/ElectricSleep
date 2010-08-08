@@ -52,7 +52,7 @@ public class CalibrateForResultActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ProgressBar progress = new ProgressBar(this);
-		progress.setIndeterminate(false);
+		
 		setContentView(progress);
 	}
 

@@ -1,9 +1,11 @@
 package com.androsz.electricsleep.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -53,7 +55,9 @@ public class SleepAccelerometerService extends Service implements
 
 	private int updateInterval = 60000;
 
-	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_NORMAL;
+	private Date dateStarted;
+
+	public static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_UI;
 
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
@@ -125,6 +129,8 @@ public class SleepAccelerometerService extends Service implements
 		obtainWakeLock();
 
 		createNotification();
+
+		dateStarted = new Date();
 	}
 
 	@Override
@@ -139,23 +145,33 @@ public class SleepAccelerometerService extends Service implements
 
 		notificationManager.cancel(notificationId);
 
-		final String state = Environment.getExternalStorageState();
+		saveSleepData();
+	}
 
-		
-		SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
-		try {
-			shdb.addSleep(SimpleDateFormat.getDateTimeInstance().format(new Date()), currentSeriesX, currentSeriesY, minSensitivity, maxSensitivity, alarmTriggerSensitivity);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			// We can read and write the media
+	private void saveSleepData() {
+		if (currentSeriesX.size() > 1 && currentSeriesY.size() > 1) {
+			SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
+			try {
+				DateFormat sdf = SimpleDateFormat
+						.getDateTimeInstance(DateFormat.SHORT,
+								DateFormat.SHORT, Locale.getDefault());
+				DateFormat sdf2 = SimpleDateFormat
+						.getDateTimeInstance(DateFormat.SHORT,
+								DateFormat.SHORT, Locale.getDefault());
+				Date now = new Date();
+				if (dateStarted.getDate() == now.getDate()) {
+					sdf2 = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
+				}
 
-		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			// We can only read the media
-		} else {
-			// We can neither read nor write
+				shdb
+						.addSleep(sdf.format(dateStarted) + " to "
+								+ sdf2.format(now), currentSeriesX,
+								currentSeriesY, minSensitivity, maxSensitivity,
+								alarmTriggerSensitivity);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

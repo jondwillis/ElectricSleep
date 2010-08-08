@@ -55,7 +55,7 @@ public class SleepHistoryDatabase {
 	public static final String KEY_SLEEP_DATA_X = "sleep_data_x";
 	public static final String KEY_SLEEP_DATA_Y = "sleep_data_y";
 	public static final String KEY_SLEEP_DATA_MIN = "sleep_data_min";
-	public static final String KEY_SLEEP_DATA_MAX = "sleep_data_min";
+	public static final String KEY_SLEEP_DATA_MAX = "sleep_data_max";
 	public static final String KEY_SLEEP_DATA_ALARM = "sleep_data_alarm";
 
 	private static final String DATABASE_NAME = "sleephistory";
@@ -219,7 +219,7 @@ public class SleepHistoryDatabase {
 		return baos.toByteArray();
 	}
 
-	private static Object byteArrayToObject(byte[] bytes)
+	public static Object byteArrayToObject(byte[] bytes)
 			throws StreamCorruptedException, IOException,
 			ClassNotFoundException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -232,9 +232,6 @@ public class SleepHistoryDatabase {
 	 * This creates/opens the database.
 	 */
 	private static class SleepHistoryDBOpenHelper extends SQLiteOpenHelper {
-
-		private final Context mHelperContext;
-		private SQLiteDatabase mDatabase;
 
 		/*
 		 * Note that FTS3 does not support column constraints and thus, you
@@ -250,19 +247,11 @@ public class SleepHistoryDatabase {
 
 		SleepHistoryDBOpenHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
-			mHelperContext = context;
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			mDatabase = db;
-			mDatabase.execSQL(FTS_TABLE_CREATE);
-		}
-		
-		@Override
-		public void onOpen(SQLiteDatabase db)
-		{
-			mDatabase = db;
+			db.execSQL(FTS_TABLE_CREATE);
 		}
 
 		/**
@@ -276,28 +265,26 @@ public class SleepHistoryDatabase {
 				ArrayList<Double> sleepChartDataY, int min, int max, int alarm)
 				throws IOException {
 
-			while (mDatabase == null) {
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			SQLiteDatabase db = getWritableDatabase();
+			long insertResult = -1;
+			try {
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(KEY_SLEEP_DATE_TIME, sleepDateTime);
+
+				initialValues.put(KEY_SLEEP_DATA_X,
+						objectToByteArray(sleepChartDataX));
+				initialValues.put(KEY_SLEEP_DATA_Y,
+						objectToByteArray(sleepChartDataY));
+
+				initialValues.put(KEY_SLEEP_DATA_MIN, min);
+				initialValues.put(KEY_SLEEP_DATA_MAX, max);
+				initialValues.put(KEY_SLEEP_DATA_ALARM, alarm);
+				insertResult = db.insert(FTS_VIRTUAL_TABLE, null,
+						initialValues);
+			} finally {
+				db.close();
 			}
-
-			ContentValues initialValues = new ContentValues();
-			initialValues.put(KEY_SLEEP_DATE_TIME, sleepDateTime);
-
-			initialValues.put(KEY_SLEEP_DATA_X,
-					objectToByteArray(sleepChartDataX));
-			initialValues.put(KEY_SLEEP_DATA_Y,
-					objectToByteArray(sleepChartDataY));
-
-			initialValues.put(KEY_SLEEP_DATA_MIN, min);
-			initialValues.put(KEY_SLEEP_DATA_MAX, max);
-			initialValues.put(KEY_SLEEP_DATA_ALARM, alarm);
-
-			return mDatabase.insert(FTS_VIRTUAL_TABLE, null, initialValues);
+			return insertResult;
 		}
 
 		@Override

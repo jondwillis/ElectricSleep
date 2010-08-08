@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -71,4 +74,22 @@ public abstract class CustomTitlebarActivity extends Activity {
 		btn2.setVisibility(View.INVISIBLE);
 		findViewById(R.id.title_sep_2).setVisibility(View.INVISIBLE);
 	}
+	
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.titlebar_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemSearch:
+                onSearchRequested();
+                return true;
+            default:
+                return false;
+        }
+    }
+	
 }
