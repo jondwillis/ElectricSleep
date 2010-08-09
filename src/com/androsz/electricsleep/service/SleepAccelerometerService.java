@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -193,28 +194,54 @@ public class SleepAccelerometerService extends Service implements
 					.max(minSensitivity, java.lang.Math.min(maxSensitivity,
 							deltaTime / averageTimeBetweenUpdates));
 
+			int yOneAgoIndex = currentSeriesY.size() - 1;
+			int yTwoAgoIndex = currentSeriesY.size() - 2;
+
+			// this should help reduce both runtime memory and saved data memory
+			// later on.
+			boolean syncChart = false;
+			if (yTwoAgoIndex > 0) {
+				double oneAgo = currentSeriesY.get(yOneAgoIndex);
+				double twoAgo = currentSeriesY.get(yTwoAgoIndex);
+				if (Math.round(oneAgo) == Math.round(twoAgo)
+						&& Math.round(oneAgo) == Math.round(y)) {
+					currentSeriesX.remove(yOneAgoIndex);
+					currentSeriesY.remove(yOneAgoIndex);
+					// flag to sync instead of update
+					syncChart = true;
+				}
+			}
+
 			currentSeriesX.add(x);
 			currentSeriesY.add(y);
 
-			final Intent i = new Intent(SleepActivity.UPDATE_CHART);
-			i.putExtra("x", x);
-			i.putExtra("y", y);
-			i.putExtra("min", minSensitivity);
-			i.putExtra("max", maxSensitivity);
-			sendBroadcast(i);
+			if (syncChart) {
+				pokeSyncChartReceiver.onReceive(this, null);
+			} else {
+				final Intent i = new Intent(SleepActivity.UPDATE_CHART);
+				i.putExtra("x", x);
+				i.putExtra("y", y);
+				i.putExtra("min", minSensitivity);
+				i.putExtra("max", maxSensitivity);
+				sendBroadcast(i);
+			}
 
 			totalNumberOfSensorChanges = 0;
 			totalTimeBetweenSensorChanges = 0;
 
 			lastChartUpdateTime = currentTime;
 
-			// if (currentTime > 1280125500000L && y > MIN_SENSITIVITY * 1.5f) {
-			/*
-			 * if (currentTime > 12801395400L && y > alarmTriggerSensitivity) {
-			 * stopSelf(); }
-			 */
-		}
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 9);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			long alarmMillis = cal.getTimeInMillis();
+			if (currentTime >= alarmMillis && y > alarmTriggerSensitivity) {
+				stopSelf();
+			}
 
+		}
 		lastOnSensorChangedTime = currentTime;
 	}
 

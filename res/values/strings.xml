@@ -6,8 +6,7 @@
 	<string name="invalid_settings">Your calibration settings are invalid. Please
 		manually configure settings or run the Calibration Wizard.</string>
 	<string name="message_recommend_calibration">
-
-		It is recommended that you run the Calibration Wizard or manually
+		\n\nIt is recommended that you run the Calibration Wizard or manually
 		configure your Settings now.</string>
 	<string name="message_prefs_not_compatible">Your preferences are not compatible with this
 		version of ElectricSleep.</string>
@@ -236,4 +235,58 @@
 
 	<!-- Search failure message. -->
 	<string name="no_results">No results found for \"%s\"</string>
+<string-array name="array_prefs_alarm_window_friendly"><item>5 minutes</item>
+<item>10 minutes</item>
+<item>15 minutes</item>
+<item>20 minutes</item>
+<item>25  minutes</item>
+<item>30 minutes</item>
+<item>35 minutes</item>
+<item>40 minutes</item>
+<item>45 minutes</item>
+<item>50 minutes</item>
+<item>55 minutes</item>
+<item>1 hour</item>
+<item>1 hour 5 minutes</item>
+<item>1 hour 10 minutes</item>
+<item>1 hour 15 minutes</item>
+<item>1 hour 20 minutes</item>
+<item>1 hour 25 minutes</item>
+<item>1 hour 30 minutes</item>
+<item>1 hour 35 minutes</item>
+<item>1 hour 40 minutes</item>
+<item>1 hour 45 minutes</item>
+<item>1 hour 50 minutes</item>
+<item>1 hour 55 minutes</item>
+<item>2 hours</item>
+</string-array>
+
+<string-array name="array_prefs_alarm_window_values"><item>5</item>
+<item>10</item>
+<item>15</item>
+<item>20</item>
+<item>25</item>
+<item>30</item>
+<item>35</item>
+<item>40</item>
+<item>45</item>
+<item>50</item>
+<item>55</item>
+<item>60</item>
+<item>65</item>
+<item>70</item>
+<item>75</item>
+<item>80</item>
+<item>85</item>
+<item>90</item>
+<item>95</item>
+<item>100</item>
+<item>105</item>
+<item>110</item>
+<item>115</item>
+<item>120</item>
+</string-array>
+<string name="title_pref_alarm_window">Alarm Window Length</string>
+<string name="summary_pref_alarm_window">The window of time before your alarm is set to go off during which ElectricSleep will try to wake you.</string>
+<string name="pref_alarm_window">alarmWindow</string>
 </resources>

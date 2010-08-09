@@ -2,18 +2,18 @@ package com.androsz.electricsleep.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ListView;
 
 import com.androsz.electricsleep.R;
 
-public class SettingsActivity extends PreferenceActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.settings);
-	}
+public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 
 	@Override
 	protected void onDestroy() {
@@ -37,7 +37,8 @@ public class SettingsActivity extends PreferenceActivity {
 		final int alarmSensitivity = userPrefs.getInt(
 				getString(R.string.pref_alarm_trigger_sensitivity), 30);
 
-		if (!areSensitivitiesValid(minSensitivity, maxSensitivity, alarmSensitivity)) {
+		if (!areSensitivitiesValid(minSensitivity, maxSensitivity,
+				alarmSensitivity)) {
 			final SharedPreferences.Editor ed = userPrefs.edit();
 			ed.putInt(getString(R.string.pref_minimum_sensitivity), 0);
 			ed.putInt(getString(R.string.pref_maximum_sensitivity), 100);
@@ -51,22 +52,28 @@ public class SettingsActivity extends PreferenceActivity {
 		if (maxSensitivity < 0 || minSensitivity < 0 || alarmSensitivity < 0) {
 			return false;
 		}
-		
-		if(minSensitivity > alarmSensitivity || minSensitivity > maxSensitivity)
-		{
+
+		if (minSensitivity > alarmSensitivity
+				|| minSensitivity > maxSensitivity) {
 			return false;
 		}
-		
-		if(alarmSensitivity > maxSensitivity || alarmSensitivity < minSensitivity)
-		{
+
+		if (alarmSensitivity > maxSensitivity
+				|| alarmSensitivity < minSensitivity) {
 			return false;
 		}
-		
-		if(maxSensitivity < alarmSensitivity || maxSensitivity < minSensitivity)
-		{
+
+		if (maxSensitivity < alarmSensitivity
+				|| maxSensitivity < minSensitivity) {
 			return false;
 		}
-		
+
 		return true;
+	}
+
+	@Override
+	protected int getContentAreaLayoutId() {
+		// TODO Auto-generated method stub
+		return R.xml.settings;
 	}
 }

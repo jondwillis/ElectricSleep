@@ -1,55 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/custom_titlebar_container" android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/titlebar_container" android:layout_height="match_parent"
+	android:layout_width="match_parent" android:background="@color/primary1">
 
-	<RelativeLayout android:id="@+id/titlebar_container"
-		android:layout_width="fill_parent" android:layout_height="@dimen/title_height"
-		 style="@style/TitleBar">
+	<ImageButton android:id="@+id/title_home_button"
+		android:layout_width="@dimen/title_height" android:layout_height="match_parent"
+		android:layout_alignWithParentIfMissing="true"
+		android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+		android:layout_alignParentBottom="true" android:src="@drawable/ic_title_home"
+		android:background="@drawable/title_button" android:onClick="onHomeClick" />
+		
+	<ImageView android:id="@+id/title_home_button_sep"
+		android:layout_width="1px" android:layout_height="match_parent"
+		android:layout_alignParentTop="true" android:layout_alignParentBottom="true"
+		android:layout_toRightOf="@id/title_home_button" android:background="@color/titlebar_separator" />
+		
+	<TextView android:id="@+id/title_text" android:layout_height="wrap_content"
+		android:layout_alignParentTop="true" android:layout_alignParentBottom="true"
+		android:layout_toRightOf="@id/title_home_button_sep" style="@style/TitleBarText"
+		android:gravity="center_vertical" android:layout_width="wrap_content" />
 
-		<!-- Home button and title -->
-		<ImageButton android:id="@+id/title_home_button"
-			android:layout_width="@dimen/title_height" android:layout_height="fill_parent"
-			android:layout_alignWithParentIfMissing="true"
-			android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
-			android:layout_alignParentBottom="true" android:src="@drawable/ic_title_home"
-			android:background="@drawable/title_button" android:onClick="onHomeClick"/>
-		<ImageView android:id="@+id/title_home_button_sep"
-			android:layout_width="1px" android:layout_height="fill_parent"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentBottom="true" android:layout_toRightOf="@id/title_home_button"
-			android:background="@color/titlebar_separator" />
-		<TextView android:id="@+id/title_text" android:layout_height="wrap_content" android:layout_alignParentTop="true"
-			android:layout_alignParentBottom="true" android:layout_toRightOf="@id/title_home_button_sep"
-			style="@style/TitleBarText" android:gravity="center_vertical" android:layout_width="wrap_content"/>
+	<ImageView android:id="@+id/title_sep_1"
+		android:layout_width="1px" android:layout_height="match_parent"
+		android:layout_alignParentTop="true" android:layout_alignParentBottom="true"
+		android:layout_toLeftOf="@+id/title_button_1" android:background="@color/titlebar_separator"
+		android:visibility="gone" />
+		
+	<ImageButton android:id="@+id/title_button_1"
+		android:layout_width="@dimen/title_height" android:layout_height="match_parent"
+		android:layout_toLeftOf="@+id/title_sep_2"
+		android:layout_alignWithParentIfMissing="true"
+		android:layout_alignParentTop="true" android:layout_alignParentBottom="true"
+		android:src="@drawable/ic_title_refresh" android:background="@drawable/title_button"
+		android:onClick="onTitleButton1Click" android:visibility="gone" />
+		
+	<ProgressBar android:id="@+id/title_progress_1"
+		android:indeterminate="true" android:layout_toLeftOf="@dimen/title_height"
+		android:layout_width="@dimen/title_height" android:layout_height="@dimen/title_height"
+		android:visibility="gone" android:layout_alignParentRight="true" />
 
-		<!-- Right buttons -->
-		<ImageView android:id="@+id/title_sep_1"
-			android:layout_width="1px" android:layout_height="fill_parent"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/title_button_1"
-			android:background="@color/titlebar_separator" android:visibility="gone"/>
-		<ImageButton android:id="@+id/title_button_1"
-			android:layout_width="@dimen/title_height" android:layout_height="fill_parent"
-			android:layout_toLeftOf="@+id/title_sep_2"
-			android:layout_alignWithParentIfMissing="true"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentBottom="true" android:src="@drawable/ic_title_refresh"
-			android:background="@drawable/title_button" android:onClick="onTitleButton1Click" android:visibility="gone"/>
-		<ProgressBar android:id="@+id/title_progress_1"
-			android:indeterminate="true" android:layout_toLeftOf="@dimen/title_height" android:layout_width="@dimen/title_height" android:layout_height="@dimen/title_height" android:visibility="gone" android:layout_alignParentRight="true"/>
+	<ImageView android:id="@+id/title_sep_2"
+		android:layout_width="1px" android:layout_height="match_parent"
+		android:layout_alignParentTop="true" android:layout_alignParentBottom="true"
+		android:layout_toLeftOf="@+id/title_button_2" android:background="@color/titlebar_separator"
+		android:visibility="gone" />
+		
+	<ImageButton android:id="@+id/title_button_2"
+		android:layout_width="@dimen/title_height" android:layout_height="match_parent"
+		android:layout_alignWithParentIfMissing="true"
+		android:layout_alignParentTop="true" android:layout_alignParentRight="true"
+		android:layout_alignParentBottom="true" android:src="@drawable/ic_title_search"
+		android:background="@drawable/title_button" android:onClick="onTitleButton2Click"
+		android:visibility="gone" />
 
-		<ImageView android:id="@+id/title_sep_2"
-			android:layout_width="1px" android:layout_height="fill_parent"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/title_button_2"
-			android:background="@color/titlebar_separator" android:visibility="gone"/>
-		<ImageButton android:id="@+id/title_button_2"
-			android:layout_width="@dimen/title_height" android:layout_height="fill_parent"
-			android:layout_alignWithParentIfMissing="true"
-			android:layout_alignParentTop="true" android:layout_alignParentRight="true"
-			android:layout_alignParentBottom="true" android:src="@drawable/ic_title_search"
-			android:background="@drawable/title_button" android:onClick="onTitleButton2Click" android:visibility="gone"/>
-
-	</RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

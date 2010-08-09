@@ -4,10 +4,18 @@
 	<style name="Theme" parent="android:Theme"></style>
 
 	<!-- Variation on the Light theme that turns off the title -->
-	<style name="Theme.electricsleep" parent="android:style/Theme.Light">
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:windowContentOverlay">@null</item>
-	</style>
+	<style name="Theme.electricsleep">
+		<item name="android:windowContentOverlay">@android:color/transparent</item>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item> 
+		<item name="android:windowTitleSize">@dimen/title_height</item>
+	</style> 
+	
+	<style name="WindowTitleBackground" parent="android:WindowTitleBackground">    
+ 
+        <item name="android:background">@android:color/transparent</item>        
+ 
+    </style> 
 
 	<style name="HomeButton">
 		<item name="android:padding">10dip</item>
@@ -20,14 +28,6 @@
 		<item name="android:textStyle">bold</item>
 		<item name="android:textColor">@color/primary1</item>
 		<item name="android:background">@null</item>
-	</style>
-
-	<style name="TitleBar">
-		<item name="android:id">@id/title_container</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">@dimen/title_height</item>
-		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@color/primary1</item>
 	</style>
 
 	<style name="TitleBarAction">

@@ -101,11 +101,9 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// change title in titlebar without changing the app's name in the
-		// launcher
-		// this.setTitle(R.string.title_home);
-
 		super.onCreate(savedInstanceState);
+		
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
 		showTitleButton1(R.drawable.ic_title_export);
 		// showTitleButton2(R.drawable.ic_title_refresh);

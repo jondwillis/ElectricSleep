@@ -9,6 +9,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.view.WindowManager;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.androsz.electricsleep.service.SleepAccelerometerService;
@@ -16,9 +19,7 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
 public class CalibrateForResultActivity extends Activity {
 
 	public static final int CALIBRATION_FAILED = -0x1337;
-	private PowerManager powerManager;
-	private WakeLock partialWakeLock;
-
+	
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -27,14 +28,6 @@ public class CalibrateForResultActivity extends Activity {
 			finish();
 		}
 	};
-
-	private void obtainWakeLock() {
-		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		partialWakeLock = powerManager.newWakeLock(
-				PowerManager.ON_AFTER_RELEASE
-						| PowerManager.SCREEN_DIM_WAKE_LOCK, toString());
-		partialWakeLock.acquire();
-	}
 
 	@Override
 	public void onBackPressed() {
@@ -51,15 +44,18 @@ public class CalibrateForResultActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		LinearLayout container = new LinearLayout(this);
 		ProgressBar progress = new ProgressBar(this);
+
+		container.addView(progress, 72, 72);
+		setContentView(container);
 		
-		setContentView(progress);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 	@Override
 	protected void onPause() {
 		unregisterReceiver(updateChartReceiver);
-		partialWakeLock.release();
 		super.onPause();
 	}
 
@@ -68,7 +64,6 @@ public class CalibrateForResultActivity extends Activity {
 		super.onResume();
 		registerReceiver(updateChartReceiver, new IntentFilter(
 				SleepActivity.UPDATE_CHART));
-		obtainWakeLock();
 	}
 
 	/*@Override

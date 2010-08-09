@@ -197,7 +197,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 
 	private void notifyUser(String message, boolean toast) {
 		if (ttsAvailable) {
-			textToSpeech.speak(message, TextToSpeech.QUEUE_ADD, null);
+			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
 		}
 		if (toast) {
 			Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

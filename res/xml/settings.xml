@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="Movement calibration">
+	<PreferenceCategory android:title="@string/title_calibrate">
 		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_minimum_sensitivity"
-			android:summary="@string/summary_minimum_sensitivity" 
-			android:key="@string/pref_minimum_sensitivity" />
-		<com.androsz.electricsleep.ui.SeekBarPreference 
+			android:summary="@string/summary_minimum_sensitivity" android:key="@string/pref_minimum_sensitivity" android:defaultValue="0" />
+		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_maximum_sensitivity"
-			android:summary="@string/summary_maximum_sensitivity" 
-			android:key="@string/pref_maximum_sensitivity" />
-		<com.androsz.electricsleep.ui.SeekBarPreference 
+			android:summary="@string/summary_maximum_sensitivity" android:key="@string/pref_maximum_sensitivity" android:defaultValue="100" />
+		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_alarm_trigger_sensitivity"
 			android:summary="@string/summary_alarm_trigger_sensitivity"
-			android:key="@string/pref_alarm_trigger_sensitivity" />
+			android:key="@string/pref_alarm_trigger_sensitivity" android:defaultValue="33" />
+	
+</PreferenceCategory>
+	<PreferenceCategory android:title="@string/title_alarms">
+		<ListPreference android:entries="@array/array_prefs_alarm_window_friendly"
+			android:entryValues="@array/array_prefs_alarm_window_values"
+			android:title="@string/title_pref_alarm_window" android:summary="@string/summary_pref_alarm_window"
+			android:key="@string/pref_alarm_window" android:defaultValue="30"></ListPreference>
 	</PreferenceCategory>
 </PreferenceScreen>

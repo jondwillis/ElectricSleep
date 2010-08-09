@@ -14,14 +14,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
-
 /**
  * Helper class provides interoperability with Android AlarmClock database.
  * Based on com.android.alarmclock.Alarms class
  * <p/>
  * Copyright (c) 2005-2008, The Android Open Source Project Copyright (c) 2009,
  * Alexander Kosenkov Copyright (c) 2010, Jonathan Willis (modifications and
- * adoption into Electric Sleep Licensed under the Apache License, Version 2.0
+ * adoption into ElectricSleep)
+ *  Licensed under the Apache License, Version 2.0
  * (the "License");
  * <p/>
  * Project home: http://code.google.com/p/android-alarmclock-database/
@@ -154,11 +154,6 @@ public class AlarmDatabase {
 			c.add(Calendar.DAY_OF_WEEK, addDays);
 		}
 		return c;
-	}
-
-	@Deprecated
-	public static Intent changeAlarmSettings() {
-		return changeAlarmSettings(null);
 	}
 
 	/**

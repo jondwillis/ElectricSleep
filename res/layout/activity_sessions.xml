@@ -19,7 +19,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <LinearLayout style="@style/TitleBar">
+    <LinearLayout >
         <ImageButton style="@style/TitleBarAction"
             android:contentDescription="@string/description_home"
             android:src="@drawable/ic_title_home"

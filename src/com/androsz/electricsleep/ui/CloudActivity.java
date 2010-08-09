@@ -13,6 +13,7 @@ import com.androsz.electricsleep.R;
 
 public class CloudActivity extends CustomTitlebarActivity {
 
+	private WebView webView;
 	@Override
 	protected int getContentAreaLayoutId() {
 		// TODO Auto-generated method stub
@@ -25,7 +26,7 @@ public class CloudActivity extends CustomTitlebarActivity {
 		final ProgressBar progressWheel = (ProgressBar) super
 				.findViewById(R.id.title_progress_1);
 
-		WebView webView = (WebView) findViewById(R.id.webViewCloud);
+		webView = (WebView) findViewById(R.id.webViewCloud);
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setBlockNetworkImage(true);
 
@@ -48,6 +49,17 @@ public class CloudActivity extends CustomTitlebarActivity {
 		});
 
 		webView.loadUrl("http://androsz.com/");
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		if(webView != null)
+		{
+			webView.clearCache(true);
+		}
+		
+		super.onDestroy();
 	}
 
 }

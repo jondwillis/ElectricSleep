@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,28 +12,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androsz.electricsleep.R;
 
-public abstract class CustomTitlebarActivity extends Activity {
+public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivity {
 
 	protected abstract int getContentAreaLayoutId();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
 		getWindow().setFormat(PixelFormat.RGBA_8888);
-
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		setContentView(getContentAreaLayoutId());
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
-
+		super.onCreate(savedInstanceState);
+		this.setTheme(R.style.Theme_electricsleep);
+		ListView lvw = getListView();
+		lvw.setCacheColorHint(0);
+		lvw.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.gradient_background_vert));
+		addPreferencesFromResource(getContentAreaLayoutId());
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+				R.layout.titlebar);
 		((TextView) findViewById(R.id.title_text)).setText(getTitle());
-		//setContentView(R.layout.titlebar);
-		//View.inflate(this, getContentAreaLayoutId(),
-		//		(ViewGroup) findViewById(R.id.custom_titlebar_container));
 	}
 
 	public void onHomeClick(View v) {
