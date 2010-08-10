@@ -1,9 +1,8 @@
 package com.androsz.electricsleep.ui;
 
-import java.text.NumberFormat;
-
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -28,9 +27,19 @@ public class SeekBarPreference extends DialogPreference {
 	protected void onDialogClosed(boolean positiveResult) {
 		if (positiveResult) {
 			persistInt(seekBar.getProgress());
-			// setSummary(String.format("The value is %d",
-			// seekBar.getProgress()));
 		}
+	}
+
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index) {
+		return (int) a.getInt(index, 0);
+	}
+
+	@Override
+	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+		int temp = restoreValue ? getPersistedInt(0) : (Integer) defaultValue;
+		if (!restoreValue)
+			persistInt(temp);
 	}
 
 	@Override
@@ -39,6 +48,7 @@ public class SeekBarPreference extends DialogPreference {
 		final LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(new LinearLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setMinimumWidth(400);
 		layout.setPadding(20, 20, 20, 20);
 
@@ -46,6 +56,7 @@ public class SeekBarPreference extends DialogPreference {
 		textView.setLayoutParams(new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));
+
 		syncTextViewText(getPersistedInt(0));
 		textView.setPadding(5, 5, 5, 5);
 		layout.addView(textView);
@@ -82,8 +93,6 @@ public class SeekBarPreference extends DialogPreference {
 	}
 
 	private void syncTextViewText(int progress) {
-		final NumberFormat nf = NumberFormat.getIntegerInstance();
-		nf.setMinimumIntegerDigits(3);
-		textView.setText(nf.format(progress));
+		textView.setText("" + progress);
 	}
 }

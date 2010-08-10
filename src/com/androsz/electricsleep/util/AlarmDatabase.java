@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -13,15 +14,16 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Parcel;
 import android.util.Log;
+
 /**
  * Helper class provides interoperability with Android AlarmClock database.
  * Based on com.android.alarmclock.Alarms class
  * <p/>
  * Copyright (c) 2005-2008, The Android Open Source Project Copyright (c) 2009,
  * Alexander Kosenkov Copyright (c) 2010, Jonathan Willis (modifications and
- * adoption into ElectricSleep)
- *  Licensed under the Apache License, Version 2.0
+ * adoption into ElectricSleep) Licensed under the Apache License, Version 2.0
  * (the "License");
  * <p/>
  * Project home: http://code.google.com/p/android-alarmclock-database/
@@ -219,6 +221,17 @@ public class AlarmDatabase {
 		// i.putExtra(Alarms.ID, next_alarm_id);
 	}
 
+	public static void triggerAlarm(final Context context, final Alarm alarm) {
+		Intent intent = new Intent("com.android.deskclock.ALARM_ALERT");
+
+		Parcel out = Parcel.obtain();
+		alarm.writeToParcel(out, 0);
+		out.setDataPosition(0);
+		intent.putExtra("intent.extra.alarm_raw", out.marshall());
+		
+		context.sendBroadcast(intent);
+	}
+
 	/**
 	 * returns number of days from today until next alarmclock
 	 * 
@@ -363,11 +376,11 @@ public class AlarmDatabase {
 		return entity;
 	}
 
-	public Record getNearestEnabledAlarm() throws UnsupportedOperationException {
+	public Alarm getNearestEnabledAlarm() throws UnsupportedOperationException {
 		return getNearestEnabledAlarm(System.currentTimeMillis());
 	}
 
-	public Record getNearestEnabledAlarm(long minimumTime)
+	public Alarm getNearestEnabledAlarm(long minimumTime)
 			throws UnsupportedOperationException {
 		final Cursor cur = mContentResolver.query(mAlarmUri, null, "enabled=?",
 				new String[] { "1" }, null);
@@ -382,22 +395,16 @@ public class AlarmDatabase {
 			return null;
 		}
 
-		new Record(cur); // NB: side-effect!!
-		Record nearest = null;
+		Alarm nearest = null;
 
 		do {
-			// Get the field values
-			final int hour = cur.getInt(column_hour);
-			final int minute = cur.getInt(column_minutes);
-			final int daysOfWeek = cur.getInt(column_daysofweek);
-
-			final Calendar cal = calculateNextAlarm(hour, minute, daysOfWeek,
-					minimumTime);
+			Alarm current = new Alarm(cur); // NB: side-effect!!
+			Calendar cal = current.getNearestAlarmDate();
 
 			if ((nearest == null || cal
 					.compareTo(nearest.getNearestAlarmDate()) == -1)
 					&& cal.getTimeInMillis() > minimumTime) {
-				nearest = new Record(cur);
+				nearest = new Alarm(cur);
 				nearest.nearestAlarmDate = cal;
 			}
 

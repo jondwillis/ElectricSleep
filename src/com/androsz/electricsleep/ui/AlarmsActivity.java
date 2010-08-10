@@ -25,7 +25,7 @@ public class AlarmsActivity extends CustomTitlebarActivity {
 		final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
 				"com.android.deskclock");
 		adb.getNearestEnabledAlarm().getNearestAlarmDate();
-		final CharSequence text = adb.getNearestEnabledAlarm().audio;
+		final CharSequence text = adb.getNearestEnabledAlarm().alert.toString();
 		final int duration = Toast.LENGTH_SHORT;
 
 		Toast.makeText(getApplicationContext(), text, duration).show();

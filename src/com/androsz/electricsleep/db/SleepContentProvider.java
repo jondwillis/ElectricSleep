@@ -214,5 +214,4 @@ public class SleepContentProvider extends ContentProvider {
 			String[] selectionArgs) {
 		throw new UnsupportedOperationException();
 	}
-
 }

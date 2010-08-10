@@ -74,7 +74,7 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 		findViewById(R.id.title_sep_2).setVisibility(View.INVISIBLE);
 	}
 	
-/*
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.titlebar_menu, menu);
@@ -90,5 +90,4 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
                 return false;
         }
     }
-	*/
 }

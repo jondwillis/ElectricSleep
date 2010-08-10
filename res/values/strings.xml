@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="monitoring_sleep">Monitoring Sleep</string>
-    <string name="movement_level_during_sleep">Movement level during sleep</string>
-    <string name="search">Search</string>
+    <string name="preset">Preset:</string>
+    <string name="summary_pref_use_alarm_off">ElectricSleep will only monitor your sleep movements in sleep mode</string>
+    <string name="summary_pref_use_alarm_on">ElectricSleep will wake you before the next enabled alarm in sleep mode</string>
+    <string name="title_pref_use_alarm">Use Alarm</string>
+    <string name="pref_use_alarm">useAlarm</string>
+	<string name="monitoring_sleep">Monitoring Sleep</string>
+	<string name="movement_level_during_sleep">Movement level during sleep</string>
+	<string name="search">Search</string>
 	<string name="invalid_settings">Your calibration settings are invalid. Please
 		manually configure settings or run the Calibration Wizard.</string>
 	<string name="message_recommend_calibration">
-		\n\nIt is recommended that you run the Calibration Wizard or manually
+		\n\nIt is recommended that you run the Calibration
+		Wizard or manually
 		configure your Settings now.</string>
 	<string name="message_prefs_not_compatible">Your preferences are not compatible with this
 		version of ElectricSleep.</string>
@@ -21,27 +27,82 @@
 	<string name="calibration_failed">Calibration failed. Try again.</string>
 	<string name="starting_in">Starting in 5 seconds</string>
 	<string name="calibrate_title_results">Calibration Results</string>
-	<string name="calibrate_directions_alarm">The calibration will begin after a 5 second delay,
-		and will last exactly 10 seconds if everything works. Gently move ONCE
-		then remain still until you are informed by a voice that the test is
-		over. Press next when you are ready.</string>
-	<string name="calibrate_description_alarm">This test will calibrate the minimum amount of
-		movement that it takes for ElectricSleep to trigger a wake-up alarm.</string>
+	<string name="calibrate_directions_alarm">
+		<li>
+			The calibration will begin after a
+			<b>5 second delay.</b>
+		</li>
+		\n
+		<li>
+			It will last exactly
+			<b>5 seconds.</b>
+		</li>
+		\n
+		<li>
+			<b>Gently move ONCE
+				then remain still</b>
+			until you are informed by a voice that the test is
+			over.
+		</li>
+		\n
+		<li>Press next when you are ready.</li>
+	</string>
+	<string name="calibrate_description_alarm">
+		<b>Goal:</b>
+		identify the amount of
+		movement that it should take for ElectricSleep
+		to wake you up.
+	</string>
 	<string name="calibrate_title_alarm">Alarm Trigger Sensitivity</string>
-	<string name="calibrate_description_max">This test will calibrate the maximum amount of
-		movement that ElectricSleep will record. It is important for showing
-		concise and informative sleep movement charts.</string>
+	<string name="calibrate_description_max">
+		<b>Goal:</b>
+		limit the amount of movement that movement charts will display to
+		improve visualization.
+	</string>
 	<string name="calibrate_title_max">Maximum Movement Sensitivity</string>
-	<string name="calibrate_description_placement">Generally, it is best to place your device as out
-		of the way as possible, yet close enough so that it will move slightly
-		when you move. If you charge your device during the night, covering it
-		may cause it to overheat. At this time, situate yourself and your
-		device.</string>
+	<string name="calibrate_description_placement">
+		ElectricSleep uses your device\'s accelerometer to record movement
+		during sleep. Your device must move slightly when you move during the
+		night.\n\n
+		<li>
+			<b>DO</b>
+			place your device on your bed, couch... where it will absorb
+			vibrations from your pillow, mattress...
+		</li>
+		\n
+		<li>
+			<b>DO NOT</b>
+			place your device near edges, in direct contact with your body, or
+			cover
+			it if it is charging.
+		</li>
+		\n
+		<li>
+			<b>At this time,</b>
+			situate yourself and your device.
+		</li>
+	</string>
 	<string name="calibrate_title_placement">Device Placement</string>
-	<string name="calibrate_directions_min">The calibration will begin after a 5 second delay,
-		and will last exactly 30 seconds if everything works. Try to remain
-		completely still until you are informed by a voice that the test is
-		over. Press next when you are ready.</string>
+	<string name="calibrate_directions_min">
+		<li>
+			The calibration will begin after a
+			<b>5 second delay.</b>
+		</li>
+		\n
+		<li>
+			It will last exactly
+			<b>30 seconds.</b>
+		</li>
+		\n
+		<li>
+			Remain
+			<b>completely still</b>
+			until you are informed by a voice that the test is
+			over.
+		</li>
+		\n
+		<li>Press next when you are ready.</li>
+	</string>
 	<string name="calibrate_title_welcome">ElectricSleep Calibration Wizard</string>
 	<string name="finish">Finish</string>
 	<string name="previous">Previous</string>
@@ -197,28 +258,60 @@
 	<string name="title_pref_maximum_sensitivity">Max. movement sensitivity</string>
 	<string name="title_pref_alarm_trigger_sensitivity">Alarm trigger sensitivity</string>
 	<string name="summary_minimum_sensitivity">Filters out \'noise\' non-movements so they do not
-		visually distort movement charts. Change ONLY if automatic calibration
-		is not acceptable.</string>
+		visually distort movement charts.</string>
 	<string name="summary_maximum_sensitivity">Limits large movements so they do not visually
-		distort movement charts. Change ONLY if automatic calibration is not
-		acceptable.</string>
+		distort movement charts.</string>
 	<string name="summary_alarm_trigger_sensitivity">Minimum level of movement that will trigger alarm
-		to go off. Change ONLY if automatic calibration is not acceptable.</string>
+		to go off.</string>
 	<string name="exit">Exit</string>
 	<string name="calibrate_title_min">Minimum Movement Sensitivity</string>
-	<string name="calibrate_description_min">This test will calibrate the cut-off level for
-		movement \'noise\' that occurs when there is very little
-		human-discernable movement going on. This test will provide the
-		baseline for showing when you are NOT moving during sleep.</string>
-	<string name="calibrate_description_welcome">This wizard will guide you through calibrating
-		ElectricSleep to work with your device. This is necessary because
-		there are many different android devices and even more places to
-		sleep. At the end of the wizard, ElectricSleep will be configured to
-		record your movement during sleep accurately.</string>
-	<string name="calibrate_directions_max">The calibration will begin after a 5 second delay,
-		and will last exactly 10 seconds if everything works. Continuously
-		move, roll, and flop about until you are informed by a voice that the
-		test is over. Press next when you are ready.</string>
+	<string name="calibrate_description_min">
+		<b>Goal:</b>
+		find the cut-off level for
+		the \'noise\' that occurs when there is no
+		real
+		movement.
+	</string>
+	<string name="calibrate_description_welcome">
+		This wizard will calibrate ElectricSleep. The process takes about a
+		minute and requires your cooperation.\n\n
+		<li>
+			There are many
+			<b>different Android devices.</b>
+		</li>
+		\n
+		<li>
+			There are even
+			<b>more places to
+				sleep.</b>
+		</li>
+		\n
+		<li>
+			ElectricSleep needs to tune itself on your
+			<b>unique device</b>
+			so it can
+			<b>function correctly.</b>
+		</li>
+	</string>
+	<string name="calibrate_directions_max">
+		<li>
+			The calibration will begin after a
+			<b>5 second delay.</b>
+		</li>
+		\n
+		<li>
+			It will last exactly
+			<b>10 seconds.</b>
+		</li>
+		\n
+		<li>
+			<b>Continuously move, roll, and flop about</b>
+			until you are informed by a voice that the test is
+			over.
+		</li>
+		\n
+		<li>Press next when you are ready.</li>
+	</string>
 	<string name="calibrating">Calibrating...</string>
 	<string name="prefs_version">prefsVersion</string>
 
@@ -235,58 +328,61 @@
 
 	<!-- Search failure message. -->
 	<string name="no_results">No results found for \"%s\"</string>
-<string-array name="array_prefs_alarm_window_friendly"><item>5 minutes</item>
-<item>10 minutes</item>
-<item>15 minutes</item>
-<item>20 minutes</item>
-<item>25  minutes</item>
-<item>30 minutes</item>
-<item>35 minutes</item>
-<item>40 minutes</item>
-<item>45 minutes</item>
-<item>50 minutes</item>
-<item>55 minutes</item>
-<item>1 hour</item>
-<item>1 hour 5 minutes</item>
-<item>1 hour 10 minutes</item>
-<item>1 hour 15 minutes</item>
-<item>1 hour 20 minutes</item>
-<item>1 hour 25 minutes</item>
-<item>1 hour 30 minutes</item>
-<item>1 hour 35 minutes</item>
-<item>1 hour 40 minutes</item>
-<item>1 hour 45 minutes</item>
-<item>1 hour 50 minutes</item>
-<item>1 hour 55 minutes</item>
-<item>2 hours</item>
-</string-array>
+	<string-array name="array_prefs_alarm_window_friendly">
+		<item>5 minutes</item>
+		<item>10 minutes</item>
+		<item>15 minutes</item>
+		<item>20 minutes</item>
+		<item>25 minutes</item>
+		<item>30 minutes</item>
+		<item>35 minutes</item>
+		<item>40 minutes</item>
+		<item>45 minutes</item>
+		<item>50 minutes</item>
+		<item>55 minutes</item>
+		<item>1 hour</item>
+		<item>1 hour 5 minutes</item>
+		<item>1 hour 10 minutes</item>
+		<item>1 hour 15 minutes</item>
+		<item>1 hour 20 minutes</item>
+		<item>1 hour 25 minutes</item>
+		<item>1 hour 30 minutes</item>
+		<item>1 hour 35 minutes</item>
+		<item>1 hour 40 minutes</item>
+		<item>1 hour 45 minutes</item>
+		<item>1 hour 50 minutes</item>
+		<item>1 hour 55 minutes</item>
+		<item>2 hours</item>
+	</string-array>
 
-<string-array name="array_prefs_alarm_window_values"><item>5</item>
-<item>10</item>
-<item>15</item>
-<item>20</item>
-<item>25</item>
-<item>30</item>
-<item>35</item>
-<item>40</item>
-<item>45</item>
-<item>50</item>
-<item>55</item>
-<item>60</item>
-<item>65</item>
-<item>70</item>
-<item>75</item>
-<item>80</item>
-<item>85</item>
-<item>90</item>
-<item>95</item>
-<item>100</item>
-<item>105</item>
-<item>110</item>
-<item>115</item>
-<item>120</item>
-</string-array>
-<string name="title_pref_alarm_window">Alarm Window Length</string>
-<string name="summary_pref_alarm_window">The window of time before your alarm is set to go off during which ElectricSleep will try to wake you.</string>
-<string name="pref_alarm_window">alarmWindow</string>
+	<string-array name="array_prefs_alarm_window_values">
+		<item>5</item>
+		<item>10</item>
+		<item>15</item>
+		<item>20</item>
+		<item>25</item>
+		<item>30</item>
+		<item>35</item>
+		<item>40</item>
+		<item>45</item>
+		<item>50</item>
+		<item>55</item>
+		<item>60</item>
+		<item>65</item>
+		<item>70</item>
+		<item>75</item>
+		<item>80</item>
+		<item>85</item>
+		<item>90</item>
+		<item>95</item>
+		<item>100</item>
+		<item>105</item>
+		<item>110</item>
+		<item>115</item>
+		<item>120</item>
+	</string-array>
+	<string name="title_pref_alarm_window">Alarm Window Length</string>
+	<string name="summary_pref_alarm_window">The window of time before your alarm is set to go
+		off during which ElectricSleep will try to wake you.</string>
+	<string name="pref_alarm_window">alarmWindow</string>
 </resources>

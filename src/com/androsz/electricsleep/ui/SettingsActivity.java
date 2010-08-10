@@ -26,27 +26,6 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 		ed.commit();
 	}
 
-	private void initializePrefs() {
-
-		final SharedPreferences userPrefs = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
-		final int minSensitivity = userPrefs.getInt(
-				getString(R.string.pref_minimum_sensitivity), 0);
-		final int maxSensitivity = userPrefs.getInt(
-				getString(R.string.pref_maximum_sensitivity), 100);
-		final int alarmSensitivity = userPrefs.getInt(
-				getString(R.string.pref_alarm_trigger_sensitivity), 30);
-
-		if (!areSensitivitiesValid(minSensitivity, maxSensitivity,
-				alarmSensitivity)) {
-			final SharedPreferences.Editor ed = userPrefs.edit();
-			ed.putInt(getString(R.string.pref_minimum_sensitivity), 0);
-			ed.putInt(getString(R.string.pref_maximum_sensitivity), 100);
-			ed.putInt(getString(R.string.pref_alarm_trigger_sensitivity), 30);
-			ed.commit();
-		}
-	}
-
 	public static boolean areSensitivitiesValid(int minSensitivity,
 			int maxSensitivity, int alarmSensitivity) {
 		if (maxSensitivity < 0 || minSensitivity < 0 || alarmSensitivity < 0) {

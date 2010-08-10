@@ -3,20 +3,29 @@
 	<PreferenceCategory android:title="@string/title_calibrate">
 		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_minimum_sensitivity"
-			android:summary="@string/summary_minimum_sensitivity" android:key="@string/pref_minimum_sensitivity" android:defaultValue="0" />
+			android:summary="@string/summary_minimum_sensitivity" android:key="@string/pref_minimum_sensitivity"
+			android:defaultValue="0" />
 		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_maximum_sensitivity"
-			android:summary="@string/summary_maximum_sensitivity" android:key="@string/pref_maximum_sensitivity" android:defaultValue="100" />
+			android:summary="@string/summary_maximum_sensitivity" android:key="@string/pref_maximum_sensitivity"
+			android:defaultValue="100" />
 		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_alarm_trigger_sensitivity"
 			android:summary="@string/summary_alarm_trigger_sensitivity"
-			android:key="@string/pref_alarm_trigger_sensitivity" android:defaultValue="33" />
-	
-</PreferenceCategory>
+			android:key="@string/pref_alarm_trigger_sensitivity"
+			android:defaultValue="33" />
+
+	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/title_alarms">
+		<CheckBoxPreference android:summaryOn="@string/summary_pref_use_alarm_on"
+			android:summaryOff="@string/summary_pref_use_alarm_off" android:key="@string/pref_use_alarm"
+			android:title="@string/title_pref_use_alarm"
+			android:disableDependentsState="false"></CheckBoxPreference>
 		<ListPreference android:entries="@array/array_prefs_alarm_window_friendly"
 			android:entryValues="@array/array_prefs_alarm_window_values"
 			android:title="@string/title_pref_alarm_window" android:summary="@string/summary_pref_alarm_window"
-			android:key="@string/pref_alarm_window" android:defaultValue="30"></ListPreference>
+			android:key="@string/pref_alarm_window" android:defaultValue="30"
+			android:dependency="@string/pref_use_alarm"></ListPreference>
+
 	</PreferenceCategory>
 </PreferenceScreen>

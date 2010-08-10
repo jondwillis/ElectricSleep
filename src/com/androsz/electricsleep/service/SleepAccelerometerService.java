@@ -28,6 +28,9 @@ import android.os.PowerManager.WakeLock;
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.SleepActivity;
+import com.androsz.electricsleep.util.Alarm;
+import com.androsz.electricsleep.util.AlarmDatabase;
+import com.androsz.electricsleep.util.AlarmDatabase.Record;
 
 public class SleepAccelerometerService extends Service implements
 		SensorEventListener {
@@ -54,7 +57,7 @@ public class SleepAccelerometerService extends Service implements
 	private int maxSensitivity = 100;
 	private int alarmTriggerSensitivity = -1;
 
-	private int updateInterval = 60000;
+	private int updateInterval = 10000;
 
 	private Date dateStarted;
 
@@ -231,16 +234,17 @@ public class SleepAccelerometerService extends Service implements
 
 			lastChartUpdateTime = currentTime;
 
-			Calendar cal = Calendar.getInstance();
-			cal.set(Calendar.HOUR_OF_DAY, 9);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			long alarmMillis = cal.getTimeInMillis();
-			if (currentTime >= alarmMillis && y > alarmTriggerSensitivity) {
+			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
+					"com.android.deskclock");
+			Alarm alarm = adb.getNearestEnabledAlarm();
+			Calendar alarmTime = alarm.getNearestAlarmDate();
+			alarmTime.add(Calendar.MINUTE, -30);
+			long alarmMillis = alarmTime.getTimeInMillis();
+			if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
+				alarm.time = currentTime;
+				com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(this, alarm);
 				stopSelf();
 			}
-
 		}
 		lastOnSensorChangedTime = currentTime;
 	}
