@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="preset">Preset:</string>
-    <string name="summary_pref_use_alarm_off">ElectricSleep will only monitor your sleep movements in sleep mode</string>
-    <string name="summary_pref_use_alarm_on">ElectricSleep will wake you before the next enabled alarm in sleep mode</string>
+    <string name="summary_pref_use_alarm_off">ElectricSleep will not wake you up in sleep mode (recording only)</string>
+    <string name="summary_pref_use_alarm_on">ElectricSleep is set to wake you before the next enabled alarm in sleep mode</string>
     <string name="title_pref_use_alarm">Use Alarm</string>
     <string name="pref_use_alarm">useAlarm</string>
 	<string name="monitoring_sleep">Monitoring Sleep</string>
@@ -385,4 +385,5 @@
 	<string name="summary_pref_alarm_window">The window of time before your alarm is set to go
 		off during which ElectricSleep will try to wake you.</string>
 	<string name="pref_alarm_window">alarmWindow</string>
+<string name="stop">Stop</string>
 </resources>

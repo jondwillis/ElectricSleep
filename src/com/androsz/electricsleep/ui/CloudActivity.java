@@ -2,7 +2,6 @@ package com.androsz.electricsleep.ui;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,6 +13,7 @@ import com.androsz.electricsleep.R;
 public class CloudActivity extends CustomTitlebarActivity {
 
 	private WebView webView;
+
 	@Override
 	protected int getContentAreaLayoutId() {
 		// TODO Auto-generated method stub
@@ -31,20 +31,24 @@ public class CloudActivity extends CustomTitlebarActivity {
 		webView.getSettings().setBlockNetworkImage(true);
 
 		webView.setWebChromeClient(new WebChromeClient() {
+			@Override
 			public void onProgressChanged(WebView view, int progress) {
-				int visibility = (progress == 100 ? View.GONE : View.VISIBLE);
+				final int visibility = progress == 100 ? View.GONE
+						: View.VISIBLE;
 				progressWheel.setVisibility(visibility);
 			}
 		});
 		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onPageFinished(WebView webView, String url) {
+				progressWheel.setVisibility(View.GONE);
+			}
+
+			@Override
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) {
 				Toast.makeText(CloudActivity.this, "Oh no! " + description,
 						Toast.LENGTH_SHORT).show();
-			}
-
-			public void onPageFinished(WebView webView, String url) {
-				progressWheel.setVisibility(View.GONE);
 			}
 		});
 
@@ -52,13 +56,11 @@ public class CloudActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onDestroy()
-	{
-		if(webView != null)
-		{
+	protected void onDestroy() {
+		if (webView != null) {
 			webView.clearCache(true);
 		}
-		
+
 		super.onDestroy();
 	}
 

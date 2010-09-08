@@ -17,10 +17,8 @@ package com.androsz.electricsleep.achartengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.androsz.electricsleep.achartengine.chart.AbstractChart;
@@ -39,10 +37,6 @@ public class GraphicalView extends View {
 	private final Rect mRect = new Rect();
 	/** The user interface thread handler. */
 	private final Handler mHandler;
-	/** The old x coordinate. */
-	private float oldX;
-	/** The old y coordinate. */
-	private float oldY;
 
 	/**
 	 * Creates a new graphical view.
@@ -61,61 +55,36 @@ public class GraphicalView extends View {
 		}
 	}
 
-	/*public void handleTouch(MotionEvent event) {
-		final int action = event.getAction();
-		if (mRenderer != null && action == MotionEvent.ACTION_MOVE) {
-			if (oldX >= 0 || oldY >= 0) {
-				final float newX = event.getX();
-				final float newY = event.getY();
-
-				double minX = mRenderer.getXAxisMin();
-				double maxX = mRenderer.getXAxisMax();
-				double minY = mRenderer.getYAxisMin();
-				double maxY = mRenderer.getYAxisMax();
-				final XYChart chart = (XYChart) mChart;
-				final double[] calcRange = chart.getCalcRange();
-				if (minX == minY && calcRange[0] == calcRange[1]
-						|| maxX == maxY && calcRange[2] == calcRange[3]) {
-					return;
-				}
-				
-				if (!mRenderer.isMinXSet()) {
-					minX = calcRange[0];
-					//mRenderer.setXAxisMin(minX);
-				}
-				if (!mRenderer.isMaxXSet()) {
-					maxX = calcRange[1];
-					//mRenderer.setXAxisMax(maxX);
-				}
-				if (!mRenderer.isMinYSet()) {
-					minY = calcRange[2];
-					//mRenderer.setYAxisMin(minY);
-				}
-				if (!mRenderer.isMaxYSet()) {
-					maxY = calcRange[3];
-					//mRenderer.setYAxisMax(maxY);
-				}
-
-				final PointF realPoint = chart.toRealPoint(oldX, oldY);
-				final PointF realPoint2 = chart.toRealPoint(newX, newY);
-				final double deltaX = realPoint.x - realPoint2.x;
-				final double deltaY = realPoint.y - realPoint2.y;
-				//mRenderer.setXAxisMin(minX + deltaX);
-				//mRenderer.setXAxisMax(maxX + deltaX);
-				//mRenderer.setYAxisMin(minY + deltaY);
-				//mRenderer.setYAxisMax(maxY + deltaY);
-				oldX = newX;
-				oldY = newY;
-				//repaint();
-			}
-		} else if (action == MotionEvent.ACTION_DOWN) {
-			oldX = event.getX();
-			oldY = event.getY();
-		} else if (action == MotionEvent.ACTION_UP) {
-			oldX = 0;
-			oldY = 0;
-		}
-	}*/
+	/*
+	 * public void handleTouch(MotionEvent event) { final int action =
+	 * event.getAction(); if (mRenderer != null && action ==
+	 * MotionEvent.ACTION_MOVE) { if (oldX >= 0 || oldY >= 0) { final float newX
+	 * = event.getX(); final float newY = event.getY();
+	 * 
+	 * double minX = mRenderer.getXAxisMin(); double maxX =
+	 * mRenderer.getXAxisMax(); double minY = mRenderer.getYAxisMin(); double
+	 * maxY = mRenderer.getYAxisMax(); final XYChart chart = (XYChart) mChart;
+	 * final double[] calcRange = chart.getCalcRange(); if (minX == minY &&
+	 * calcRange[0] == calcRange[1] || maxX == maxY && calcRange[2] ==
+	 * calcRange[3]) { return; }
+	 * 
+	 * if (!mRenderer.isMinXSet()) { minX = calcRange[0];
+	 * //mRenderer.setXAxisMin(minX); } if (!mRenderer.isMaxXSet()) { maxX =
+	 * calcRange[1]; //mRenderer.setXAxisMax(maxX); } if
+	 * (!mRenderer.isMinYSet()) { minY = calcRange[2];
+	 * //mRenderer.setYAxisMin(minY); } if (!mRenderer.isMaxYSet()) { maxY =
+	 * calcRange[3]; //mRenderer.setYAxisMax(maxY); }
+	 * 
+	 * final PointF realPoint = chart.toRealPoint(oldX, oldY); final PointF
+	 * realPoint2 = chart.toRealPoint(newX, newY); final double deltaX =
+	 * realPoint.x - realPoint2.x; final double deltaY = realPoint.y -
+	 * realPoint2.y; //mRenderer.setXAxisMin(minX + deltaX);
+	 * //mRenderer.setXAxisMax(maxX + deltaX); //mRenderer.setYAxisMin(minY +
+	 * deltaY); //mRenderer.setYAxisMax(maxY + deltaY); oldX = newX; oldY =
+	 * newY; //repaint(); } } else if (action == MotionEvent.ACTION_DOWN) { oldX
+	 * = event.getX(); oldY = event.getY(); } else if (action ==
+	 * MotionEvent.ACTION_UP) { oldX = 0; oldY = 0; } }
+	 */
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -129,11 +98,9 @@ public class GraphicalView extends View {
 	}
 
 	/*
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		handleTouch(event);
-		return true;
-	}*/
+	 * @Override public boolean onTouchEvent(MotionEvent event) {
+	 * handleTouch(event); return true; }
+	 */
 
 	/**
 	 * Schedule a user interface repaint.

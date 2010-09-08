@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
@@ -102,7 +101,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
 		showTitleButton1(R.drawable.ic_title_export);
@@ -128,15 +127,20 @@ public class HomeActivity extends CustomTitlebarActivity {
 	public void onSleepClick(View v) throws Exception {
 		final SharedPreferences userPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-		final int maxSensitivity = userPrefs.getInt(
-				getString(R.string.pref_maximum_sensitivity), -1);
 		final int minSensitivity = userPrefs.getInt(
 				getString(R.string.pref_minimum_sensitivity), -1);
+		final int maxSensitivity = userPrefs.getInt(
+				getString(R.string.pref_maximum_sensitivity), -1);
 		final int alarmTriggerSensitivity = userPrefs.getInt(
 				getString(R.string.pref_alarm_trigger_sensitivity), -1);
 
+		final boolean useAlarm = userPrefs.getBoolean(
+				getString(R.string.pref_use_alarm), false);
+		final int alarmWindow = Integer.parseInt(userPrefs.getString(
+				getString(R.string.pref_alarm_window), "-1"));
+
 		if (maxSensitivity < 0 || minSensitivity < 0
-				|| alarmTriggerSensitivity < 0) {
+				|| alarmTriggerSensitivity < 0 || (useAlarm && alarmWindow < 0)) {
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(
 					HomeActivity.this).setMessage(
 					getString(R.string.invalid_settings)).setCancelable(false)
@@ -168,6 +172,8 @@ public class HomeActivity extends CustomTitlebarActivity {
 		i.putExtra("min", minSensitivity);
 		i.putExtra("max", maxSensitivity);
 		i.putExtra("alarm", alarmTriggerSensitivity);
+		i.putExtra("useAlarm", useAlarm);
+		i.putExtra("alarmWindow", alarmWindow);
 		enforceCalibrationBeforeStartingSleep(i, new Intent(HomeActivity.this,
 				SleepActivity.class));
 	}

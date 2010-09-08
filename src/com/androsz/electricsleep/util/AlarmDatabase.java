@@ -221,17 +221,6 @@ public class AlarmDatabase {
 		// i.putExtra(Alarms.ID, next_alarm_id);
 	}
 
-	public static void triggerAlarm(final Context context, final Alarm alarm) {
-		Intent intent = new Intent("com.android.deskclock.ALARM_ALERT");
-
-		Parcel out = Parcel.obtain();
-		alarm.writeToParcel(out, 0);
-		out.setDataPosition(0);
-		intent.putExtra("intent.extra.alarm_raw", out.marshall());
-		
-		context.sendBroadcast(intent);
-	}
-
 	/**
 	 * returns number of days from today until next alarmclock
 	 * 
@@ -276,6 +265,17 @@ public class AlarmDatabase {
 		i.setAction("android.alarmclock.NightClockUI");
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		return i;
+	}
+
+	public static void triggerAlarm(final Context context, final Alarm alarm) {
+		final Intent intent = new Intent("com.android.deskclock.ALARM_ALERT");
+
+		final Parcel out = Parcel.obtain();
+		alarm.writeToParcel(out, 0);
+		out.setDataPosition(0);
+		intent.putExtra("intent.extra.alarm_raw", out.marshall());
+
+		context.sendBroadcast(intent);
 	}
 
 	private final Uri mAlarmUri;
@@ -398,8 +398,8 @@ public class AlarmDatabase {
 		Alarm nearest = null;
 
 		do {
-			Alarm current = new Alarm(cur); // NB: side-effect!!
-			Calendar cal = current.getNearestAlarmDate();
+			final Alarm current = new Alarm(cur); // NB: side-effect!!
+			final Calendar cal = current.getNearestAlarmDate();
 
 			if ((nearest == null || cal
 					.compareTo(nearest.getNearestAlarmDate()) == -1)

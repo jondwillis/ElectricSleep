@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.util.AlarmDatabase;
@@ -22,16 +21,16 @@ public class AlarmsActivity extends CustomTitlebarActivity {
 	}
 
 	public void onChangeAlarmSettings(View v) {
-		final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
+		/*final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
 				"com.android.deskclock");
 		adb.getNearestEnabledAlarm().getNearestAlarmDate();
 		final CharSequence text = adb.getNearestEnabledAlarm().alert.toString();
 		final int duration = Toast.LENGTH_SHORT;
 
-		Toast.makeText(getApplicationContext(), text, duration).show();
-
+		Toast.makeText(getApplicationContext(), text, duration).show();*/
+		
 		// startActivity(AlarmDatabase.startNightClock());
-		// startActivity(AlarmDatabase.changeAlarmSettings(getPackageManager()));
+		startActivity(AlarmDatabase.changeAlarmSettings(getPackageManager()));
 	}
 
 	@Override

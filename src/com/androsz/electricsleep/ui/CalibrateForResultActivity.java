@@ -7,10 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -19,7 +16,7 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
 public class CalibrateForResultActivity extends Activity {
 
 	public static final int CALIBRATION_FAILED = -0x1337;
-	
+
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -36,7 +33,7 @@ public class CalibrateForResultActivity extends Activity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		//getParent().onConfigurationChanged(newConfig);
+		// getParent().onConfigurationChanged(newConfig);
 		// do nothing to prevent onWindowFocusChanged to be called and
 		// subsequent failure of the test
 	}
@@ -44,13 +41,13 @@ public class CalibrateForResultActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		LinearLayout container = new LinearLayout(this);
-		ProgressBar progress = new ProgressBar(this);
+		final LinearLayout container = new LinearLayout(this);
+		final ProgressBar progress = new ProgressBar(this);
 
 		container.addView(progress, 72, 72);
 		setContentView(container);
-		
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 	@Override
@@ -66,12 +63,10 @@ public class CalibrateForResultActivity extends Activity {
 				SleepActivity.UPDATE_CHART));
 	}
 
-	/*@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		if (!hasFocus) {
-			setFailed();
-		}
-	}*/
+	/*
+	 * @Override public void onWindowFocusChanged(boolean hasFocus) { if
+	 * (!hasFocus) { setFailed(); } }
+	 */
 
 	private void setFailed() {
 		this.setResult(CALIBRATION_FAILED);

@@ -36,13 +36,6 @@ public class SeekBarPreference extends DialogPreference {
 	}
 
 	@Override
-	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-		int temp = restoreValue ? getPersistedInt(0) : (Integer) defaultValue;
-		if (!restoreValue)
-			persistInt(temp);
-	}
-
-	@Override
 	protected void onPrepareDialogBuilder(Builder builder) {
 
 		final LinearLayout layout = new LinearLayout(context);
@@ -90,6 +83,15 @@ public class SeekBarPreference extends DialogPreference {
 		builder.setTitle(getTitle());
 
 		super.onPrepareDialogBuilder(builder);
+	}
+
+	@Override
+	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+		final int temp = restoreValue ? getPersistedInt(0)
+				: (Integer) defaultValue;
+		if (!restoreValue) {
+			persistInt(temp);
+		}
 	}
 
 	private void syncTextViewText(int progress) {

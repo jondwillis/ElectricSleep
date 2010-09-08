@@ -2,6 +2,7 @@ package com.androsz.electricsleep.ui;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
@@ -39,59 +40,6 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	private GraphicalView chartGraphicalView;
 
 	private ProgressDialog waitForSeriesData;
-
-	@Override
-	protected int getContentAreaLayoutId() {
-		// TODO Auto-generated method stub
-		return R.layout.activity_sleep;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected void onCreate(Bundle savedInstanceState) {
-
-		Uri uri = getIntent().getData();
-		Cursor cursor = managedQuery(uri, null, null, null, null);
-
-		if (cursor == null) {
-			finish();
-		} else {
-			cursor.moveToFirst();
-
-			int dateTime = cursor.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME);
-			int x = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_X);
-			int y = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_Y);
-			int min = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN);
-			int max = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX);
-			int alarm = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM);
-			
-			this.setTitle("Sleep: " + cursor.getString(dateTime));
-			super.onCreate(savedInstanceState);
-			buildChart();
-			try {
-				xySeriesMovement.mX = (List<Double>) SleepHistoryDatabase
-						.byteArrayToObject(cursor.getBlob(x));
-				xySeriesMovement.mY = (List<Double>) SleepHistoryDatabase
-						.byteArrayToObject(cursor.getBlob(y));
-			} catch (StreamCorruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			addChartView();
-			redrawChart(cursor.getInt(min), cursor.getInt(max), cursor.getInt(alarm));
-		}
-	}
 
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
@@ -158,6 +106,62 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
+	protected int getContentAreaLayoutId() {
+		// TODO Auto-generated method stub
+		return R.layout.activity_sleep;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void onCreate(Bundle savedInstanceState) {
+
+		final Uri uri = getIntent().getData();
+		final Cursor cursor = managedQuery(uri, null, null, null, null);
+
+		if (cursor == null) {
+			finish();
+		} else {
+			cursor.moveToFirst();
+
+			final int dateTime = cursor
+					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME);
+			final int x = cursor
+					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_X);
+			final int y = cursor
+					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_Y);
+			final int min = cursor
+					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN);
+			final int max = cursor
+					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX);
+			final int alarm = cursor
+					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM);
+
+			this.setTitle("Sleep: " + cursor.getString(dateTime));
+			super.onCreate(savedInstanceState);
+			buildChart();
+			try {
+				xySeriesMovement.mX = (List<Double>) SleepHistoryDatabase
+						.byteArrayToObject(cursor.getBlob(x));
+				xySeriesMovement.mY = (List<Double>) SleepHistoryDatabase
+						.byteArrayToObject(cursor.getBlob(y));
+			} catch (final StreamCorruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			addChartView();
+			redrawChart(cursor.getInt(min), cursor.getInt(max), cursor
+					.getInt(alarm));
+		}
+	}
+
+	@Override
 	protected void onRestoreInstanceState(Bundle savedState) {
 		super.onRestoreInstanceState(savedState);
 
@@ -203,6 +207,51 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 			if (waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
 				waitForSeriesData = null;
+			}
+
+			int count = xySeriesMovement.mY.size();
+			int numberOfDesiredGroupedPoints = 100;
+			numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? numberOfDesiredGroupedPoints
+					: count;
+
+			if (numberOfDesiredGroupedPoints != count) {
+				int pointsPerGroup = (count / numberOfDesiredGroupedPoints) + 1;
+				List<Double> lessDetailedX = new ArrayList<Double>(
+						numberOfDesiredGroupedPoints);
+				List<Double> lessDetailedY = new ArrayList<Double>(
+						numberOfDesiredGroupedPoints);
+				int numberOfPointsInThisGroup = pointsPerGroup;
+				double averageYForThisGroup = 0;
+				for (int i = 0; i < numberOfDesiredGroupedPoints; i++) {
+					averageYForThisGroup = 0;
+					int startIndexForThisGroup = (i * pointsPerGroup);
+					for (int j = 0; j < pointsPerGroup; j++) {
+						try {
+							averageYForThisGroup += xySeriesMovement.mY
+									.get(startIndexForThisGroup + j);
+						} catch (IndexOutOfBoundsException ioobe) {
+							// lower the number of points
+							// (and signify that we are done)
+							numberOfPointsInThisGroup = j - 1;
+							break;
+						}
+					}
+					// averageXForThisGroup /= numberOfPointsInThisGroup;
+					averageYForThisGroup /= numberOfPointsInThisGroup;
+					if (numberOfPointsInThisGroup < pointsPerGroup) {
+						// we are done
+						int lastIndex = xySeriesMovement.mX.size() - 1;
+						lessDetailedX.add(xySeriesMovement.mX.get(lastIndex));
+						lessDetailedY.add(xySeriesMovement.mY.get(lastIndex));
+						xySeriesMovement.mX = lessDetailedX;
+						xySeriesMovement.mY = lessDetailedY;
+						break;
+					} else {
+						lessDetailedX.add(xySeriesMovement.mX
+								.get(startIndexForThisGroup));
+						lessDetailedY.add(averageYForThisGroup);
+					}
+				}
 			}
 
 			final double firstX = xySeriesMovement.mX.get(0);

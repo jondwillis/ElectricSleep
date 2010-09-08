@@ -56,7 +56,7 @@ public class SleepContentProvider extends ContentProvider {
 	 * queries.
 	 */
 	private static UriMatcher buildUriMatcher() {
-		UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		// to get definitions...
 		matcher.addURI(AUTHORITY, "sleephistory", SEARCH_WORDS);
 		matcher.addURI(AUTHORITY, "sleephistory/#", GET_WORD);
@@ -79,6 +79,62 @@ public class SleepContentProvider extends ContentProvider {
 		matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_SHORTCUT
 				+ "/*", REFRESH_SHORTCUT);
 		return matcher;
+	}
+
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		throw new UnsupportedOperationException();
+	}
+
+	private Cursor getSleep(Uri uri) {
+		final String rowId = uri.getLastPathSegment();
+		final String[] columns = new String[] {
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_MAX,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
+
+		return sleepHistoryDatabase.getSleep(rowId, columns);
+	}
+
+	private Cursor getSuggestions(String query) {
+		query = query.toLowerCase();
+		final String[] columns = new String[] { BaseColumns._ID,
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
+				/*
+				 * SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, (only if you want
+				 * to refresh shortcuts)
+				 */
+				SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
+
+		return sleepHistoryDatabase.getSleepMatches(query, columns);
+	}
+
+	/**
+	 * This method is required in order to query the supported types. It's also
+	 * useful in our own query() method to determine the type of Uri received.
+	 */
+	@Override
+	public String getType(Uri uri) {
+		switch (sURIMatcher.match(uri)) {
+		case SEARCH_WORDS:
+			return WORDS_MIME_TYPE;
+		case GET_WORD:
+			return DEFINITION_MIME_TYPE;
+		case SEARCH_SUGGEST:
+			return SearchManager.SUGGEST_MIME_TYPE;
+		case REFRESH_SHORTCUT:
+			return SearchManager.SHORTCUT_MIME_TYPE;
+		default:
+			throw new IllegalArgumentException("Unknown URL " + uri);
+		}
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -124,39 +180,7 @@ public class SleepContentProvider extends ContentProvider {
 		}
 	}
 
-	private Cursor getSuggestions(String query) {
-		query = query.toLowerCase();
-		String[] columns = new String[] { BaseColumns._ID,
-				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
-				/*
-				 * SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, (only if you want
-				 * to refresh shortcuts)
-				 */
-				SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
-
-		return sleepHistoryDatabase.getSleepMatches(query, columns);
-	}
-
-	private Cursor search(String query) {
-		query = query.toLowerCase();
-		String[] columns = new String[] { BaseColumns._ID,
-				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME, };
-
-		return sleepHistoryDatabase.getSleepMatches(query, columns);
-	}
-
-	private Cursor getSleep(Uri uri) {
-		String rowId = uri.getLastPathSegment();
-		String[] columns = new String[] {
-				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_MAX,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
-
-		return sleepHistoryDatabase.getSleep(rowId, columns);
-	}
+	// Other required implementations...
 
 	private Cursor refreshShortcut(Uri uri) {
 		/*
@@ -168,8 +192,8 @@ public class SleepContentProvider extends ContentProvider {
 		 * using the given item Uri and provide all the columns originally
 		 * provided with the suggestion query.
 		 */
-		String rowId = uri.getLastPathSegment();
-		String[] columns = new String[] { BaseColumns._ID,
+		final String rowId = uri.getLastPathSegment();
+		final String[] columns = new String[] { BaseColumns._ID,
 				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
 				SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
 				SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
@@ -177,36 +201,12 @@ public class SleepContentProvider extends ContentProvider {
 		return sleepHistoryDatabase.getSleep(rowId, columns);
 	}
 
-	/**
-	 * This method is required in order to query the supported types. It's also
-	 * useful in our own query() method to determine the type of Uri received.
-	 */
-	@Override
-	public String getType(Uri uri) {
-		switch (sURIMatcher.match(uri)) {
-		case SEARCH_WORDS:
-			return WORDS_MIME_TYPE;
-		case GET_WORD:
-			return DEFINITION_MIME_TYPE;
-		case SEARCH_SUGGEST:
-			return SearchManager.SUGGEST_MIME_TYPE;
-		case REFRESH_SHORTCUT:
-			return SearchManager.SHORTCUT_MIME_TYPE;
-		default:
-			throw new IllegalArgumentException("Unknown URL " + uri);
-		}
-	}
+	private Cursor search(String query) {
+		query = query.toLowerCase();
+		final String[] columns = new String[] { BaseColumns._ID,
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME, };
 
-	// Other required implementations...
-
-	@Override
-	public Uri insert(Uri uri, ContentValues values) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
-		throw new UnsupportedOperationException();
+		return sleepHistoryDatabase.getSleepMatches(query, columns);
 	}
 
 	@Override

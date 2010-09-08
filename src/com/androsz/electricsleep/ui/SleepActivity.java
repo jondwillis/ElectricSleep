@@ -2,6 +2,7 @@ package com.androsz.electricsleep.ui;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -100,32 +101,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 		}
 	}
 
-	private void showWaitForSeriesDataIfNeeded() {
-		if (xySeriesMovement.getItemCount() < 2) {
-			if (waitForSeriesData == null || !waitForSeriesData.isShowing()) {
-				waitForSeriesData = new WaitForSeriesDataProgressDialog(
-						this);
-				waitForSeriesData
-						.setMessage(getText(R.string.dialog_wait_for_sleep_data_message));
-				// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
-				waitForSeriesData.setButton(
-						DialogInterface.BUTTON_NEGATIVE,
-						getString(R.string.exit),
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface arg0,
-									int arg1) {
-
-								stopService(new Intent(SleepActivity.this,
-										SleepAccelerometerService.class));
-								SleepActivity.this.finish();
-							}
-						});
-				waitForSeriesData.show();
-			}
-		}
-	}
-
 	private void buildChart() {
 		if (xySeriesMovement == null) {
 
@@ -170,7 +145,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 				xyMultipleSeriesRenderer.setXLabels(5);
 			}
 			xyMultipleSeriesRenderer.setYLabels(0);
-			xyMultipleSeriesRenderer.setYTitle(getString(R.string.movement_level_during_sleep));
+			xyMultipleSeriesRenderer
+					.setYTitle(getString(R.string.movement_level_during_sleep));
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(
 					R.color.text));
@@ -191,14 +167,16 @@ public class SleepActivity extends CustomTitlebarActivity {
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
+		showTitleButton2(R.drawable.ic_title_refresh);
 
 		buildChart();
 	}
 
 	@Override
 	protected void onPause() {
-		if (waitForSeriesData != null && waitForSeriesData.isShowing())
+		if (waitForSeriesData != null && waitForSeriesData.isShowing()) {
 			waitForSeriesData.dismiss();
+		}
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(syncChartReceiver);
 		super.onPause();
@@ -253,6 +231,22 @@ public class SleepActivity extends CustomTitlebarActivity {
 		stopService(new Intent(this, SleepAccelerometerService.class));
 	}
 
+	public void onTitleButton2Click(View v) {
+		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+				.setMessage("will show settings").setCancelable(true)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				}).setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+		dialog.show();
+	}
+
 	private void redrawChart(int min, int max) {
 		if (xySeriesMovement.mX.size() > 1 && xySeriesMovement.mY.size() > 1) {
 			if (waitForSeriesData != null) {
@@ -280,6 +274,29 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xySeriesAlarmTrigger.add(lastX, alarmTrigger);
 
 			chartGraphicalView.repaint();
+		}
+	}
+
+	private void showWaitForSeriesDataIfNeeded() {
+		if (xySeriesMovement.getItemCount() < 2) {
+			if (waitForSeriesData == null || !waitForSeriesData.isShowing()) {
+				waitForSeriesData = new WaitForSeriesDataProgressDialog(this);
+				waitForSeriesData
+						.setMessage(getText(R.string.dialog_wait_for_sleep_data_message));
+				// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
+				waitForSeriesData.setButton(DialogInterface.BUTTON_NEGATIVE,
+						getString(R.string.stop),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+
+								stopService(new Intent(SleepActivity.this,
+										SleepAccelerometerService.class));
+								SleepActivity.this.finish();
+							}
+						});
+				waitForSeriesData.show();
+			}
 		}
 	}
 }

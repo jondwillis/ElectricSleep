@@ -29,6 +29,8 @@
 		</activity>
 		<activity android:name=".ui.ReviewSleepActivity">
 		</activity>
+		<activity android:name=".ui.SaveSleepActivity">
+		</activity>
 
 		<service android:name=".service.SleepAccelerometerService"
 			android:icon="@drawable/icon" android:label="@string/app_name">

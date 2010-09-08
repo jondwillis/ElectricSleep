@@ -35,43 +35,44 @@ import com.androsz.electricsleep.db.SleepHistoryDatabase;
 
 public class HistoryActivity extends CustomTitlebarActivity {
 
+	private TextView mTextView;
+
+	private ListView mListView;
+
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_history;
 	}
-
-	private TextView mTextView;
-	private ListView mListView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		mTextView = (TextView) findViewById(R.id.text);
+		mTextView.setVisibility(View.GONE);
 		mListView = (ListView) findViewById(R.id.list);
 
-		Intent intent = getIntent();
+		final Intent intent = getIntent();
 
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 			// handles a click on a search suggestion; launches activity to show
 			// word
-			Intent reviewIntent = new Intent(this, ReviewSleepActivity.class);
+			final Intent reviewIntent = new Intent(this,
+					ReviewSleepActivity.class);
 			reviewIntent.setData(intent.getData());
 			startActivity(reviewIntent);
 			finish();
 		} else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			// handles a search query
-			String query = intent.getStringExtra(SearchManager.QUERY);
+			final String query = intent.getStringExtra(SearchManager.QUERY);
 			showResults(query);
-		}
-		else
-		{
+		} else {
 			showResults("to");
 		}
 	}
-	
-	public boolean onSearchRequested()
-	{
+
+	@Override
+	public boolean onSearchRequested() {
 		showResults("to");
 		return super.onSearchRequested();
 	}
@@ -84,8 +85,9 @@ public class HistoryActivity extends CustomTitlebarActivity {
 	 */
 	private void showResults(String query) {
 
-		Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI, null,
-				null, new String[] { query }, SleepHistoryDatabase.KEY_SLEEP_DATE_TIME + " DESC");
+		final Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI,
+				null, null, new String[] { query },
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME + " DESC");
 
 		if (cursor == null) {
 			// There are no results
@@ -93,25 +95,25 @@ public class HistoryActivity extends CustomTitlebarActivity {
 					new Object[] { query }));
 		} else {
 			// Display the number of results
-			int count = cursor.getCount();
-			String countString = getResources().getQuantityString(
+			final int count = cursor.getCount();
+			final String countString = getResources().getQuantityString(
 					R.plurals.search_results, count,
 					new Object[] { count, query });
 			mTextView.setText(countString);
 
 			// Specify the columns we want to display in the result
-			String[] from = new String[] { SleepHistoryDatabase.KEY_SLEEP_DATE_TIME };
+			final String[] from = new String[] { SleepHistoryDatabase.KEY_SLEEP_DATE_TIME };
 
 			// Specify the corresponding layout elements where we want the
 			// columns to go
-			int[] to = new int[] { R.id.word };
+			final int[] to = new int[] { R.id.word };
 
 			// Create a simple cursor adapter for the definitions and apply them
 			// to the ListView
-			SimpleCursorAdapter sleepHistory = new SimpleCursorAdapter(this,
-					R.layout.list_item_sleep_history, cursor, from, to);
+			final SimpleCursorAdapter sleepHistory = new SimpleCursorAdapter(
+					this, R.layout.list_item_sleep_history, cursor, from, to);
 			mListView.setAdapter(sleepHistory);
-			//mListView.setBackgroundColor(android.R.color.transparent);
+			// mListView.setBackgroundColor(android.R.color.transparent);
 
 			// Define the on-click listener for the list items
 			mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -119,10 +121,11 @@ public class HistoryActivity extends CustomTitlebarActivity {
 						int position, long id) {
 					// Build the Intent used to open WordActivity with a
 					// specific word Uri
-					Intent wordIntent = new Intent(getApplicationContext(),
-							ReviewSleepActivity.class);
-					Uri data = Uri.withAppendedPath(
-							SleepContentProvider.CONTENT_URI, String.valueOf(id));
+					final Intent wordIntent = new Intent(
+							getApplicationContext(), ReviewSleepActivity.class);
+					final Uri data = Uri.withAppendedPath(
+							SleepContentProvider.CONTENT_URI, String
+									.valueOf(id));
 					wordIntent.setData(data);
 					startActivity(wordIntent);
 				}
