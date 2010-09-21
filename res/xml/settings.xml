@@ -14,8 +14,8 @@
 			android:summary="@string/summary_alarm_trigger_sensitivity"
 			android:key="@string/pref_alarm_trigger_sensitivity"
 			android:defaultValue="33" />
-
 	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/title_alarms">
 		<CheckBoxPreference android:summaryOn="@string/summary_pref_use_alarm_on"
 			android:summaryOff="@string/summary_pref_use_alarm_off" android:key="@string/pref_use_alarm"

@@ -38,7 +38,7 @@ public class SleepAccelerometerService extends Service implements
 	public static final String POKE_SYNC_CHART = "com.androsz.electricsleep.POKE_SYNC_CHART";
 	public static final String ALARM_TRIGGERED = "com.androsz.electricsleep.ALARM_TRIGGERED";
 
-	private final int notificationId = 0x1337;
+	private static final int NOTIFICATION_ID = 0x1337a;
 
 	public ArrayList<Double> currentSeriesX = new ArrayList<Double>();
 	public ArrayList<Double> currentSeriesY = new ArrayList<Double>();
@@ -62,7 +62,7 @@ public class SleepAccelerometerService extends Service implements
 	private boolean useAlarm = false;
 	private int alarmWindow = 30;
 
-	private int updateInterval = 60000;
+	private int updateInterval = 1000;
 
 	private Date dateStarted;
 
@@ -106,7 +106,7 @@ public class SleepAccelerometerService extends Service implements
 		notification.setLatestEventInfo(context, contentTitle, contentText,
 				contentIntent);
 
-		notificationManager.notify(notificationId, notification);
+		notificationManager.notify(NOTIFICATION_ID, notification);
 	}
 
 	private void obtainWakeLock() {
@@ -152,7 +152,7 @@ public class SleepAccelerometerService extends Service implements
 
 		partialWakeLock.release();
 
-		notificationManager.cancel(notificationId);
+		notificationManager.cancel(NOTIFICATION_ID);
 
 		saveSleepData();
 	}
@@ -253,6 +253,9 @@ public class SleepAccelerometerService extends Service implements
 	private void saveSleepData() {
 		if (currentSeriesX.size() > 1 && currentSeriesY.size() > 1) {
 			Intent saveIntent = new Intent(this, SaveSleepActivity.class);
+			saveIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+					| Intent.FLAG_ACTIVITY_NEW_TASK);
+			this.startActivity(saveIntent);
 			final SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
 			try {
 				final DateFormat sdf = DateFormat
