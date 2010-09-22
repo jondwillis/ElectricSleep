@@ -121,13 +121,13 @@ public class HistoryActivity extends CustomTitlebarActivity {
 						int position, long id) {
 					// Build the Intent used to open WordActivity with a
 					// specific word Uri
-					final Intent wordIntent = new Intent(
+					final Intent reviewSleepIntent = new Intent(
 							getApplicationContext(), ReviewSleepActivity.class);
 					final Uri data = Uri.withAppendedPath(
 							SleepContentProvider.CONTENT_URI, String
 									.valueOf(id));
-					wordIntent.setData(data);
-					startActivity(wordIntent);
+					reviewSleepIntent.setData(data);
+					startActivity(reviewSleepIntent);
 				}
 			});
 		}

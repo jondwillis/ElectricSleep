@@ -70,8 +70,9 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xySeriesMovement.mX.add(intent.getDoubleExtra("x", 0));
 			xySeriesMovement.mY.add(intent.getDoubleExtra("y", 0));
 
-			redrawChart(intent.getIntExtra("min", 0), intent.getIntExtra("max",
-					100));
+			redrawChart(intent.getIntExtra("min", 0),
+					intent.getIntExtra("max", 100),
+					intent.getIntExtra("alarm", -1));
 		}
 	};
 
@@ -85,8 +86,9 @@ public class SleepActivity extends CustomTitlebarActivity {
 			xySeriesMovement.mY = (List<Double>) intent
 					.getSerializableExtra("currentSeriesY");
 
-			redrawChart(intent.getIntExtra("min", 0), intent.getIntExtra("max",
-					100));
+			redrawChart(intent.getIntExtra("min", 0),
+					intent.getIntExtra("max", 100),
+					intent.getIntExtra("alarm", -1));
 		}
 	};
 
@@ -228,17 +230,22 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	public void onTitleButton1Click(View v) {
-		stopService(new Intent(this, SleepAccelerometerService.class));
+		Intent saveActivityIntent = new Intent(this, SaveSleepActivity.class);
+		saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+				| Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(saveActivityIntent);
 	}
 
 	public void onTitleButton2Click(View v) {
 		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-				.setMessage("will show settings").setCancelable(true)
+				.setMessage("will show settings")
+				.setCancelable(true)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
 					}
-				}).setNegativeButton("Cancel",
+				})
+				.setNegativeButton("Cancel",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								dialog.cancel();
@@ -247,7 +254,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		dialog.show();
 	}
 
-	private void redrawChart(int min, int max) {
+	private void redrawChart(int min, int max, int alarmTriggerSensitivity) {
 		if (xySeriesMovement.mX.size() > 1 && xySeriesMovement.mY.size() > 1) {
 			if (waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
@@ -266,12 +273,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 			// reconfigure the alarm trigger line..
 			xySeriesAlarmTrigger.clear();
 
-			final int alarmTrigger = PreferenceManager
-					.getDefaultSharedPreferences(getBaseContext()).getInt(
-							getString(R.string.pref_alarm_trigger_sensitivity),
-							-1);
-			xySeriesAlarmTrigger.add(firstX, alarmTrigger);
-			xySeriesAlarmTrigger.add(lastX, alarmTrigger);
+			xySeriesAlarmTrigger.add(firstX, alarmTriggerSensitivity);
+			xySeriesAlarmTrigger.add(lastX, alarmTriggerSensitivity);
 
 			chartGraphicalView.repaint();
 		}

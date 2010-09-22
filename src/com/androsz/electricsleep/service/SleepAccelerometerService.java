@@ -36,6 +36,7 @@ import com.androsz.electricsleep.util.AlarmDatabase;
 public class SleepAccelerometerService extends Service implements
 		SensorEventListener {
 	public static final String POKE_SYNC_CHART = "com.androsz.electricsleep.POKE_SYNC_CHART";
+	public static final String POKE_SAVE_SLEEP = "com.androsz.electricsleep.POKE_SAVE_SLEEP";
 	public static final String ALARM_TRIGGERED = "com.androsz.electricsleep.ALARM_TRIGGERED";
 
 	private static final int NOTIFICATION_ID = 0x1337a;
@@ -77,8 +78,39 @@ public class SleepAccelerometerService extends Service implements
 				i.putExtra("currentSeriesY", currentSeriesY);
 				i.putExtra("min", minSensitivity);
 				i.putExtra("max", maxSensitivity);
+				i.putExtra("alarm", alarmTriggerSensitivity);
 				sendBroadcast(i);
 			}
+		}
+	};
+	
+	private final BroadcastReceiver pokeSaveSleepReceiver = new BroadcastReceiver()
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
+
+			saveIntent.putExtra("currentSeriesX", currentSeriesX);
+			saveIntent.putExtra("currentSeriesY", currentSeriesY);
+			saveIntent.putExtra("minSensitivity", minSensitivity);
+			saveIntent.putExtra("maxSensitivity", maxSensitivity);
+			saveIntent.putExtra("alarmTriggerSensitivity",
+					alarmTriggerSensitivity);
+
+			// send start/end time as well
+			final DateFormat sdf = DateFormat.getDateTimeInstance(
+					DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+			DateFormat sdf2 = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+					DateFormat.SHORT, Locale.getDefault());
+			final Date now = new Date();
+			if (dateStarted.getDate() == now.getDate()) {
+				sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
+			}
+			saveIntent.putExtra("name",
+					sdf.format(dateStarted) + "to " + sdf2.format(now));
+			
+			sendBroadcast(saveIntent);
 		}
 	};
 
@@ -132,6 +164,8 @@ public class SleepAccelerometerService extends Service implements
 
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
+		
+		registerReceiver(pokeSaveSleepReceiver, new IntentFilter(POKE_SAVE_SLEEP));
 
 		registerAccelerometerListener();
 
@@ -147,6 +181,7 @@ public class SleepAccelerometerService extends Service implements
 		super.onDestroy();
 
 		unregisterReceiver(pokeSyncChartReceiver);
+		unregisterReceiver(pokeSaveSleepReceiver);
 
 		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
@@ -154,7 +189,7 @@ public class SleepAccelerometerService extends Service implements
 
 		notificationManager.cancel(NOTIFICATION_ID);
 
-		saveSleepData();
+		//saveSleepData();
 	}
 
 	@Override
@@ -171,9 +206,10 @@ public class SleepAccelerometerService extends Service implements
 			final double averageTimeBetweenUpdates = totalTimeBetweenSensorChanges
 					/ totalNumberOfSensorChanges;
 			final double x = currentTime;
-			final double y = java.lang.Math
-					.max(minSensitivity, java.lang.Math.min(maxSensitivity,
-							deltaTime / averageTimeBetweenUpdates));
+			final double y = java.lang.Math.max(
+					minSensitivity,
+					java.lang.Math.min(maxSensitivity, deltaTime
+							/ averageTimeBetweenUpdates));
 
 			// this should help reduce both runtime memory and saved data memory
 			// later on.
@@ -203,6 +239,7 @@ public class SleepAccelerometerService extends Service implements
 				i.putExtra("y", y);
 				i.putExtra("min", minSensitivity);
 				i.putExtra("max", maxSensitivity);
+				i.putExtra("alarm", alarmTriggerSensitivity);
 				sendBroadcast(i);
 			}
 
@@ -246,38 +283,8 @@ public class SleepAccelerometerService extends Service implements
 	private void registerAccelerometerListener() {
 		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-		sensorManager.registerListener(this, sensorManager
-				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SENSOR_DELAY);
-	}
-
-	private void saveSleepData() {
-		if (currentSeriesX.size() > 1 && currentSeriesY.size() > 1) {
-			Intent saveIntent = new Intent(this, SaveSleepActivity.class);
-			saveIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-					| Intent.FLAG_ACTIVITY_NEW_TASK);
-			this.startActivity(saveIntent);
-			final SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
-			try {
-				final DateFormat sdf = DateFormat
-						.getDateTimeInstance(DateFormat.SHORT,
-								DateFormat.SHORT, Locale.getDefault());
-				DateFormat sdf2 = DateFormat
-						.getDateTimeInstance(DateFormat.SHORT,
-								DateFormat.SHORT, Locale.getDefault());
-				final Date now = new Date();
-				if (dateStarted.getDate() == now.getDate()) {
-					sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
-				}
-
-				shdb
-						.addSleep(sdf.format(dateStarted) + " to "
-								+ sdf2.format(now), currentSeriesX,
-								currentSeriesY, minSensitivity, maxSensitivity,
-								alarmTriggerSensitivity);
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		sensorManager.registerListener(this,
+				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+				SENSOR_DELAY);
 	}
 }

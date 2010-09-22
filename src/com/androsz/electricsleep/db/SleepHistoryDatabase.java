@@ -26,9 +26,16 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.service.SleepAccelerometerService;
+import com.androsz.electricsleep.ui.SleepActivity;
+
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -184,22 +191,33 @@ public class SleepHistoryDatabase {
 	 * @return rowId or -1 if failed
 	 * @throws IOException
 	 */
-	public void addSleep(final String sleepDateTime,
+	public long addSleep(final Context context, final String sleepDateTime,
 			final ArrayList<Double> sleepChartDataX,
 			final ArrayList<Double> sleepChartDataY, final int min,
 			final int max, final int alarm) throws IOException {
-		new Thread(new Runnable() {
+		
+		/*new Thread(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
+				try {*/
+					ProgressDialog waitForSaveDialog = new ProgressDialog(context);
+					waitForSaveDialog
+							.setMessage(context.getText(R.string.dialog_wait_for_sleep_data_message));
+					// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
+					waitForSaveDialog.setCancelable(false);
+					waitForSaveDialog.show();
+					
+					long result = databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
 							sleepChartDataY, min, max, alarm);
-				} catch (final IOException e) {
+					
+					waitForSaveDialog.dismiss();
+				/*} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-		}).start();
+		});*/
+					return result;
 	}
 
 	/**
