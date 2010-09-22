@@ -2,30 +2,67 @@
 	android:layout_height="match_parent" android:layout_width="match_parent"
 	android:background="@drawable/gradient_background_vert"
 	android:orientation="vertical">
-	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_margin="4dip" android:background="@drawable/gradient_background_horiz">
-			
-			
-		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_margin="4dip" android:background="@color/background_transparent_darken">
+	<LinearLayout android:layout_width="match_parent"
+		android:layout_height="wrap_content" android:orientation="horizontal"
+		android:layout_margin="4dip" android:background="@drawable/gradient_background_horiz">
 
-			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="left|center_vertical" style="@style/TextHeader" android:padding="4dip" android:text="@string/preset"></TextView><Spinner android:id="@+id/spinnerPreset" android:layout_height="wrap_content" android:layout_gravity="fill_horizontal" android:layout_width="match_parent"></Spinner><Button android:id="@+id/Button01" android:background="@null" android:text="+" style="@style/TextHeader" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="right|center_vertical"></Button>
-		
 
-</LinearLayout></LinearLayout><LinearLayout android:layout_width="match_parent" android:orientation="vertical" android:layout_margin="4dip" android:layout_height="wrap_content" android:layout_gravity="center_vertical|center_horizontal" android:background="@drawable/gradient_background_horiz">
-		
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal"
+			android:layout_margin="4dip" android:background="@color/background_transparent_darken">
 
-		<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_margin="4dip" android:background="@color/background_transparent_darken">
-			<Button style="@style/HomeButton" android:id="@+id/home_btn_sleep" android:onClick="onSleepClick" android:drawableTop="@drawable/home_btn_sleep" android:text="@string/title_sleep" />
-			<Button style="@style/HomeButton" android:id="@+id/home_btn_calibrate" android:drawableTop="@drawable/home_btn_calibrate" android:onClick="onCalibrateClick" android:text="@string/title_calibrate" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="left|center_vertical"
+				style="@style/TextHeader" android:padding="4dip" android:text="@string/preset"></TextView>
+			<Spinner android:id="@+id/spinnerPreset"
+				android:layout_height="wrap_content" android:layout_gravity="fill_horizontal"
+				android:layout_width="match_parent"></Spinner>
+			<Button android:id="@+id/Button01" android:background="@null"
+				android:text="+" style="@style/TextHeader" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:layout_gravity="right|center_vertical"></Button>
+
+
+		</LinearLayout>
+	</LinearLayout>
+	<LinearLayout android:layout_width="match_parent"
+		android:orientation="vertical" android:layout_margin="4dip"
+		android:layout_height="wrap_content" android:layout_gravity="center_vertical|center_horizontal"
+		android:background="@drawable/gradient_background_horiz">
+
+
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal"
+			android:layout_margin="4dip" android:background="@color/background_transparent_darken">
+			<Button style="@style/HomeButton" android:id="@+id/home_btn_sleep"
+				android:onClick="onSleepClick" android:drawableTop="@drawable/home_btn_sleep"
+				android:text="@string/title_sleep" />
+			<Button style="@style/HomeButton" android:id="@+id/home_btn_calibrate"
+				android:drawableTop="@drawable/home_btn_calibrate" android:onClick="onCalibrateClick"
+				android:text="@string/title_calibrate" />
 		</LinearLayout>
 
-		<LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/background_transparent_darken" android:layout_marginLeft="4dip" android:layout_marginRight="4dip">
-			<Button android:id="@+id/home_btn_alarms" style="@style/HomeButton" android:onClick="onAlarmsClick" android:text="@string/title_alarms" android:drawableTop="@drawable/home_btn_alarms" />
-			<Button android:id="@+id/home_btn_settings" style="@style/HomeButton" android:onClick="onSettingsClick" android:text="@string/title_settings" android:drawableTop="@drawable/home_btn_settings" />
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:background="@color/background_transparent_darken"
+			android:layout_marginLeft="4dip" android:layout_marginRight="4dip">
+			<Button android:id="@+id/home_btn_alarms" style="@style/HomeButton"
+				android:onClick="onAlarmsClick" android:text="@string/title_alarms"
+				android:drawableTop="@drawable/home_btn_alarms" />
+			<Button android:id="@+id/home_btn_settings" style="@style/HomeButton"
+				android:onClick="onSettingsClick" android:text="@string/title_settings"
+				android:drawableTop="@drawable/home_btn_settings" />
 		</LinearLayout>
 
-		<LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/background_transparent_darken" android:layout_margin="4dip">
-			<Button android:id="@+id/home_btn_history" style="@style/HomeButton" android:onClick="onHistoryClick" android:text="@string/title_history" android:drawableTop="@drawable/home_btn_history" />
-			<Button android:id="@+id/home_btn_cloud" style="@style/HomeButton" android:onClick="onCloudClick" android:text="@string/title_cloud" android:drawableTop="@drawable/home_btn_cloud" />
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:background="@color/background_transparent_darken"
+			android:layout_margin="4dip">
+			<Button android:id="@+id/home_btn_history" style="@style/HomeButton"
+				android:onClick="onHistoryClick" android:text="@string/title_history"
+				android:drawableTop="@drawable/home_btn_history" />
+			<Button android:id="@+id/home_btn_cloud" style="@style/HomeButton"
+				android:onClick="onCloudClick" android:text="@string/title_cloud"
+				android:drawableTop="@drawable/home_btn_cloud" />
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

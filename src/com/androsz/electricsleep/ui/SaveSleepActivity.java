@@ -3,6 +3,7 @@ package com.androsz.electricsleep.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
@@ -18,10 +19,9 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class SaveSleepActivity extends Activity {
+public class SaveSleepActivity extends CustomTitlebarActivity {
 
 	public static final String SAVE_SLEEP = "com.androsz.electricsleep.SAVE_SLEEP";
-	private boolean saveSleep = false;
 	@Override
 	// @SuppressWarnings("unchecked")
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,6 @@ public class SaveSleepActivity extends Activity {
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								saveSleep = true;
 								sendBroadcast(new Intent(SleepAccelerometerService.POKE_SAVE_SLEEP));
 								stopService(new Intent(SaveSleepActivity.this, SleepAccelerometerService.class));
 							}
@@ -97,4 +96,9 @@ public class SaveSleepActivity extends Activity {
 			
 		}
 	};
+	@Override
+	protected int getContentAreaLayoutId() {
+		// TODO Auto-generated method stub
+		return R.layout.activity_save;
+	}
 }
