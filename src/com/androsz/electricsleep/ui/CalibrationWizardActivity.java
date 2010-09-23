@@ -43,7 +43,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			final Intent i = new Intent(CalibrationWizardActivity.this,
 					SleepAccelerometerService.class);
 			stopService(i);
-			i.putExtra("interval", 2500);
+			i.putExtra("interval", 5000);
 			i.putExtra("min", minCalibration);
 			i.putExtra("max", maxCalibration);
 			startService(i);

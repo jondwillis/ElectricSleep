@@ -63,7 +63,7 @@ public class SleepAccelerometerService extends Service implements
 	private boolean useAlarm = false;
 	private int alarmWindow = 30;
 
-	private int updateInterval = 1000;
+	private int updateInterval = 60000;
 
 	private Date dateStarted;
 
@@ -93,9 +93,9 @@ public class SleepAccelerometerService extends Service implements
 
 			saveIntent.putExtra("currentSeriesX", currentSeriesX);
 			saveIntent.putExtra("currentSeriesY", currentSeriesY);
-			saveIntent.putExtra("minSensitivity", minSensitivity);
-			saveIntent.putExtra("maxSensitivity", maxSensitivity);
-			saveIntent.putExtra("alarmTriggerSensitivity",
+			saveIntent.putExtra("min", minSensitivity);
+			saveIntent.putExtra("max", maxSensitivity);
+			saveIntent.putExtra("alarm",
 					alarmTriggerSensitivity);
 
 			// send start/end time as well
@@ -108,7 +108,7 @@ public class SleepAccelerometerService extends Service implements
 				sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
 			}
 			saveIntent.putExtra("name",
-					sdf.format(dateStarted) + "to " + sdf2.format(now));
+					sdf.format(dateStarted) + " to " + sdf2.format(now));
 			
 			sendBroadcast(saveIntent);
 		}
@@ -259,7 +259,12 @@ public class SleepAccelerometerService extends Service implements
 					alarm.time = currentTime;
 					com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
 							this, alarm);
-					stopSelf();
+					Intent saveActivityIntent = new Intent(this, SaveSleepActivity.class);
+					saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+							| Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(saveActivityIntent);
+					sensorManager.unregisterListener(SleepAccelerometerService.this);
+					partialWakeLock.release();
 				}
 			}
 		}

@@ -70,10 +70,11 @@ public class SaveSleepActivity extends CustomTitlebarActivity {
 					SaveSleepActivity.this);
 			
 			try {
+				int min = intent.getIntExtra("min", 0);
 				long result = shdb.addSleep(SaveSleepActivity.this, intent.getStringExtra("name"),
 				(ArrayList<Double>)intent.getSerializableExtra("currentSeriesX"),
 				(ArrayList<Double>)intent.getSerializableExtra("currentSeriesY"),
-				intent.getIntExtra("min", 0),
+				min,
 				intent.getIntExtra("max", 100),
 				intent.getIntExtra("alarm", -1));
 				

@@ -3,7 +3,11 @@ package com.androsz.electricsleep.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -69,13 +73,26 @@ public abstract class CustomTitlebarActivity extends Activity {
 		findViewById(R.id.title_sep_2).setVisibility(View.VISIBLE);
 	}
 
-	/*
-	 * public boolean onCreateOptionsMenu(Menu menu) { MenuInflater inflater =
-	 * getMenuInflater(); inflater.inflate(R.menu.titlebar_menu, menu); return
-	 * true; }
-	 * 
-	 * public boolean onOptionsItemSelected(MenuItem item) { switch
-	 * (item.getItemId()) { case R.id.itemSearch: onSearchRequested(); return
-	 * true; default: return false; } }
-	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.titlebar_menu, menu);
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menuItemDonate:
+			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
+			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+			startActivity(marketIntent);
+			return true;
+		case R.id.menuItemSettings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.menuItemExit:
+			finish();
+		default:
+			return false;
+		}
+	}
 }

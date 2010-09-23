@@ -2,6 +2,7 @@ package com.androsz.electricsleep.ui;
 
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
@@ -64,9 +65,16 @@ public abstract class CustomTitlebarPreferenceActivity extends
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.itemSearch:
-			onSearchRequested();
+		case R.id.menuItemDonate:
+			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
+			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+			startActivity(marketIntent);
 			return true;
+		case R.id.menuItemSettings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.menuItemExit:
+			finish();
 		default:
 			return false;
 		}

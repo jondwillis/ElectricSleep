@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="summary_pref_calibration">Tap to calibrate movement sensitivities automatically</string>
+    <string name="title_pref_calibration">Calibration Wizard</string>
+    <string name="pref_calibration">calibrationWizard</string>
+    <string name="summary_pref_alarms">Manage system alarms - ElectricSleep will always bind to the nearest enabled alarm.</string>
+    <string name="title_pref_alarms">Alarms</string>
     <string name="preset">Preset:</string>
     <string name="summary_pref_use_alarm_off">ElectricSleep will not wake you up in sleep mode (recording only)</string>
     <string name="summary_pref_use_alarm_on">ElectricSleep is set to wake you before the next enabled alarm in sleep mode</string>
@@ -386,4 +391,6 @@
 		off during which ElectricSleep will try to wake you.</string>
 	<string name="pref_alarm_window">alarmWindow</string>
 <string name="stop">Stop</string>
+<string name="pref_alarms">alarms</string>
+<string name="donate">Donate</string>
 </resources>

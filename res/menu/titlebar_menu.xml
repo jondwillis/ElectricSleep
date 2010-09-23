@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/title_settings" android:id="@+id/itemSettings"
-		android:icon="@drawable/home_btn_settings_pressed"></item>
-	<item android:id="@+id/itemSearch" android:title="@string/search"
-		android:icon="@drawable/ic_title_search_alt"></item>
+	<item android:id="@+id/menuItemDonate" android:title="@string/donate"></item><item android:title="@string/title_settings" android:icon="@drawable/home_btn_settings_pressed" android:id="@+id/menuItemSettings"></item>
+	
+
+<item android:id="@+id/menuItemExit" android:title="@string/exit"></item>
 </menu>

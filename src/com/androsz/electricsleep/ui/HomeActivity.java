@@ -58,13 +58,13 @@ public class HomeActivity extends CustomTitlebarActivity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									onCalibrateClick(null);
+									startActivity(new Intent(HomeActivity.this, CalibrationWizardActivity.class));
 								}
 							}).setNeutralButton("Manual",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									onSettingsClick(null);
+									startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
 								}
 							}).setNegativeButton("Cancel",
 							new DialogInterface.OnClickListener() {
@@ -84,18 +84,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_home;
-	}
-
-	public void onAlarmsClick(View v) {
-		startActivity(new Intent(this, AlarmsActivity.class));
-	}
-
-	public void onCalibrateClick(View v) {
-		startActivity(new Intent(this, CalibrationWizardActivity.class));
-	}
-
-	public void onCloudClick(View v) {
-		startActivity(new Intent(this, CloudActivity.class));
 	}
 
 	@Override
@@ -119,11 +107,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	public void onHomeClick(View v) {
 		// do nothing b/c home is home!
 	}
-
-	public void onSettingsClick(View v) {
-		startActivity(new Intent(this, SettingsActivity.class));
-	}
-
+	
 	public void onSleepClick(View v) throws Exception {
 		final SharedPreferences userPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
@@ -148,13 +132,13 @@ public class HomeActivity extends CustomTitlebarActivity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									onCalibrateClick(null);
+									startActivity(new Intent(HomeActivity.this, CalibrationWizardActivity.class));
 								}
 							}).setNeutralButton("Manual",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									onSettingsClick(null);
+									startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
 								}
 							}).setNegativeButton("Cancel",
 							new DialogInterface.OnClickListener() {
