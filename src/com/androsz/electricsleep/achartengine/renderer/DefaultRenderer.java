@@ -68,7 +68,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param renderer
 	 *            the renderer to be added
 	 */
-	public void addSeriesRenderer(SimpleSeriesRenderer renderer) {
+	public void addSeriesRenderer(final SimpleSeriesRenderer renderer) {
 		mRenderers.add(renderer);
 	}
 
@@ -124,7 +124,7 @@ public class DefaultRenderer implements Serializable {
 	 *            the index in the simple renderers list
 	 * @return the simple renderer at the specified index
 	 */
-	public SimpleSeriesRenderer getSeriesRendererAt(int index) {
+	public SimpleSeriesRenderer getSeriesRendererAt(final int index) {
 		return mRenderers.get(index);
 	}
 
@@ -224,7 +224,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param renderer
 	 *            the renderer to be removed
 	 */
-	public void removeSeriesRenderer(SimpleSeriesRenderer renderer) {
+	public void removeSeriesRenderer(final SimpleSeriesRenderer renderer) {
 		mRenderers.remove(renderer);
 	}
 
@@ -234,7 +234,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param antialiasing
 	 *            the antialiasing
 	 */
-	public void setAntialiasing(boolean antialiasing) {
+	public void setAntialiasing(final boolean antialiasing) {
 		this.antialiasing = antialiasing;
 	}
 
@@ -244,7 +244,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param apply
 	 *            the apply flag for the background color
 	 */
-	public void setApplyBackgroundColor(boolean apply) {
+	public void setApplyBackgroundColor(final boolean apply) {
 		mApplyBackgroundColor = apply;
 	}
 
@@ -254,7 +254,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param color
 	 *            the axes color
 	 */
-	public void setAxesColor(int color) {
+	public void setAxesColor(final int color) {
 		mAxesColor = color;
 	}
 
@@ -264,7 +264,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param color
 	 *            the background color
 	 */
-	public void setBackgroundColor(int color) {
+	public void setBackgroundColor(final int color) {
 		mBackgroundColor = color;
 	}
 
@@ -274,7 +274,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param color
 	 *            the labels color
 	 */
-	public void setLabelsColor(int color) {
+	public void setLabelsColor(final int color) {
 		mLabelsColor = color;
 	}
 
@@ -284,7 +284,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param textSize
 	 *            the labels text size
 	 */
-	public void setLabelsTextSize(float textSize) {
+	public void setLabelsTextSize(final float textSize) {
 		mLabelsTextSize = textSize;
 	}
 
@@ -294,7 +294,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param textSize
 	 *            the legend text size
 	 */
-	public void setLegendTextSize(float textSize) {
+	public void setLegendTextSize(final float textSize) {
 		mLegendTextSize = textSize;
 	}
 
@@ -304,7 +304,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param showAxes
 	 *            the visibility flag for the axes
 	 */
-	public void setShowAxes(boolean showAxes) {
+	public void setShowAxes(final boolean showAxes) {
 		mShowAxes = showAxes;
 	}
 
@@ -314,7 +314,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param showGrid
 	 *            the visibility flag for the grid
 	 */
-	public void setShowGrid(boolean showGrid) {
+	public void setShowGrid(final boolean showGrid) {
 		mShowGrid = showGrid;
 	}
 
@@ -324,7 +324,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param showLabels
 	 *            the visibility flag for the labels
 	 */
-	public void setShowLabels(boolean showLabels) {
+	public void setShowLabels(final boolean showLabels) {
 		mShowLabels = showLabels;
 	}
 
@@ -334,7 +334,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param showLegend
 	 *            the visibility flag for the legend
 	 */
-	public void setShowLegend(boolean showLegend) {
+	public void setShowLegend(final boolean showLegend) {
 		mShowLegend = showLegend;
 	}
 
@@ -346,7 +346,7 @@ public class DefaultRenderer implements Serializable {
 	 * @param style
 	 *            the text typeface style
 	 */
-	public void setTextTypeface(String typefaceName, int style) {
+	public void setTextTypeface(final String typefaceName, final int style) {
 		textTypefaceName = typefaceName;
 		textTypefaceStyle = style;
 	}

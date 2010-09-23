@@ -102,7 +102,7 @@ public class MathHelper {
 	 *            the input angle value
 	 * @return the output value in the [0..360) interval
 	 */
-	public static int getAngle(int angle) {
+	public static int getAngle(final int angle) {
 		if (angle < 0) {
 			return ANGLE + angle;
 		}
@@ -120,7 +120,7 @@ public class MathHelper {
 	 *            the array of objects
 	 * @return the array of doubles
 	 */
-	public static double[] getDoubles(Object[] o) {
+	public static double[] getDoubles(final Object[] o) {
 		final int length = o.length;
 		final double[] values = new double[length];
 		for (int i = 0; i < length; i++) {
@@ -137,7 +137,7 @@ public class MathHelper {
 	 *            the array of objects
 	 * @return the array of floats
 	 */
-	public static float[] getFloats(Object[] o) {
+	public static float[] getFloats(final Object[] o) {
 		final int length = o.length;
 		final float[] values = new float[length];
 		for (int i = 0; i < length; i++) {
@@ -190,7 +190,7 @@ public class MathHelper {
 	 *            the input values
 	 * @return an array with the minimum and maximum values
 	 */
-	public static double[] minmax(List<Double> values) {
+	public static double[] minmax(final List<Double> values) {
 		if (values.size() == 0) {
 			return new double[2];
 		}
@@ -230,7 +230,7 @@ public class MathHelper {
 	 *            the input values
 	 * @return the sum of the values
 	 */
-	public static double sum(List<Double> values) {
+	public static double sum(final List<Double> values) {
 		double sum = 0;
 		final int length = values.size();
 		for (int i = 0; i < length; i++) {

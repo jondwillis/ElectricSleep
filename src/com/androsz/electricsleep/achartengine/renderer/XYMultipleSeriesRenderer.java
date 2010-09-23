@@ -32,7 +32,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 		/** The rotate angle. */
 		private int mAngle = 0;
 
-		private Orientation(int angle) {
+		private Orientation(final int angle) {
 			mAngle = angle;
 		}
 
@@ -87,7 +87,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param text
 	 *            the text label
 	 */
-	public void addTextLabel(double x, String text) {
+	public void addTextLabel(final double x, final String text) {
 		mXTextLabels.put(x, text);
 	}
 
@@ -170,7 +170,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 *            the X axis value
 	 * @return the X axis text label
 	 */
-	public String getXTextLabel(Double x) {
+	public String getXTextLabel(final Double x) {
 		return mXTextLabels.get(x);
 	}
 
@@ -279,7 +279,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param textSize
 	 *            the chart axis text size
 	 */
-	public void setAxisTitleTextSize(float textSize) {
+	public void setAxisTitleTextSize(final float textSize) {
 		mAxisTitleTextSize = textSize;
 	}
 
@@ -289,7 +289,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param title
 	 *            the chart title
 	 */
-	public void setChartTitle(String title) {
+	public void setChartTitle(final String title) {
 		mChartTitle = title;
 	}
 
@@ -299,7 +299,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param textSize
 	 *            the chart title text size
 	 */
-	public void setChartTitleTextSize(float textSize) {
+	public void setChartTitleTextSize(final float textSize) {
 		mChartTitleTextSize = textSize;
 	}
 
@@ -309,7 +309,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param textSize
 	 *            the chart values text size
 	 */
-	public void setChartValuesTextSize(float textSize) {
+	public void setChartValuesTextSize(final float textSize) {
 		mChartValuesTextSize = textSize;
 	}
 
@@ -319,7 +319,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param display
 	 *            if the chart point values should be displayed as text
 	 */
-	public void setDisplayChartValues(boolean display) {
+	public void setDisplayChartValues(final boolean display) {
 		mDisplayChartValues = display;
 	}
 
@@ -329,7 +329,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param orientation
 	 *            the chart orientation
 	 */
-	public void setOrientation(Orientation orientation) {
+	public void setOrientation(final Orientation orientation) {
 		mOrientation = orientation;
 	}
 
@@ -339,7 +339,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param max
 	 *            the X axis range end value
 	 */
-	public void setXAxisMax(double max) {
+	public void setXAxisMax(final double max) {
 		mMaxX = max;
 	}
 
@@ -349,7 +349,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param min
 	 *            the X axis range start value
 	 */
-	public void setXAxisMin(double min) {
+	public void setXAxisMin(final double min) {
 		mMinX = min;
 	}
 
@@ -359,7 +359,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param xLabels
 	 *            the approximate number of labels for the X axis
 	 */
-	public void setXLabels(int xLabels) {
+	public void setXLabels(final int xLabels) {
 		mXLabels = xLabels;
 	}
 
@@ -369,7 +369,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param title
 	 *            the X axis title
 	 */
-	public void setXTitle(String title) {
+	public void setXTitle(final String title) {
 		mXTitle = title;
 	}
 
@@ -379,7 +379,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param max
 	 *            the Y axis range end value
 	 */
-	public void setYAxisMax(double max) {
+	public void setYAxisMax(final double max) {
 		mMaxY = max;
 	}
 
@@ -389,7 +389,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param min
 	 *            the Y axis range start value
 	 */
-	public void setYAxisMin(double min) {
+	public void setYAxisMin(final double min) {
 		mMinY = min;
 	}
 
@@ -399,7 +399,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param yLabels
 	 *            the approximate number of labels for the Y axis
 	 */
-	public void setYLabels(int yLabels) {
+	public void setYLabels(final int yLabels) {
 		mYLabels = yLabels;
 	}
 
@@ -409,7 +409,7 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	 * @param title
 	 *            the Y axis title
 	 */
-	public void setYTitle(String title) {
+	public void setYTitle(final String title) {
 		mYTitle = title;
 	}
 

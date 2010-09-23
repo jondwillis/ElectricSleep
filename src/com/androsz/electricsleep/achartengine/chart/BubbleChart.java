@@ -46,8 +46,8 @@ public class BubbleChart extends XYChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public BubbleChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public BubbleChart(final XYMultipleSeriesDataset dataset,
+			final XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 	}
 
@@ -65,8 +65,8 @@ public class BubbleChart extends XYChart {
 	 * @param radius
 	 *            the bubble radius
 	 */
-	private void drawCircle(Canvas canvas, Paint paint, float x, float y,
-			float radius) {
+	private void drawCircle(final Canvas canvas, final Paint paint,
+			final float x, final float y, final float radius) {
 		canvas.drawCircle(x, y, radius, paint);
 	}
 
@@ -85,8 +85,9 @@ public class BubbleChart extends XYChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(final Canvas canvas,
+			final SimpleSeriesRenderer renderer, final float x, final float y,
+			final Paint paint) {
 		paint.setStyle(Style.FILL);
 		drawCircle(canvas, paint, x + SHAPE_WIDTH, y, 3);
 	}
@@ -108,9 +109,9 @@ public class BubbleChart extends XYChart {
 	 *            the index of the series currently being drawn
 	 */
 	@Override
-	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+	public void drawSeries(final Canvas canvas, final Paint paint,
+			final float[] points, final SimpleSeriesRenderer seriesRenderer,
+			final float yAxisValue, final int seriesIndex) {
 		final XYSeriesRenderer renderer = (XYSeriesRenderer) seriesRenderer;
 		paint.setColor(renderer.getColor());
 		paint.setStyle(Style.FILL);

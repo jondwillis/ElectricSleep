@@ -47,7 +47,7 @@ public class XYSeries implements Serializable {
 	 * @param title
 	 *            the series title.
 	 */
-	public XYSeries(String title) {
+	public XYSeries(final String title) {
 		mTitle = title;
 		initRange();
 	}
@@ -60,7 +60,7 @@ public class XYSeries implements Serializable {
 	 * @param y
 	 *            the value for the Y axis
 	 */
-	public void add(double x, double y) {
+	public void add(final double x, final double y) {
 		mX.add(x);
 		mY.add(y);
 		updateRange(x, y);
@@ -136,7 +136,7 @@ public class XYSeries implements Serializable {
 	 *            the index
 	 * @return the X value
 	 */
-	public double getX(int index) {
+	public double getX(final int index) {
 		return mX.get(index);
 	}
 
@@ -147,7 +147,7 @@ public class XYSeries implements Serializable {
 	 *            the index
 	 * @return the Y value
 	 */
-	public double getY(int index) {
+	public double getY(final int index) {
 		return mY.get(index);
 	}
 
@@ -173,7 +173,7 @@ public class XYSeries implements Serializable {
 	 * @param index
 	 *            the index in the series of the value to remove
 	 */
-	public void remove(int index) {
+	public void remove(final int index) {
 		final double removedX = mX.remove(index);
 		final double removedY = mY.remove(index);
 		if (removedX == mMinX || removedX == mMaxX || removedY == mMinY
@@ -182,19 +182,19 @@ public class XYSeries implements Serializable {
 		}
 	}
 
-	public void setMaxX(double maxX) {
+	public void setMaxX(final double maxX) {
 		mMaxX = maxX;
 	}
 
-	public void setMaxY(double maxY) {
+	public void setMaxY(final double maxY) {
 		mMaxY = maxY;
 	}
 
-	public void setMinX(double minX) {
+	public void setMinX(final double minX) {
 		mMinX = minX;
 	}
 
-	public void setMinY(double minY) {
+	public void setMinY(final double minY) {
 		mMinY = minY;
 	}
 
@@ -204,7 +204,7 @@ public class XYSeries implements Serializable {
 	 * @param title
 	 *            the series title
 	 */
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		mTitle = title;
 	}
 
@@ -216,7 +216,7 @@ public class XYSeries implements Serializable {
 	 * @param y
 	 *            the new y value
 	 */
-	private void updateRange(double x, double y) {
+	private void updateRange(final double x, final double y) {
 		mMinX = Math.min(mMinX, x);
 		mMaxX = Math.max(mMaxX, x);
 		mMinY = Math.min(mMinY, y);

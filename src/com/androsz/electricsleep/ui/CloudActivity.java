@@ -21,7 +21,7 @@ public class CloudActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		final ProgressBar progressWheel = (ProgressBar) super
 				.findViewById(R.id.title_progress_1);
@@ -32,7 +32,7 @@ public class CloudActivity extends CustomTitlebarActivity {
 
 		webView.setWebChromeClient(new WebChromeClient() {
 			@Override
-			public void onProgressChanged(WebView view, int progress) {
+			public void onProgressChanged(final WebView view, final int progress) {
 				final int visibility = progress == 100 ? View.GONE
 						: View.VISIBLE;
 				progressWheel.setVisibility(visibility);
@@ -40,13 +40,14 @@ public class CloudActivity extends CustomTitlebarActivity {
 		});
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
-			public void onPageFinished(WebView webView, String url) {
+			public void onPageFinished(final WebView webView, final String url) {
 				progressWheel.setVisibility(View.GONE);
 			}
 
 			@Override
-			public void onReceivedError(WebView view, int errorCode,
-					String description, String failingUrl) {
+			public void onReceivedError(final WebView view,
+					final int errorCode, final String description,
+					final String failingUrl) {
 				Toast.makeText(CloudActivity.this, "Oh no! " + description,
 						Toast.LENGTH_SHORT).show();
 			}

@@ -31,7 +31,7 @@ public class RangeCategorySeries extends CategorySeries {
 	 * @param title
 	 *            the series title
 	 */
-	public RangeCategorySeries(String title) {
+	public RangeCategorySeries(final String title) {
 		super(title);
 	}
 
@@ -43,7 +43,7 @@ public class RangeCategorySeries extends CategorySeries {
 	 * @param maxValue
 	 *            the new maximum value
 	 */
-	public void add(double minValue, double maxValue) {
+	public void add(final double minValue, final double maxValue) {
 		super.add(minValue);
 		mMaxValues.add(maxValue);
 	}
@@ -58,7 +58,8 @@ public class RangeCategorySeries extends CategorySeries {
 	 * @param maxValue
 	 *            the new maximum value
 	 */
-	public void add(String category, double minValue, double maxValue) {
+	public void add(final String category, final double minValue,
+			final double maxValue) {
 		super.add(category, minValue);
 		mMaxValues.add(maxValue);
 	}
@@ -79,7 +80,7 @@ public class RangeCategorySeries extends CategorySeries {
 	 *            the index
 	 * @return the maximum value at the index
 	 */
-	public double getMaximumValue(int index) {
+	public double getMaximumValue(final int index) {
 		return mMaxValues.get(index);
 	}
 
@@ -90,7 +91,7 @@ public class RangeCategorySeries extends CategorySeries {
 	 *            the index
 	 * @return the minimum value at the index
 	 */
-	public double getMinimumValue(int index) {
+	public double getMinimumValue(final int index) {
 		return getValue(index);
 	}
 
@@ -101,7 +102,7 @@ public class RangeCategorySeries extends CategorySeries {
 	 *            the index in the series of the values to remove
 	 */
 	@Override
-	public void remove(int index) {
+	public void remove(final int index) {
 		super.remove(index);
 		mMaxValues.remove(index);
 	}

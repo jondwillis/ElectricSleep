@@ -36,7 +36,7 @@ public class CategorySeries implements Serializable {
 	 * @param title
 	 *            the series title
 	 */
-	public CategorySeries(String title) {
+	public CategorySeries(final String title) {
 		mTitle = title;
 	}
 
@@ -46,7 +46,7 @@ public class CategorySeries implements Serializable {
 	 * @param value
 	 *            the new value
 	 */
-	public void add(double value) {
+	public void add(final double value) {
 		add(mCategories.size() + "", value);
 	}
 
@@ -58,7 +58,7 @@ public class CategorySeries implements Serializable {
 	 * @param value
 	 *            the new value
 	 */
-	public void add(String category, double value) {
+	public void add(final String category, final double value) {
 		mCategories.add(category);
 		mValues.add(value);
 	}
@@ -78,7 +78,7 @@ public class CategorySeries implements Serializable {
 	 *            the index
 	 * @return the category name at the index
 	 */
-	public String getCategory(int index) {
+	public String getCategory(final int index) {
 		return mCategories.get(index);
 	}
 
@@ -107,7 +107,7 @@ public class CategorySeries implements Serializable {
 	 *            the index
 	 * @return the value at the index
 	 */
-	public double getValue(int index) {
+	public double getValue(final int index) {
 		return mValues.get(index);
 	}
 
@@ -117,7 +117,7 @@ public class CategorySeries implements Serializable {
 	 * @param index
 	 *            the index in the series of the value to remove
 	 */
-	public void remove(int index) {
+	public void remove(final int index) {
 		mCategories.remove(index);
 		mValues.remove(index);
 	}

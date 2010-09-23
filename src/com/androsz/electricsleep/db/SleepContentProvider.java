@@ -82,11 +82,12 @@ public class SleepContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(final Uri uri, final String selection,
+			final String[] selectionArgs) {
 		throw new UnsupportedOperationException();
 	}
 
-	private Cursor getSleep(Uri uri) {
+	private Cursor getSleep(final Uri uri) {
 		final String rowId = uri.getLastPathSegment();
 		final String[] columns = new String[] {
 				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
@@ -117,7 +118,7 @@ public class SleepContentProvider extends ContentProvider {
 	 * useful in our own query() method to determine the type of Uri received.
 	 */
 	@Override
-	public String getType(Uri uri) {
+	public String getType(final Uri uri) {
 		switch (sURIMatcher.match(uri)) {
 		case SEARCH_WORDS:
 			return WORDS_MIME_TYPE;
@@ -133,7 +134,7 @@ public class SleepContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
+	public Uri insert(final Uri uri, final ContentValues values) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -151,8 +152,9 @@ public class SleepContentProvider extends ContentProvider {
 	 * All other arguments are ignored.
 	 */
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public Cursor query(final Uri uri, final String[] projection,
+			final String selection, String[] selectionArgs,
+			final String sortOrder) {
 
 		// Use the UriMatcher to see what kind of query we have and format the
 		// db query accordingly
@@ -182,7 +184,7 @@ public class SleepContentProvider extends ContentProvider {
 
 	// Other required implementations...
 
-	private Cursor refreshShortcut(Uri uri) {
+	private Cursor refreshShortcut(final Uri uri) {
 		/*
 		 * This won't be called with the current implementation, but if we
 		 * include {@link SearchManager#SUGGEST_COLUMN_SHORTCUT_ID} as a column
@@ -210,8 +212,8 @@ public class SleepContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+	public int update(final Uri uri, final ContentValues values,
+			final String selection, final String[] selectionArgs) {
 		throw new UnsupportedOperationException();
 	}
 }

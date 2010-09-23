@@ -20,9 +20,9 @@ import java.io.Serializable;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 
 import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;
 import com.androsz.electricsleep.achartengine.renderer.SimpleSeriesRenderer;
@@ -68,8 +68,9 @@ public abstract class AbstractChart implements Serializable {
 	 * @param paint
 	 *            the paint used for drawing
 	 */
-	protected void drawBackground(DefaultRenderer renderer, Canvas canvas,
-			int x, int y, int width, int height, Paint paint) {
+	protected void drawBackground(final DefaultRenderer renderer,
+			final Canvas canvas, final int x, final int y, final int width,
+			final int height, final Paint paint) {
 		if (renderer.isApplyBackgroundColor()) {
 			paint.setColor(renderer.getBackgroundColor());
 			paint.setStyle(Style.FILL);
@@ -101,17 +102,18 @@ public abstract class AbstractChart implements Serializable {
 	 * @param paint
 	 *            the paint to be used for drawing
 	 */
-	protected void drawLegend(Canvas canvas, DefaultRenderer renderer,
-			String[] titles, int left, int right, int y, int width, int height,
-			int legendSize, Paint paint) {
+	protected void drawLegend(final Canvas canvas,
+			final DefaultRenderer renderer, final String[] titles,
+			final int left, final int right, final int y, final int width,
+			final int height, final int legendSize, final Paint paint) {
 		if (renderer.isShowLegend()) {
 			float currentX = left;
 			float currentY = y + height - legendSize + 32;
 			final float lineSize = getLegendShapeWidth();
 			paint.setTextAlign(Align.LEFT);
 			paint.setTextSize(renderer.getLegendTextSize());
-			final int sLength = Math.min(titles.length, renderer
-					.getSeriesRendererCount());
+			final int sLength = Math.min(titles.length,
+					renderer.getSeriesRendererCount());
 			for (int i = 0; i < sLength; i++) {
 				String text = titles[i];
 				if (titles.length == renderer.getSeriesRendererCount()) {
@@ -180,8 +182,8 @@ public abstract class AbstractChart implements Serializable {
 	 * @param circular
 	 *            if the path ends with the start point
 	 */
-	protected void drawPath(Canvas canvas, float[] points, Paint paint,
-			boolean circular) {
+	protected void drawPath(final Canvas canvas, final float[] points,
+			final Paint paint, final boolean circular) {
 		final Path path = new Path();
 		path.moveTo(points[0], points[1]);
 		for (int i = 2; i < points.length; i += 2) {
@@ -193,8 +195,8 @@ public abstract class AbstractChart implements Serializable {
 		canvas.drawPath(path, paint);
 	}
 
-	private boolean getExceed(float currentWidth, DefaultRenderer renderer,
-			int right, int width) {
+	private boolean getExceed(final float currentWidth,
+			final DefaultRenderer renderer, final int right, final int width) {
 		boolean exceed = currentWidth > right;
 		if (isVertical(renderer)) {
 			exceed = currentWidth > width;
@@ -209,7 +211,7 @@ public abstract class AbstractChart implements Serializable {
 	 */
 	public abstract int getLegendShapeWidth();
 
-	private boolean isVertical(DefaultRenderer renderer) {
+	private boolean isVertical(final DefaultRenderer renderer) {
 		return renderer instanceof XYMultipleSeriesRenderer
 				&& ((XYMultipleSeriesRenderer) renderer).getOrientation() == Orientation.VERTICAL;
 	}

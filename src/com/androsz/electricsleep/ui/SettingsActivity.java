@@ -12,8 +12,12 @@ import com.androsz.electricsleep.util.AlarmDatabase;
 
 public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 
-	public static boolean areSensitivitiesValid(int minSensitivity,
-			int maxSensitivity, int alarmSensitivity) {
+	public static int DEFAULT_MAX_SENSITIVITY = 100;
+	public static int DEFAULT_MIN_SENSITIVITY = 0;
+	public static int DEFAULT_ALARM_SENSITIVITY = -1;
+
+	public static boolean areSensitivitiesValid(final int minSensitivity,
+			final int maxSensitivity, final int alarmSensitivity) {
 		if (maxSensitivity < 0 || minSensitivity < 0 || alarmSensitivity < 0) {
 			return false;
 		}
@@ -36,14 +40,21 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 		return true;
 	}
 
-	public void onCreate(Bundle savedInstanceState) {
+	@Override
+	protected int getContentAreaLayoutId() {
+		// TODO Auto-generated method stub
+		return R.xml.settings;
+	}
+
+	@Override
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		getPreferenceScreen().findPreference(getText(R.string.pref_alarms))
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 					@Override
-					public boolean onPreferenceClick(Preference preference) {
+					public boolean onPreferenceClick(final Preference preference) {
 						startActivity(AlarmDatabase
 								.changeAlarmSettings(getPackageManager()));
 						// startActivity(new Intent(SettingsActivity.this,
@@ -52,21 +63,17 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 					}
 				});
 
-		getPreferenceScreen().findPreference(getText(R.string.pref_calibration))
+		getPreferenceScreen()
+				.findPreference(getText(R.string.pref_calibration))
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 					@Override
-					public boolean onPreferenceClick(Preference preference) {
-						startActivity(new Intent(SettingsActivity.this, CalibrationWizardActivity.class));
+					public boolean onPreferenceClick(final Preference preference) {
+						startActivity(new Intent(SettingsActivity.this,
+								CalibrationWizardActivity.class));
 						return true;
 					}
 				});
-	}
-
-	@Override
-	protected int getContentAreaLayoutId() {
-		// TODO Auto-generated method stub
-		return R.xml.settings;
 	}
 
 	@Override

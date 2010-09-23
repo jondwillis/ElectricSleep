@@ -20,21 +20,23 @@ public class AlarmsActivity extends CustomTitlebarActivity {
 		return R.layout.activity_alarms;
 	}
 
-	public void onChangeAlarmSettings(View v) {
-		/*final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
-				"com.android.deskclock");
-		adb.getNearestEnabledAlarm().getNearestAlarmDate();
-		final CharSequence text = adb.getNearestEnabledAlarm().alert.toString();
-		final int duration = Toast.LENGTH_SHORT;
+	public void onChangeAlarmSettings(final View v) {
+		/*
+		 * final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
+		 * "com.android.deskclock");
+		 * adb.getNearestEnabledAlarm().getNearestAlarmDate(); final
+		 * CharSequence text = adb.getNearestEnabledAlarm().alert.toString();
+		 * final int duration = Toast.LENGTH_SHORT;
+		 * 
+		 * Toast.makeText(getApplicationContext(), text, duration).show();
+		 */
 
-		Toast.makeText(getApplicationContext(), text, duration).show();*/
-		
 		// startActivity(AlarmDatabase.startNightClock());
 		startActivity(AlarmDatabase.changeAlarmSettings(getPackageManager()));
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		final List<ApplicationInfo> apps = AlarmDatabase

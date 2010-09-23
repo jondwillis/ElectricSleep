@@ -27,7 +27,7 @@ public enum PointStyle {
 	 * 
 	 * @return the point shape index
 	 */
-	public static int getIndexForName(String name) {
+	public static int getIndexForName(final String name) {
 		int index = -1;
 		final PointStyle[] styles = values();
 		final int length = styles.length;
@@ -46,7 +46,7 @@ public enum PointStyle {
 	 *            the point style name
 	 * @return the point shape
 	 */
-	public static PointStyle getPointStyleForName(String name) {
+	public static PointStyle getPointStyleForName(final String name) {
 		PointStyle pointStyle = null;
 		final PointStyle[] styles = values();
 		final int length = styles.length;
@@ -67,7 +67,7 @@ public enum PointStyle {
 	 * @param name
 	 *            the name
 	 */
-	private PointStyle(String name) {
+	private PointStyle(final String name) {
 		mName = name;
 	}
 

@@ -34,7 +34,7 @@ public abstract class CustomTitlebarPreferenceActivity extends
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		getWindow().setFormat(PixelFormat.RGBA_8888);
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		super.onCreate(savedInstanceState);
@@ -50,24 +50,26 @@ public abstract class CustomTitlebarPreferenceActivity extends
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(final Menu menu) {
 		final MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.titlebar_menu, menu);
 		return true;
 	}
 
-	public void onHomeClick(View v) {
+	public void onHomeClick(final View v) {
 		final Intent intent = new Intent(v.getContext(), HomeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menuItemDonate:
-			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
-			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+			final Uri marketUri = Uri
+					.parse("market://details?id=com.androsz.electricsleepdonate");
+			final Intent marketIntent = new Intent(Intent.ACTION_VIEW,
+					marketUri);
 			startActivity(marketIntent);
 			return true;
 		case R.id.menuItemSettings:
@@ -85,14 +87,14 @@ public abstract class CustomTitlebarPreferenceActivity extends
 		btnHome.setImageResource(R.drawable.logo);
 	}
 
-	public void showTitleButton1(int drawableResourceId) {
+	public void showTitleButton1(final int drawableResourceId) {
 		final ImageButton btn1 = (ImageButton) findViewById(R.id.title_button_1);
 		btn1.setVisibility(View.VISIBLE);
 		btn1.setImageResource(drawableResourceId);
 		findViewById(R.id.title_sep_1).setVisibility(View.VISIBLE);
 	}
 
-	public void showTitleButton2(int drawableResourceId) {
+	public void showTitleButton2(final int drawableResourceId) {
 		final ImageButton btn2 = (ImageButton) findViewById(R.id.title_button_2);
 		btn2.setVisibility(View.VISIBLE);
 		btn2.setImageResource(drawableResourceId);

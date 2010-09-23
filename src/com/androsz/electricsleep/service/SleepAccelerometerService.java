@@ -1,20 +1,17 @@
 package com.androsz.electricsleep.service;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Sensor;
@@ -24,11 +21,10 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.SaveSleepActivity;
+import com.androsz.electricsleep.ui.SettingsActivity;
 import com.androsz.electricsleep.ui.SleepActivity;
 import com.androsz.electricsleep.util.Alarm;
 import com.androsz.electricsleep.util.AlarmDatabase;
@@ -56,14 +52,14 @@ public class SleepAccelerometerService extends Service implements
 	private long totalTimeBetweenSensorChanges = 0;
 	private int totalNumberOfSensorChanges = 0;
 
-	private int minSensitivity = 0;
-	private int maxSensitivity = 100;
-	private int alarmTriggerSensitivity = -1;
+	private int minSensitivity = SettingsActivity.DEFAULT_MIN_SENSITIVITY;
+	private int maxSensitivity = SettingsActivity.DEFAULT_MAX_SENSITIVITY;
+	private int alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
 	private boolean useAlarm = false;
 	private int alarmWindow = 30;
 
-	private int updateInterval = 60000;
+	private int updateInterval = 2000;
 
 	private Date dateStarted;
 
@@ -71,7 +67,7 @@ public class SleepAccelerometerService extends Service implements
 
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
-		public void onReceive(Context context, Intent intent) {
+		public void onReceive(final Context context, final Intent intent) {
 			if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
 				final Intent i = new Intent(SleepActivity.SYNC_CHART);
 				i.putExtra("currentSeriesX", currentSeriesX);
@@ -83,20 +79,17 @@ public class SleepAccelerometerService extends Service implements
 			}
 		}
 	};
-	
-	private final BroadcastReceiver pokeSaveSleepReceiver = new BroadcastReceiver()
-	{
+
+	private final BroadcastReceiver pokeSaveSleepReceiver = new BroadcastReceiver() {
 		@Override
-		public void onReceive(Context context, Intent intent)
-		{
-			Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
+		public void onReceive(final Context context, final Intent intent) {
+			final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 
 			saveIntent.putExtra("currentSeriesX", currentSeriesX);
 			saveIntent.putExtra("currentSeriesY", currentSeriesY);
 			saveIntent.putExtra("min", minSensitivity);
 			saveIntent.putExtra("max", maxSensitivity);
-			saveIntent.putExtra("alarm",
-					alarmTriggerSensitivity);
+			saveIntent.putExtra("alarm", alarmTriggerSensitivity);
 
 			// send start/end time as well
 			final DateFormat sdf = DateFormat.getDateTimeInstance(
@@ -107,9 +100,9 @@ public class SleepAccelerometerService extends Service implements
 			if (dateStarted.getDate() == now.getDate()) {
 				sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
 			}
-			saveIntent.putExtra("name",
-					sdf.format(dateStarted) + " to " + sdf2.format(now));
-			
+			saveIntent.putExtra("name", sdf.format(dateStarted) + " "
+					+ getString(R.string.to) + " " + sdf2.format(now));
+
 			sendBroadcast(saveIntent);
 		}
 	};
@@ -149,12 +142,12 @@ public class SleepAccelerometerService extends Service implements
 	}
 
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	public void onAccuracyChanged(final Sensor sensor, final int accuracy) {
 		// not used
 	}
 
 	@Override
-	public IBinder onBind(Intent intent) {
+	public IBinder onBind(final Intent intent) {
 		return null;
 	}
 
@@ -164,8 +157,9 @@ public class SleepAccelerometerService extends Service implements
 
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
-		
-		registerReceiver(pokeSaveSleepReceiver, new IntentFilter(POKE_SAVE_SLEEP));
+
+		registerReceiver(pokeSaveSleepReceiver, new IntentFilter(
+				POKE_SAVE_SLEEP));
 
 		registerAccelerometerListener();
 
@@ -189,11 +183,11 @@ public class SleepAccelerometerService extends Service implements
 
 		notificationManager.cancel(NOTIFICATION_ID);
 
-		//saveSleepData();
+		// saveSleepData();
 	}
 
 	@Override
-	public void onSensorChanged(SensorEvent event) {
+	public void onSensorChanged(final SensorEvent event) {
 		final long currentTime = System.currentTimeMillis();
 		final long timeSinceLastSensorChange = currentTime
 				- lastOnSensorChangedTime;
@@ -257,14 +251,16 @@ public class SleepAccelerometerService extends Service implements
 				final long alarmMillis = alarmTime.getTimeInMillis();
 				if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
 					alarm.time = currentTime;
+					
+					final Intent saveActivityIntent = new Intent(this,
+							SaveSleepActivity.class);
+					saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(saveActivityIntent);
+					sensorManager
+							.unregisterListener(SleepAccelerometerService.this);
+					
 					com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
 							this, alarm);
-					Intent saveActivityIntent = new Intent(this, SaveSleepActivity.class);
-					saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-							| Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(saveActivityIntent);
-					sensorManager.unregisterListener(SleepAccelerometerService.this);
-					partialWakeLock.release();
 				}
 			}
 		}
@@ -272,7 +268,8 @@ public class SleepAccelerometerService extends Service implements
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+	public int onStartCommand(final Intent intent, final int flags,
+			final int startId) {
 		updateInterval = intent.getIntExtra("interval", updateInterval);
 		minSensitivity = intent.getIntExtra("min", minSensitivity);
 		maxSensitivity = intent.getIntExtra("max", maxSensitivity);

@@ -41,7 +41,7 @@ public class MultipleCategorySeries implements Serializable {
 	 * @param title
 	 *            the series title
 	 */
-	public MultipleCategorySeries(String title) {
+	public MultipleCategorySeries(final String title) {
 		mTitle = title;
 	}
 
@@ -55,7 +55,8 @@ public class MultipleCategorySeries implements Serializable {
 	 * @param values
 	 *            the new value
 	 */
-	public void add(String category, String[] titles, double[] values) {
+	public void add(final String category, final String[] titles,
+			final double[] values) {
 		mCategories.add(category);
 		mTitles.add(titles);
 		mValues.add(values);
@@ -69,7 +70,7 @@ public class MultipleCategorySeries implements Serializable {
 	 * @param values
 	 *            the new value
 	 */
-	public void add(String[] titles, double[] values) {
+	public void add(final String[] titles, final double[] values) {
 		add(mCategories.size() + "", titles, values);
 	}
 
@@ -98,7 +99,7 @@ public class MultipleCategorySeries implements Serializable {
 	 *            the index
 	 * @return the category name at the index
 	 */
-	public String getCategory(int index) {
+	public String getCategory(final int index) {
 		return mCategories.get(index);
 	}
 
@@ -109,7 +110,7 @@ public class MultipleCategorySeries implements Serializable {
 	 *            the index
 	 * @return the series item count
 	 */
-	public int getItemCount(int index) {
+	public int getItemCount(final int index) {
 		return mValues.get(index).length;
 	}
 
@@ -120,7 +121,7 @@ public class MultipleCategorySeries implements Serializable {
 	 *            the index
 	 * @return the series titles
 	 */
-	public String[] getTitles(int index) {
+	public String[] getTitles(final int index) {
 		return mTitles.get(index);
 	}
 
@@ -131,7 +132,7 @@ public class MultipleCategorySeries implements Serializable {
 	 *            the index
 	 * @return the value at the index
 	 */
-	public double[] getValues(int index) {
+	public double[] getValues(final int index) {
 		return mValues.get(index);
 	}
 
@@ -141,7 +142,7 @@ public class MultipleCategorySeries implements Serializable {
 	 * @param index
 	 *            the index in the series of the value to remove
 	 */
-	public void remove(int index) {
+	public void remove(final int index) {
 		mCategories.remove(index);
 		mTitles.remove(index);
 		mValues.remove(index);

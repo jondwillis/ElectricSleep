@@ -46,7 +46,7 @@ public class GraphicalView extends View {
 	 * @param chart
 	 *            the chart to be drawn
 	 */
-	public GraphicalView(Context context, AbstractChart chart) {
+	public GraphicalView(final Context context, final AbstractChart chart) {
 		super(context);
 		mChart = chart;
 		mHandler = new Handler();
@@ -87,7 +87,7 @@ public class GraphicalView extends View {
 	 */
 
 	@Override
-	protected void onDraw(Canvas canvas) {
+	protected void onDraw(final Canvas canvas) {
 		super.onDraw(canvas);
 		canvas.getClipBounds(mRect);
 		final int top = mRect.top;
@@ -107,6 +107,7 @@ public class GraphicalView extends View {
 	 */
 	public void repaint() {
 		mHandler.post(new Runnable() {
+			@Override
 			public void run() {
 				invalidate();
 			}

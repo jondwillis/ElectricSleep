@@ -22,14 +22,15 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
 
 public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		OnInitListener {
+
 	private class DelayedStartAlarmCalibrationTask extends
 			AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Void doInBackground(final Void... params) {
 
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(DELAYED_START_TIME);
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -37,17 +38,16 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(final Void result) {
 			notifyUser(CalibrationWizardActivity.this
 					.getString(R.string.move_once));
 			final Intent i = new Intent(CalibrationWizardActivity.this,
 					SleepAccelerometerService.class);
 			stopService(i);
-			i.putExtra("interval", 5000);
+			i.putExtra("interval", ALARM_CALIBRATION_TIME);
 			i.putExtra("min", minCalibration);
 			i.putExtra("max", maxCalibration);
 			startService(i);
-
 		}
 
 		@Override
@@ -64,10 +64,10 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Void doInBackground(final Void... params) {
 
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(DELAYED_START_TIME);
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -82,7 +82,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(final Void result) {
 			notifyUser(CalibrationWizardActivity.this
 					.getString(R.string.start_moving));
 			final Intent i = new Intent(CalibrationWizardActivity.this,
@@ -90,7 +90,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			stopService(i);
 			i.putExtra("interval", MAXIMUM_CALIBRATION_TIME);
 			i.putExtra("min", minCalibration);
-			i.putExtra("max", 100);
+			i.putExtra("max", SettingsActivity.DEFAULT_MAX_SENSITIVITY);
 			startService(i);
 		}
 
@@ -108,10 +108,10 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			AsyncTask<Void, Void, Void> {
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Void doInBackground(final Void... params) {
 
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(DELAYED_START_TIME);
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -126,15 +126,15 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(final Void result) {
 			notifyUser(CalibrationWizardActivity.this
 					.getString(R.string.remain_still));
 			final Intent i = new Intent(CalibrationWizardActivity.this,
 					SleepAccelerometerService.class);
 			stopService(i);
 			i.putExtra("interval", MINIMUM_CALIBRATION_TIME);
-			i.putExtra("min", 0);
-			i.putExtra("max", 100);
+			i.putExtra("min", SettingsActivity.DEFAULT_MIN_SENSITIVITY);
+			i.putExtra("max", SettingsActivity.DEFAULT_MAX_SENSITIVITY);
 			startService(i);
 		}
 
@@ -166,7 +166,9 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 
 	private static final int MAXIMUM_CALIBRATION_TIME = 10000;
 
-	private static final int ALARM_CALIBRATION_TIME = 3000;
+	private static final int ALARM_CALIBRATION_TIME = 5000;
+
+	private static final int DELAYED_START_TIME = 5000;
 
 	private void checkTextToSpeechInstalled() {
 		final Intent checkIntent = new Intent();
@@ -202,11 +204,11 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		return R.layout.activity_calibrate;
 	}
 
-	private void notifyUser(String message) {
+	private void notifyUser(final String message) {
 		notifyUser(message, true);
 	}
 
-	private void notifyUser(String message, boolean toast) {
+	private void notifyUser(final String message, final boolean toast) {
 		if (ttsAvailable) {
 			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
 		}
@@ -216,7 +218,8 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode,
+			final Intent data) {
 		if (resultCode == CalibrateForResultActivity.CALIBRATION_FAILED) {
 			notifyUser(getString(R.string.calibration_failed));
 			if (currentTask != null) {
@@ -281,14 +284,14 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		viewFlipper = (ViewFlipper) findViewById(R.id.wizardViewFlipper);
 		setupNavigationButtons();
 	}
 
 	@Override
-	public void onInit(int arg0) {
+	public void onInit(final int arg0) {
 		if (arg0 == TextToSpeech.SUCCESS) {
 			if (textToSpeech.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_AVAILABLE) {
 				textToSpeech.setLanguage(Locale.US);
@@ -299,7 +302,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		ttsAvailable = true;
 	}
 
-	public void onLeftButtonClick(View v) {
+	public void onLeftButtonClick(final View v) {
 
 		if (viewFlipper.getDisplayedChild() != 0) {
 			viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
@@ -314,7 +317,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedState) {
+	protected void onRestoreInstanceState(final Bundle savedState) {
 
 		super.onRestoreInstanceState(savedState);
 
@@ -331,7 +334,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		setupNavigationButtons();
 	}
 
-	public void onRightButtonClick(View v) {
+	public void onRightButtonClick(final View v) {
 		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
 				R.anim.slide_right_in));
 		viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
@@ -368,7 +371,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		outState.putInt("child", viewFlipper.getDisplayedChild());

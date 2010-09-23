@@ -41,8 +41,8 @@ public class ScatterChart extends XYChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public ScatterChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public ScatterChart(final XYMultipleSeriesDataset dataset,
+			final XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 	}
 
@@ -58,7 +58,8 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawCircle(Canvas canvas, Paint paint, float x, float y) {
+	private void drawCircle(final Canvas canvas, final Paint paint,
+			final float x, final float y) {
 		canvas.drawCircle(x, y, SIZE, paint);
 	}
 
@@ -76,8 +77,8 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawDiamond(Canvas canvas, Paint paint, float[] path, float x,
-			float y) {
+	private void drawDiamond(final Canvas canvas, final Paint paint,
+			final float[] path, final float x, final float y) {
 		path[0] = x;
 		path[1] = y - SIZE;
 		path[2] = x - SIZE;
@@ -104,8 +105,9 @@ public class ScatterChart extends XYChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(final Canvas canvas,
+			final SimpleSeriesRenderer renderer, final float x, final float y,
+			final Paint paint) {
 		if (((XYSeriesRenderer) renderer).isFillPoints()) {
 			paint.setStyle(Style.FILL);
 		} else {
@@ -150,9 +152,9 @@ public class ScatterChart extends XYChart {
 	 *            the index of the series currently being drawn
 	 */
 	@Override
-	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+	public void drawSeries(final Canvas canvas, final Paint paint,
+			final float[] points, final SimpleSeriesRenderer seriesRenderer,
+			final float yAxisValue, final int seriesIndex) {
 		final XYSeriesRenderer renderer = (XYSeriesRenderer) seriesRenderer;
 		paint.setColor(renderer.getColor());
 		if (renderer.isFillPoints()) {
@@ -207,7 +209,8 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawSquare(Canvas canvas, Paint paint, float x, float y) {
+	private void drawSquare(final Canvas canvas, final Paint paint,
+			final float x, final float y) {
 		canvas.drawRect(x - SIZE, y - SIZE, x + SIZE, y + SIZE, paint);
 	}
 
@@ -225,8 +228,8 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawTriangle(Canvas canvas, Paint paint, float[] path,
-			float x, float y) {
+	private void drawTriangle(final Canvas canvas, final Paint paint,
+			final float[] path, final float x, final float y) {
 		path[0] = x;
 		path[1] = y - SIZE - SIZE / 2;
 		path[2] = x - SIZE;
@@ -248,7 +251,8 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawX(Canvas canvas, Paint paint, float x, float y) {
+	private void drawX(final Canvas canvas, final Paint paint, final float x,
+			final float y) {
 		canvas.drawLine(x - SIZE, y - SIZE, x + SIZE, y + SIZE, paint);
 		canvas.drawLine(x + SIZE, y - SIZE, x - SIZE, y + SIZE, paint);
 	}

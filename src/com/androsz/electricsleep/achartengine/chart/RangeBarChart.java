@@ -39,8 +39,8 @@ public class RangeBarChart extends BarChart {
 	 * @param type
 	 *            the range bar chart type
 	 */
-	public RangeBarChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer, Type type) {
+	public RangeBarChart(final XYMultipleSeriesDataset dataset,
+			final XYMultipleSeriesRenderer renderer, final Type type) {
 		super(dataset, renderer, type);
 	}
 
@@ -59,8 +59,9 @@ public class RangeBarChart extends BarChart {
 	 *            the index of the series currently being drawn
 	 */
 	@Override
-	protected void drawChartValuesText(Canvas canvas, XYSeries series,
-			Paint paint, float[] points, int seriesIndex) {
+	protected void drawChartValuesText(final Canvas canvas,
+			final XYSeries series, final Paint paint, final float[] points,
+			final int seriesIndex) {
 		final int seriesNr = mDataset.getSeriesCount();
 		final float halfDiffX = getHalfDiffX(points, points.length, seriesNr);
 		for (int k = 0; k < points.length; k += 4) {
@@ -95,9 +96,9 @@ public class RangeBarChart extends BarChart {
 	 *            the index of the series currently being drawn
 	 */
 	@Override
-	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+	public void drawSeries(final Canvas canvas, final Paint paint,
+			final float[] points, final SimpleSeriesRenderer seriesRenderer,
+			final float yAxisValue, final int seriesIndex) {
 		final int seriesNr = mDataset.getSeriesCount();
 		final int length = points.length;
 		paint.setColor(seriesRenderer.getColor());

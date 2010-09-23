@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 public class SeekBarPreference extends DialogPreference {
 
@@ -18,25 +18,25 @@ public class SeekBarPreference extends DialogPreference {
 	private SeekBar seekBar;
 	private TextView textView;
 
-	public SeekBarPreference(Context context, AttributeSet attrs) {
+	public SeekBarPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
 	}
 
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
+	protected void onDialogClosed(final boolean positiveResult) {
 		if (positiveResult) {
 			persistInt(seekBar.getProgress());
 		}
 	}
 
 	@Override
-	protected Object onGetDefaultValue(TypedArray a, int index) {
+	protected Object onGetDefaultValue(final TypedArray a, final int index) {
 		return (int) a.getInt(index, 0);
 	}
 
 	@Override
-	protected void onPrepareDialogBuilder(Builder builder) {
+	protected void onPrepareDialogBuilder(final Builder builder) {
 
 		final LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(new LinearLayout.LayoutParams(
@@ -64,17 +64,17 @@ public class SeekBarPreference extends DialogPreference {
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
+			public void onProgressChanged(final SeekBar seekBar,
+					final int progress, final boolean fromUser) {
 				syncTextViewText(progress);
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
+			public void onStartTrackingTouch(final SeekBar seekBar) {
 			}
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
+			public void onStopTrackingTouch(final SeekBar seekBar) {
 			}
 		});
 		layout.addView(seekBar);
@@ -86,7 +86,8 @@ public class SeekBarPreference extends DialogPreference {
 	}
 
 	@Override
-	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+	protected void onSetInitialValue(final boolean restoreValue,
+			final Object defaultValue) {
 		final int temp = restoreValue ? getPersistedInt(0)
 				: (Integer) defaultValue;
 		if (!restoreValue) {
@@ -94,7 +95,7 @@ public class SeekBarPreference extends DialogPreference {
 		}
 	}
 
-	private void syncTextViewText(int progress) {
+	private void syncTextViewText(final int progress) {
 		textView.setText("" + progress);
 	}
 }

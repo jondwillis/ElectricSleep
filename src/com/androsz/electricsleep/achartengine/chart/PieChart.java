@@ -17,9 +17,9 @@ package com.androsz.electricsleep.achartengine.chart;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
 
 import com.androsz.electricsleep.achartengine.model.CategorySeries;
 import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;
@@ -44,7 +44,7 @@ public class PieChart extends AbstractChart {
 	 * @param renderer
 	 *            the series renderer
 	 */
-	public PieChart(CategorySeries dataset, DefaultRenderer renderer) {
+	public PieChart(final CategorySeries dataset, final DefaultRenderer renderer) {
 		mDataset = dataset;
 		mRenderer = renderer;
 	}
@@ -64,7 +64,8 @@ public class PieChart extends AbstractChart {
 	 *            the height of the view to draw to
 	 */
 	@Override
-	public void draw(Canvas canvas, int x, int y, int width, int height) {
+	public void draw(final Canvas canvas, final int x, final int y,
+			final int width, final int height) {
 		final Paint paint = new Paint();
 		paint.setAntiAlias(mRenderer.isAntialiasing());
 		paint.setStyle(Style.FILL);
@@ -87,8 +88,8 @@ public class PieChart extends AbstractChart {
 			titles[i] = mDataset.getCategory(i);
 		}
 		float currentAngle = 0;
-		final int mRadius = Math.min(Math.abs(right - left), Math.abs(bottom
-				- top));
+		final int mRadius = Math.min(Math.abs(right - left),
+				Math.abs(bottom - top));
 		final int radius = (int) (mRadius * 0.35);
 		final int centerX = (left + right) / 2;
 		final int centerY = (bottom + top) / 2;
@@ -147,8 +148,9 @@ public class PieChart extends AbstractChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(final Canvas canvas,
+			final SimpleSeriesRenderer renderer, final float x, final float y,
+			final Paint paint) {
 		canvas.drawRect(x, y - SHAPE_WIDTH / 2, x + SHAPE_WIDTH, y
 				+ SHAPE_WIDTH / 2, paint);
 	}

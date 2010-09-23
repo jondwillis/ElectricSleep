@@ -53,23 +53,34 @@ public class HomeActivity extends CustomTitlebarActivity {
 		if (message.length() > 0) {
 			message += getString(R.string.message_recommend_calibration);
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-					.setMessage(message).setCancelable(false)
+					.setMessage(message)
+					.setCancelable(false)
 					.setPositiveButton("Calibrate",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									startActivity(new Intent(HomeActivity.this, CalibrationWizardActivity.class));
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											CalibrationWizardActivity.class));
 								}
-							}).setNeutralButton("Manual",
+							})
+					.setNeutralButton("Manual",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											SettingsActivity.class));
 								}
-							}).setNegativeButton("Cancel",
+							})
+					.setNegativeButton("Cancel",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
 									dialog.cancel();
 								}
 							});
@@ -87,7 +98,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
@@ -99,16 +110,16 @@ public class HomeActivity extends CustomTitlebarActivity {
 		enforceCalibrationBeforeStartingSleep(null, null);
 	}
 
-	public void onHistoryClick(View v) {
+	public void onHistoryClick(final View v) {
 		startActivity(new Intent(this, HistoryActivity.class));
 	}
 
 	@Override
-	public void onHomeClick(View v) {
+	public void onHomeClick(final View v) {
 		// do nothing b/c home is home!
 	}
-	
-	public void onSleepClick(View v) throws Exception {
+
+	public void onSleepClick(final View v) throws Exception {
 		final SharedPreferences userPrefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		final int minSensitivity = userPrefs.getInt(
@@ -124,26 +135,37 @@ public class HomeActivity extends CustomTitlebarActivity {
 				getString(R.string.pref_alarm_window), "-1"));
 
 		if (maxSensitivity < 0 || minSensitivity < 0
-				|| alarmTriggerSensitivity < 0 || (useAlarm && alarmWindow < 0)) {
+				|| alarmTriggerSensitivity < 0 || useAlarm && alarmWindow < 0) {
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(
-					HomeActivity.this).setMessage(
-					getString(R.string.invalid_settings)).setCancelable(false)
+					HomeActivity.this)
+					.setMessage(getString(R.string.invalid_settings))
+					.setCancelable(false)
 					.setPositiveButton("Calibrate",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									startActivity(new Intent(HomeActivity.this, CalibrationWizardActivity.class));
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											CalibrationWizardActivity.class));
 								}
-							}).setNeutralButton("Manual",
+							})
+					.setNeutralButton("Manual",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											SettingsActivity.class));
 								}
-							}).setNegativeButton("Cancel",
+							})
+					.setNegativeButton("Cancel",
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
 									dialog.cancel();
 								}
 							});
@@ -162,7 +184,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 				SleepActivity.class));
 	}
 
-	public void onTitleButton1Click(View v) {
+	public void onTitleButton1Click(final View v) {
 		Toast.makeText(this, "ohhh", Toast.LENGTH_SHORT).show();
 	}
 }

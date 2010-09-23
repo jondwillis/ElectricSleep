@@ -19,7 +19,7 @@ public class CalibrateForResultActivity extends Activity {
 
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
-		public void onReceive(Context context, Intent intent) {
+		public void onReceive(final Context context, final Intent intent) {
 			CalibrateForResultActivity.this.setResult((int) intent
 					.getDoubleExtra("y", 0));
 			finish();
@@ -32,14 +32,14 @@ public class CalibrateForResultActivity extends Activity {
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(final Configuration newConfig) {
 		// getParent().onConfigurationChanged(newConfig);
 		// do nothing to prevent onWindowFocusChanged to be called and
 		// subsequent failure of the test
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		final LinearLayout container = new LinearLayout(this);
 		final ProgressBar progress = new ProgressBar(this);

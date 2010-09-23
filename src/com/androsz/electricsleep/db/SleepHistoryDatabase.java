@@ -26,22 +26,18 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.service.SleepAccelerometerService;
-import com.androsz.electricsleep.ui.SleepActivity;
-
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import com.androsz.electricsleep.R;
 
 /**
  * Contains logic to return specific words from the dictionary, and load the
@@ -65,7 +61,7 @@ public class SleepHistoryDatabase {
 				+ KEY_SLEEP_DATA_MIN + ", " + KEY_SLEEP_DATA_MAX + ", "
 				+ KEY_SLEEP_DATA_ALARM + ");";
 
-		SleepHistoryDBOpenHelper(Context context) {
+		SleepHistoryDBOpenHelper(final Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}
 
@@ -75,10 +71,10 @@ public class SleepHistoryDatabase {
 		 * @return rowId or -1 if failed
 		 * @throws IOException
 		 */
-		public long addSleep(String sleepDateTime,
-				ArrayList<Double> sleepChartDataX,
-				ArrayList<Double> sleepChartDataY, int min, int max, int alarm)
-				throws IOException {
+		public long addSleep(final String sleepDateTime,
+				final ArrayList<Double> sleepChartDataX,
+				final ArrayList<Double> sleepChartDataY, final int min,
+				final int max, final int alarm) throws IOException {
 
 			final SQLiteDatabase db = getWritableDatabase();
 			long insertResult = -1;
@@ -103,12 +99,13 @@ public class SleepHistoryDatabase {
 		}
 
 		@Override
-		public void onCreate(SQLiteDatabase db) {
+		public void onCreate(final SQLiteDatabase db) {
 			db.execSQL(FTS_TABLE_CREATE);
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
+				final int newVersion) {
 			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
@@ -130,7 +127,7 @@ public class SleepHistoryDatabase {
 
 	private static final int DATABASE_VERSION = 2;
 
-	public static Object byteArrayToObject(byte[] bytes)
+	public static Object byteArrayToObject(final byte[] bytes)
 			throws StreamCorruptedException, IOException,
 			ClassNotFoundException {
 		final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -139,7 +136,8 @@ public class SleepHistoryDatabase {
 		return ois.readObject();
 	}
 
-	private static byte[] objectToByteArray(Object obj) throws IOException {
+	private static byte[] objectToByteArray(final Object obj)
+			throws IOException {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(obj);
@@ -181,7 +179,7 @@ public class SleepHistoryDatabase {
 	 * @param context
 	 *            The Context within which to work, used to create the DB
 	 */
-	public SleepHistoryDatabase(Context context) {
+	public SleepHistoryDatabase(final Context context) {
 		databaseOpenHelper = new SleepHistoryDBOpenHelper(context);
 	}
 
@@ -195,29 +193,28 @@ public class SleepHistoryDatabase {
 			final ArrayList<Double> sleepChartDataX,
 			final ArrayList<Double> sleepChartDataY, final int min,
 			final int max, final int alarm) throws IOException {
-		
-		/*new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {*/
-					ProgressDialog waitForSaveDialog = new ProgressDialog(context);
-					waitForSaveDialog
-							.setMessage(context.getText(R.string.dialog_wait_for_sleep_data_message));
-					// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
-					waitForSaveDialog.setCancelable(false);
-					waitForSaveDialog.show();
-					
-					long result = databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
-							sleepChartDataY, min, max, alarm);
-					
-					waitForSaveDialog.dismiss();
-				/*} catch (final IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});*/
-					return result;
+
+		/*
+		 * new Thread(new Runnable() {
+		 * 
+		 * @Override public void run() { try {
+		 */
+		final ProgressDialog waitForSaveDialog = new ProgressDialog(context);
+		waitForSaveDialog.setMessage(context
+				.getText(R.string.dialog_wait_for_sleep_data_message));
+		// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
+		waitForSaveDialog.setCancelable(false);
+		waitForSaveDialog.show();
+
+		final long result = databaseOpenHelper.addSleep(sleepDateTime,
+				sleepChartDataX, sleepChartDataY, min, max, alarm);
+
+		waitForSaveDialog.dismiss();
+		/*
+		 * } catch (final IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } } });
+		 */
+		return result;
 	}
 
 	/**
@@ -229,7 +226,7 @@ public class SleepHistoryDatabase {
 	 *            The columns to include, if null then all are included
 	 * @return Cursor positioned to matching word, or null if not found.
 	 */
-	public Cursor getSleep(String rowId, String[] columns) {
+	public Cursor getSleep(final String rowId, final String[] columns) {
 		final String selection = "rowid = ?";
 		final String[] selectionArgs = new String[] { rowId };
 
@@ -250,7 +247,7 @@ public class SleepHistoryDatabase {
 	 *            The columns to include, if null then all are included
 	 * @return Cursor over all words that match, or null if none found.
 	 */
-	public Cursor getSleepMatches(String query, String[] columns) {
+	public Cursor getSleepMatches(final String query, final String[] columns) {
 		final String selection = KEY_SLEEP_DATE_TIME + " MATCH ?";
 		final String[] selectionArgs = new String[] { query + "*" };
 
@@ -284,8 +281,8 @@ public class SleepHistoryDatabase {
 	 *            The columns to return
 	 * @return A Cursor over all rows matching the query
 	 */
-	private Cursor query(String selection, String[] selectionArgs,
-			String[] columns) {
+	private Cursor query(final String selection, final String[] selectionArgs,
+			final String[] columns) {
 		/*
 		 * The SQLiteBuilder provides a map for all possible columns requested
 		 * to actual columns in the database, creating a simple column alias
@@ -296,9 +293,9 @@ public class SleepHistoryDatabase {
 		builder.setTables(FTS_VIRTUAL_TABLE);
 		builder.setProjectionMap(columnMap);
 
-		final Cursor cursor = builder.query(databaseOpenHelper
-				.getReadableDatabase(), columns, selection, selectionArgs,
-				null, null, null);
+		final Cursor cursor = builder.query(
+				databaseOpenHelper.getReadableDatabase(), columns, selection,
+				selectionArgs, null, null, null);
 
 		if (cursor == null) {
 			return null;

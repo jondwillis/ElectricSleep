@@ -47,7 +47,7 @@ public class AlarmDatabase {
 		private Calendar nearestAlarmDate;
 		private final int daysOfWeek;
 
-		public Record(Cursor cur) {
+		public Record(final Cursor cur) {
 			if (column_id == -1) {
 				column_id = cur.getColumnIndexOrThrow("_id");
 				column_hour = cur.getColumnIndexOrThrow("hour");
@@ -69,7 +69,7 @@ public class AlarmDatabase {
 		}
 
 		@Override
-		public boolean equals(Object o) {
+		public boolean equals(final Object o) {
 			if (this == o) {
 				return true;
 			}
@@ -127,8 +127,8 @@ public class AlarmDatabase {
 		}
 	}
 
-	public static Calendar calculateNextAlarm(int hour, int minute,
-			int daysOfWeek, long minimumTime) {
+	public static Calendar calculateNextAlarm(final int hour, final int minute,
+			final int daysOfWeek, final long minimumTime) {
 
 		// newRecord with now
 		final Calendar c = Calendar.getInstance();
@@ -166,7 +166,7 @@ public class AlarmDatabase {
 	 *            may be null
 	 * @return Intent for changing alarmclock settings
 	 */
-	public static Intent changeAlarmSettings(PackageManager packageManager) {
+	public static Intent changeAlarmSettings(final PackageManager packageManager) {
 		final Intent i = new Intent();
 		i.setAction(Intent.ACTION_MAIN);
 		i.setClassName("com.android.alarmclock",
@@ -230,7 +230,7 @@ public class AlarmDatabase {
 	 *            alarmclock-clock internal days representation
 	 * @return days count
 	 */
-	private static int getNextAlarm(Calendar c, int mDays) {
+	private static int getNextAlarm(final Calendar c, final int mDays) {
 		if (mDays == 0) {
 			return -1;
 		}
@@ -247,7 +247,7 @@ public class AlarmDatabase {
 	}
 
 	public static List<ApplicationInfo> getPossibleAlarmClocks(
-			PackageManager packageManager) {
+			final PackageManager packageManager) {
 		final List<ApplicationInfo> appsInfo = packageManager
 				.getInstalledApplications(0);
 		final List<ApplicationInfo> clockApps = new ArrayList<ApplicationInfo>();
@@ -304,8 +304,8 @@ public class AlarmDatabase {
 	 * @param contentObserver
 	 *            will be called for external database updates
 	 */
-	public AlarmDatabase(ContentResolver contentResolver,
-			ContentObserver contentObserver, String packageName) {
+	public AlarmDatabase(final ContentResolver contentResolver,
+			final ContentObserver contentObserver, final String packageName) {
 		mContentResolver = contentResolver;
 		mAlarmUri = Uri.parse("content://" + packageName + "/alarm");
 
@@ -327,9 +327,9 @@ public class AlarmDatabase {
 	 *            Runnable to be called if database changes
 	 * @param handler
 	 */
-	public AlarmDatabase(ContentResolver contentResolver,
+	public AlarmDatabase(final ContentResolver contentResolver,
 			final Runnable contentObserver, final Handler handler,
-			String packageName) {
+			final String packageName) {
 		this(contentResolver, new ContentObserver(handler) {
 			@Override
 			public boolean deliverSelfNotifications() {
@@ -337,7 +337,7 @@ public class AlarmDatabase {
 			}
 
 			@Override
-			public void onChange(boolean selfChange) {
+			public void onChange(final boolean selfChange) {
 				contentObserver.run();
 			}
 		}, packageName);
@@ -350,7 +350,8 @@ public class AlarmDatabase {
 	 * @param contentResolver
 	 *            get from context
 	 */
-	public AlarmDatabase(ContentResolver contentResolver, String packageName) {
+	public AlarmDatabase(final ContentResolver contentResolver,
+			final String packageName) {
 		this(contentResolver, (ContentObserver) null, packageName);
 	}
 
@@ -362,7 +363,7 @@ public class AlarmDatabase {
 		super.finalize();
 	}
 
-	public Record getAlarmById(int alarmId) {
+	public Record getAlarmById(final int alarmId) {
 		final Cursor cur = mContentResolver.query(mAlarmUri, null, "_id=?",
 				new String[] { String.valueOf(alarmId) }, null);
 
@@ -380,7 +381,7 @@ public class AlarmDatabase {
 		return getNearestEnabledAlarm(System.currentTimeMillis());
 	}
 
-	public Alarm getNearestEnabledAlarm(long minimumTime)
+	public Alarm getNearestEnabledAlarm(final long minimumTime)
 			throws UnsupportedOperationException {
 		final Cursor cur = mContentResolver.query(mAlarmUri, null, "enabled=?",
 				new String[] { "1" }, null);

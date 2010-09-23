@@ -22,7 +22,8 @@ public class IntentUtil {
 	 * @return True if an Intent with the specified action can be sent and
 	 *         responded to, false otherwise.
 	 */
-	public static boolean isIntentAvailable(Context context, String action) {
+	public static boolean isIntentAvailable(final Context context,
+			final String action) {
 		final PackageManager packageManager = context.getPackageManager();
 		final Intent intent = new Intent(action);
 		final List<ResolveInfo> list = packageManager.queryIntentActivities(

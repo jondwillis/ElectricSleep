@@ -86,7 +86,7 @@ public class XYSeriesRenderer extends SimpleSeriesRenderer {
 	 * @param fill
 	 *            the fill below line flag value
 	 */
-	public void setFillBelowLine(boolean fill) {
+	public void setFillBelowLine(final boolean fill) {
 		mFillBelowLine = fill;
 	}
 
@@ -96,7 +96,7 @@ public class XYSeriesRenderer extends SimpleSeriesRenderer {
 	 * @param color
 	 *            the fill below line color
 	 */
-	public void setFillBelowLineColor(int color) {
+	public void setFillBelowLineColor(final int color) {
 		mFillColor = color;
 	}
 
@@ -106,7 +106,7 @@ public class XYSeriesRenderer extends SimpleSeriesRenderer {
 	 * @param fill
 	 *            the points fill flag value
 	 */
-	public void setFillPoints(boolean fill) {
+	public void setFillPoints(final boolean fill) {
 		mFillPoints = fill;
 	}
 
@@ -116,7 +116,7 @@ public class XYSeriesRenderer extends SimpleSeriesRenderer {
 	 * @param lineWidth
 	 *            the line width
 	 */
-	public void setLineWidth(float lineWidth) {
+	public void setLineWidth(final float lineWidth) {
 		mLineWidth = lineWidth;
 	}
 
@@ -126,7 +126,7 @@ public class XYSeriesRenderer extends SimpleSeriesRenderer {
 	 * @param style
 	 *            the point style
 	 */
-	public void setPointStyle(PointStyle style) {
+	public void setPointStyle(final PointStyle style) {
 		mPointStyle = style;
 	}
 }

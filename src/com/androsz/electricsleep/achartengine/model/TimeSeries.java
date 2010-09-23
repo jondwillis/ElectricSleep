@@ -28,7 +28,7 @@ public class TimeSeries extends XYSeries {
 	 * @param title
 	 *            the series title
 	 */
-	public TimeSeries(String title) {
+	public TimeSeries(final String title) {
 		super(title);
 	}
 
@@ -40,7 +40,7 @@ public class TimeSeries extends XYSeries {
 	 * @param y
 	 *            the value for the Y axis
 	 */
-	public void add(Date x, double y) {
+	public void add(final Date x, final double y) {
 		super.add(x.getTime(), y);
 	}
 }

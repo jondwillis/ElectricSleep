@@ -113,7 +113,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 
 		final Uri uri = getIntent().getData();
 		final Cursor cursor = managedQuery(uri, null, null, null, null);
@@ -156,13 +156,13 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 			}
 
 			addChartView();
-			redrawChart(cursor.getInt(min), cursor.getInt(max), cursor
-					.getInt(alarm));
+			redrawChart(cursor.getInt(min), cursor.getInt(max),
+					cursor.getInt(alarm));
 		}
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedState) {
+	protected void onRestoreInstanceState(final Bundle savedState) {
 		super.onRestoreInstanceState(savedState);
 
 		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) savedState
@@ -188,7 +188,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		outState.putSerializable("dataset", xyMultipleSeriesDataset);
@@ -202,34 +202,35 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 				xySeriesAlarmTriggerRenderer);
 	}
 
-	private void redrawChart(int min, int max, int alarm) {
+	private void redrawChart(final int min, final int max, final int alarm) {
 		if (xySeriesMovement.mX.size() > 1 && xySeriesMovement.mY.size() > 1) {
 			if (waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
 				waitForSeriesData = null;
 			}
 
-			int count = xySeriesMovement.mY.size();
+			final int count = xySeriesMovement.mY.size();
 			int numberOfDesiredGroupedPoints = 100;
 			numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? numberOfDesiredGroupedPoints
 					: count;
 
 			if (numberOfDesiredGroupedPoints != count) {
-				int pointsPerGroup = (count / numberOfDesiredGroupedPoints) + 1;
-				List<Double> lessDetailedX = new ArrayList<Double>(
+				final int pointsPerGroup = count / numberOfDesiredGroupedPoints
+						+ 1;
+				final List<Double> lessDetailedX = new ArrayList<Double>(
 						numberOfDesiredGroupedPoints);
-				List<Double> lessDetailedY = new ArrayList<Double>(
+				final List<Double> lessDetailedY = new ArrayList<Double>(
 						numberOfDesiredGroupedPoints);
 				int numberOfPointsInThisGroup = pointsPerGroup;
 				double averageYForThisGroup = 0;
 				for (int i = 0; i < numberOfDesiredGroupedPoints; i++) {
 					averageYForThisGroup = 0;
-					int startIndexForThisGroup = (i * pointsPerGroup);
+					final int startIndexForThisGroup = i * pointsPerGroup;
 					for (int j = 0; j < pointsPerGroup; j++) {
 						try {
 							averageYForThisGroup += xySeriesMovement.mY
 									.get(startIndexForThisGroup + j);
-						} catch (IndexOutOfBoundsException ioobe) {
+						} catch (final IndexOutOfBoundsException ioobe) {
 							// lower the number of points
 							// (and signify that we are done)
 							numberOfPointsInThisGroup = j - 1;
@@ -240,7 +241,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 					averageYForThisGroup /= numberOfPointsInThisGroup;
 					if (numberOfPointsInThisGroup < pointsPerGroup) {
 						// we are done
-						int lastIndex = xySeriesMovement.mX.size() - 1;
+						final int lastIndex = xySeriesMovement.mX.size() - 1;
 						lessDetailedX.add(xySeriesMovement.mX.get(lastIndex));
 						lessDetailedY.add(xySeriesMovement.mY.get(lastIndex));
 						xySeriesMovement.mX = lessDetailedX;

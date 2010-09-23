@@ -43,8 +43,8 @@ public class TimeChart extends LineChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public TimeChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public TimeChart(final XYMultipleSeriesDataset dataset,
+			final XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 	}
 
@@ -71,14 +71,15 @@ public class TimeChart extends LineChart {
 	 *            the minimum value on the X axis in the chart
 	 */
 	@Override
-	protected void drawXLabels(List<Double> xLabels,
-			Double[] xTextLabelLocations, Canvas canvas, Paint paint, int left,
-			int top, int bottom, double xPixelsPerUnit, double minX) {
+	protected void drawXLabels(final List<Double> xLabels,
+			final Double[] xTextLabelLocations, final Canvas canvas,
+			final Paint paint, final int left, final int top, final int bottom,
+			final double xPixelsPerUnit, final double minX) {
 		final int length = xLabels.size();
 		final boolean showLabels = mRenderer.isShowLabels();
 		final boolean showGrid = mRenderer.isShowGrid();
-		final DateFormat format = getDateFormat(xLabels.get(0), xLabels
-				.get(length - 1));
+		final DateFormat format = getDateFormat(xLabels.get(0),
+				xLabels.get(length - 1));
 		for (int i = 0; i < length; i++) {
 			final long label = Math.round(xLabels.get(i));
 			final float xLabel = (float) (left + xPixelsPerUnit
@@ -115,7 +116,7 @@ public class TimeChart extends LineChart {
 	 *            the end date in milliseconds
 	 * @return the date format
 	 */
-	private DateFormat getDateFormat(double start, double end) {
+	private DateFormat getDateFormat(final double start, final double end) {
 		if (mDateFormat != null) {
 			SimpleDateFormat format = null;
 			try {
@@ -143,7 +144,7 @@ public class TimeChart extends LineChart {
 	 *            the date format pattern for the X axis labels. If null, an
 	 *            appropriate default format will be used.
 	 */
-	public void setDateFormat(String format) {
+	public void setDateFormat(final String format) {
 		mDateFormat = format;
 	}
 }

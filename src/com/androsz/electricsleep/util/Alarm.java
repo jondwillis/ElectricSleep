@@ -144,7 +144,7 @@ public final class Alarm implements Parcelable {
 		// Bitmask of all repeating days
 		private int mDays;
 
-		DaysOfWeek(int days) {
+		DaysOfWeek(final int days) {
 			mDays = days;
 		}
 
@@ -167,7 +167,7 @@ public final class Alarm implements Parcelable {
 		 * @param c
 		 *            must be set to today
 		 */
-		public int getNextAlarm(Calendar c) {
+		public int getNextAlarm(final Calendar c) {
 			if (mDays == 0) {
 				return -1;
 			}
@@ -189,15 +189,15 @@ public final class Alarm implements Parcelable {
 			return mDays != 0;
 		}
 
-		private boolean isSet(int day) {
+		private boolean isSet(final int day) {
 			return (mDays & 1 << day) > 0;
 		}
 
-		public void set(DaysOfWeek dow) {
+		public void set(final DaysOfWeek dow) {
 			mDays = dow.mDays;
 		}
 
-		public void set(int day, boolean set) {
+		public void set(final int day, final boolean set) {
 			if (set) {
 				mDays |= 1 << day;
 			} else {
@@ -205,7 +205,7 @@ public final class Alarm implements Parcelable {
 			}
 		}
 
-		public String toString(Context context, boolean showNever) {
+		public String toString(final Context context, final boolean showNever) {
 			final StringBuilder ret = new StringBuilder();
 
 			/*
@@ -235,17 +235,20 @@ public final class Alarm implements Parcelable {
 	// Parcelable apis
 	// ////////////////////////////
 	public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
-		public Alarm createFromParcel(Parcel p) {
+		@Override
+		public Alarm createFromParcel(final Parcel p) {
 			return new Alarm(p);
 		}
 
-		public Alarm[] newArray(int size) {
+		@Override
+		public Alarm[] newArray(final int size) {
 			return new Alarm[size];
 		}
 	};
 
-	private static Calendar calculateNextAlarm(int hour, int minute,
-			DaysOfWeek daysOfWeek, long minimumTime) {
+	private static Calendar calculateNextAlarm(final int hour,
+			final int minute, final DaysOfWeek daysOfWeek,
+			final long minimumTime) {
 
 		// newRecord with now
 		final Calendar c = Calendar.getInstance();
@@ -301,7 +304,7 @@ public final class Alarm implements Parcelable {
 		alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 	}
 
-	public Alarm(Cursor c) {
+	public Alarm(final Cursor c) {
 		id = c.getInt(Columns.ALARM_ID_INDEX);
 		enabled = c.getInt(Columns.ALARM_ENABLED_INDEX) == 1;
 		hour = c.getInt(Columns.ALARM_HOUR_INDEX);
@@ -331,7 +334,7 @@ public final class Alarm implements Parcelable {
 		}
 	}
 
-	public Alarm(Parcel p) {
+	public Alarm(final Parcel p) {
 		id = p.readInt();
 		enabled = p.readInt() == 1;
 		hour = p.readInt();
@@ -344,11 +347,12 @@ public final class Alarm implements Parcelable {
 		silent = p.readInt() == 1;
 	}
 
+	@Override
 	public int describeContents() {
 		return 0;
 	}
 
-	public String getLabelOrDefault(Context context) {
+	public String getLabelOrDefault(final Context context) {
 		if (label == null || label.length() == 0) {
 			return "";// context.getString(R.string.default_label);
 		}
@@ -363,7 +367,8 @@ public final class Alarm implements Parcelable {
 		return nearestAlarmDate;
 	}
 
-	public void writeToParcel(Parcel p, int flags) {
+	@Override
+	public void writeToParcel(final Parcel p, final int flags) {
 		p.writeInt(id);
 		p.writeInt(enabled ? 1 : 0);
 		p.writeInt(hour);

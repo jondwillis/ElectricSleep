@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -29,11 +28,12 @@ import com.androsz.electricsleep.service.SleepAccelerometerService;
 public class SleepActivity extends CustomTitlebarActivity {
 
 	private class WaitForSeriesDataProgressDialog extends ProgressDialog {
-		public WaitForSeriesDataProgressDialog(Context context) {
+		public WaitForSeriesDataProgressDialog(final Context context) {
 			super(context);
 		}
 
-		public WaitForSeriesDataProgressDialog(Context context, int theme) {
+		public WaitForSeriesDataProgressDialog(final Context context,
+				final int theme) {
 			// super(context);
 			super(context, theme);
 		}
@@ -66,29 +66,35 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
-		public void onReceive(Context context, Intent intent) {
+		public void onReceive(final Context context, final Intent intent) {
 			xySeriesMovement.mX.add(intent.getDoubleExtra("x", 0));
 			xySeriesMovement.mY.add(intent.getDoubleExtra("y", 0));
 
-			redrawChart(intent.getIntExtra("min", 0),
-					intent.getIntExtra("max", 100),
-					intent.getIntExtra("alarm", -1));
+			redrawChart(intent.getIntExtra("min",
+					SettingsActivity.DEFAULT_MIN_SENSITIVITY),
+					intent.getIntExtra("max",
+							SettingsActivity.DEFAULT_MAX_SENSITIVITY),
+					intent.getIntExtra("alarm",
+							SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 		}
 	};
 
 	private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
 		@SuppressWarnings("unchecked")
 		@Override
-		public void onReceive(Context context, Intent intent) {
+		public void onReceive(final Context context, final Intent intent) {
 			xySeriesMovement.mX = (List<Double>) intent
 					.getSerializableExtra("currentSeriesX");
 
 			xySeriesMovement.mY = (List<Double>) intent
 					.getSerializableExtra("currentSeriesY");
 
-			redrawChart(intent.getIntExtra("min", 0),
-					intent.getIntExtra("max", 100),
-					intent.getIntExtra("alarm", -1));
+			redrawChart(intent.getIntExtra("min",
+					SettingsActivity.DEFAULT_MIN_SENSITIVITY),
+					intent.getIntExtra("max",
+							SettingsActivity.DEFAULT_MAX_SENSITIVITY),
+					intent.getIntExtra("alarm",
+							SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 		}
 	};
 
@@ -163,7 +169,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 
 		this.setTitle(R.string.monitoring_sleep);
 		super.onCreate(savedInstanceState);
@@ -185,7 +191,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedState) {
+	protected void onRestoreInstanceState(final Bundle savedState) {
 		super.onRestoreInstanceState(savedState);
 
 		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) savedState
@@ -215,7 +221,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		outState.putSerializable("dataset", xyMultipleSeriesDataset);
@@ -229,32 +235,39 @@ public class SleepActivity extends CustomTitlebarActivity {
 				xySeriesAlarmTriggerRenderer);
 	}
 
-	public void onTitleButton1Click(View v) {
-		Intent saveActivityIntent = new Intent(this, SaveSleepActivity.class);
+	public void onTitleButton1Click(final View v) {
+		final Intent saveActivityIntent = new Intent(this,
+				SaveSleepActivity.class);
 		saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-				| Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				| Intent.FLAG_ACTIVITY_CLEAR_TOP
+				| Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(saveActivityIntent);
 	}
 
-	public void onTitleButton2Click(View v) {
+	public void onTitleButton2Click(final View v) {
 		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 				.setMessage("will show settings")
 				.setCancelable(true)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+					@Override
+					public void onClick(final DialogInterface dialog,
+							final int id) {
 						dialog.cancel();
 					}
 				})
 				.setNegativeButton("Cancel",
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
+							@Override
+							public void onClick(final DialogInterface dialog,
+									final int id) {
 								dialog.cancel();
 							}
 						});
 		dialog.show();
 	}
 
-	private void redrawChart(int min, int max, int alarmTriggerSensitivity) {
+	private void redrawChart(final int min, final int max,
+			final int alarmTriggerSensitivity) {
 		if (xySeriesMovement.mX.size() > 1 && xySeriesMovement.mY.size() > 1) {
 			if (waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
@@ -291,7 +304,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 						getString(R.string.stop),
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(DialogInterface arg0, int arg1) {
+							public void onClick(final DialogInterface arg0,
+									final int arg1) {
 
 								stopService(new Intent(SleepActivity.this,
 										SleepAccelerometerService.class));

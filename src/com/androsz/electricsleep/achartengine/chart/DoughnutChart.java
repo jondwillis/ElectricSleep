@@ -18,9 +18,9 @@ package com.androsz.electricsleep.achartengine.chart;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
 
 import com.androsz.electricsleep.achartengine.model.MultipleCategorySeries;
 import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;
@@ -50,8 +50,8 @@ public class DoughnutChart extends AbstractChart {
 	 * @param renderer
 	 *            the series renderer
 	 */
-	public DoughnutChart(MultipleCategorySeries dataset,
-			DefaultRenderer renderer) {
+	public DoughnutChart(final MultipleCategorySeries dataset,
+			final DefaultRenderer renderer) {
 		mDataset = dataset;
 		mRenderer = renderer;
 	}
@@ -71,7 +71,8 @@ public class DoughnutChart extends AbstractChart {
 	 *            the height of the view to draw to
 	 */
 	@Override
-	public void draw(Canvas canvas, int x, int y, int width, int height) {
+	public void draw(final Canvas canvas, final int x, final int y,
+			final int width, final int height) {
 		final Paint paint = new Paint();
 		paint.setAntiAlias(mRenderer.isAntialiasing());
 		paint.setStyle(Style.FILL);
@@ -88,8 +89,8 @@ public class DoughnutChart extends AbstractChart {
 		mStep = SHAPE_WIDTH * 3 / 4;
 
 		final int cLength = mDataset.getCategoriesCount();
-		final int mRadius = Math.min(Math.abs(right - left), Math.abs(bottom
-				- top));
+		final int mRadius = Math.min(Math.abs(right - left),
+				Math.abs(bottom - top));
 		final double rCoef = 0.35;
 		final double decCoef = 0.2 / cLength;
 		int radius = (int) (mRadius * rCoef);
@@ -174,8 +175,9 @@ public class DoughnutChart extends AbstractChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(final Canvas canvas,
+			final SimpleSeriesRenderer renderer, final float x, final float y,
+			final Paint paint) {
 		mStep--;
 		canvas.drawCircle(x + SHAPE_WIDTH - mStep, y, mStep, paint);
 	}

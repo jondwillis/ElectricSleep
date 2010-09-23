@@ -20,10 +20,10 @@ import java.util.List;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.Paint.Align;
 
 import com.androsz.electricsleep.achartengine.model.XYMultipleSeriesDataset;
 import com.androsz.electricsleep.achartengine.model.XYSeries;
@@ -61,8 +61,8 @@ public abstract class XYChart extends AbstractChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public XYChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public XYChart(final XYMultipleSeriesDataset dataset,
+			final XYMultipleSeriesRenderer renderer) {
 		mDataset = dataset;
 		mRenderer = renderer;
 	}
@@ -82,7 +82,8 @@ public abstract class XYChart extends AbstractChart {
 	 *            the height of the view to draw to
 	 */
 	@Override
-	public void draw(Canvas canvas, int x, int y, int width, int height) {
+	public void draw(final Canvas canvas, final int x, final int y,
+			final int width, final int height) {
 		final Paint paint = new Paint();
 		paint.setAntiAlias(mRenderer.isAntialiasing());
 		int legendSize = 0;
@@ -100,8 +101,8 @@ public abstract class XYChart extends AbstractChart {
 		drawBackground(mRenderer, canvas, x, y, width, height, paint);
 
 		if (paint.getTypeface() == null
-				|| !paint.getTypeface().toString().equals(
-						mRenderer.getTextTypefaceName())
+				|| !paint.getTypeface().toString()
+						.equals(mRenderer.getTextTypefaceName())
 				|| paint.getTypeface().getStyle() != mRenderer
 						.getTextTypefaceStyle()) {
 			paint.setTypeface(Typeface.create(mRenderer.getTextTypefaceName(),
@@ -208,9 +209,7 @@ public abstract class XYChart extends AbstractChart {
 				} else if (or == Orientation.VERTICAL) {
 					if (showLabels) {
 						paint.setColor(mRenderer.getLabelsColor());
-						canvas
-								.drawLine(right + 4, yLabel, right, yLabel,
-										paint);
+						canvas.drawLine(right + 4, yLabel, right, yLabel, paint);
 						drawText(canvas, getLabel(label), right + 10,
 								yLabel - 2, paint, 0);
 					}
@@ -226,11 +225,9 @@ public abstract class XYChart extends AbstractChart {
 				paint.setTextSize(mRenderer.getAxisTitleTextSize());
 				paint.setTextAlign(Align.CENTER);
 				final int xTitleSize = (int) (mRenderer.getXTitle().length() > 0 ? paint
-						.getTextSize()
-						: 0);
+						.getTextSize() : 0);
 				final int yTitleSize = (int) (mRenderer.getYTitle().length() > 0 ? paint
-						.getTextSize()
-						: 0);
+						.getTextSize() : 0);
 				final int padding = 10;
 				if (or == Orientation.HORIZONTAL) {
 					drawText(canvas, mRenderer.getXTitle(), x + width / 2,
@@ -272,8 +269,9 @@ public abstract class XYChart extends AbstractChart {
 				points[j + 1] = (float) (bottom - yPixelsPerUnit
 						* (series.getY(index) - minY));
 			}
-			drawSeries(canvas, paint, points, seriesRenderer, Math.min(bottom,
-					(float) (bottom + yPixelsPerUnit * minY)), i);
+			drawSeries(canvas, paint, points, seriesRenderer,
+					Math.min(bottom, (float) (bottom + yPixelsPerUnit * minY)),
+					i);
 			if (isRenderPoints(seriesRenderer)) {
 				final ScatterChart pointsChart = new ScatterChart(mDataset,
 						mRenderer);
@@ -328,8 +326,9 @@ public abstract class XYChart extends AbstractChart {
 	 * @param seriesIndex
 	 *            the index of the series currently being drawn
 	 */
-	protected void drawChartValuesText(Canvas canvas, XYSeries series,
-			Paint paint, float[] points, int seriesIndex) {
+	protected void drawChartValuesText(final Canvas canvas,
+			final XYSeries series, final Paint paint, final float[] points,
+			final int seriesIndex) {
 		for (int k = 0; k < points.length; k += 2) {
 			drawText(canvas, getLabel(series.getY(k / 2)), points[k],
 					points[k + 1] - 3.5f, paint, 0);
@@ -373,8 +372,9 @@ public abstract class XYChart extends AbstractChart {
 	 * @param extraAngle
 	 *            the array of points to be used for drawing the series
 	 */
-	protected void drawText(Canvas canvas, String text, float x, float y,
-			Paint paint, int extraAngle) {
+	protected void drawText(final Canvas canvas, final String text,
+			final float x, final float y, final Paint paint,
+			final int extraAngle) {
 		final int angle = -mRenderer.getOrientation().getAngle() + extraAngle;
 		if (angle != 0) {
 			// canvas.scale(1 / mScale, mScale);
@@ -409,9 +409,10 @@ public abstract class XYChart extends AbstractChart {
 	 * @param minX
 	 *            the minimum value on the X axis in the chart
 	 */
-	protected void drawXLabels(List<Double> xLabels,
-			Double[] xTextLabelLocations, Canvas canvas, Paint paint, int left,
-			int top, int bottom, double xPixelsPerUnit, double minX) {
+	protected void drawXLabels(final List<Double> xLabels,
+			final Double[] xTextLabelLocations, final Canvas canvas,
+			final Paint paint, final int left, final int top, final int bottom,
+			final double xPixelsPerUnit, final double minX) {
 		final int length = xLabels.size();
 		final boolean showLabels = mRenderer.isShowLabels();
 		final boolean showGrid = mRenderer.isShowGrid();
@@ -452,7 +453,7 @@ public abstract class XYChart extends AbstractChart {
 	 *            the input label value
 	 * @return the label without the useless fraction digit
 	 */
-	protected String getLabel(double label) {
+	protected String getLabel(final double label) {
 		String text = "";
 		if (label == Math.round(label)) {
 			text = Math.round(label) + "";
@@ -473,11 +474,11 @@ public abstract class XYChart extends AbstractChart {
 	 * @param renderer
 	 *            the series renderer
 	 */
-	public boolean isRenderPoints(SimpleSeriesRenderer renderer) {
+	public boolean isRenderPoints(final SimpleSeriesRenderer renderer) {
 		return false;
 	}
 
-	public PointF toRealPoint(float screenX, float screenY) {
+	public PointF toRealPoint(final float screenX, final float screenY) {
 		final double realMinX = mRenderer.getXAxisMin();
 		final double realMaxX = mRenderer.getXAxisMax();
 		final double realMinY = mRenderer.getYAxisMin();
@@ -488,7 +489,7 @@ public abstract class XYChart extends AbstractChart {
 						* (realMaxY - realMinY) / screenR.height() + realMinY));
 	}
 
-	public PointF toScreenPoint(PointF realPoint) {
+	public PointF toScreenPoint(final PointF realPoint) {
 		final double realMinX = mRenderer.getXAxisMin();
 		final double realMaxX = mRenderer.getXAxisMax();
 		final double realMinY = mRenderer.getYAxisMin();
@@ -510,7 +511,8 @@ public abstract class XYChart extends AbstractChart {
 	 * @param inverse
 	 *            if the inverse transform needs to be applied
 	 */
-	private void transform(Canvas canvas, float angle, boolean inverse) {
+	private void transform(final Canvas canvas, final float angle,
+			final boolean inverse) {
 		if (inverse) {
 			canvas.scale(1 / mScale, mScale);
 			canvas.translate(mTranslate, -mTranslate);

@@ -31,7 +31,7 @@ public class GraphicalActivity extends Activity {
 	private AbstractChart mChart;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		final Bundle extras = getIntent().getExtras();
 		mChart = (AbstractChart) extras.getSerializable(ChartFactory.CHART);

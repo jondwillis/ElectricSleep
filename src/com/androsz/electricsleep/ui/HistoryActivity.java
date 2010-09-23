@@ -24,10 +24,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
@@ -45,7 +45,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		mTextView = (TextView) findViewById(R.id.text);
@@ -67,13 +67,13 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			final String query = intent.getStringExtra(SearchManager.QUERY);
 			showResults(query);
 		} else {
-			showResults("to");
+			showResults(getString(R.string.to));
 		}
 	}
 
 	@Override
 	public boolean onSearchRequested() {
-		showResults("to");
+		showResults(getString(R.string.to));
 		return super.onSearchRequested();
 	}
 
@@ -83,7 +83,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 	 * @param query
 	 *            The search query
 	 */
-	private void showResults(String query) {
+	private void showResults(final String query) {
 
 		final Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI,
 				null, null, new String[] { query },
@@ -117,15 +117,16 @@ public class HistoryActivity extends CustomTitlebarActivity {
 
 			// Define the on-click listener for the list items
 			mListView.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
+				@Override
+				public void onItemClick(final AdapterView<?> parent,
+						final View view, final int position, final long id) {
 					// Build the Intent used to open WordActivity with a
 					// specific word Uri
 					final Intent reviewSleepIntent = new Intent(
 							getApplicationContext(), ReviewSleepActivity.class);
 					final Uri data = Uri.withAppendedPath(
-							SleepContentProvider.CONTENT_URI, String
-									.valueOf(id));
+							SleepContentProvider.CONTENT_URI,
+							String.valueOf(id));
 					reviewSleepIntent.setData(data);
 					startActivity(reviewSleepIntent);
 				}
