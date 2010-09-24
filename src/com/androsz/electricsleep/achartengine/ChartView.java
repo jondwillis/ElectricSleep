@@ -23,12 +23,14 @@ import android.view.View;
 
 import com.androsz.electricsleep.achartengine.chart.AbstractChart;
 import com.androsz.electricsleep.achartengine.chart.XYChart;
+import com.androsz.electricsleep.achartengine.model.CategorySeries;
+import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;
 import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
 
 /**
  * The view that encapsulates the graphical chart.
  */
-public class GraphicalView extends View {
+public abstract class ChartView extends View {
 	/** The chart to be drawn. */
 	private final AbstractChart mChart;
 	/** The chart renderer. */
@@ -46,14 +48,24 @@ public class GraphicalView extends View {
 	 * @param chart
 	 *            the chart to be drawn
 	 */
-	public GraphicalView(final Context context, final AbstractChart chart) {
+	public ChartView(final Context context) {
 		super(context);
-		mChart = chart;
+		mChart = buildChart();
 		mHandler = new Handler();
 		if (mChart instanceof XYChart) {
 			mRenderer = ((XYChart) mChart).getRenderer();
 		}
 	}
+	private static void checkParameters(final CategorySeries dataset,
+			final DefaultRenderer renderer) {
+		if (dataset == null || renderer == null
+				|| dataset.getItemCount() != renderer.getSeriesRendererCount()) {
+			throw new IllegalArgumentException(
+					"Dataset and renderer should be not null and the dataset number of items should be equal to the number of series renderers");
+		}
+	}
+	
+	protected abstract AbstractChart buildChart();
 
 	/*
 	 * public void handleTouch(MotionEvent event) { final int action =

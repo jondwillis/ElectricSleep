@@ -59,7 +59,7 @@ public class SleepAccelerometerService extends Service implements
 	private boolean useAlarm = false;
 	private int alarmWindow = 30;
 
-	private int updateInterval = 2000;
+	private int updateInterval = 30000;
 
 	private Date dateStarted;
 
@@ -101,7 +101,7 @@ public class SleepAccelerometerService extends Service implements
 				sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
 			}
 			saveIntent.putExtra("name", sdf.format(dateStarted) + " "
-					+ getString(R.string.to) + " " + sdf2.format(now));
+					+ getText(R.string.to) + " " + sdf2.format(now));
 
 			sendBroadcast(saveIntent);
 		}
@@ -254,7 +254,7 @@ public class SleepAccelerometerService extends Service implements
 					
 					final Intent saveActivityIntent = new Intent(this,
 							SaveSleepActivity.class);
-					saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+					saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(saveActivityIntent);
 					sensorManager
 							.unregisterListener(SleepAccelerometerService.this);

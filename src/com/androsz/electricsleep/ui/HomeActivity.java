@@ -173,14 +173,14 @@ public class HomeActivity extends CustomTitlebarActivity {
 			return;
 		}
 
-		final Intent i = new Intent(HomeActivity.this,
+		final Intent serviceIntent = new Intent(HomeActivity.this,
 				SleepAccelerometerService.class);
-		i.putExtra("min", minSensitivity);
-		i.putExtra("max", maxSensitivity);
-		i.putExtra("alarm", alarmTriggerSensitivity);
-		i.putExtra("useAlarm", useAlarm);
-		i.putExtra("alarmWindow", alarmWindow);
-		enforceCalibrationBeforeStartingSleep(i, new Intent(HomeActivity.this,
+		serviceIntent.putExtra("min", minSensitivity);
+		serviceIntent.putExtra("max", maxSensitivity);
+		serviceIntent.putExtra("alarm", alarmTriggerSensitivity);
+		serviceIntent.putExtra("useAlarm", useAlarm);
+		serviceIntent.putExtra("alarmWindow", alarmWindow);
+		enforceCalibrationBeforeStartingSleep(serviceIntent, new Intent(HomeActivity.this,
 				SleepActivity.class));
 	}
 
