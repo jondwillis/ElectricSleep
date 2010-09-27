@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="to">to</string>
-    <string name="summary_pref_calibration">Tap to calibrate movement sensitivities automatically</string>
-    <string name="title_pref_calibration">Calibration Wizard</string>
-    <string name="pref_calibration">calibrationWizard</string>
-    <string name="summary_pref_alarms">Manage system alarms - ElectricSleep will always bind to the nearest enabled alarm.</string>
-    <string name="title_pref_alarms">Alarms</string>
-    <string name="preset">Preset:</string>
-    <string name="summary_pref_use_alarm_off">ElectricSleep will not wake you up in sleep mode (recording only)</string>
-    <string name="summary_pref_use_alarm_on">ElectricSleep is set to wake you before the next enabled alarm in sleep mode</string>
-    <string name="title_pref_use_alarm">Use Alarm</string>
-    <string name="pref_use_alarm">useAlarm</string>
+	<string name="to">to</string>
+	<string name="summary_pref_calibration">Tap to calibrate movement sensitivities
+		automatically</string>
+	<string name="title_pref_calibration">Calibration Wizard</string>
+	<string name="pref_calibration">calibrationWizard</string>
+	<string name="summary_pref_alarms">Manage system alarms - ElectricSleep will always
+		bind to the nearest enabled alarm.</string>
+	<string name="title_pref_alarms">Alarms</string>
+	<string name="preset">Preset:</string>
+	<string name="summary_pref_use_alarm_off">ElectricSleep will not wake you up in sleep mode
+		(recording only)</string>
+	<string name="summary_pref_use_alarm_on">ElectricSleep is set to wake you before the next
+		enabled alarm in sleep mode</string>
+	<string name="title_pref_use_alarm">Use Alarm</string>
+	<string name="pref_use_alarm">useAlarm</string>
 	<string name="monitoring_sleep">Monitoring Sleep</string>
 	<string name="movement_level_during_sleep">Movement level during sleep</string>
 	<string name="search">Search</string>
@@ -252,7 +256,7 @@
 	<string name="title_group_statistics">Statistics</string>
 	<string name="title_group_configuration">Configuration</string>
 	<string name="title_home">Electric Sleep Home</string>
-	<string name="notification_sleep_started">ElectricSleep is monitoring movements</string>
+	<string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
 	<string name="dialog_wait_for_sleep_data_message">ElectricSleep has not been recording movement long
@@ -391,7 +395,10 @@
 	<string name="summary_pref_alarm_window">The window of time before your alarm is set to go
 		off during which ElectricSleep will try to wake you.</string>
 	<string name="pref_alarm_window">alarmWindow</string>
-<string name="stop">Stop</string>
-<string name="pref_alarms">alarms</string>
-<string name="donate">Donate</string>
+	<string name="stop">Stop</string>
+	<string name="pref_alarms">alarms</string>
+	<string name="donate">Donate</string>
+	<string name="notification_save_sleep_title">Save sleep</string>
+	<string name="notification_save_sleep_text">Tap to save or discard sleep history</string>
+	<string name="notification_save_sleep_ticker">Rate, save, or discard pending sleep</string>
 </resources>

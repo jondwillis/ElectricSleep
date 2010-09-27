@@ -22,6 +22,7 @@ import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
 import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.view.SleepChartReView;
+import com.androsz.electricsleep.ui.view.SleepChartView;
 
 public class ReviewSleepActivity extends CustomTitlebarActivity {
 
@@ -30,9 +31,18 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
-			sleepChartView = new SleepChartReView(this);
+			if (sleepChartView == null) {
+				sleepChartView = new SleepChartReView(this);
+			}
 			layout.addView(sleepChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		}
+	}
+
+	private void removeChartView() {
+		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
+		if (sleepChartView.getParent() == layout) {
+			layout.removeView(sleepChartView);
 		}
 	}
 
@@ -115,12 +125,13 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		addChartView();
+		//addChartView();
 	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
+		removeChartView();
 		outState.putSerializable("sleepChartView", sleepChartView);
 		/*outState.putSerializable("dataset",
 				sleepChartGraphicalView.xyMultipleSeriesDataset);

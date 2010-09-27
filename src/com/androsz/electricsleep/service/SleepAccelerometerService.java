@@ -23,6 +23,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.ui.CalibrationWizardActivity;
 import com.androsz.electricsleep.ui.SaveSleepActivity;
 import com.androsz.electricsleep.ui.SettingsActivity;
 import com.androsz.electricsleep.ui.SleepActivity;
@@ -32,8 +33,9 @@ import com.androsz.electricsleep.util.AlarmDatabase;
 public class SleepAccelerometerService extends Service implements
 		SensorEventListener {
 	public static final String POKE_SYNC_CHART = "com.androsz.electricsleep.POKE_SYNC_CHART";
-	public static final String POKE_SAVE_SLEEP = "com.androsz.electricsleep.POKE_SAVE_SLEEP";
 	public static final String ALARM_TRIGGERED = "com.androsz.electricsleep.ALARM_TRIGGERED";
+	public static final String STOP_AND_SAVE_SLEEP = "com.androsz.electricsleep.STOP_AND_SAVE_SLEEP";
+	public static final String SLEEP_STOPPED = "com.androsz.electricsleep.SLEEP_STOPPED";
 
 	private static final int NOTIFICATION_ID = 0x1337a;
 
@@ -59,7 +61,7 @@ public class SleepAccelerometerService extends Service implements
 	private boolean useAlarm = false;
 	private int alarmWindow = 30;
 
-	private int updateInterval = 30000;
+	private int updateInterval = CalibrationWizardActivity.MINIMUM_CALIBRATION_TIME;
 
 	private Date dateStarted;
 
@@ -80,38 +82,20 @@ public class SleepAccelerometerService extends Service implements
 		}
 	};
 
-	private final BroadcastReceiver pokeSaveSleepReceiver = new BroadcastReceiver() {
+	private final BroadcastReceiver stopAndSaveSleepReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
-
-			saveIntent.putExtra("currentSeriesX", currentSeriesX);
-			saveIntent.putExtra("currentSeriesY", currentSeriesY);
-			saveIntent.putExtra("min", minSensitivity);
-			saveIntent.putExtra("max", maxSensitivity);
-			saveIntent.putExtra("alarm", alarmTriggerSensitivity);
-
-			// send start/end time as well
-			final DateFormat sdf = DateFormat.getDateTimeInstance(
-					DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
-			DateFormat sdf2 = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-					DateFormat.SHORT, Locale.getDefault());
-			final Date now = new Date();
-			if (dateStarted.getDate() == now.getDate()) {
-				sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
-			}
-			saveIntent.putExtra("name", sdf.format(dateStarted) + " "
-					+ getText(R.string.to) + " " + sdf2.format(now));
-
-			sendBroadcast(saveIntent);
+			final Intent saveIntent = addExtrasToSaveSleepIntent(new Intent(SleepAccelerometerService.this, SaveSleepActivity.class));
+			startActivity(saveIntent);
+			stopSelf();
 		}
 	};
 
-	private void createNotification() {
+	private void createServiceNotification() {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		final int icon = R.drawable.icon;
-		final CharSequence tickerText = getText(R.string.notification_sleep_started);
+		final CharSequence tickerText = getText(R.string.notification_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
 		final Notification notification = new Notification(icon, tickerText,
@@ -132,6 +116,31 @@ public class SleepAccelerometerService extends Service implements
 				contentIntent);
 
 		notificationManager.notify(NOTIFICATION_ID, notification);
+	}
+	
+	private void createSaveSleepNotification() {
+		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+		final int icon = R.drawable.home_btn_sleep;
+		final CharSequence tickerText = getText(R.string.notification_save_sleep_ticker);
+		final long when = System.currentTimeMillis();
+
+		final Notification notification = new Notification(icon, tickerText,
+				when);
+
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+
+		final Context context = getApplicationContext();
+		final CharSequence contentTitle = getText(R.string.notification_save_sleep_title);
+		final CharSequence contentText = getText(R.string.notification_save_sleep_text);
+		final Intent notificationIntent = addExtrasToSaveSleepIntent(new Intent(this, SaveSleepActivity.class));
+		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				notificationIntent, 0);
+
+		notification.setLatestEventInfo(context, contentTitle, contentText,
+				contentIntent);
+
+		notificationManager.notify(this.hashCode(), notification);
 	}
 
 	private void obtainWakeLock() {
@@ -158,14 +167,14 @@ public class SleepAccelerometerService extends Service implements
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
 
-		registerReceiver(pokeSaveSleepReceiver, new IntentFilter(
-				POKE_SAVE_SLEEP));
+		registerReceiver(stopAndSaveSleepReceiver, new IntentFilter(
+				STOP_AND_SAVE_SLEEP));
 
 		registerAccelerometerListener();
 
 		obtainWakeLock();
 
-		createNotification();
+		createServiceNotification();
 
 		dateStarted = new Date();
 	}
@@ -175,7 +184,7 @@ public class SleepAccelerometerService extends Service implements
 		super.onDestroy();
 
 		unregisterReceiver(pokeSyncChartReceiver);
-		unregisterReceiver(pokeSaveSleepReceiver);
+		unregisterReceiver(stopAndSaveSleepReceiver);
 
 		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
@@ -251,16 +260,16 @@ public class SleepAccelerometerService extends Service implements
 				final long alarmMillis = alarmTime.getTimeInMillis();
 				if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
 					alarm.time = currentTime;
+
+					createSaveSleepNotification();
 					
-					final Intent saveActivityIntent = new Intent(this,
-							SaveSleepActivity.class);
-					saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(saveActivityIntent);
-					sensorManager
-							.unregisterListener(SleepAccelerometerService.this);
+					//tell monitoring activities that sleep has ended
+					sendBroadcast(new Intent(SLEEP_STOPPED));
 					
 					com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
 							this, alarm);
+					
+					stopSelf();
 				}
 			}
 		}
@@ -288,5 +297,27 @@ public class SleepAccelerometerService extends Service implements
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SENSOR_DELAY);
+	}
+
+	private Intent addExtrasToSaveSleepIntent(Intent saveIntent) {
+		saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+		saveIntent.putExtra("currentSeriesX", currentSeriesX);
+		saveIntent.putExtra("currentSeriesY", currentSeriesY);
+		saveIntent.putExtra("min", minSensitivity);
+		saveIntent.putExtra("max", maxSensitivity);
+		saveIntent.putExtra("alarm", alarmTriggerSensitivity);
+
+		// send start/end time as well
+		final DateFormat sdf = DateFormat.getDateTimeInstance(
+				DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+		DateFormat sdf2 = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+				DateFormat.SHORT, Locale.getDefault());
+		final Date now = new Date();
+		if (dateStarted.getDate() == now.getDate()) {
+			sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
+		}
+		saveIntent.putExtra("name", sdf.format(dateStarted) + " "
+				+ getText(R.string.to) + " " + sdf2.format(now));
+		return saveIntent;
 	}
 }

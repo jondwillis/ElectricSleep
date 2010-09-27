@@ -95,6 +95,13 @@ public class SleepActivity extends CustomTitlebarActivity {
 		}
 	};
 
+	private final BroadcastReceiver sleepStoppedReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+			finish();
+		}
+	};
+
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
@@ -126,8 +133,15 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 		showTitleButton1(R.drawable.ic_title_export);
 		showTitleButton2(R.drawable.ic_title_refresh);
-		// TODO having this removed might cause problems
-		// addChartView();
+		registerReceiver(sleepStoppedReceiver, new IntentFilter(
+				SleepAccelerometerService.SLEEP_STOPPED));
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		unregisterReceiver(sleepStoppedReceiver);
 	}
 
 	@Override
@@ -198,12 +212,12 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	public void onTitleButton1Click(final View v) {
-		final Intent saveActivityIntent = new Intent(this,
-				SaveSleepActivity.class);
-		saveActivityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-				| Intent.FLAG_ACTIVITY_CLEAR_TOP
-				| Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(saveActivityIntent);
+		// final Intent saveActivityIntent = new Intent(this,
+		// SaveSleepActivity.class);
+		// startActivity(saveActivityIntent);
+		sendBroadcast(new Intent(SleepAccelerometerService.STOP_AND_SAVE_SLEEP));
+
+		finish();
 	}
 
 	public void onTitleButton2Click(final View v) {

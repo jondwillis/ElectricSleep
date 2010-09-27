@@ -199,17 +199,17 @@ public class SleepHistoryDatabase {
 		 * 
 		 * @Override public void run() { try {
 		 */
-		final ProgressDialog waitForSaveDialog = new ProgressDialog(context);
+		/*final ProgressDialog waitForSaveDialog = new ProgressDialog(context);
 		waitForSaveDialog.setMessage(context
 				.getText(R.string.dialog_wait_for_sleep_data_message));
 		// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
 		waitForSaveDialog.setCancelable(false);
-		waitForSaveDialog.show();
+		waitForSaveDialog.show();*/
 
 		final long result = databaseOpenHelper.addSleep(sleepDateTime,
 				sleepChartDataX, sleepChartDataY, min, max, alarm);
 
-		waitForSaveDialog.dismiss();
+		//waitForSaveDialog.dismiss();
 		/*
 		 * } catch (final IOException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); } } });

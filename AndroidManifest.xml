@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.androsz.electricsleep" android:versionCode="1"
 	android:versionName="0.1" android:installLocation="internalOnly">
-	<application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@style/Theme.electricsleep">
+	<application android:icon="@drawable/icon" android:label="@string/app_name"
+		android:theme="@style/Theme.electricsleep">
 		<activity android:name=".ui.HomeActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -24,18 +25,26 @@
 		<activity android:name=".ui.CloudActivity" android:label="@string/title_cloud">
 		</activity>
 
+		<receiver android:name=".receiver.SaveSleepReceiver"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="com.androsz.electricsleep.SAVE_SLEEP" />
+			</intent-filter>
+		</receiver>
+
 		<activity android:name=".ui.CalibrateForResultActivity"
 			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog">
 		</activity>
 		<activity android:name=".ui.ReviewSleepActivity">
 		</activity>
-		<activity android:name=".ui.SaveSleepActivity">
+		<activity android:name=".ui.SaveSleepActivity"
+			android:clearTaskOnLaunch="true" android:excludeFromRecents="true">
 		</activity>
 
 		<service android:name=".service.SleepAccelerometerService"
 			android:icon="@drawable/icon" android:label="@string/app_name">
 		</service>
-		
+
 		<provider android:name=".db.SleepContentProvider"
 			android:authorities="com.androsz.electricsleep.db.sleepcontentprovider"></provider>
 
@@ -43,8 +52,8 @@
 	<uses-sdk android:minSdkVersion="8" />
 
 
-	
+
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-	
+
 </manifest> 

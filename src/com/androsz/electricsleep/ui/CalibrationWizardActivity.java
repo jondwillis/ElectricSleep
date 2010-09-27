@@ -162,7 +162,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	private static AsyncTask<Void, Void, Void> currentTask;
 	private static final int TEST_TTS_INSTALLED = 0x1337;
 
-	private static final int MINIMUM_CALIBRATION_TIME = 30000;
+	public static final int MINIMUM_CALIBRATION_TIME = 3000;
 
 	private static final int MAXIMUM_CALIBRATION_TIME = 10000;
 
@@ -232,7 +232,6 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		switch (requestCode) {
 		case R.id.minTest:
 			minCalibration = resultCode;
-			minCalibration *= 2;
 			notifyUser(getString(R.string.minimum_sensitivity_set_to) + " "
 					+ minCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));
