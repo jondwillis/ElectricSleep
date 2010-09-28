@@ -41,36 +41,22 @@ public class SaveSleepActivity extends CustomTitlebarActivity {
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(final DialogInterface dialog,
-									final int id) {
-								//sendBroadcast(new Intent(
-								//		SleepAccelerometerService.POKE_SAVE_SLEEP));
-								
+									final int id) {								
 								final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 								saveIntent.putExtras(getIntent().getExtras());
 								sendBroadcast(saveIntent);
-								//stopService(new Intent(SaveSleepActivity.this,
-								//		SleepAccelerometerService.class));
+								finish();
 							}
 						})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
 							final int id) {
-						final Intent intent = new Intent(SaveSleepActivity.this, HomeActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(intent);
-						stopService(new Intent(SaveSleepActivity.this,
-								SleepAccelerometerService.class));
+						//final Intent intent = new Intent(SaveSleepActivity.this, HomeActivity.class);
+						//startActivity(intent);
 						finish();
 						return;
 					}
 				}).show();
-	}
-
-	@Override
-	protected void onDestroy() {
-		//unregisterReceiver(saveSleepReceiver);
-
-		super.onDestroy();
 	}
 }

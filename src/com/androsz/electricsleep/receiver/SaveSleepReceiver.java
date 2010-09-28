@@ -3,11 +3,14 @@ package com.androsz.electricsleep.receiver;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.content.BroadcastReceiver;
+import android.database.Cursor;
 
+import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.ReviewSleepActivity;
@@ -27,7 +30,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 		try {
 			final int min = intent.getIntExtra("min",
 					SettingsActivity.DEFAULT_MIN_SENSITIVITY);
-			final long result = shdb
+			shdb
 					.addSleep(context, intent.getStringExtra("name"),
 							(ArrayList<Double>) intent
 									.getSerializableExtra("currentSeriesX"),
@@ -38,12 +41,13 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 							intent.getIntExtra("alarm",
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
+			
 			final Intent reviewSleepIntent = new Intent(context,
 					ReviewSleepActivity.class);
-
-			final Uri data = Uri.withAppendedPath(
-					SleepContentProvider.CONTENT_URI, String.valueOf(result));
-			reviewSleepIntent.setData(data);
+			final Uri uri = Uri.withAppendedPath(
+					SleepContentProvider.CONTENT_URI, String.valueOf( new SleepHistoryDatabase(context).getNumberOfRows()));
+			
+			reviewSleepIntent.setData(uri);
 
 			reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 

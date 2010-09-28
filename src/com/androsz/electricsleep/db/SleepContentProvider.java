@@ -30,7 +30,6 @@ import android.provider.BaseColumns;
  * Provides access to the dictionary database.
  */
 public class SleepContentProvider extends ContentProvider {
-	String TAG = "SleepContentProvider";
 
 	public static String AUTHORITY = "com.androsz.electricsleep.db.sleepcontentprovider";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY

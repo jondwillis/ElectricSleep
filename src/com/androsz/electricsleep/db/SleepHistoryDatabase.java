@@ -77,6 +77,7 @@ public class SleepHistoryDatabase {
 				final int max, final int alarm) throws IOException {
 
 			final SQLiteDatabase db = getWritableDatabase();
+
 			long insertResult = -1;
 			try {
 				final ContentValues initialValues = new ContentValues();
@@ -199,17 +200,18 @@ public class SleepHistoryDatabase {
 		 * 
 		 * @Override public void run() { try {
 		 */
-		/*final ProgressDialog waitForSaveDialog = new ProgressDialog(context);
-		waitForSaveDialog.setMessage(context
-				.getText(R.string.dialog_wait_for_sleep_data_message));
-		// waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
-		waitForSaveDialog.setCancelable(false);
-		waitForSaveDialog.show();*/
+		/*
+		 * final ProgressDialog waitForSaveDialog = new ProgressDialog(context);
+		 * waitForSaveDialog.setMessage(context
+		 * .getText(R.string.dialog_wait_for_sleep_data_message)); //
+		 * waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
+		 * waitForSaveDialog.setCancelable(false); waitForSaveDialog.show();
+		 */
 
 		final long result = databaseOpenHelper.addSleep(sleepDateTime,
 				sleepChartDataX, sleepChartDataY, min, max, alarm);
 
-		//waitForSaveDialog.dismiss();
+		// waitForSaveDialog.dismiss();
 		/*
 		 * } catch (final IOException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); } } });
@@ -268,6 +270,21 @@ public class SleepHistoryDatabase {
 		 * clause to use FTS_VIRTUAL_TABLE instead of KEY_WORD (to search across
 		 * the entire table, but sorting the relevance could be difficult.
 		 */
+	}
+
+	public long getNumberOfRows() {
+		final String[] columns = new String[] {
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_MAX,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
+		for (long rowId = 1; rowId < Long.MAX_VALUE; rowId++) {
+			if (getSleep(String.valueOf(rowId), columns) == null)
+				return rowId-1;
+		}
+		return -1;
 	}
 
 	/**

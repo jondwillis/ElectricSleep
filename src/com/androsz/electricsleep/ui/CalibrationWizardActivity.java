@@ -162,7 +162,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	private static AsyncTask<Void, Void, Void> currentTask;
 	private static final int TEST_TTS_INSTALLED = 0x1337;
 
-	public static final int MINIMUM_CALIBRATION_TIME = 3000;
+	public static final int MINIMUM_CALIBRATION_TIME = 30000;
 
 	private static final int MAXIMUM_CALIBRATION_TIME = 10000;
 

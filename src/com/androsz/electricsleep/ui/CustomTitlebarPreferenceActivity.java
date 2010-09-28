@@ -75,8 +75,6 @@ public abstract class CustomTitlebarPreferenceActivity extends
 		case R.id.menuItemSettings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
-		case R.id.menuItemExit:
-			finish();
 		default:
 			return false;
 		}
