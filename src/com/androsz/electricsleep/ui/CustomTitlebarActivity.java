@@ -83,7 +83,7 @@ public abstract class CustomTitlebarActivity extends Activity {
 
 	public void setHomeButtonAsLogo() {
 		final ImageButton btnHome = (ImageButton) findViewById(R.id.title_home_button);
-		btnHome.setImageResource(R.drawable.logo);
+		btnHome.setImageResource(R.drawable.icon);
 	}
 
 	public void showTitleButton1(final int drawableResourceId) {

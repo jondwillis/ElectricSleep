@@ -159,23 +159,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 		super.onRestoreInstanceState(savedState);
 		sleepChartView = (SleepChartView) savedState
 				.getSerializable("sleepChartView");
-		/*
-		 * sleepChartGraphicalView.xyMultipleSeriesDataset =
-		 * (XYMultipleSeriesDataset) savedState .getSerializable("dataset");
-		 * sleepChartGraphicalView.xyMultipleSeriesRenderer =
-		 * (XYMultipleSeriesRenderer) savedState .getSerializable("renderer");
-		 * 
-		 * sleepChartGraphicalView.xySeriesMovement = (XYSeries) savedState
-		 * .getSerializable("seriesMovement");
-		 * sleepChartGraphicalView.xySeriesMovementRenderer = (XYSeriesRenderer)
-		 * savedState .getSerializable("rendererMovement");
-		 * 
-		 * sleepChartGraphicalView.xySeriesAlarmTrigger = (XYSeries) savedState
-		 * .getSerializable("seriesAlarmTrigger");
-		 * sleepChartGraphicalView.xySeriesAlarmTriggerRenderer =
-		 * (XYSeriesRenderer) savedState
-		 * .getSerializable("rendererAlarmTrigger");
-		 */
 	}
 
 	@Override
@@ -193,22 +176,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 		super.onSaveInstanceState(outState);
 		removeChartView();
 		outState.putSerializable("sleepChartView", sleepChartView);
-		/*
-		 * outState.putSerializable("dataset",
-		 * sleepChartGraphicalView.xyMultipleSeriesDataset);
-		 * outState.putSerializable("renderer",
-		 * sleepChartGraphicalView.xyMultipleSeriesRenderer);
-		 * 
-		 * outState.putSerializable("seriesMovement",
-		 * sleepChartGraphicalView.xySeriesMovement);
-		 * outState.putSerializable("rendererMovement",
-		 * sleepChartGraphicalView.xySeriesMovementRenderer);
-		 * 
-		 * outState.putSerializable("seriesAlarmTrigger",
-		 * sleepChartGraphicalView.xySeriesAlarmTrigger);
-		 * outState.putSerializable("rendererAlarmTrigger",
-		 * sleepChartGraphicalView.xySeriesAlarmTriggerRenderer);
-		 */
 	}
 
 	public void onTitleButton1Click(final View v) {
