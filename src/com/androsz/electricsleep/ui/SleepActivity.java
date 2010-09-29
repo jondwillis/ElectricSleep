@@ -9,19 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.achartengine.ChartView;
-import com.androsz.electricsleep.achartengine.model.XYMultipleSeriesDataset;
-import com.androsz.electricsleep.achartengine.model.XYSeries;
-import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
-import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 import com.androsz.electricsleep.ui.view.SleepChartView;
 
@@ -113,13 +106,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 		}
 	}
 
-	private void removeChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (sleepChartView.getParent() == layout) {
-			layout.removeView(sleepChartView);
-		}
-	}
-
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_sleep;
@@ -136,10 +122,9 @@ public class SleepActivity extends CustomTitlebarActivity {
 		registerReceiver(sleepStoppedReceiver, new IntentFilter(
 				SleepAccelerometerService.SLEEP_STOPPED));
 	}
-	
+
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(sleepStoppedReceiver);
 	}
@@ -207,6 +192,13 @@ public class SleepActivity extends CustomTitlebarActivity {
 							}
 						});
 		dialog.show();
+	}
+
+	private void removeChartView() {
+		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
+		if (sleepChartView.getParent() == layout) {
+			layout.removeView(sleepChartView);
+		}
 	}
 
 	private void showWaitForSeriesDataIfNeeded() {

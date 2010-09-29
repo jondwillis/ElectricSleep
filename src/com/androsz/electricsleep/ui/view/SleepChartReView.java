@@ -7,10 +7,11 @@ import android.content.Context;
 
 public class SleepChartReView extends SleepChartView {
 
-	public SleepChartReView(Context context) {
+	public SleepChartReView(final Context context) {
 		super(context);
 	}
 
+	@Override
 	protected void redraw(final int min, final int max, final int alarm) {
 		if (makesSense()) {
 			final int count = xySeriesMovement.mY.size();

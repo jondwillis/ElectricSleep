@@ -26,7 +26,6 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
@@ -35,9 +34,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
-import android.util.Log;
-
-import com.androsz.electricsleep.R;
 
 /**
  * Contains logic to return specific words from the dictionary, and load the
@@ -107,14 +103,11 @@ public class SleepHistoryDatabase {
 		@Override
 		public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
 				final int newVersion) {
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-					+ newVersion + ", which will destroy all old data");
 			db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
 			onCreate(db);
 		}
 	}
 
-	private static final String TAG = "SleepHistoryDatabase";
 	// The columns we'll include in the dictionary table
 	public static final String KEY_SLEEP_DATE_TIME = SearchManager.SUGGEST_COLUMN_TEXT_1;
 	public static final String KEY_SLEEP_DATA_X = "sleep_data_x";
@@ -219,6 +212,28 @@ public class SleepHistoryDatabase {
 		return result;
 	}
 
+	public void close() {
+		databaseOpenHelper.close();
+	}
+
+	public long getNumberOfRows() {
+		final String[] columns = new String[] {
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_MAX,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
+		for (long rowId = 1; rowId < Long.MAX_VALUE; rowId++) {
+			final Cursor cursor = getSleep(String.valueOf(rowId), columns);
+			if (cursor == null) {
+				return rowId - 1;
+			}
+			cursor.close();
+		}
+		return -1;
+	}
+
 	/**
 	 * Returns a Cursor positioned at the word specified by rowId
 	 * 
@@ -270,21 +285,6 @@ public class SleepHistoryDatabase {
 		 * clause to use FTS_VIRTUAL_TABLE instead of KEY_WORD (to search across
 		 * the entire table, but sorting the relevance could be difficult.
 		 */
-	}
-
-	public long getNumberOfRows() {
-		final String[] columns = new String[] {
-				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_MAX,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
-		for (long rowId = 1; rowId < Long.MAX_VALUE; rowId++) {
-			if (getSleep(String.valueOf(rowId), columns) == null)
-				return rowId-1;
-		}
-		return -1;
 	}
 
 	/**

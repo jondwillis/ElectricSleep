@@ -5,8 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.Display;
-import android.view.View;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.achartengine.ChartView;
@@ -31,49 +29,11 @@ public class SleepChartView extends ChartView implements Serializable {
 
 	public XYSeriesRenderer xySeriesAlarmTriggerRenderer;
 
-	public SleepChartView(Context context) {
+	public SleepChartView(final Context context) {
 		super(context);
 	}
 
-	public boolean makesSense() {
-		return xySeriesMovement.getItemCount() > 1;
-	}
-
-	protected void redraw(int min, int max, int alarm) {
-
-		if (makesSense()) {
-			final double firstX = xySeriesMovement.mX.get(0);
-			final double lastX = xySeriesMovement.mX.get(xySeriesMovement.mX
-					.size() - 1);
-			xyMultipleSeriesRenderer.setXAxisMin(firstX);
-			xyMultipleSeriesRenderer.setXAxisMax(lastX);
-
-			xyMultipleSeriesRenderer.setYAxisMin(min);
-			xyMultipleSeriesRenderer.setYAxisMax(max);
-
-			// reconfigure the alarm trigger line..
-			xySeriesAlarmTrigger.clear();
-
-			xySeriesAlarmTrigger.add(firstX, alarm);
-			xySeriesAlarmTrigger.add(lastX, alarm);
-
-			repaint();
-		}
-	}
-
-	public void syncByCopying(List<Double> x, List<Double> y, int min, int max,
-			int alarm) {
-		xySeriesMovement.mX = x;
-		xySeriesMovement.mY = y;
-		redraw(min, max, alarm);
-	}
-
-	public void syncByAdding(Double x, Double y, int min, int max, int alarm) {
-		xySeriesMovement.mX.add(x);
-		xySeriesMovement.mY.add(y);
-		redraw(min, max, alarm);
-	}
-
+	@Override
 	public AbstractChart buildChart() {
 		if (xySeriesMovement == null) {
 			// set up sleep movement series/renderer
@@ -123,11 +83,51 @@ public class SleepChartView extends ChartView implements Serializable {
 					R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer
 					.getAxesColor());
-			TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
+			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
 			timeChart.setDateFormat("h:mm a");
 			return timeChart;
 		}
 		return null;
+	}
+
+	public boolean makesSense() {
+		return xySeriesMovement.getItemCount() > 1;
+	}
+
+	protected void redraw(final int min, final int max, final int alarm) {
+
+		if (makesSense()) {
+			final double firstX = xySeriesMovement.mX.get(0);
+			final double lastX = xySeriesMovement.mX.get(xySeriesMovement.mX
+					.size() - 1);
+			xyMultipleSeriesRenderer.setXAxisMin(firstX);
+			xyMultipleSeriesRenderer.setXAxisMax(lastX);
+
+			xyMultipleSeriesRenderer.setYAxisMin(min);
+			xyMultipleSeriesRenderer.setYAxisMax(max);
+
+			// reconfigure the alarm trigger line..
+			xySeriesAlarmTrigger.clear();
+
+			xySeriesAlarmTrigger.add(firstX, alarm);
+			xySeriesAlarmTrigger.add(lastX, alarm);
+
+			repaint();
+		}
+	}
+
+	public void syncByAdding(final Double x, final Double y, final int min,
+			final int max, final int alarm) {
+		xySeriesMovement.mX.add(x);
+		xySeriesMovement.mY.add(y);
+		redraw(min, max, alarm);
+	}
+
+	public void syncByCopying(final List<Double> x, final List<Double> y,
+			final int min, final int max, final int alarm) {
+		xySeriesMovement.mX = x;
+		xySeriesMovement.mY = y;
+		redraw(min, max, alarm);
 	}
 }

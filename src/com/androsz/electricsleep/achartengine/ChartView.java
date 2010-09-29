@@ -23,8 +23,6 @@ import android.view.View;
 
 import com.androsz.electricsleep.achartengine.chart.AbstractChart;
 import com.androsz.electricsleep.achartengine.chart.XYChart;
-import com.androsz.electricsleep.achartengine.model.CategorySeries;
-import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;
 import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
 
 /**
@@ -56,15 +54,7 @@ public abstract class ChartView extends View {
 			mRenderer = ((XYChart) mChart).getRenderer();
 		}
 	}
-	private static void checkParameters(final CategorySeries dataset,
-			final DefaultRenderer renderer) {
-		if (dataset == null || renderer == null
-				|| dataset.getItemCount() != renderer.getSeriesRendererCount()) {
-			throw new IllegalArgumentException(
-					"Dataset and renderer should be not null and the dataset number of items should be equal to the number of series renderers");
-		}
-	}
-	
+
 	protected abstract AbstractChart buildChart();
 
 	/*
