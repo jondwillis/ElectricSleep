@@ -238,22 +238,20 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			break;
 		case R.id.maxTest:
 			maxCalibration = resultCode;
-			final float ratioMax = 1
-					- (float) Math.abs(MAXIMUM_CALIBRATION_TIME
+			final float ratioMax = (float) Math.abs(MAXIMUM_CALIBRATION_TIME
 							- MINIMUM_CALIBRATION_TIME)
 					/ MINIMUM_CALIBRATION_TIME;
-			maxCalibration += minCalibration * ratioMax;
+			maxCalibration += (minCalibration / ratioMax);
 			notifyUser(getString(R.string.maximum_sensitivity_set_to) + " "
 					+ maxCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));
 			break;
 		case R.id.alarmTest:
 			alarmTriggerCalibration = resultCode;
-			final float ratioAlarm = 1
-					- (float) Math.abs(ALARM_CALIBRATION_TIME
+			final float ratioAlarm = (float) Math.abs(ALARM_CALIBRATION_TIME
 							- MINIMUM_CALIBRATION_TIME)
 					/ MINIMUM_CALIBRATION_TIME;
-			alarmTriggerCalibration += minCalibration * ratioAlarm;
+			alarmTriggerCalibration += (minCalibration / ratioAlarm);
 			notifyUser(getString(R.string.alarm_trigger_sensitivity_set_to)
 					+ " " + alarmTriggerCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));

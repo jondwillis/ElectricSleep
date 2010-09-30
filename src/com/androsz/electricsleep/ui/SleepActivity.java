@@ -49,17 +49,20 @@ public class SleepActivity extends CustomTitlebarActivity {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 
-			sleepChartView.syncByAdding(intent.getDoubleExtra("x", 0), intent
-					.getDoubleExtra("y", 0), intent.getIntExtra("min",
-					SettingsActivity.DEFAULT_MIN_SENSITIVITY), intent
-					.getIntExtra("max",
-							SettingsActivity.DEFAULT_MAX_SENSITIVITY), intent
-					.getIntExtra("alarm",
-							SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
+			if (sleepChartView != null) {
+				sleepChartView.syncByAdding(intent.getDoubleExtra("x", 0),
+						intent.getDoubleExtra("y", 0),
+						intent.getIntExtra("min",
+								SettingsActivity.DEFAULT_MIN_SENSITIVITY),
+						intent.getIntExtra("max",
+								SettingsActivity.DEFAULT_MAX_SENSITIVITY),
+						intent.getIntExtra("alarm",
+								SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
-			if (sleepChartView.makesSense() && waitForSeriesData != null) {
-				waitForSeriesData.dismiss();
-				waitForSeriesData = null;
+				if (sleepChartView.makesSense() && waitForSeriesData != null) {
+					waitForSeriesData.dismiss();
+					waitForSeriesData = null;
+				}
 			}
 		}
 	};
@@ -69,6 +72,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 
+			sleepChartView = new SleepChartView(SleepActivity.this);
 			sleepChartView
 					.syncByCopying((List<Double>) intent
 							.getSerializableExtra("currentSeriesX"),
@@ -80,10 +84,15 @@ public class SleepActivity extends CustomTitlebarActivity {
 									SettingsActivity.DEFAULT_MAX_SENSITIVITY),
 							intent.getIntExtra("alarm",
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
-
+			addChartView();
+			
 			if (sleepChartView.makesSense() && waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
 				waitForSeriesData = null;
+			}
+			else
+			{
+				showWaitForSeriesDataIfNeeded();
 			}
 		}
 	};
@@ -98,9 +107,11 @@ public class SleepActivity extends CustomTitlebarActivity {
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
-			if (sleepChartView == null) {
-				sleepChartView = new SleepChartView(this);
-			}
+			// if (sleepChartView == null) {
+			// sleepChartView = new SleepChartView(this);
+			// }
+			// sendBroadcast(new
+			// Intent(SleepAccelerometerService.POKE_SYNC_CHART));
 			layout.addView(sleepChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		}
@@ -134,6 +145,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		if (waitForSeriesData != null && waitForSeriesData.isShowing()) {
 			waitForSeriesData.dismiss();
 		}
+		removeChartView();
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(syncChartReceiver);
 		super.onPause();
@@ -141,16 +153,23 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedState) {
+		/*
+		 * try {
+		 * 
+		 * sleepChartView = (SleepChartView) savedState
+		 * .getSerializable("sleepChartView"); }
+		 * catch(java.lang.RuntimeException rte) { sendBroadcast(new
+		 * Intent(SleepAccelerometerService.POKE_SYNC_CHART)); }
+		 */
 		super.onRestoreInstanceState(savedState);
-		sleepChartView = (SleepChartView) savedState
-				.getSerializable("sleepChartView");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		addChartView();
-		showWaitForSeriesDataIfNeeded();
+
+		// sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
+		// addChartView();
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
@@ -158,9 +177,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
+		// outState.putSerializable("sleepChartView", sleepChartView);
 		super.onSaveInstanceState(outState);
-		removeChartView();
-		outState.putSerializable("sleepChartView", sleepChartView);
 	}
 
 	public void onTitleButton1Click(final View v) {
@@ -196,13 +214,13 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	private void removeChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (sleepChartView.getParent() == layout) {
+		if (sleepChartView != null && sleepChartView.getParent() == layout) {
 			layout.removeView(sleepChartView);
 		}
 	}
 
 	private void showWaitForSeriesDataIfNeeded() {
-		if (!sleepChartView.makesSense()) {
+		if (sleepChartView == null || !sleepChartView.makesSense()) {
 			if (waitForSeriesData == null || !waitForSeriesData.isShowing()) {
 				waitForSeriesData = new WaitForSeriesDataProgressDialog(this);
 				waitForSeriesData

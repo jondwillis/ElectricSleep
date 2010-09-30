@@ -116,6 +116,13 @@ public class SleepAccelerometerService extends Service implements
 		return saveIntent;
 	}
 
+	public void onLowMemory() {
+		super.onLowMemory();
+		final Date now = new Date();
+		if (dateStarted.getDate() == now.getDate()) {
+		}
+	}
+
 	private void createSaveSleepNotification() {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -218,6 +225,8 @@ public class SleepAccelerometerService extends Service implements
 
 		notificationManager.cancel(NOTIFICATION_ID);
 
+		// tell monitoring activities that sleep has ended
+		sendBroadcast(new Intent(SLEEP_STOPPED));
 		// saveSleepData();
 	}
 
@@ -289,9 +298,6 @@ public class SleepAccelerometerService extends Service implements
 
 					createSaveSleepNotification();
 
-					// tell monitoring activities that sleep has ended
-					sendBroadcast(new Intent(SLEEP_STOPPED));
-
 					com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
 							this, alarm);
 
@@ -305,15 +311,16 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public int onStartCommand(final Intent intent, final int flags,
 			final int startId) {
-		updateInterval = intent.getIntExtra("interval", updateInterval);
-		minSensitivity = intent.getIntExtra("min", minSensitivity);
-		maxSensitivity = intent.getIntExtra("max", maxSensitivity);
-		alarmTriggerSensitivity = intent.getIntExtra("alarm",
-				alarmTriggerSensitivity);
+		if (intent != null) {
+			updateInterval = intent.getIntExtra("interval", updateInterval);
+			minSensitivity = intent.getIntExtra("min", minSensitivity);
+			maxSensitivity = intent.getIntExtra("max", maxSensitivity);
+			alarmTriggerSensitivity = intent.getIntExtra("alarm",
+					alarmTriggerSensitivity);
 
-		useAlarm = intent.getBooleanExtra("useAlarm", useAlarm);
-		alarmWindow = intent.getIntExtra("alarmWindow", alarmWindow);
-
+			useAlarm = intent.getBooleanExtra("useAlarm", useAlarm);
+			alarmWindow = intent.getIntExtra("alarmWindow", alarmWindow);
+		}
 		return startId;
 	}
 

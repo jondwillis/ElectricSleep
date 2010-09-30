@@ -158,7 +158,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 							});
 			dialog.show();
 		} else if (service != null && activity != null) {
-
 			startService(service);
 			startActivity(activity);
 		}
