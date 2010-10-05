@@ -26,6 +26,10 @@ import com.androsz.electricsleep.achartengine.util.MathHelper;
  * scatter... charts.
  */
 public class XYSeries implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -224488951294506127L;
 	/** The series title. */
 	private String mTitle;
 	/** A list to contain the values for the X axis. */

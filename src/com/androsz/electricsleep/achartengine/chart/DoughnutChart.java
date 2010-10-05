@@ -30,6 +30,11 @@ import com.androsz.electricsleep.achartengine.renderer.SimpleSeriesRenderer;
  * The doughnut chart rendering class.
  */
 public class DoughnutChart extends AbstractChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6278513238399144861L;
+
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 10;
 

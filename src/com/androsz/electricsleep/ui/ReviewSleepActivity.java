@@ -98,9 +98,13 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedState) {
-		super.onRestoreInstanceState(savedState);
-		sleepChartView = (SleepChartReView) savedState
-				.getSerializable("sleepChartView");
+		try {
+			super.onRestoreInstanceState(savedState);
+			sleepChartView = (SleepChartReView) savedState
+					.getSerializable("sleepChartView");
+		} catch (RuntimeException re) {
+
+		}
 	}
 
 	@Override

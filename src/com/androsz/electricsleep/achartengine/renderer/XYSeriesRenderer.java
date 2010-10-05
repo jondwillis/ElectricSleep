@@ -23,6 +23,10 @@ import com.androsz.electricsleep.achartengine.chart.PointStyle;
  * A renderer for the XY type series.
  */
 public class XYSeriesRenderer extends SimpleSeriesRenderer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5651898991850122052L;
 	/** If the chart points should be filled. */
 	private boolean mFillPoints = false;
 	/** If the chart should be filled below its line. */

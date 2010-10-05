@@ -26,6 +26,10 @@ import android.graphics.Typeface;
  * An abstract renderer to be extended by the multiple series classes.
  */
 public class DefaultRenderer implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7089789635819599612L;
 	/** The default background color. */
 	public static final int BACKGROUND_COLOR = Color.BLACK;
 	/** The default color for text. */

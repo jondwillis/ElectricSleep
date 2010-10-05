@@ -23,6 +23,11 @@ import java.util.Date;
 public class TimeSeries extends XYSeries {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4943185346838519637L;
+
+	/**
 	 * Builds a new date / time series.
 	 * 
 	 * @param title

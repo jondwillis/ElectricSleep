@@ -23,6 +23,11 @@ import java.util.List;
  * A series for the multiple category charts like the doughnut.
  */
 public class MultipleCategorySeries implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8068912640460637624L;
+
 	/** The series title. */
 	private final String mTitle;
 

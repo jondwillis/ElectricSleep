@@ -28,6 +28,10 @@ import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
  * The scatter chart rendering class.
  */
 public class ScatterChart extends XYChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5816421013582024721L;
 	/** The point shape size. */
 	private static final float SIZE = 3;
 	/** The legend shape width. */

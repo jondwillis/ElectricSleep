@@ -36,6 +36,10 @@ import com.androsz.electricsleep.achartengine.util.MathHelper;
  * The XY chart rendering class.
  */
 public abstract class XYChart extends AbstractChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7965314943269310391L;
 	/** The multiple series dataset. */
 	protected XYMultipleSeriesDataset mDataset;
 	/** The multiple series renderer. */

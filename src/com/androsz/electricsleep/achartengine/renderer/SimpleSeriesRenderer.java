@@ -23,6 +23,10 @@ import android.graphics.Color;
  * A simple series renderer.
  */
 public class SimpleSeriesRenderer implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6127551755006069712L;
 	/** The series color. */
 	private int mColor = Color.BLUE;
 

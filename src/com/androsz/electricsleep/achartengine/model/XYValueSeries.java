@@ -25,6 +25,10 @@ import com.androsz.electricsleep.achartengine.util.MathHelper;
  * charts like bubble.
  */
 public class XYValueSeries extends XYSeries {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7379541220492201033L;
 	/** A list to contain the series values. */
 	private final List<Double> mValue = new ArrayList<Double>();
 	/** The minimum value. */

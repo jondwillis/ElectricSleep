@@ -23,6 +23,10 @@ import java.util.List;
  * A series for the category charts like the bar and pie ones.
  */
 public class CategorySeries implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2435977008011172784L;
 	/** The series title. */
 	private final String mTitle;
 	/** The series categories. */

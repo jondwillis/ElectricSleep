@@ -29,6 +29,10 @@ import com.androsz.electricsleep.achartengine.renderer.SimpleSeriesRenderer;
  * The pie chart rendering class.
  */
 public class PieChart extends AbstractChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5458735672629083283L;
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 10;
 	/** The series dataset. */

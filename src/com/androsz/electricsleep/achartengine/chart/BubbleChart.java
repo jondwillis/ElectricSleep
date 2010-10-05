@@ -29,6 +29,11 @@ import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
  * The bubble chart rendering class.
  */
 public class BubbleChart extends XYChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3382269721510744859L;
+
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 10;
 

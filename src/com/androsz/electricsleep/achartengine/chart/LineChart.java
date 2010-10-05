@@ -28,6 +28,10 @@ import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
  * The line chart rendering class.
  */
 public class LineChart extends XYChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -533658285402330691L;
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 30;
 

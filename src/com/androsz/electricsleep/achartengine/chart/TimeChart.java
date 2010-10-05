@@ -30,6 +30,10 @@ import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
  * The time chart rendering class.
  */
 public class TimeChart extends LineChart {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5875506893665730324L;
 	/** The number of milliseconds in a day. */
 	public static final long DAY = 24 * 60 * 60 * 1000;
 	/** The date format pattern to be used in formatting the X axis labels. */

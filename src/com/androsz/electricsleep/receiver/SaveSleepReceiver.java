@@ -55,6 +55,5 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 		} finally {
 			shdb.close();
 		}
-
 	}
 }

@@ -17,6 +17,11 @@ import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
 
 public class SleepChartView extends ChartView implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5692853786456847694L;
+
 	public XYMultipleSeriesDataset xyMultipleSeriesDataset;
 
 	public XYMultipleSeriesRenderer xyMultipleSeriesRenderer;

@@ -17,6 +17,7 @@
 package com.androsz.electricsleep.ui;
 
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.StreamCorruptedException;
 import java.util.List;
 
@@ -197,12 +198,16 @@ public class HomeActivity extends CustomTitlebarActivity {
 		removeChartView();
 	}
 
-	@Override
-	protected void onRestoreInstanceState(final Bundle savedState) {
-		super.onRestoreInstanceState(savedState);
-		sleepChartView = (SleepChartReView) savedState
-				.getSerializable("sleepChartView");
-	}
+//	@Override
+//	protected void onRestoreInstanceState(final Bundle savedState) {
+//		try {
+//			super.onRestoreInstanceState(savedState);
+//			sleepChartView = (SleepChartReView) savedState
+//					.getSerializable("sleepChartView");
+//		} catch (RuntimeException re) {
+//
+//		}
+//	}
 
 	@Override
 	protected void onResume() {
@@ -210,11 +215,11 @@ public class HomeActivity extends CustomTitlebarActivity {
 		addChartView();
 	}
 
-	@Override
+	/*@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable("sleepChartView", sleepChartView);
-	}
+	}*/
 
 	public void onSleepClick(final View v) throws Exception {
 		final SharedPreferences userPrefs = PreferenceManager

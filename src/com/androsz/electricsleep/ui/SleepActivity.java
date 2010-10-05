@@ -85,13 +85,11 @@ public class SleepActivity extends CustomTitlebarActivity {
 							intent.getIntExtra("alarm",
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 			addChartView();
-			
+
 			if (sleepChartView.makesSense() && waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
 				waitForSeriesData = null;
-			}
-			else
-			{
+			} else {
 				showWaitForSeriesDataIfNeeded();
 			}
 		}

@@ -30,6 +30,11 @@ import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
 public class RangeBarChart extends BarChart {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1697432805847440777L;
+
+	/**
 	 * Builds a new range bar chart instance.
 	 * 
 	 * @param dataset

@@ -47,8 +47,6 @@ public class SleepAccelerometerService extends Service implements
 	private PowerManager powerManager;
 	private WakeLock partialWakeLock;
 
-	private NotificationManager notificationManager;
-
 	private long lastChartUpdateTime = System.currentTimeMillis();
 	private long lastOnSensorChangedTime = System.currentTimeMillis();
 	private long totalTimeBetweenSensorChanges = 0;
@@ -70,7 +68,7 @@ public class SleepAccelerometerService extends Service implements
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
+			//if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
 				final Intent i = new Intent(SleepActivity.SYNC_CHART);
 				i.putExtra("currentSeriesX", currentSeriesX);
 				i.putExtra("currentSeriesY", currentSeriesY);
@@ -78,7 +76,7 @@ public class SleepAccelerometerService extends Service implements
 				i.putExtra("max", maxSensitivity);
 				i.putExtra("alarm", alarmTriggerSensitivity);
 				sendBroadcast(i);
-			}
+			//}
 		}
 	};
 
@@ -116,15 +114,8 @@ public class SleepAccelerometerService extends Service implements
 		return saveIntent;
 	}
 
-	public void onLowMemory() {
-		super.onLowMemory();
-		final Date now = new Date();
-		if (dateStarted.getDate() == now.getDate()) {
-		}
-	}
-
 	private void createSaveSleepNotification() {
-		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		final int icon = R.drawable.home_btn_sleep;
 		final CharSequence tickerText = getText(R.string.notification_save_sleep_ticker);
@@ -149,8 +140,8 @@ public class SleepAccelerometerService extends Service implements
 		notificationManager.notify(this.hashCode(), notification);
 	}
 
-	private void createServiceNotification() {
-		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	private Notification createServiceNotification() {
+		//notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 		final int icon = R.drawable.icon;
 		final CharSequence tickerText = getText(R.string.notification_sleep_ticker);
@@ -172,8 +163,9 @@ public class SleepAccelerometerService extends Service implements
 
 		notification.setLatestEventInfo(context, contentTitle, contentText,
 				contentIntent);
-
-		notificationManager.notify(NOTIFICATION_ID, notification);
+		
+		return notification;
+		//notificationManager.notify(NOTIFICATION_ID, notification);
 	}
 
 	private void obtainWakeLock() {
@@ -196,7 +188,9 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		
+		this.startForeground(NOTIFICATION_ID, createServiceNotification());
+		
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
 
@@ -207,27 +201,24 @@ public class SleepAccelerometerService extends Service implements
 
 		obtainWakeLock();
 
-		createServiceNotification();
-
 		dateStarted = new Date();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-
+		
 		unregisterReceiver(pokeSyncChartReceiver);
 		unregisterReceiver(stopAndSaveSleepReceiver);
 
 		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
 		partialWakeLock.release();
-
-		notificationManager.cancel(NOTIFICATION_ID);
-
+		
 		// tell monitoring activities that sleep has ended
 		sendBroadcast(new Intent(SLEEP_STOPPED));
-		// saveSleepData();
+		
+		stopForeground(true);
 	}
 
 	@Override

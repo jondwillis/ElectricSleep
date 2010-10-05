@@ -35,6 +35,11 @@ import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer.
 public abstract class AbstractChart implements Serializable {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1730762441195405935L;
+
+	/**
 	 * The graphical representation of the chart.
 	 * 
 	 * @param canvas

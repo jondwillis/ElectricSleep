@@ -35,6 +35,11 @@ public class BarChart extends XYChart {
 		DEFAULT, STACKED;
 	}
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4190343442277930881L;
+
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 12;
 

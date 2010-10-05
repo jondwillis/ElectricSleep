@@ -7,6 +7,11 @@ import android.content.Context;
 
 public class SleepChartReView extends SleepChartView {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5283117631549734626L;
+
 	public SleepChartReView(final Context context) {
 		super(context);
 	}

@@ -23,6 +23,10 @@ import java.util.List;
  * A series that includes 0 to many XYSeries.
  */
 public class XYMultipleSeriesDataset implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1766219700972279204L;
 	/** The included series. */
 	private final List<XYSeries> mSeries = new ArrayList<XYSeries>();
 
