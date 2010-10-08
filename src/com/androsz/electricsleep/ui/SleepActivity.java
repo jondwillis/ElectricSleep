@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
-import com.androsz.electricsleep.ui.view.SleepChartView;
+import com.androsz.electricsleep.ui.widget.SleepChartView;
 
 public class SleepActivity extends CustomTitlebarActivity {
 
@@ -59,7 +59,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 						intent.getIntExtra("alarm",
 								SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
-				if (sleepChartView.makesSense() && waitForSeriesData != null) {
+				if (sleepChartView.makesSenseToDisplay() && waitForSeriesData != null) {
 					waitForSeriesData.dismiss();
 					waitForSeriesData = null;
 				}
@@ -86,7 +86,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 			addChartView();
 
-			if (sleepChartView.makesSense() && waitForSeriesData != null) {
+			if (sleepChartView.makesSenseToDisplay() && waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
 				waitForSeriesData = null;
 			} else {
@@ -151,15 +151,15 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedState) {
-		/*
-		 * try {
-		 * 
-		 * sleepChartView = (SleepChartView) savedState
-		 * .getSerializable("sleepChartView"); }
-		 * catch(java.lang.RuntimeException rte) { sendBroadcast(new
-		 * Intent(SleepAccelerometerService.POKE_SYNC_CHART)); }
-		 */
-		super.onRestoreInstanceState(savedState);
+
+		try {
+			super.onRestoreInstanceState(savedState);
+		} catch (java.lang.RuntimeException rte) {
+			//sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
+		}
+		sleepChartView = (SleepChartView) savedState
+		.getSerializable("sleepChartView");
+
 	}
 
 	@Override
@@ -175,8 +175,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
-		// outState.putSerializable("sleepChartView", sleepChartView);
 		super.onSaveInstanceState(outState);
+		outState.putSerializable("sleepChartView", sleepChartView);
 	}
 
 	public void onTitleButton1Click(final View v) {
@@ -218,7 +218,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	private void showWaitForSeriesDataIfNeeded() {
-		if (sleepChartView == null || !sleepChartView.makesSense()) {
+		if (sleepChartView == null || !sleepChartView.makesSenseToDisplay()) {
 			if (waitForSeriesData == null || !waitForSeriesData.isShowing()) {
 				waitForSeriesData = new WaitForSeriesDataProgressDialog(this);
 				waitForSeriesData

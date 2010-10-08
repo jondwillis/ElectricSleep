@@ -25,6 +25,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
@@ -68,8 +69,8 @@ public class SleepHistoryDatabase {
 		 * @throws IOException
 		 */
 		public long addSleep(final String sleepDateTime,
-				final ArrayList<Double> sleepChartDataX,
-				final ArrayList<Double> sleepChartDataY, final int min,
+				final List<Double> sleepChartDataX,
+				final List<Double> sleepChartDataY, final int min,
 				final int max, final int alarm) throws IOException {
 
 			final SQLiteDatabase db = getWritableDatabase();
@@ -184,8 +185,8 @@ public class SleepHistoryDatabase {
 	 * @throws IOException
 	 */
 	public long addSleep(final Context context, final String sleepDateTime,
-			final ArrayList<Double> sleepChartDataX,
-			final ArrayList<Double> sleepChartDataY, final int min,
+			final List<Double> sleepChartDataX,
+			final List<Double> sleepChartDataY, final int min,
 			final int max, final int alarm) throws IOException {
 
 		/*
@@ -216,22 +217,9 @@ public class SleepHistoryDatabase {
 		databaseOpenHelper.close();
 	}
 
-	public long getNumberOfRows() {
-		final String[] columns = new String[] {
-				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_MAX,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
-		for (long rowId = 1; rowId < Long.MAX_VALUE; rowId++) {
-			final Cursor cursor = getSleep(String.valueOf(rowId), columns);
-			if (cursor == null) {
-				return rowId - 1;
-			}
-			cursor.close();
-		}
-		return -1;
+	public boolean deleteRow(long id) {
+		return databaseOpenHelper.getWritableDatabase().delete(FTS_VIRTUAL_TABLE,
+				"rowid=?", new String[] { Long.toString(id) }) > 0;
 	}
 
 	/**

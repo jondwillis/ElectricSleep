@@ -33,7 +33,7 @@
 //import com.androsz.electricsleep.achartengine.model.XYMultipleSeriesDataset;
 //import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;
 //import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
-//import com.androsz.electricsleep.ui.view.SleepChartView;
+//import com.androsz.electricsleep.ui.widget.SleepChartView;
 //
 ///**
 // * Utility methods for creating chart views or intents.

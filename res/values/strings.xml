@@ -5,6 +5,7 @@
 		automatically</string>
 	<string name="title_pref_calibration">Calibration Wizard</string>
 	<string name="pref_calibration">calibrationWizard</string>
+	<string name="pref_last_sleep_row">lastSavedSleepRow</string>
 	<string name="summary_pref_alarms">Manage system alarms - ElectricSleep will always
 		bind to the nearest enabled alarm.</string>
 	<string name="title_pref_alarms">Alarms</string>
@@ -113,13 +114,13 @@
 		\n
 		<li>Press next when you are ready.</li>
 	</string>
-	<string name="calibrate_title_welcome">ElectricSleep Calibration Wizard</string>
+	<string name="calibrate_title_welcome">Movement Calibration Wizard</string>
 	<string name="finish">Finish</string>
 	<string name="previous">Previous</string>
 	<string name="next">Next</string>
 	<string name="app_name">ElectricSleep</string>
 
-	<string name="description_logo">Electric Sleep</string>
+	<string name="description_logo">ElectricSleep</string>
 	<string name="description_home">Home</string>
 	<string name="description_search">Search</string>
 	<string name="description_map">Map</string>
@@ -128,15 +129,6 @@
 	<string name="description_export">Export</string>
 	<string name="description_star">Star</string>
 
-	<string name="title_notes">Notes</string>
-	<string name="title_note_edit">Edit note</string>
-
-	<string name="title_session_tracks">Session tracks</string>
-	<string name="title_vendor_tracks">Sandbox tracks</string>
-
-	<string name="title_share">Share using</string>
-
-	<string name="title_search">Search</string>
 	<string name="title_search_query">
 		Search for \'
 		<xliff:g id="query">%1$s</xliff:g>
@@ -193,65 +185,6 @@
 	<string name="search_label">ElectricSleep</string>
 	<string name="search_hint">Date of Sleep</string>
 
-	<string name="share_template">
-		Checking out \'
-		<xliff:g id="title">%1$s</xliff:g>
-		\' at Google #io2010
-		<xliff:g id="hashtag">%2$s</xliff:g>
-	</string>
-	<string name="share_notes">Exported notes from Google I/O 2010</string>
-
-	<string name="moderator_header">Moderator</string>
-	<string name="moderator_summary">Use Moderator to ask questions during this session,
-		and vote up/down other questions.</string>
-	<string name="wave_header">Wave</string>
-	<string name="wave_summary">Use Wave to collaborate in real-time with others
-		during this session.</string>
-
-	<string name="dialog_moderator_title">Google Moderator</string>
-	<string name="dialog_moderator_message">The official Google Moderator app is available in
-		Market, would you like to install it or continue using a normal
-		browser?</string>
-
-	<string name="dialog_moderator_web">Use Browser</string>
-	<string name="dialog_moderator_market">Visit Market</string>
-
-	<string name="dialog_wave_title">Google Wave</string>
-	<string name="dialog_wave_message">The Google Wave mobile interface is still in beta,
-		and using a desktop or laptop is recommended for the best
-		experience.\n\nContinue to Google Wave anyway?</string>
-
-	<string name="speaker_template">
-		<xliff:g id="name">%1$s</xliff:g>
-		,
-		<xliff:g id="company">%2$s</xliff:g>
-	</string>
-
-	<string name="note_save">Save</string>
-	<string name="note_discard">Discard</string>
-
-	<string name="note_create">Create new note</string>
-	<string name="note_hint">Enter note</string>
-
-	<string name="note_discard_title">Discard note?</string>
-	<string name="note_discard_confirm">Are you sure you want to discard this note,
-		deleting any contents?</string>
-
-	<string name="note_before">
-		<xliff:g id="time">%1$s</xliff:g>
-		before session
-	</string>
-	<string name="note_into">
-		<xliff:g id="time">%1$s</xliff:g>
-		into session
-	</string>
-	<string name="note_after">
-		<xliff:g id="time">%1$s</xliff:g>
-		after session
-	</string>
-
-	<string name="permission_write">Modify Google I/O schedule data</string>
-
 	<string name="title_group_functions">Functions</string>
 	<string name="title_group_statistics">Statistics</string>
 	<string name="title_group_configuration">Configuration</string>
@@ -259,8 +192,8 @@
 	<string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
-	<string name="dialog_wait_for_sleep_data_message">ElectricSleep has not been recording movement long
-		enough for this chart to be meaningful yet. Please wait.</string>
+	<string name="dialog_wait_for_sleep_data_message">Have a restful sleep!<br/>ElectricSleep has not been recording movement long
+		enough for this chart to be meaningful yet.</string>
 	<string name="pref_minimum_sensitivity">minimum_sensitivity</string>
 	<string name="pref_maximum_sensitivity">maximum_sensitivity</string>
 	<string name="pref_alarm_trigger_sensitivity">alarmTriggerSensitivity</string>

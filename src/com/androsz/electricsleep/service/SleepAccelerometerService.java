@@ -68,15 +68,15 @@ public class SleepAccelerometerService extends Service implements
 	private final BroadcastReceiver pokeSyncChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			//if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
-				final Intent i = new Intent(SleepActivity.SYNC_CHART);
-				i.putExtra("currentSeriesX", currentSeriesX);
-				i.putExtra("currentSeriesY", currentSeriesY);
-				i.putExtra("min", minSensitivity);
-				i.putExtra("max", maxSensitivity);
-				i.putExtra("alarm", alarmTriggerSensitivity);
-				sendBroadcast(i);
-			//}
+			// if (currentSeriesX.size() > 0 && currentSeriesY.size() > 0) {
+			final Intent i = new Intent(SleepActivity.SYNC_CHART);
+			i.putExtra("currentSeriesX", currentSeriesX);
+			i.putExtra("currentSeriesY", currentSeriesY);
+			i.putExtra("min", minSensitivity);
+			i.putExtra("max", maxSensitivity);
+			i.putExtra("alarm", alarmTriggerSensitivity);
+			sendBroadcast(i);
+			// }
 		}
 	};
 
@@ -141,7 +141,8 @@ public class SleepAccelerometerService extends Service implements
 	}
 
 	private Notification createServiceNotification() {
-		//notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		// notificationManager = (NotificationManager)
+		// getSystemService(Context.NOTIFICATION_SERVICE);
 
 		final int icon = R.drawable.icon;
 		final CharSequence tickerText = getText(R.string.notification_sleep_ticker);
@@ -163,9 +164,9 @@ public class SleepAccelerometerService extends Service implements
 
 		notification.setLatestEventInfo(context, contentTitle, contentText,
 				contentIntent);
-		
+
 		return notification;
-		//notificationManager.notify(NOTIFICATION_ID, notification);
+		// notificationManager.notify(NOTIFICATION_ID, notification);
 	}
 
 	private void obtainWakeLock() {
@@ -188,9 +189,9 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+
 		this.startForeground(NOTIFICATION_ID, createServiceNotification());
-		
+
 		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
 				POKE_SYNC_CHART));
 
@@ -207,17 +208,17 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		
+
 		unregisterReceiver(pokeSyncChartReceiver);
 		unregisterReceiver(stopAndSaveSleepReceiver);
 
 		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
 		partialWakeLock.release();
-		
+
 		// tell monitoring activities that sleep has ended
 		sendBroadcast(new Intent(SLEEP_STOPPED));
-		
+
 		stopForeground(true);
 	}
 
@@ -231,14 +232,17 @@ public class SleepAccelerometerService extends Service implements
 		totalTimeBetweenSensorChanges += timeSinceLastSensorChange;
 
 		final long deltaTime = currentTime - lastChartUpdateTime;
-		if (deltaTime > updateInterval) {
-			final double averageTimeBetweenUpdates = totalTimeBetweenSensorChanges
-					/ totalNumberOfSensorChanges;
-			final double x = currentTime;
-			final double y = java.lang.Math.max(
-					minSensitivity,
-					java.lang.Math.min(maxSensitivity, deltaTime
-							/ averageTimeBetweenUpdates));
+		final double averageTimeBetweenUpdates = totalTimeBetweenSensorChanges
+				/ totalNumberOfSensorChanges;
+		final double x = currentTime;
+		final double y = java.lang.Math.max(
+				minSensitivity,
+				java.lang.Math.min(maxSensitivity, deltaTime
+						/ averageTimeBetweenUpdates));
+
+		if (deltaTime < updateInterval) {
+			triggerAlarmIfNecessary(currentTime, y);
+		} else {
 
 			// this should help reduce both runtime memory and saved data memory
 			// later on.
@@ -277,26 +281,30 @@ public class SleepAccelerometerService extends Service implements
 
 			lastChartUpdateTime = currentTime;
 
-			if (useAlarm) {
-				final AlarmDatabase adb = new AlarmDatabase(
-						getContentResolver(), "com.android.deskclock");
-				final Alarm alarm = adb.getNearestEnabledAlarm();
-				final Calendar alarmTime = alarm.getNearestAlarmDate();
-				alarmTime.add(Calendar.MINUTE, alarmWindow * -1);
-				final long alarmMillis = alarmTime.getTimeInMillis();
-				if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
-					alarm.time = currentTime;
-
-					createSaveSleepNotification();
-
-					com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
-							this, alarm);
-
-					stopSelf();
-				}
-			}
+			triggerAlarmIfNecessary(currentTime, y);
 		}
 		lastOnSensorChangedTime = currentTime;
+	}
+
+	private void triggerAlarmIfNecessary(final long currentTime, final double y) {
+		if (useAlarm) {
+			final AlarmDatabase adb = new AlarmDatabase(
+					getContentResolver(), "com.android.deskclock");
+			final Alarm alarm = adb.getNearestEnabledAlarm();
+			final Calendar alarmTime = alarm.getNearestAlarmDate();
+			alarmTime.add(Calendar.MINUTE, alarmWindow * -1);
+			final long alarmMillis = alarmTime.getTimeInMillis();
+			if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
+				alarm.time = currentTime;
+
+				createSaveSleepNotification();
+
+				com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
+						this, alarm);
+
+				stopSelf();
+			}
+		}
 	}
 
 	@Override

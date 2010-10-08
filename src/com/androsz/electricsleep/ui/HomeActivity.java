@@ -1,23 +1,6 @@
-/*
- * Copyright 2010 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.androsz.electricsleep.ui;
 
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.io.StreamCorruptedException;
 import java.util.List;
 
@@ -33,14 +16,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
-import com.androsz.electricsleep.ui.view.SleepChartReView;
+import com.androsz.electricsleep.ui.widget.SleepChartReView;
 
 /**
  * Front-door {@link Activity} that displays high-level features the application
@@ -51,61 +36,34 @@ public class HomeActivity extends CustomTitlebarActivity {
 	private SleepChartReView sleepChartView;
 
 	private void addChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (layout.getChildCount() == 0) {
-			if (sleepChartView == null) {
-				sleepChartView = new SleepChartReView(this);
+		final RelativeLayout layout = (RelativeLayout) findViewById(R.id.home_container);
+		// if (layout.getChildCount() == 2) {
+		sleepChartView = (SleepChartReView) findViewById(R.id.home_sleep_chart);
+		/*
+		 * / / layout . addView ( sleepChartView , new LayoutParams ( / /
+		 * LayoutParams . WRAP_CONTENT , LayoutParams . WRAP_CONTENT ) ) ;
+		 * 
+		 * final Button sleepBtn = ( Button ) findViewById ( R . id .
+		 * home_btn_sleep ) ; sleepBtn . bringToFront ( ) ; final Button
+		 * historyBtn = ( Button ) findViewById ( R . id . home_btn_history ) ;
+		 * historyBtn . bringToFront ( ) ; }
+		 */
+		final Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI,
+				null, null, new String[] { getString(R.string.to) },
+				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME + " DESC");
+		try {
+			if (cursor == null) {
+				layout.setVisibility(View.GONE);
+				// finish();
+			} else {
+				cursor.moveToLast();
+
+				sleepChartView.syncWithCursor(cursor);
+				final int nameIndex = cursor
+						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME);
 			}
-			layout.addView(sleepChartView, new LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		}
-
-		final SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
-		final Uri uri = Uri.withAppendedPath(SleepContentProvider.CONTENT_URI,
-				String.valueOf(shdb.getNumberOfRows()));
-		shdb.close();
-
-		final Cursor cursor = managedQuery(uri, null, null, null, null);
-
-		if (cursor == null) {
-			layout.setVisibility(View.GONE);
-			// finish();
-		} else {
-			startManagingCursor(cursor);
-			cursor.moveToFirst();
-
-			cursor.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME);
-			final int xIndex = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_X);
-			final int yIndex = cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_Y);
-			final int min = cursor
-					.getInt(cursor
-							.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN));
-			final int max = cursor
-					.getInt(cursor
-							.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX));
-			final int alarm = cursor
-					.getInt(cursor
-							.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
-
-			try {
-				sleepChartView.syncByCopying(
-						(List<Double>) SleepHistoryDatabase
-								.byteArrayToObject(cursor.getBlob(xIndex)),
-						(List<Double>) SleepHistoryDatabase
-								.byteArrayToObject(cursor.getBlob(yIndex)),
-						min, max, alarm);
-			} catch (final StreamCorruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (final ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} finally {
+			cursor.close();
 		}
 	}
 
@@ -179,7 +137,13 @@ public class HomeActivity extends CustomTitlebarActivity {
 		// showTitleButton2(R.drawable.ic_title_refresh);
 		setHomeButtonAsLogo();
 
-		enforceCalibrationBeforeStartingSleep(null, null);
+		final SharedPreferences userPrefs = getSharedPreferences(
+				getString(R.string.prefs_version), Context.MODE_PRIVATE);
+		final int prefsVersion = userPrefs.getInt(
+				getString(R.string.prefs_version), 0);
+		if (prefsVersion == 0) {
+
+		}
 
 	}
 
@@ -195,19 +159,19 @@ public class HomeActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		removeChartView();
+		// removeChartView();
 	}
 
-//	@Override
-//	protected void onRestoreInstanceState(final Bundle savedState) {
-//		try {
-//			super.onRestoreInstanceState(savedState);
-//			sleepChartView = (SleepChartReView) savedState
-//					.getSerializable("sleepChartView");
-//		} catch (RuntimeException re) {
-//
-//		}
-//	}
+	@Override
+	protected void onRestoreInstanceState(final Bundle savedState) {
+		try {
+			super.onRestoreInstanceState(savedState);
+			sleepChartView = (SleepChartReView) savedState
+					.getSerializable("sleepChartView");
+		} catch (RuntimeException re) {
+
+		}
+	}
 
 	@Override
 	protected void onResume() {
@@ -215,15 +179,15 @@ public class HomeActivity extends CustomTitlebarActivity {
 		addChartView();
 	}
 
-	/*@Override
+	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable("sleepChartView", sleepChartView);
-	}*/
+	}
 
 	public void onSleepClick(final View v) throws Exception {
 		final SharedPreferences userPrefs = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
+				.getDefaultSharedPreferences(this);
 		final int minSensitivity = userPrefs.getInt(
 				getString(R.string.pref_minimum_sensitivity), -1);
 		final int maxSensitivity = userPrefs.getInt(

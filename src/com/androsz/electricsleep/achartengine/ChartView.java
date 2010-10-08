@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.view.View;
 
 import com.androsz.electricsleep.achartengine.chart.AbstractChart;
@@ -48,6 +49,15 @@ public abstract class ChartView extends View {
 	 */
 	public ChartView(final Context context) {
 		super(context);
+		mChart = buildChart();
+		mHandler = new Handler();
+		if (mChart instanceof XYChart) {
+			mRenderer = ((XYChart) mChart).getRenderer();
+		}
+	}
+
+	public ChartView(final Context context, AttributeSet as) {
+		super(context, as);
 		mChart = buildChart();
 		mHandler = new Handler();
 		if (mChart instanceof XYChart) {
