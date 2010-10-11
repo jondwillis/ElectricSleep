@@ -8,10 +8,7 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-<<<<<<< .working
 import android.util.AttributeSet;
-=======
->>>>>>> .merge-right.r52
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.achartengine.ChartView;
@@ -46,17 +43,12 @@ public class SleepChartView extends ChartView implements Serializable {
 		super(context);
 	}
 
-<<<<<<< .working
 	public SleepChartView(final Context context, AttributeSet as) {
 		super(context, as);
 	}
 
 	@Override
-	protected AbstractChart buildChart() {
-=======
-	@Override
 	public AbstractChart buildChart() {
->>>>>>> .merge-right.r52
 		if (xySeriesMovement == null) {
 			// set up sleep movement series/renderer
 			xySeriesMovement = new XYSeries("sleep");
@@ -112,7 +104,6 @@ public class SleepChartView extends ChartView implements Serializable {
 		}
 		return null;
 	}
-<<<<<<< .working
 
 	public boolean makesSenseToDisplay() {
 		return xySeriesMovement.getItemCount() > 1;
@@ -186,46 +177,4 @@ public class SleepChartView extends ChartView implements Serializable {
 		
 		redraw(min, max, alarm);
 	}
-}=======
-
-	public boolean makesSense() {
-		return xySeriesMovement.getItemCount() > 1;
-	}
-
-	protected void redraw(final int min, final int max, final int alarm) {
-
-		if (makesSense()) {
-			final double firstX = xySeriesMovement.mX.get(0);
-			final double lastX = xySeriesMovement.mX.get(xySeriesMovement.mX
-					.size() - 1);
-			xyMultipleSeriesRenderer.setXAxisMin(firstX);
-			xyMultipleSeriesRenderer.setXAxisMax(lastX);
-
-			xyMultipleSeriesRenderer.setYAxisMin(min);
-			xyMultipleSeriesRenderer.setYAxisMax(max);
-
-			// reconfigure the alarm trigger line..
-			xySeriesAlarmTrigger.clear();
-
-			xySeriesAlarmTrigger.add(firstX, alarm);
-			xySeriesAlarmTrigger.add(lastX, alarm);
-
-			repaint();
-		}
-	}
-
-	public void syncByAdding(final Double x, final Double y, final int min,
-			final int max, final int alarm) {
-		xySeriesMovement.mX.add(x);
-		xySeriesMovement.mY.add(y);
-		redraw(min, max, alarm);
-	}
-
-	public void syncByCopying(final List<Double> x, final List<Double> y,
-			final int min, final int max, final int alarm) {
-		xySeriesMovement.mX = x;
-		xySeriesMovement.mY = y;
-		redraw(min, max, alarm);
-	}
 }
->>>>>>> .merge-right.r52

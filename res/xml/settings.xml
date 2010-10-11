@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:title="@string/title_calibrate">
-		<Preference android:title="@string/title_pref_calibration" android:key="@string/pref_calibration" android:summary="@string/summary_pref_calibration"></Preference><com.androsz.electricsleep.ui.SeekBarPreference
+		<Preference android:title="@string/title_pref_calibration"
+			android:key="@string/pref_calibration" android:summary="@string/summary_pref_calibration"></Preference>
+		<com.androsz.electricsleep.ui.SeekBarPreference
 			android:title="@string/title_pref_minimum_sensitivity"
 			android:summary="@string/summary_minimum_sensitivity" android:key="@string/pref_minimum_sensitivity"
 			android:defaultValue="0" />
@@ -14,8 +16,7 @@
 			android:summary="@string/summary_alarm_trigger_sensitivity"
 			android:key="@string/pref_alarm_trigger_sensitivity"
 			android:defaultValue="33" />
-	
-</PreferenceCategory>
+	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/title_alarms">
 		<CheckBoxPreference android:summaryOn="@string/summary_pref_use_alarm_on"
@@ -30,8 +31,5 @@
 			android:title="@string/title_pref_alarm_window" android:summary="@string/summary_pref_alarm_window"
 			android:key="@string/pref_alarm_window" android:defaultValue="30"
 			android:dependency="@string/pref_use_alarm"></ListPreference>
-
-
-
 	</PreferenceCategory>
 </PreferenceScreen>

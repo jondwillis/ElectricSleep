@@ -1,6 +1,8 @@
 package com.androsz.electricsleep.ui;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -10,13 +12,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 import com.androsz.electricsleep.ui.widget.SleepChartView;
+import com.androsz.electricsleep.util.Alarm;
+import com.androsz.electricsleep.util.AlarmDatabase;
 
 public class SleepActivity extends CustomTitlebarActivity {
 
@@ -127,7 +134,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		super.onCreate(savedInstanceState);
 
 		showTitleButton1(R.drawable.ic_title_export);
-		showTitleButton2(R.drawable.ic_title_refresh);
+		showTitleButton2(R.drawable.home_btn_alarms);
 		registerReceiver(sleepStoppedReceiver, new IntentFilter(
 				SleepAccelerometerService.SLEEP_STOPPED));
 	}
@@ -171,6 +178,20 @@ public class SleepActivity extends CustomTitlebarActivity {
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
+		
+		final AlarmDatabase adb = new AlarmDatabase(
+				getContentResolver(), "com.android.deskclock");
+		final Alarm alarm = adb.getNearestEnabledAlarm();
+		final Calendar alarmTime = alarm.getNearestAlarmDate();
+		
+		java.text.DateFormat df = DateFormat.getDateFormat(this);//.getDateFormat(this);
+		String dateTime = df.format(alarmTime.getTime());
+		df = DateFormat.getTimeFormat(this);
+		dateTime = df.format(alarmTime.getTime()) + " on " + dateTime;
+		//CharSequence cs = "":
+		//StringBuilder sb = new StringBuilder();
+		//   Formatter formatter = new Formatter();
+		Toast.makeText(this, "Bound to alarm @ " + dateTime , Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -189,25 +210,27 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	public void onTitleButton2Click(final View v) {
-		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-				.setMessage("will show settings")
-				.setCancelable(true)
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(final DialogInterface dialog,
-							final int id) {
-						dialog.cancel();
-					}
-				})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(final DialogInterface dialog,
-									final int id) {
-								dialog.cancel();
-							}
-						});
-		dialog.show();
+		startActivity(AlarmDatabase
+				.changeAlarmSettings(getPackageManager()));
+//		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+//				.setMessage("will show settings")
+//				.setCancelable(true)
+//				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(final DialogInterface dialog,
+//							final int id) {
+//						dialog.cancel();
+//					}
+//				})
+//				.setNegativeButton("Cancel",
+//						new DialogInterface.OnClickListener() {
+//							@Override
+//							public void onClick(final DialogInterface dialog,
+//									final int id) {
+//								dialog.cancel();
+//							}
+//						});
+//		dialog.show();
 	}
 
 	private void removeChartView() {
