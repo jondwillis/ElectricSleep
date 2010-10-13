@@ -80,33 +80,15 @@
 		<item name="android:background">@drawable/gradient_lighten</item>
 	</style>
 
-	<style name="SessionTitle">
-		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">@dimen/text_size_medium</item>
-		<item name="android:textColor">@android:color/primary_text_light</item>
-	</style>
+	
 
-	<style name="SessionSubtitle">
-		<item name="android:textSize">@dimen/text_size_small</item>
-		<item name="android:textColor">@android:color/secondary_text_light</item>
-	</style>
+	
 
-	<style name="NoteCreate">
-		<item name="android:textSize">18sp</item>
-		<item name="android:textStyle">bold</item>
-		<item name="android:textColor">@android:color/primary_text_light</item>
-	</style>
+	
 
-	<style name="NoteContent">
-		<item name="android:textSize">15sp</item>
-		<item name="android:lineSpacingMultiplier">1.1</item>
-		<item name="android:textColor">@android:color/primary_text_light</item>
-	</style>
+	
 
-	<style name="NoteTime">
-		<item name="android:textSize">13sp</item>
-		<item name="android:textColor">@android:color/secondary_text_light</item>
-	</style>
+	
 
 	<style name="ListItem">
 		<item name="android:minHeight">?android:attr/listPreferredItemHeight</item>

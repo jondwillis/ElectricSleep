@@ -19,13 +19,14 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
-import com.androsz.electricsleep.ui.widget.SleepChartReView;
+import com.androsz.electricsleep.ui.widget.SleepChartView;
 
 /**
  * Front-door {@link Activity} that displays high-level features the application
@@ -33,12 +34,12 @@ import com.androsz.electricsleep.ui.widget.SleepChartReView;
  */
 public class HomeActivity extends CustomTitlebarActivity {
 
-	private SleepChartReView sleepChartView;
+	private SleepChartView sleepChartView;
 
 	private void addChartView() {
 		final RelativeLayout layout = (RelativeLayout) findViewById(R.id.home_container);
 		// if (layout.getChildCount() == 2) {
-		sleepChartView = (SleepChartReView) findViewById(R.id.home_sleep_chart);
+		sleepChartView = (SleepChartView) findViewById(R.id.home_sleep_chart);
 		/*
 		 * / / layout . addView ( sleepChartView , new LayoutParams ( / /
 		 * LayoutParams . WRAP_CONTENT , LayoutParams . WRAP_CONTENT ) ) ;
@@ -51,19 +52,14 @@ public class HomeActivity extends CustomTitlebarActivity {
 		final Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI,
 				null, null, new String[] { getString(R.string.to) },
 				SleepHistoryDatabase.KEY_SLEEP_DATE_TIME + " DESC");
-		try {
-			if (cursor == null) {
-				layout.setVisibility(View.GONE);
-				// finish();
-			} else {
-				cursor.moveToLast();
 
-				sleepChartView.syncWithCursor(cursor);
-				final int nameIndex = cursor
-						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME);
-			}
-		} finally {
-			cursor.close();
+		if (cursor == null) {
+			sleepChartView.setVisibility(View.GONE);
+		} else {
+			cursor.moveToLast();
+			sleepChartView.syncWithCursor(cursor);
+			TextView reviewTitleText = (TextView)findViewById(R.id.home_review_title_text);
+			reviewTitleText.setText(getString(R.string.home_review_title_text));
 		}
 	}
 
@@ -142,7 +138,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 		final int prefsVersion = userPrefs.getInt(
 				getString(R.string.prefs_version), 0);
 		if (prefsVersion == 0) {
-
+			//todo
 		}
 
 	}
@@ -166,7 +162,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	protected void onRestoreInstanceState(final Bundle savedState) {
 		try {
 			super.onRestoreInstanceState(savedState);
-			sleepChartView = (SleepChartReView) savedState
+			sleepChartView = (SleepChartView) savedState
 					.getSerializable("sleepChartView");
 		} catch (RuntimeException re) {
 

@@ -1,10 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="wrap_content"
-	android:layout_height="120dip" android:padding="5dp">
-	<TextView android:id="@+id/sleep_history_list_item_name"
-		style="@android:style/TextAppearance.Small" android:layout_width="match_parent"
-		android:layout_height="wrap_content" />
-	<com.androsz.electricsleep.ui.widget.SleepChartReView
-		android:id="@+id/sleep_history_list_item_sleepchartview"
-		android:layout_width="match_parent" android:layout_height="match_parent" />
-</LinearLayout>
+<com.androsz.electricsleep.ui.widget.SleepChartView
+	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/sleep_history_list_item_sleepchartview"
+	android:layout_width="match_parent" android:layout_height="wrap_content"
+	android:padding="5dp" />

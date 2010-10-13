@@ -78,7 +78,7 @@ public class SleepChartView extends ChartView implements Serializable {
 			xyMultipleSeriesRenderer
 					.addSeriesRenderer(xySeriesAlarmTriggerRenderer);
 			xyMultipleSeriesRenderer.setShowLegend(false);
-			xyMultipleSeriesRenderer.setAxisTitleTextSize(22);
+			xyMultipleSeriesRenderer.setAxisTitleTextSize(17);
 			xyMultipleSeriesRenderer.setLabelsTextSize(17);
 			xyMultipleSeriesRenderer.setAntialiasing(true);
 			// TODO move this?
@@ -89,6 +89,7 @@ public class SleepChartView extends ChartView implements Serializable {
 			 * landscape xyMultipleSeriesRenderer.setXLabels(10); } else { //
 			 * portrait xyMultipleSeriesRenderer.setXLabels(5); }
 			 */
+			xyMultipleSeriesRenderer.setXLabels(7);
 			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setYTitle(super.getContext().getString(
 					R.string.movement_level_during_sleep));
@@ -174,7 +175,8 @@ public class SleepChartView extends ChartView implements Serializable {
 				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX));
 		final int alarm = cursor.getInt(cursor
 				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
-		
+
+		xyMultipleSeriesRenderer.setChartTitle(name);
 		redraw(min, max, alarm);
 	}
 }

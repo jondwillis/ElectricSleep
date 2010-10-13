@@ -95,8 +95,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 
 		if (cursor == null) {
 			// There are no results
-			mTextView.setText(getString(R.string.no_results,
-					new Object[] { query }));
+			mTextView.setText(getString(R.string.no_results));
 		} else {
 			mTextView.setVisibility(View.GONE);
 
@@ -116,6 +115,9 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			mListView.setAdapter(sleepHistory);
 			
 			mListView.setDrawingCacheQuality(ListView.DRAWING_CACHE_QUALITY_LOW);
+			//mListView.setWillNotCacheDrawing(true);
+			mListView.setScrollingCacheEnabled(false);
+			mListView.setScrollbarFadingEnabled(false);
 			
 			mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 

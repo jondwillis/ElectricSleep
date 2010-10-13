@@ -240,9 +240,7 @@ public class SleepAccelerometerService extends Service implements
 				java.lang.Math.min(maxSensitivity, deltaTime
 						/ averageTimeBetweenUpdates));
 
-		if (deltaTime < updateInterval) {
-			triggerAlarmIfNecessary(currentTime, y);
-		} else {
+		if(deltaTime >= updateInterval) {
 
 			// this should help reduce both runtime memory and saved data memory
 			// later on.
@@ -283,10 +281,22 @@ public class SleepAccelerometerService extends Service implements
 
 			triggerAlarmIfNecessary(currentTime, y);
 		}
+		else
+		{
+			if(triggerAlarmIfNecessary(currentTime, y))
+			{
+				currentSeriesX.add((double) currentTime);
+				currentSeriesY.add(y);
+				totalNumberOfSensorChanges = 0;
+				totalTimeBetweenSensorChanges = 0;
+
+				lastChartUpdateTime = currentTime;
+			}
+		}
 		lastOnSensorChangedTime = currentTime;
 	}
 
-	private void triggerAlarmIfNecessary(final long currentTime, final double y) {
+	private boolean triggerAlarmIfNecessary(final long currentTime, final double y) {
 		if (useAlarm) {
 			final AlarmDatabase adb = new AlarmDatabase(
 					getContentResolver(), "com.android.deskclock");
@@ -303,8 +313,10 @@ public class SleepAccelerometerService extends Service implements
 						this, alarm);
 
 				stopSelf();
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override

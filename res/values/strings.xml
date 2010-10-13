@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="home_review_title_text_empty">Nothing to review yet...</string>
+    <string name="home_review_title_text">Sleep Statistics Dashboard</string>
 	<string name="to">to</string>
 	<string name="summary_pref_calibration">Tap to calibrate movement sensitivities
 		automatically</string>
@@ -17,12 +19,12 @@
 	<string name="title_pref_use_alarm">Use Alarm</string>
 	<string name="pref_use_alarm">useAlarm</string>
 	<string name="monitoring_sleep">Monitoring Sleep</string>
-	<string name="movement_level_during_sleep">Movement level during sleep</string>
+	<string name="movement_level_during_sleep">"(&lt;-low)   Movement   (high-&gt;)"</string>
 	<string name="search">Search</string>
 	<string name="invalid_settings">Your calibration settings are invalid. Please
 		manually configure settings or run the Calibration Wizard.</string>
 	<string name="message_recommend_calibration">
-		\n\nIt is recommended that you run the Calibration
+		\n\nIt is required that you run the Calibration
 		Wizard or manually
 		configure your Settings now.</string>
 	<string name="message_prefs_not_compatible">Your preferences are not compatible with this
@@ -192,8 +194,7 @@
 	<string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
-	<string name="dialog_wait_for_sleep_data_message">Have a restful sleep!<br/>ElectricSleep has not been recording movement long
-		enough for this chart to be meaningful yet.</string>
+	<string name="dialog_wait_for_sleep_data_message">Have a restful sleep!\n\nThere\'s nothing to diplay yet, check back later!</string>
 	<string name="pref_minimum_sensitivity">minimum_sensitivity</string>
 	<string name="pref_maximum_sensitivity">maximum_sensitivity</string>
 	<string name="pref_alarm_trigger_sensitivity">alarmTriggerSensitivity</string>
@@ -270,7 +271,7 @@
 	</plurals>
 
 	<!-- Search failure message. -->
-	<string name="no_results">No results found for \"%s\"</string>
+	<string name="no_results">There is no saved sleep yet.</string>
 	<string-array name="array_prefs_alarm_window_friendly">
 		<item>5 minutes</item>
 		<item>10 minutes</item>

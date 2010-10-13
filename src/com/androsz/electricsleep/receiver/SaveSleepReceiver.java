@@ -35,15 +35,66 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 					SettingsActivity.DEFAULT_MIN_SENSITIVITY);
 			int max = intent.getIntExtra("max",
 					SettingsActivity.DEFAULT_MAX_SENSITIVITY);
-			int alarm = intent
-			.getIntExtra("alarm",
+			int alarm = intent.getIntExtra("alarm",
 					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
-			
+
 			final String name = intent.getStringExtra("name");
-			shdb.addSleep(context, name, (List<Double>) intent
-					.getSerializableExtra("currentSeriesX"),
-					(List<Double>) intent
-							.getSerializableExtra("currentSeriesY"), min, max, alarm);
+
+			List<Double> mX = (List<Double>) intent
+					.getSerializableExtra("currentSeriesX");
+			List<Double> mY = (List<Double>) intent
+					.getSerializableExtra("currentSeriesY");
+			final int count = mY.size();
+
+			int numberOfDesiredGroupedPoints = 100;
+			numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? count
+					/ ((int) (double) count / numberOfDesiredGroupedPoints)
+					: count;
+			//
+			if (numberOfDesiredGroupedPoints != count) {
+				final int pointsPerGroup = count / numberOfDesiredGroupedPoints
+						+ 1;
+				final List<Double> lessDetailedX = new ArrayList<Double>(
+						numberOfDesiredGroupedPoints);
+				final List<Double> lessDetailedY = new ArrayList<Double>(
+						numberOfDesiredGroupedPoints);
+				int numberOfPointsInThisGroup = pointsPerGroup;
+				double averageYForThisGroup = 0;
+				for (int i = 0; i < numberOfDesiredGroupedPoints; i++) {
+					averageYForThisGroup = 0;
+					final int startIndexForThisGroup = i * pointsPerGroup;
+					for (int j = 0; j < pointsPerGroup; j++) {
+						try {
+							averageYForThisGroup += mY
+									.get(startIndexForThisGroup + j);
+						} catch (final IndexOutOfBoundsException ioobe) {
+							// lower the number of points
+							// (and signify that we are done)
+							numberOfPointsInThisGroup = j - 1;
+							break;
+						}
+					}
+					averageYForThisGroup /= numberOfPointsInThisGroup;
+					if (numberOfPointsInThisGroup < pointsPerGroup) {
+						// we are done
+						final int lastIndex = mX.size() - 1;
+						lessDetailedX.add(mX.get(lastIndex));
+						lessDetailedY.add(mY.get(lastIndex));
+						mX = lessDetailedX;
+						mY = lessDetailedY;
+						break;
+					} else {
+						lessDetailedX.add(mX.get(startIndexForThisGroup));
+						lessDetailedY.add(averageYForThisGroup);
+					}
+				}
+				shdb.addSleep(context, name, lessDetailedX, lessDetailedY, min, max, alarm);
+			}
+			else
+			{
+				shdb.addSleep(context, name, mX, mY, min, max, alarm);
+			}
+
 
 			long rowId = -1;
 
@@ -71,4 +122,5 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 			shdb.close();
 		}
 	}
+
 }

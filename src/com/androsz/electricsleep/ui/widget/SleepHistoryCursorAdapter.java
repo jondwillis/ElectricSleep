@@ -1,9 +1,5 @@
 package com.androsz.electricsleep.ui.widget;
 
-import java.io.IOException;
-import java.io.StreamCorruptedException;
-import java.util.List;
-
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 
@@ -23,32 +19,24 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 		super(context, LAYOUT, cursor, true);
 	}
 
+	private ViewGroup parent;
+
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		LayoutInflater li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.parent = parent;
 		return li.inflate(LAYOUT, parent, false);
 	}
 
 	@Override
-	public void bindView(final View view, final Context context, final Cursor cursor) {
+	public void bindView(final View view, final Context context,
+			final Cursor cursor) {
+		System.gc();
+		final SleepChartView sleepChartView = (SleepChartView) view
+				.findViewById(R.id.sleep_history_list_item_sleepchartview);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				TextView nameTextView = (TextView) view
-						.findViewById(R.id.sleep_history_list_item_name);
-				final SleepChartReView sleepChartView = (SleepChartReView) view
-						.findViewById(R.id.sleep_history_list_item_sleepchartview);
-
-				final String name = cursor.getString(cursor
-						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME));
-				
-				nameTextView.setText(name);
-				sleepChartView.syncWithCursor(cursor);
-			}
-
-		}).run();
-
+		sleepChartView.syncWithCursor(cursor);
+		sleepChartView.setMinimumHeight(parent.getHeight());
 	}
 }

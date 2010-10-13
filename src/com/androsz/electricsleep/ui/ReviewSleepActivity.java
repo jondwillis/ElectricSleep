@@ -14,17 +14,17 @@ import android.widget.LinearLayout;
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
-import com.androsz.electricsleep.ui.widget.SleepChartReView;
+import com.androsz.electricsleep.ui.widget.SleepChartView;
 
 public class ReviewSleepActivity extends CustomTitlebarActivity {
 
-	private SleepChartReView sleepChartView;
+	private SleepChartView sleepChartView;
 
 	private void addChartView() {
 		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
 		if (layout.getChildCount() == 0) {
 			if (sleepChartView == null) {
-				sleepChartView = new SleepChartReView(this);
+				sleepChartView = new SleepChartView(this);
 			}
 			layout.addView(sleepChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -111,7 +111,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	protected void onRestoreInstanceState(final Bundle savedState) {
 		try {
 			super.onRestoreInstanceState(savedState);
-			sleepChartView = (SleepChartReView) savedState
+			sleepChartView = (SleepChartView) savedState
 					.getSerializable("sleepChartView");
 		} catch (RuntimeException re) {
 
