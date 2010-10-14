@@ -39,8 +39,8 @@ public class SleepAccelerometerService extends Service implements
 
 	private static final int NOTIFICATION_ID = 0x1337a;
 
-	public ArrayList<Double> currentSeriesX = new ArrayList<Double>();
-	public ArrayList<Double> currentSeriesY = new ArrayList<Double>();
+	public ArrayList<Double> currentSeriesX;
+	public ArrayList<Double> currentSeriesY;
 
 	private SensorManager sensorManager;
 
@@ -218,6 +218,9 @@ public class SleepAccelerometerService extends Service implements
 
 		// tell monitoring activities that sleep has ended
 		sendBroadcast(new Intent(SLEEP_STOPPED));
+		
+		currentSeriesX = new ArrayList<Double>();
+		currentSeriesY = new ArrayList<Double>();
 
 		stopForeground(true);
 	}
@@ -296,7 +299,7 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public int onStartCommand(final Intent intent, final int flags,
 			final int startId) {
-		if (intent != null) {
+		if (intent != null && startId == 1) {
 			updateInterval = intent.getIntExtra("interval", updateInterval);
 			minSensitivity = intent.getIntExtra("min", minSensitivity);
 			maxSensitivity = intent.getIntExtra("max", maxSensitivity);
@@ -305,6 +308,8 @@ public class SleepAccelerometerService extends Service implements
 
 			useAlarm = intent.getBooleanExtra("useAlarm", useAlarm);
 			alarmWindow = intent.getIntExtra("alarmWindow", alarmWindow);
+			currentSeriesX = new ArrayList<Double>();
+			currentSeriesY = new ArrayList<Double>();
 		}
 		return startId;
 	}

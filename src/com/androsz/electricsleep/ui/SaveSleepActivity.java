@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
+import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 
@@ -24,24 +25,30 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 	@Override
 	// @SuppressWarnings("unchecked")
 	protected void onCreate(final Bundle savedInstanceState) {
-
-		// registerReceiver(saveSleepReceiver, new IntentFilter(SAVE_SLEEP));
 		super.onCreate(savedInstanceState);
+		((RatingBar) findViewById(R.id.save_sleep_rating_bar))
+				.setOnRatingBarChangeListener(this);
 	}
 
 	@Override
 	public void onRatingChanged(final RatingBar ratingBar, final float rating,
 			final boolean fromUser) {
-		this.rating = rating;
-
+		if (fromUser) {
+			this.rating = rating;
+		}
 	}
 
 	public void onSaveClick(final View v) {
-		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
-		((RatingBar) findViewById(R.id.save_sleep_rating_bar))
-				.setOnRatingBarChangeListener(this);
+
+		if (Float.isNaN(rating)) {
+			Toast.makeText(this, R.string.error_not_rated, Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
 
 		getIntent().putExtra("rating", rating);
+
+		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 		saveIntent.putExtras(getIntent().getExtras());
 		sendBroadcast(saveIntent);
 		finish();
