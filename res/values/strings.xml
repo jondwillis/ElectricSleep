@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="rate_title">Rate how easily you awoke and how refreshed you feel:</string>
+    <string name="save">Save</string>
+    <string name="discard">Discard</string>
     <string name="home_review_title_text_empty">Nothing to review yet...</string>
     <string name="home_review_title_text">Sleep Statistics Dashboard</string>
 	<string name="to">to</string>
@@ -335,4 +338,5 @@
 	<string name="notification_save_sleep_title">Save sleep</string>
 	<string name="notification_save_sleep_text">Tap to save or discard sleep history</string>
 	<string name="notification_save_sleep_ticker">Rate, save, or discard pending sleep</string>
+<string name="dismiss">Dismiss</string>
 </resources>

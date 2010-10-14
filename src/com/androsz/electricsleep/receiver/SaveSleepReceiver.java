@@ -46,7 +46,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 					.getSerializableExtra("currentSeriesY");
 			final int count = mY.size();
 
-			int numberOfDesiredGroupedPoints = 100;
+			int numberOfDesiredGroupedPoints = 200;
 			numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? count
 					/ ((int) (double) count / numberOfDesiredGroupedPoints)
 					: count;

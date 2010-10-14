@@ -133,8 +133,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 		this.setTitle(R.string.monitoring_sleep);
 		super.onCreate(savedInstanceState);
 
-		showTitleButton1(R.drawable.ic_title_export);
-		showTitleButton2(R.drawable.home_btn_alarms);
+		showTitleButton1(R.drawable.ic_title_stop_default);
+		showTitleButton2(R.drawable.ic_title_alarm);
 		registerReceiver(sleepStoppedReceiver, new IntentFilter(
 				SleepAccelerometerService.SLEEP_STOPPED));
 	}
@@ -192,7 +192,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		//StringBuilder sb = new StringBuilder();
 		//   Formatter formatter = new Formatter();
 		Toast.makeText(this, "Bound to alarm @ " + dateTime , Toast.LENGTH_LONG).show();
-	}
+	} 
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
@@ -201,12 +201,25 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	public void onTitleButton1Click(final View v) {
-		// final Intent saveActivityIntent = new Intent(this,
-		// SaveSleepActivity.class);
-		// startActivity(saveActivityIntent);
-		sendBroadcast(new Intent(SleepAccelerometerService.STOP_AND_SAVE_SLEEP));
-
-		finish();
+		
+		new AlertDialog.Builder(this)
+		.setMessage("Are you sure you want to end sleep monitoring?")
+		.setCancelable(false)
+		.setPositiveButton("Yes",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog,
+							final int id) {
+						sendBroadcast(new Intent(SleepAccelerometerService.STOP_AND_SAVE_SLEEP));
+						finish();
+					}
+				})
+		.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(final DialogInterface dialog,
+					final int id) {
+			}
+		}).show();
 	}
 
 	public void onTitleButton2Click(final View v) {
@@ -257,6 +270,16 @@ public class SleepActivity extends CustomTitlebarActivity {
 								stopService(new Intent(SleepActivity.this,
 										SleepAccelerometerService.class));
 								SleepActivity.this.finish();
+							}
+						});
+				waitForSeriesData.setButton(DialogInterface.BUTTON_NEUTRAL,
+						getString(R.string.dismiss),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(final DialogInterface arg0,
+									final int arg1) {
+
+								waitForSeriesData.dismiss();
 							}
 						});
 				waitForSeriesData.show();
