@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +36,7 @@ import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.widget.SleepHistoryCursorAdapter;
+import com.androsz.electricsleep.util.DeviceUtil;
 
 public class HistoryActivity extends CustomTitlebarActivity {
 
@@ -113,12 +113,17 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			final SleepHistoryCursorAdapter sleepHistory = new SleepHistoryCursorAdapter(
 					this, cursor);
 			mListView.setAdapter(sleepHistory);
-			
-			mListView.setDrawingCacheQuality(ListView.DRAWING_CACHE_QUALITY_LOW);
-			//mListView.setWillNotCacheDrawing(true);
-			mListView.setScrollingCacheEnabled(false);
+
+			mListView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+			// mListView.setWillNotCacheDrawing(true);
+			if (DeviceUtil.getCpuClockSpeed() > 550) { // anything faster than a
+														// droid *should* be
+														// able to handle smooth
+														// scrolling
+				mListView.setScrollingCacheEnabled(false);
+			}
 			mListView.setScrollbarFadingEnabled(false);
-			
+
 			mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 				@Override

@@ -2,7 +2,6 @@ package com.androsz.electricsleep.ui;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
@@ -66,7 +64,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 						intent.getIntExtra("alarm",
 								SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
-				if (sleepChartView.makesSenseToDisplay() && waitForSeriesData != null) {
+				if (sleepChartView.makesSenseToDisplay()
+						&& waitForSeriesData != null) {
 					waitForSeriesData.dismiss();
 					waitForSeriesData = null;
 				}
@@ -93,7 +92,8 @@ public class SleepActivity extends CustomTitlebarActivity {
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 			addChartView();
 
-			if (sleepChartView.makesSenseToDisplay() && waitForSeriesData != null) {
+			if (sleepChartView.makesSenseToDisplay()
+					&& waitForSeriesData != null) {
 				waitForSeriesData.dismiss();
 				waitForSeriesData = null;
 			} else {
@@ -161,11 +161,12 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 		try {
 			super.onRestoreInstanceState(savedState);
-		} catch (java.lang.RuntimeException rte) {
-			//sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
+		} catch (final java.lang.RuntimeException rte) {
+			// sendBroadcast(new
+			// Intent(SleepAccelerometerService.POKE_SYNC_CHART));
 		}
 		sleepChartView = (SleepChartView) savedState
-		.getSerializable("sleepChartView");
+				.getSerializable("sleepChartView");
 
 	}
 
@@ -178,21 +179,22 @@ public class SleepActivity extends CustomTitlebarActivity {
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
-		
-		final AlarmDatabase adb = new AlarmDatabase(
-				getContentResolver(), "com.android.deskclock");
+
+		final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
+				"com.android.deskclock");
 		final Alarm alarm = adb.getNearestEnabledAlarm();
 		final Calendar alarmTime = alarm.getNearestAlarmDate();
-		
-		java.text.DateFormat df = DateFormat.getDateFormat(this);//.getDateFormat(this);
+
+		java.text.DateFormat df = DateFormat.getDateFormat(this);// .getDateFormat(this);
 		String dateTime = df.format(alarmTime.getTime());
 		df = DateFormat.getTimeFormat(this);
 		dateTime = df.format(alarmTime.getTime()) + " on " + dateTime;
-		//CharSequence cs = "":
-		//StringBuilder sb = new StringBuilder();
-		//   Formatter formatter = new Formatter();
-		Toast.makeText(this, "Bound to alarm @ " + dateTime , Toast.LENGTH_LONG).show();
-	} 
+		// CharSequence cs = "":
+		// StringBuilder sb = new StringBuilder();
+		// Formatter formatter = new Formatter();
+		Toast.makeText(this, "Bound to alarm @ " + dateTime, Toast.LENGTH_LONG)
+				.show();
+	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
@@ -201,49 +203,30 @@ public class SleepActivity extends CustomTitlebarActivity {
 	}
 
 	public void onTitleButton1Click(final View v) {
-		
+
 		new AlertDialog.Builder(this)
-		.setMessage("Are you sure you want to end sleep monitoring?")
-		.setCancelable(false)
-		.setPositiveButton("Yes",
-				new DialogInterface.OnClickListener() {
+				.setMessage("Are you sure you want to end sleep monitoring?")
+				.setCancelable(false)
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(final DialogInterface dialog,
+									final int id) {
+								sendBroadcast(new Intent(
+										SleepAccelerometerService.STOP_AND_SAVE_SLEEP));
+								finish();
+							}
+						})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(final DialogInterface dialog,
 							final int id) {
-						sendBroadcast(new Intent(SleepAccelerometerService.STOP_AND_SAVE_SLEEP));
-						finish();
 					}
-				})
-		.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(final DialogInterface dialog,
-					final int id) {
-			}
-		}).show();
+				}).show();
 	}
 
 	public void onTitleButton2Click(final View v) {
-		startActivity(AlarmDatabase
-				.changeAlarmSettings(getPackageManager()));
-//		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-//				.setMessage("will show settings")
-//				.setCancelable(true)
-//				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//					@Override
-//					public void onClick(final DialogInterface dialog,
-//							final int id) {
-//						dialog.cancel();
-//					}
-//				})
-//				.setNegativeButton("Cancel",
-//						new DialogInterface.OnClickListener() {
-//							@Override
-//							public void onClick(final DialogInterface dialog,
-//									final int id) {
-//								dialog.cancel();
-//							}
-//						});
-//		dialog.show();
+		startActivity(AlarmDatabase.changeAlarmSettings(getPackageManager()));
 	}
 
 	private void removeChartView() {

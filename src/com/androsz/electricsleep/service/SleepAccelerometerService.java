@@ -240,7 +240,7 @@ public class SleepAccelerometerService extends Service implements
 				java.lang.Math.min(maxSensitivity, deltaTime
 						/ averageTimeBetweenUpdates));
 
-		if(deltaTime >= updateInterval) {
+		if (deltaTime >= updateInterval) {
 
 			// this should help reduce both runtime memory and saved data memory
 			// later on.
@@ -280,11 +280,8 @@ public class SleepAccelerometerService extends Service implements
 			lastChartUpdateTime = currentTime;
 
 			triggerAlarmIfNecessary(currentTime, y);
-		}
-		else
-		{
-			if(triggerAlarmIfNecessary(currentTime, y))
-			{
+		} else {
+			if (triggerAlarmIfNecessary(currentTime, y)) {
 				currentSeriesX.add((double) currentTime);
 				currentSeriesY.add(y);
 				totalNumberOfSensorChanges = 0;
@@ -294,29 +291,6 @@ public class SleepAccelerometerService extends Service implements
 			}
 		}
 		lastOnSensorChangedTime = currentTime;
-	}
-
-	private boolean triggerAlarmIfNecessary(final long currentTime, final double y) {
-		if (useAlarm) {
-			final AlarmDatabase adb = new AlarmDatabase(
-					getContentResolver(), "com.android.deskclock");
-			final Alarm alarm = adb.getNearestEnabledAlarm();
-			final Calendar alarmTime = alarm.getNearestAlarmDate();
-			alarmTime.add(Calendar.MINUTE, alarmWindow * -1);
-			final long alarmMillis = alarmTime.getTimeInMillis();
-			if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
-				alarm.time = currentTime;
-
-				createSaveSleepNotification();
-
-				com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(
-						this, alarm);
-
-				stopSelf();
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -341,5 +315,29 @@ public class SleepAccelerometerService extends Service implements
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SENSOR_DELAY);
+	}
+
+	private boolean triggerAlarmIfNecessary(final long currentTime,
+			final double y) {
+		if (useAlarm) {
+			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
+					"com.android.deskclock");
+			final Alarm alarm = adb.getNearestEnabledAlarm();
+			final Calendar alarmTime = alarm.getNearestAlarmDate();
+			alarmTime.add(Calendar.MINUTE, alarmWindow * -1);
+			final long alarmMillis = alarmTime.getTimeInMillis();
+			if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
+				alarm.time = currentTime;
+
+				createSaveSleepNotification();
+
+				com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(this,
+						alarm);
+
+				stopSelf();
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -1,32 +1,22 @@
 package com.androsz.electricsleep.ui.widget;
 
-import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.db.SleepHistoryDatabase;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
-import android.widget.TextView;
+
+import com.androsz.electricsleep.R;
 
 public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 
 	private static int LAYOUT = R.layout.list_item_sleep_history;
 
-	public SleepHistoryCursorAdapter(Context context, Cursor cursor) {
-		super(context, LAYOUT, cursor, true);
-	}
-
 	private ViewGroup parent;
 
-	@Override
-	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		LayoutInflater li = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.parent = parent;
-		return li.inflate(LAYOUT, parent, false);
+	public SleepHistoryCursorAdapter(final Context context, final Cursor cursor) {
+		super(context, LAYOUT, cursor, true);
 	}
 
 	@Override
@@ -38,5 +28,14 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 
 		sleepChartView.syncWithCursor(cursor);
 		sleepChartView.setMinimumHeight(parent.getHeight());
+	}
+
+	@Override
+	public View newView(final Context context, final Cursor cursor,
+			final ViewGroup parent) {
+		final LayoutInflater li = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.parent = parent;
+		return li.inflate(LAYOUT, parent, false);
 	}
 }

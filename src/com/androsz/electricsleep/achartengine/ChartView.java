@@ -56,7 +56,7 @@ public abstract class ChartView extends View {
 		}
 	}
 
-	public ChartView(final Context context, AttributeSet as) {
+	public ChartView(final Context context, final AttributeSet as) {
 		super(context, as);
 		mChart = buildChart();
 		mHandler = new Handler();

@@ -204,8 +204,12 @@ public class SleepContentProvider extends ContentProvider {
 
 	private Cursor search(String query) {
 		query = query.toLowerCase();
-		//final String[] columns = new String[] { BaseColumns._ID,
-		//		SleepHistoryDatabase.KEY_SLEEP_DATE_TIME, SleepHistoryDatabase.KEY_SLEEP_DATA_X, SleepHistoryDatabase.KEY_SLEEP_DATA_Y, SleepHistoryDatabase.KEY_SLEEP_DATA_MIN, SleepHistoryDatabase.KEY_SLEEP_DATA_MAX, SleepHistoryDatabase. };
+		// final String[] columns = new String[] { BaseColumns._ID,
+		// SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
+		// SleepHistoryDatabase.KEY_SLEEP_DATA_X,
+		// SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
+		// SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
+		// SleepHistoryDatabase.KEY_SLEEP_DATA_MAX, SleepHistoryDatabase. };
 
 		return sleepHistoryDatabase.getSleepMatches(query, null);
 	}

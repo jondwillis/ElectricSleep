@@ -1,7 +1,5 @@
 package com.androsz.electricsleep.ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +12,8 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 		OnRatingBarChangeListener {
 
 	public static final String SAVE_SLEEP = "com.androsz.electricsleep.SAVE_SLEEP";
+
+	private float rating = Float.NaN;
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -29,6 +29,13 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 		super.onCreate(savedInstanceState);
 	}
 
+	@Override
+	public void onRatingChanged(final RatingBar ratingBar, final float rating,
+			final boolean fromUser) {
+		this.rating = rating;
+
+	}
+
 	public void onSaveClick(final View v) {
 		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 		((RatingBar) findViewById(R.id.save_sleep_rating_bar))
@@ -38,14 +45,5 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 		saveIntent.putExtras(getIntent().getExtras());
 		sendBroadcast(saveIntent);
 		finish();
-	}
-
-	private float rating = Float.NaN;
-
-	@Override
-	public void onRatingChanged(RatingBar ratingBar, float rating,
-			boolean fromUser) {
-		this.rating = rating;
-
 	}
 }

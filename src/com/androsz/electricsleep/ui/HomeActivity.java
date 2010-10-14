@@ -1,9 +1,5 @@
 package com.androsz.electricsleep.ui;
 
-import java.io.IOException;
-import java.io.StreamCorruptedException;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,14 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +28,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	private SleepChartView sleepChartView;
 
 	private void addChartView() {
-		final RelativeLayout layout = (RelativeLayout) findViewById(R.id.home_container);
+		findViewById(R.id.home_container);
 		// if (layout.getChildCount() == 2) {
 		sleepChartView = (SleepChartView) findViewById(R.id.home_sleep_chart);
 		/*
@@ -58,7 +49,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 		} else {
 			cursor.moveToLast();
 			sleepChartView.syncWithCursor(cursor);
-			TextView reviewTitleText = (TextView)findViewById(R.id.home_review_title_text);
+			final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
 			reviewTitleText.setText(getString(R.string.home_review_title_text));
 		}
 	}
@@ -138,7 +129,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 		final int prefsVersion = userPrefs.getInt(
 				getString(R.string.prefs_version), 0);
 		if (prefsVersion == 0) {
-			//todo
+			// todo
 		}
 
 	}
@@ -164,7 +155,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 			super.onRestoreInstanceState(savedState);
 			sleepChartView = (SleepChartView) savedState
 					.getSerializable("sleepChartView");
-		} catch (RuntimeException re) {
+		} catch (final RuntimeException re) {
 
 		}
 	}
@@ -248,12 +239,5 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 	public void onTitleButton1Click(final View v) {
 		Toast.makeText(this, "ohhh", Toast.LENGTH_SHORT).show();
-	}
-
-	private void removeChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (sleepChartView.getParent() == layout) {
-			layout.removeView(sleepChartView);
-		}
 	}
 }

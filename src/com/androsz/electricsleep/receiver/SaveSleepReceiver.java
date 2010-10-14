@@ -7,13 +7,10 @@ import java.util.List;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 
-import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.ui.ReviewSleepActivity;
@@ -33,9 +30,9 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 		try {
 			final int min = intent.getIntExtra("min",
 					SettingsActivity.DEFAULT_MIN_SENSITIVITY);
-			int max = intent.getIntExtra("max",
+			final int max = intent.getIntExtra("max",
 					SettingsActivity.DEFAULT_MAX_SENSITIVITY);
-			int alarm = intent.getIntExtra("alarm",
+			final int alarm = intent.getIntExtra("alarm",
 					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 			final String name = intent.getStringExtra("name");
@@ -48,7 +45,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 
 			int numberOfDesiredGroupedPoints = 200;
 			numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? count
-					/ ((int) (double) count / numberOfDesiredGroupedPoints)
+					/ ((int) count / numberOfDesiredGroupedPoints)
 					: count;
 			//
 			if (numberOfDesiredGroupedPoints != count) {
@@ -88,17 +85,15 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 						lessDetailedY.add(averageYForThisGroup);
 					}
 				}
-				shdb.addSleep(context, name, lessDetailedX, lessDetailedY, min, max, alarm);
-			}
-			else
-			{
+				shdb.addSleep(context, name, lessDetailedX, lessDetailedY, min,
+						max, alarm);
+			} else {
 				shdb.addSleep(context, name, mX, mY, min, max, alarm);
 			}
 
-
 			long rowId = -1;
 
-			Cursor c = shdb
+			final Cursor c = shdb
 					.getSleepMatches(name, new String[] { BaseColumns._ID,
 							SleepHistoryDatabase.KEY_SLEEP_DATE_TIME });
 			c.moveToFirst();

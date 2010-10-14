@@ -25,11 +25,6 @@ import com.androsz.electricsleep.achartengine.util.MathHelper;
  */
 public class XYMultipleSeriesRenderer extends DefaultRenderer {
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3682282817645980372L;
-
-	/**
 	 * An enum for the XY chart orientation of the X axis.
 	 */
 	public enum Orientation {
@@ -50,6 +45,11 @@ public class XYMultipleSeriesRenderer extends DefaultRenderer {
 			return mAngle;
 		}
 	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3682282817645980372L;
 
 	/** The chart title. */
 	private String mChartTitle = "";

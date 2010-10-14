@@ -180,22 +180,22 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		boolean didActivity = false;
 		final int currentChildId = viewFlipper.getCurrentView().getId();
 		switch (currentChildId) {
-			case R.id.minTest:
-				currentTask = new DelayedStartMinCalibrationTask().execute(null,
-						null, null);
-				didActivity = true;
-				break;
-			case R.id.maxTest:
-				currentTask = new DelayedStartMaxCalibrationTask().execute(null,
-						null, null);
-				didActivity = true;
-				break;
-			case R.id.alarmTest:
-				currentTask = new DelayedStartAlarmCalibrationTask().execute(null,
-						null, null);
-				didActivity = true;
-				break;
-			}
+		case R.id.minTest:
+			currentTask = new DelayedStartMinCalibrationTask().execute(null,
+					null, null);
+			didActivity = true;
+			break;
+		case R.id.maxTest:
+			currentTask = new DelayedStartMaxCalibrationTask().execute(null,
+					null, null);
+			didActivity = true;
+			break;
+		case R.id.alarmTest:
+			currentTask = new DelayedStartAlarmCalibrationTask().execute(null,
+					null, null);
+			didActivity = true;
+			break;
+		}
 		return didActivity;
 	}
 

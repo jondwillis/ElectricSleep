@@ -43,7 +43,7 @@ public class SleepChartView extends ChartView implements Serializable {
 		super(context);
 	}
 
-	public SleepChartView(final Context context, AttributeSet as) {
+	public SleepChartView(final Context context, final AttributeSet as) {
 		super(context, as);
 	}
 
@@ -144,19 +144,21 @@ public class SleepChartView extends ChartView implements Serializable {
 		xySeriesMovement.mY = y;
 		redraw(min, max, alarm);
 	}
-	
-	public void syncWithCursor(final Cursor cursor)
-	{
-		final String name = cursor.getString(cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME));
-		
+
+	public void syncWithCursor(final Cursor cursor) {
+		final String name = cursor
+				.getString(cursor
+						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME));
+
 		try {
 
-			xySeriesMovement.mX = (List<Double>) SleepHistoryDatabase.byteArrayToObject(cursor.getBlob(cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_X)));
+			xySeriesMovement.mX = (List<Double>) SleepHistoryDatabase
+					.byteArrayToObject(cursor.getBlob(cursor
+							.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_X)));
 
-			xySeriesMovement.mY = (List<Double>) SleepHistoryDatabase.byteArrayToObject(cursor.getBlob(cursor
-					.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_Y)));
+			xySeriesMovement.mY = (List<Double>) SleepHistoryDatabase
+					.byteArrayToObject(cursor.getBlob(cursor
+							.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_Y)));
 
 		} catch (final StreamCorruptedException e) {
 			// TODO Auto-generated catch block
@@ -169,12 +171,15 @@ public class SleepChartView extends ChartView implements Serializable {
 			e.printStackTrace();
 		}
 
-		final int min = cursor.getInt(cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN));
-		final int max = cursor.getInt(cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX));
-		final int alarm = cursor.getInt(cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
+		final int min = cursor
+				.getInt(cursor
+						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN));
+		final int max = cursor
+				.getInt(cursor
+						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX));
+		final int alarm = cursor
+				.getInt(cursor
+						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
 
 		xyMultipleSeriesRenderer.setChartTitle(name);
 		redraw(min, max, alarm);

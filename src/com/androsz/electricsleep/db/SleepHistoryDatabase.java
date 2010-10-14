@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -186,8 +185,8 @@ public class SleepHistoryDatabase {
 	 */
 	public long addSleep(final Context context, final String sleepDateTime,
 			final List<Double> sleepChartDataX,
-			final List<Double> sleepChartDataY, final int min,
-			final int max, final int alarm) throws IOException {
+			final List<Double> sleepChartDataY, final int min, final int max,
+			final int alarm) throws IOException {
 
 		/*
 		 * new Thread(new Runnable() {
@@ -217,9 +216,10 @@ public class SleepHistoryDatabase {
 		databaseOpenHelper.close();
 	}
 
-	public boolean deleteRow(long id) {
-		return databaseOpenHelper.getWritableDatabase().delete(FTS_VIRTUAL_TABLE,
-				"rowid=?", new String[] { Long.toString(id) }) > 0;
+	public boolean deleteRow(final long id) {
+		return databaseOpenHelper.getWritableDatabase().delete(
+				FTS_VIRTUAL_TABLE, "rowid=?",
+				new String[] { Long.toString(id) }) > 0;
 	}
 
 	/**

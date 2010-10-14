@@ -7,7 +7,6 @@ import java.util.List;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
@@ -29,7 +28,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 			layout.addView(sleepChartView, new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		}
-		
+
 		final Uri uri = getIntent().getData();
 		Cursor cursor;
 		if (uri == null) {
@@ -96,11 +95,6 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 		return R.layout.activity_sleep;
 	}
 
-	protected void onResume() {
-		super.onResume();
-		addChartView();
-	}
-
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -113,9 +107,15 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 			super.onRestoreInstanceState(savedState);
 			sleepChartView = (SleepChartView) savedState
 					.getSerializable("sleepChartView");
-		} catch (RuntimeException re) {
+		} catch (final RuntimeException re) {
 
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		addChartView();
 	}
 
 	@Override
