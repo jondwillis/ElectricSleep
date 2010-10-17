@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.app;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.preference.CustomTitlebarPreferenceActivity;
 import com.androsz.electricsleep.util.AlarmDatabase;
 
 public class SettingsActivity extends CustomTitlebarPreferenceActivity {

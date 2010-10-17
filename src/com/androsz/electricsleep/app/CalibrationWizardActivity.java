@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.app;
 
 import java.util.Locale;
 
@@ -158,7 +158,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 
 	private boolean ttsAvailable = false;
 
-	private final boolean useTTS = false;
+	private boolean useTTS = true;
 	private static AsyncTask<Void, Void, Void> currentTask;
 	private static final int TEST_TTS_INSTALLED = 0x1337;
 
@@ -174,6 +174,12 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		final Intent checkIntent = new Intent();
 		checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		startActivityForResult(checkIntent, TEST_TTS_INSTALLED);
+	}
+	
+
+	public void onTitleButton1Click(final View v) {
+		int messageId = (useTTS = !useTTS) ? R.string.message_tts_on : R.string.message_tts_off;
+		notifyUser(getString(messageId));
 	}
 
 	private boolean doWizardActivity() {
@@ -209,7 +215,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	private void notifyUser(final String message, final boolean toast) {
-		if (ttsAvailable) {
+		if (ttsAvailable && useTTS) {
 			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
 		}
 		if (toast) {
@@ -283,6 +289,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		showTitleButton1(R.drawable.ic_title_alarm);
 		viewFlipper = (ViewFlipper) findViewById(R.id.wizardViewFlipper);
 		setupNavigationButtons();
 	}
@@ -324,6 +331,8 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		maxCalibration = savedState.getInt("max");
 		alarmTriggerCalibration = savedState.getInt("alarm");
 
+		useTTS = savedState.getBoolean("useTTS");
+		
 		if (textToSpeech == null) {
 			textToSpeech = new TextToSpeech(this, this);
 		}
@@ -375,7 +384,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		outState.putInt("min", minCalibration);
 		outState.putInt("max", maxCalibration);
 		outState.putInt("alarm", alarmTriggerCalibration);
-		outState.putBoolean("usetts", useTTS);
+		outState.putBoolean("useTTS", useTTS);
 	}
 
 	private void setupNavigationButtons() {

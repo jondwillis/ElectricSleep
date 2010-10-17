@@ -3,22 +3,22 @@
 	<PreferenceCategory android:title="@string/title_calibrate">
 		<Preference android:title="@string/title_pref_calibration"
 			android:key="@string/pref_calibration" android:summary="@string/summary_pref_calibration"></Preference>
-		<com.androsz.electricsleep.ui.SeekBarPreference
+		<com.androsz.electricsleep.preference.SeekBarPreference
 			android:title="@string/title_pref_minimum_sensitivity"
 			android:summary="@string/summary_minimum_sensitivity" android:key="@string/pref_minimum_sensitivity"
 			android:defaultValue="0" />
-		<com.androsz.electricsleep.ui.SeekBarPreference
+		<com.androsz.electricsleep.preference.SeekBarPreference
 			android:title="@string/title_pref_maximum_sensitivity"
 			android:summary="@string/summary_maximum_sensitivity" android:key="@string/pref_maximum_sensitivity"
 			android:defaultValue="100" />
-		<com.androsz.electricsleep.ui.SeekBarPreference
+		<com.androsz.electricsleep.preference.SeekBarPreference
 			android:title="@string/title_pref_alarm_trigger_sensitivity"
 			android:summary="@string/summary_alarm_trigger_sensitivity"
 			android:key="@string/pref_alarm_trigger_sensitivity"
 			android:defaultValue="33" />
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/title_alarms">
+	<PreferenceCategory android:title="@string/title_pref_alarms">
 		<CheckBoxPreference android:summaryOn="@string/summary_pref_use_alarm_on"
 			android:summaryOff="@string/summary_pref_use_alarm_off" android:key="@string/pref_use_alarm"
 			android:title="@string/title_pref_use_alarm"

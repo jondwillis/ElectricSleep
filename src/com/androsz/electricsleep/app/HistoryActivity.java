@@ -1,21 +1,4 @@
-/*
- * Copyright (C) 2010 The Android Open Source Project
- * Copyright (C) 2010 Androsz
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.app;
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -35,8 +18,8 @@ import android.widget.Toast;
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
-import com.androsz.electricsleep.ui.widget.SleepHistoryCursorAdapter;
 import com.androsz.electricsleep.util.DeviceUtil;
+import com.androsz.electricsleep.widget.SleepHistoryCursorAdapter;
 
 public class HistoryActivity extends CustomTitlebarActivity {
 
@@ -81,12 +64,6 @@ public class HistoryActivity extends CustomTitlebarActivity {
 		return super.onSearchRequested();
 	}
 
-	/**
-	 * Searches the dictionary and displays results for the given query.
-	 * 
-	 * @param query
-	 *            The search query
-	 */
 	private void showResults(final String query) {
 
 		final Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI,
@@ -95,21 +72,13 @@ public class HistoryActivity extends CustomTitlebarActivity {
 
 		if (cursor == null) {
 			// There are no results
+			mTextView.setVisibility(View.VISIBLE);
 			mTextView.setText(getString(R.string.no_results));
+			mListView.setVisibility(View.GONE);
 		} else {
 			mTextView.setVisibility(View.GONE);
-
-			// Specify the columns we want to display in the result
-			// final String[] from = new String[] {
-			// SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
-			// SleepHistoryDatabase.KEY_SLEEP_DATA_X };
-
-			// Specify the corresponding layout elements where we want the
-			// columns to go
-			// final int[] to = new int[] { R.id.name };
-
-			// Create a simple cursor adapter for the definitions and apply them
-			// to the ListView
+			mListView.setVisibility(View.VISIBLE);
+			
 			final SleepHistoryCursorAdapter sleepHistory = new SleepHistoryCursorAdapter(
 					this, cursor);
 			mListView.setAdapter(sleepHistory);
@@ -148,6 +117,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 														"Deleted sleep record.",
 														Toast.LENGTH_SHORT)
 														.show();
+												mListView.removeAllViewsInLayout();
 												showResults(query);
 											}
 										})

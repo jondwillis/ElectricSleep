@@ -23,10 +23,10 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.ui.CalibrationWizardActivity;
-import com.androsz.electricsleep.ui.SaveSleepActivity;
-import com.androsz.electricsleep.ui.SettingsActivity;
-import com.androsz.electricsleep.ui.SleepActivity;
+import com.androsz.electricsleep.app.CalibrationWizardActivity;
+import com.androsz.electricsleep.app.SaveSleepActivity;
+import com.androsz.electricsleep.app.SettingsActivity;
+import com.androsz.electricsleep.app.SleepActivity;
 import com.androsz.electricsleep.util.Alarm;
 import com.androsz.electricsleep.util.AlarmDatabase;
 
@@ -189,40 +189,53 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		new Thread(new Runnable() {
 
-		this.startForeground(NOTIFICATION_ID, createServiceNotification());
+			@Override
+			public void run() {
+				startForeground(NOTIFICATION_ID, createServiceNotification());
 
-		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
-				POKE_SYNC_CHART));
+				registerReceiver(pokeSyncChartReceiver, new IntentFilter(
+						POKE_SYNC_CHART));
 
-		registerReceiver(stopAndSaveSleepReceiver, new IntentFilter(
-				STOP_AND_SAVE_SLEEP));
+				registerReceiver(stopAndSaveSleepReceiver, new IntentFilter(
+						STOP_AND_SAVE_SLEEP));
 
-		registerAccelerometerListener();
+				registerAccelerometerListener();
 
-		obtainWakeLock();
+				obtainWakeLock();
 
-		dateStarted = new Date();
+				dateStarted = new Date();
+			}
+		}).run();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 
-		unregisterReceiver(pokeSyncChartReceiver);
-		unregisterReceiver(stopAndSaveSleepReceiver);
+		new Thread(new Runnable() {
 
-		sensorManager.unregisterListener(SleepAccelerometerService.this);
+			@Override
+			public void run() {
+				unregisterReceiver(pokeSyncChartReceiver);
+				unregisterReceiver(stopAndSaveSleepReceiver);
 
-		partialWakeLock.release();
+				sensorManager
+						.unregisterListener(SleepAccelerometerService.this);
 
-		// tell monitoring activities that sleep has ended
-		sendBroadcast(new Intent(SLEEP_STOPPED));
-		
-		currentSeriesX = new ArrayList<Double>();
-		currentSeriesY = new ArrayList<Double>();
+				partialWakeLock.release();
 
-		stopForeground(true);
+				// tell monitoring activities that sleep has ended
+				sendBroadcast(new Intent(SLEEP_STOPPED));
+
+				currentSeriesX = new ArrayList<Double>();
+				currentSeriesY = new ArrayList<Double>();
+
+				stopForeground(true);
+			}
+		}).run();
+
 	}
 
 	@Override

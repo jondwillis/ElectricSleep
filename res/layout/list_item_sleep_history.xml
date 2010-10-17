@@ -1,4 +1,4 @@
-<com.androsz.electricsleep.ui.widget.SleepChartView
+<com.androsz.electricsleep.view.SleepChartView
 	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/sleep_history_list_item_sleepchartview"
 	android:layout_width="match_parent" android:layout_height="wrap_content"
 	android:padding="5dp" />

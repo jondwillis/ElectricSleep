@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.preference;
 
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.app.HomeActivity;
+import com.androsz.electricsleep.app.SettingsActivity;
 
 public abstract class CustomTitlebarPreferenceActivity extends
 		PreferenceActivity {

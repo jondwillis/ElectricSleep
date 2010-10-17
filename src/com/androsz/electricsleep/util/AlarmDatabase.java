@@ -29,8 +29,6 @@ import android.util.Log;
  * Project home: http://code.google.com/p/android-alarmclock-database/
  */
 public class AlarmDatabase {
-	// public static final Uri ALARM_URI =
-	// Uri.parse("content://com.android.alarmclock/alarm");
 
 	/**
 	 * Represents single Alarm Clock record in a database. Immutable
@@ -169,32 +167,13 @@ public class AlarmDatabase {
 	public static Intent changeAlarmSettings(final PackageManager packageManager) {
 		final Intent i = new Intent();
 		i.setAction(Intent.ACTION_MAIN);
-		i.setClassName("com.android.alarmclock",
-				"com.android.alarmclock.AlarmClock");
-		if (packageManager == null) {
-			return i;
-		}
-
-		ResolveInfo resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null) {
-			return i; // < 2.1
-		}
 
 		i.setClassName("com.android.deskclock",
 				"com.android.deskclock.AlarmClock");
-		resolved = packageManager.resolveActivity(i,
+		ResolveInfo resolved = packageManager.resolveActivity(i,
 				PackageManager.MATCH_DEFAULT_ONLY);
 		if (resolved != null) {
-			return i; // 2.1?
-		}
-
-		i.setClassName("com.google.android.deskclock",
-				"com.android.deskclock.AlarmClock");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null) {
-			return i; // 2.2?
+			return i; // 2.2
 		}
 
 		i.setClassName("com.htc.android.worldclock",
@@ -213,12 +192,7 @@ public class AlarmDatabase {
 			return i; // Motoblur clock
 		}
 
-		Log.e("AlarmDatabase", "No known Alarm Clock UI provider");
 		return null;
-
-		// i.setClassName("com.android.alarmclock",
-		// "com.android.alarmclock.SetAlarm"); - private access
-		// i.putExtra(Alarms.ID, next_alarm_id);
 	}
 
 	/**
@@ -258,13 +232,6 @@ public class AlarmDatabase {
 			}
 		}
 		return clockApps;
-	}
-
-	public static Intent startNightClock() {
-		final Intent i = new Intent();
-		i.setAction("android.alarmclock.NightClockUI");
-		i.addCategory(Intent.CATEGORY_DEFAULT);
-		return i;
 	}
 
 	public static void triggerAlarm(final Context context, final Alarm alarm) {

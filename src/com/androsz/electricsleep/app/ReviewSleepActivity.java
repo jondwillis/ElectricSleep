@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.app;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
-import com.androsz.electricsleep.ui.widget.SleepChartView;
+import com.androsz.electricsleep.view.SleepChartView;
 
 public class ReviewSleepActivity extends CustomTitlebarActivity {
 
@@ -115,7 +115,13 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		addChartView();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				addChartView();
+			}
+		}).run();
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/home_container" android:layout_height="match_parent"
 	android:layout_width="match_parent" android:background="@drawable/gradient_background_vert">
-
 	<LinearLayout android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/home_button_container"
 		android:layout_alignParentLeft="true" android:orientation="vertical"
@@ -14,19 +13,16 @@
 			android:onClick="onHistoryClick" android:text="@string/title_history"
 			android:drawableTop="@drawable/home_btn_history"
 			android:layout_width="wrap_content" android:layout_height="match_parent" />
-	
-</LinearLayout>
+	</LinearLayout>
 	<LinearLayout android:layout_toRightOf="@+id/home_button_container"
 		android:layout_height="wrap_content" android:layout_width="match_parent"
 		android:id="@+id/home_review_stats_container">
 		<TextView android:layout_height="wrap_content"
-			android:gravity="center" android:layout_below="@+id/home_button_container"
-			android:layout_centerHorizontal="true"
-			android:text="@string/home_review_title_text_empty"
+			android:gravity="center" android:text="@string/home_review_title_text_empty"
 			android:textAppearance="@style/TextHeader" android:id="@+id/home_review_title_text"
 			android:layout_width="match_parent"></TextView>
 	</LinearLayout>
-	<com.androsz.electricsleep.ui.widget.SleepChartView
+	<com.androsz.electricsleep.view.SleepChartView
 		android:id="@+id/home_sleep_chart" android:layout_width="match_parent"
 		android:layout_height="match_parent" android:layout_margin="4dip"
 		android:layout_toRightOf="@+id/home_button_container"

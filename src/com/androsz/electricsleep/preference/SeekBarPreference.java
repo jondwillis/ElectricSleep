@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.preference;
 
 import android.app.AlertDialog.Builder;
 import android.content.Context;

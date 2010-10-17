@@ -2,29 +2,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.androsz.electricsleep" android:versionCode="1"
 	android:versionName="0.1" android:installLocation="internalOnly">
+
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:theme="@style/Theme.electricsleep">
-		<activity android:name=".ui.HomeActivity" android:label="@string/app_name">
+
+		<activity android:name=".app.HomeActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.SleepActivity" android:label="@string/title_sleep">
+		<activity android:name=".app.SleepActivity" android:label="@string/title_sleep" />
+		<activity android:name=".app.CalibrationWizardActivity"
+			android:label="@string/title_calibrate" />
+		<activity android:name=".app.HistoryActivity" android:label="@string/title_history" />
+		<activity android:name=".app.CalibrateForResultActivity"
+			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog" />
+		<activity android:name=".app.ReviewSleepActivity" />
+		<activity android:name=".app.SaveSleepActivity" android:label="@string/title_save_sleep" />
 
-		</activity>
-		<activity android:name=".ui.CalibrationWizardActivity"
-			android:label="@string/title_calibrate">
-		</activity>
-		<activity android:name=".ui.AlarmsActivity" android:label="@string/title_alarms">
-		</activity>
-		<activity android:name=".ui.SettingsActivity" android:label="@string/title_settings">
-		</activity>
-		<activity android:name=".ui.HistoryActivity" android:label="@string/title_history">
-		</activity>
-		<activity android:name=".ui.CloudActivity" android:label="@string/title_cloud">
-		</activity>
-
+		<activity android:name=".app.SettingsActivity" android:label="@string/title_settings" />
+		
 		<receiver android:name=".receiver.SaveSleepReceiver"
 			android:label="@string/app_name">
 			<intent-filter>
@@ -32,28 +30,21 @@
 			</intent-filter>
 		</receiver>
 
-		<activity android:name=".ui.CalibrateForResultActivity"
-			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog">
-		</activity>
-		<activity android:name=".ui.ReviewSleepActivity">
-		</activity>
-		<activity android:name=".ui.SaveSleepActivity"
-			android:clearTaskOnLaunch="true" android:excludeFromRecents="true">
-		</activity>
-
 		<service android:name=".service.SleepAccelerometerService"
-			android:icon="@drawable/icon" android:label="@string/app_name">
-		</service>
+			android:icon="@drawable/icon" android:label="@string/app_name" />
 
 		<provider android:name=".db.SleepContentProvider"
-			android:authorities="com.androsz.electricsleep.db.sleepcontentprovider"></provider>
+			android:authorities="com.androsz.electricsleep.db.sleepcontentprovider" />
 
 	</application>
+
 	<uses-sdk android:minSdkVersion="8" />
 
+	<uses-feature android:name="android.hardware.sensor.accelerometer"
+		android:required="true" />
 
-	<uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
 
 </manifest> 

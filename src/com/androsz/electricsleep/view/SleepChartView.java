@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui.widget;
+package com.androsz.electricsleep.view;
 
 import java.io.IOException;
 import java.io.Serializable;

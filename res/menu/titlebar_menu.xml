@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/menuItemDonate" android:title="@string/donate"></item><item android:title="@string/title_settings" android:id="@+id/menuItemSettings" android:icon="@drawable/ic_menu_preferences"></item>
-	
-
-
+	<item android:id="@+id/menuItemDonate" android:title="@string/donate"></item>
+	<item android:title="@string/title_settings" android:id="@+id/menuItemSettings"
+		android:icon="@drawable/ic_menu_preferences"></item>
 </menu>

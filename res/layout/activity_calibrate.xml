@@ -100,7 +100,7 @@
 			android:onClick="onLeftButtonClick"></Button>
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_gravity="bottom|right"
-			android:layout_weight="1" android:onClick="onRightButtonClick"
-			android:id="@+id/rightButton"></Button>
+			android:onClick="onRightButtonClick"
+			android:id="@+id/rightButton" android:layout_weight="1"></Button>
 	</LinearLayout>
 </LinearLayout>

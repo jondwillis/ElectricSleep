@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 
 	@Override
 	protected int getContentAreaLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.activity_save_sleep;
 	}
 
@@ -51,6 +50,10 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 		saveIntent.putExtras(getIntent().getExtras());
 		sendBroadcast(saveIntent);
+		finish();
+	}
+	
+	public void onDiscardClick(final View v) {
 		finish();
 	}
 }

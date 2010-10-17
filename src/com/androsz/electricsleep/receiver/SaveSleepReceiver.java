@@ -11,10 +11,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.androsz.electricsleep.app.ReviewSleepActivity;
+import com.androsz.electricsleep.app.SettingsActivity;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
-import com.androsz.electricsleep.ui.ReviewSleepActivity;
-import com.androsz.electricsleep.ui.SettingsActivity;
 
 public class SaveSleepReceiver extends BroadcastReceiver {
 

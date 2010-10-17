@@ -1,4 +1,4 @@
-package com.androsz.electricsleep.ui;
+package com.androsz.electricsleep.app;
 
 import java.util.Calendar;
 import java.util.List;
@@ -19,9 +19,9 @@ import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
-import com.androsz.electricsleep.ui.widget.SleepChartView;
 import com.androsz.electricsleep.util.Alarm;
 import com.androsz.electricsleep.util.AlarmDatabase;
+import com.androsz.electricsleep.view.SleepChartView;
 
 public class SleepActivity extends CustomTitlebarActivity {
 
