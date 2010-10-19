@@ -21,6 +21,7 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.provider.Settings;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.app.CalibrationWizardActivity;
@@ -56,6 +57,7 @@ public class SleepAccelerometerService extends Service implements
 	private int maxSensitivity = SettingsActivity.DEFAULT_MAX_SENSITIVITY;
 	private int alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
+	private boolean airplaneMode = true;
 	private boolean useAlarm = false;
 	private int alarmWindow = 30;
 
@@ -207,7 +209,7 @@ public class SleepAccelerometerService extends Service implements
 
 				dateStarted = new Date();
 			}
-		}).run();
+		}).start();
 	}
 
 	@Override
@@ -231,10 +233,12 @@ public class SleepAccelerometerService extends Service implements
 
 				currentSeriesX = new ArrayList<Double>();
 				currentSeriesY = new ArrayList<Double>();
+				
+				toggleAirplaneMode(false);
 
 				stopForeground(true);
 			}
-		}).run();
+		}).start();
 
 	}
 
@@ -321,8 +325,10 @@ public class SleepAccelerometerService extends Service implements
 
 			useAlarm = intent.getBooleanExtra("useAlarm", useAlarm);
 			alarmWindow = intent.getIntExtra("alarmWindow", alarmWindow);
+			airplaneMode = intent.getBooleanExtra("airplaneMode", airplaneMode);
 			currentSeriesX = new ArrayList<Double>();
 			currentSeriesY = new ArrayList<Double>();
+			toggleAirplaneMode(true);
 		}
 		return startId;
 	}
@@ -357,5 +363,17 @@ public class SleepAccelerometerService extends Service implements
 			}
 		}
 		return false;
+	}
+
+	private void toggleAirplaneMode(boolean enabling) {
+		if(airplaneMode)
+		{
+		    Settings.System.putInt(getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 
+		                            enabling ? 1 : 0);
+		    
+		    Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+		    intent.putExtra("state", enabling);
+		    sendBroadcast(intent);
+		}
 	}
 }

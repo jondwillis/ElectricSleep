@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="summary_pref_airplane_mode_off">Airplane mode will not be automatically enabled</string>
+    <string name="summary_pref_airplane_mode_on">Airplane mode will be enabled while sleeping</string>
+    <string name="title_pref_airplane_mode">Airplane mode auto on during sleep</string>
+    <string name="pref_airplane_mode">airplaneMode</string>
+    <string name="title_misc">Miscellaneous</string>
 	<string name="rate_title">Rate how easily you awoke and how refreshed you
 		feel:</string>
 	<string name="save">Save</string>

@@ -78,7 +78,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 		} else {
 			mTextView.setVisibility(View.GONE);
 			mListView.setVisibility(View.VISIBLE);
-			
+
 			final SleepHistoryCursorAdapter sleepHistory = new SleepHistoryCursorAdapter(
 					this, cursor);
 			mListView.setAdapter(sleepHistory);
@@ -117,7 +117,8 @@ public class HistoryActivity extends CustomTitlebarActivity {
 														"Deleted sleep record.",
 														Toast.LENGTH_SHORT)
 														.show();
-												mListView.removeAllViewsInLayout();
+												mListView
+														.removeAllViewsInLayout();
 												showResults(query);
 											}
 										})

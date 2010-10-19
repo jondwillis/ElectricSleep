@@ -13,8 +13,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
@@ -78,7 +76,13 @@ public class SleepActivity extends CustomTitlebarActivity {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 
-			sleepChartView = new SleepChartView(SleepActivity.this);
+			sleepChartView = (SleepChartView) findViewById(R.id.sleep_movement_chart);
+			// sleepChartView.xySeriesMovement.mX = (List<Double>) intent
+			// .getSerializableExtra("currentSeriesX");
+
+			// sleepChartView.xySeriesMovement.mY = (List<Double>) intent
+			// .getSerializableExtra("currentSeriesY");
+
 			sleepChartView
 					.syncByCopying((List<Double>) intent
 							.getSerializableExtra("currentSeriesX"),
@@ -90,7 +94,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 									SettingsActivity.DEFAULT_MAX_SENSITIVITY),
 							intent.getIntExtra("alarm",
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
-			addChartView();
 
 			if (sleepChartView.makesSenseToDisplay()
 					&& waitForSeriesData != null) {
@@ -108,19 +111,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 			finish();
 		}
 	};
-
-	private void addChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (layout.getChildCount() == 0) {
-			// if (sleepChartView == null) {
-			// sleepChartView = new SleepChartView(this);
-			// }
-			// sendBroadcast(new
-			// Intent(SleepAccelerometerService.POKE_SYNC_CHART));
-			layout.addView(sleepChartView, new LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		}
-	}
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -150,7 +140,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 		if (waitForSeriesData != null && waitForSeriesData.isShowing()) {
 			waitForSeriesData.dismiss();
 		}
-		removeChartView();
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(syncChartReceiver);
 		super.onPause();
@@ -180,20 +169,24 @@ public class SleepActivity extends CustomTitlebarActivity {
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
 
-		final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
-				"com.android.deskclock");
-		final Alarm alarm = adb.getNearestEnabledAlarm();
-		final Calendar alarmTime = alarm.getNearestAlarmDate();
+		try {
+			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
+					"com.android.deskclock");
+			final Alarm alarm = adb.getNearestEnabledAlarm();
+			final Calendar alarmTime = alarm.getNearestAlarmDate();
 
-		java.text.DateFormat df = DateFormat.getDateFormat(this);// .getDateFormat(this);
-		String dateTime = df.format(alarmTime.getTime());
-		df = DateFormat.getTimeFormat(this);
-		dateTime = df.format(alarmTime.getTime()) + " on " + dateTime;
-		// CharSequence cs = "":
-		// StringBuilder sb = new StringBuilder();
-		// Formatter formatter = new Formatter();
-		Toast.makeText(this, "Bound to alarm @ " + dateTime, Toast.LENGTH_LONG)
-				.show();
+			java.text.DateFormat df = DateFormat.getDateFormat(this);// .getDateFormat(this);
+			String dateTime = df.format(alarmTime.getTime());
+			df = DateFormat.getTimeFormat(this);
+			dateTime = df.format(alarmTime.getTime()) + " on " + dateTime;
+			// CharSequence cs = "":
+			// StringBuilder sb = new StringBuilder();
+			// Formatter formatter = new Formatter();
+			Toast.makeText(this, "Bound to alarm @ " + dateTime,
+					Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
@@ -227,13 +220,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 	public void onTitleButton2Click(final View v) {
 		startActivity(AlarmDatabase.changeAlarmSettings(getPackageManager()));
-	}
-
-	private void removeChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (sleepChartView != null && sleepChartView.getParent() == layout) {
-			layout.removeView(sleepChartView);
-		}
 	}
 
 	private void showWaitForSeriesDataIfNeeded() {

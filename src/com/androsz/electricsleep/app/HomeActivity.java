@@ -28,7 +28,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 	private SleepChartView sleepChartView;
 
 	private void addChartView() {
-		findViewById(R.id.home_container);
 		sleepChartView = (SleepChartView) findViewById(R.id.home_sleep_chart);
 
 		final Cursor cursor = managedQuery(SleepContentProvider.CONTENT_URI,
@@ -51,66 +50,58 @@ public class HomeActivity extends CustomTitlebarActivity {
 	private void enforceCalibrationBeforeStartingSleep(final Intent service,
 			final Intent activity) {
 
-		new Thread(new Runnable() {
+		final SharedPreferences userPrefs = getSharedPreferences(
+				getString(R.string.prefs_version), Context.MODE_PRIVATE);
+		final int prefsVersion = userPrefs.getInt(
+				getString(R.string.prefs_version), 0);
+		String message = "";
+		if (prefsVersion == 0) {
+			message = getString(R.string.message_not_calibrated);
+		} else if (prefsVersion != getResources().getInteger(
+				R.integer.prefs_version)) {
+			message = getString(R.string.message_prefs_not_compatible);
+		}
 
-			@Override
-			public void run() {
-				final SharedPreferences userPrefs = getSharedPreferences(
-						getString(R.string.prefs_version), Context.MODE_PRIVATE);
-				final int prefsVersion = userPrefs.getInt(
-						getString(R.string.prefs_version), 0);
-				String message = "";
-				if (prefsVersion == 0) {
-					message = getString(R.string.message_not_calibrated);
-				} else if (prefsVersion != getResources().getInteger(
-						R.integer.prefs_version)) {
-					message = getString(R.string.message_prefs_not_compatible);
-				}
-
-				if (message.length() > 0) {
-					message += getString(R.string.message_recommend_calibration);
-					final AlertDialog.Builder dialog = new AlertDialog.Builder(
-							HomeActivity.this)
-							.setMessage(message)
-							.setCancelable(false)
-							.setPositiveButton("Calibrate",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											startActivity(new Intent(
-													HomeActivity.this,
-													CalibrationWizardActivity.class));
-										}
-									})
-							.setNeutralButton("Manual",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											startActivity(new Intent(
-													HomeActivity.this,
-													SettingsActivity.class));
-										}
-									})
-							.setNegativeButton("Cancel",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											dialog.cancel();
-										}
-									});
-					dialog.show();
-				} else if (service != null && activity != null) {
-					startService(service);
-					startActivity(activity);
-				}
-			}
-		}).run();
+		if (message.length() > 0) {
+			message += getString(R.string.message_recommend_calibration);
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(
+					HomeActivity.this)
+					.setMessage(message)
+					.setCancelable(false)
+					.setPositiveButton("Calibrate",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											CalibrationWizardActivity.class));
+								}
+							})
+					.setNeutralButton("Manual",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											SettingsActivity.class));
+								}
+							})
+					.setNegativeButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									dialog.cancel();
+								}
+							});
+			dialog.show();
+		} else if (service != null && activity != null) {
+			startService(service);
+			startActivity(activity);
+		}
 	}
 
 	@Override
@@ -194,6 +185,8 @@ public class HomeActivity extends CustomTitlebarActivity {
 						getString(R.string.pref_use_alarm), false);
 				final int alarmWindow = Integer.parseInt(userPrefs.getString(
 						getString(R.string.pref_alarm_window), "-1"));
+				final boolean airplaneMode = userPrefs.getBoolean(
+						getString(R.string.pref_airplane_mode), false);
 
 				if (maxSensitivity < 0 || minSensitivity < 0
 						|| alarmTriggerSensitivity < 0 || useAlarm
@@ -244,10 +237,11 @@ public class HomeActivity extends CustomTitlebarActivity {
 				serviceIntent.putExtra("alarm", alarmTriggerSensitivity);
 				serviceIntent.putExtra("useAlarm", useAlarm);
 				serviceIntent.putExtra("alarmWindow", alarmWindow);
+				serviceIntent.putExtra("airplaneMode", airplaneMode);
 				enforceCalibrationBeforeStartingSleep(serviceIntent,
 						new Intent(HomeActivity.this, SleepActivity.class));
 			}
-		}).run();
+		}).start();
 	}
 
 	public void onTitleButton1Click(final View v) {

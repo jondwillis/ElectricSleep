@@ -20,14 +20,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	private SleepChartView sleepChartView;
 
 	private void addChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (layout.getChildCount() == 0) {
-			if (sleepChartView == null) {
-				sleepChartView = new SleepChartView(this);
-			}
-			layout.addView(sleepChartView, new LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		}
+		sleepChartView = (SleepChartView) findViewById(R.id.sleep_movement_chart);
 
 		final Uri uri = getIntent().getData();
 		Cursor cursor;
@@ -98,7 +91,6 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		removeChartView();
 	}
 
 	@Override
@@ -121,19 +113,12 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 			public void run() {
 				addChartView();
 			}
-		}).run();
+		}).start();
 	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable("sleepChartView", sleepChartView);
-	}
-
-	private void removeChartView() {
-		final LinearLayout layout = (LinearLayout) findViewById(R.id.sleepMovementChart);
-		if (sleepChartView.getParent() == layout) {
-			layout.removeView(sleepChartView);
-		}
 	}
 }

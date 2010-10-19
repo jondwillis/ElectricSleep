@@ -183,33 +183,18 @@ public class SleepHistoryDatabase {
 	 * @return rowId or -1 if failed
 	 * @throws IOException
 	 */
-	public long addSleep(final Context context, final String sleepDateTime,
+	public void addSleep(final Context context, final String sleepDateTime,
 			final List<Double> sleepChartDataX,
 			final List<Double> sleepChartDataY, final int min, final int max,
 			final int alarm) throws IOException {
 
-		/*
-		 * new Thread(new Runnable() {
-		 * 
-		 * @Override public void run() { try {
-		 */
-		/*
-		 * final ProgressDialog waitForSaveDialog = new ProgressDialog(context);
-		 * waitForSaveDialog.setMessage(context
-		 * .getText(R.string.dialog_wait_for_sleep_data_message)); //
-		 * waitForSeriesData.setContentView(R.layout.dialog_wait_for_data);
-		 * waitForSaveDialog.setCancelable(false); waitForSaveDialog.show();
-		 */
-
-		final long result = databaseOpenHelper.addSleep(sleepDateTime,
-				sleepChartDataX, sleepChartDataY, min, max, alarm);
-
-		// waitForSaveDialog.dismiss();
-		/*
-		 * } catch (final IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } } });
-		 */
-		return result;
+		try {
+			databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
+					sleepChartDataY, min, max, alarm);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void close() {

@@ -50,41 +50,62 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		new Thread(new Runnable() {
 
-		getPreferenceScreen().findPreference(getText(R.string.pref_alarms))
-				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public void run() {
+				getPreferenceScreen().findPreference(
+						getText(R.string.pref_alarms))
+						.setOnPreferenceClickListener(
+								new OnPreferenceClickListener() {
 
-					@Override
-					public boolean onPreferenceClick(final Preference preference) {
-						startActivity(AlarmDatabase
-								.changeAlarmSettings(getPackageManager()));
-						// startActivity(new Intent(SettingsActivity.this,
-						// AlarmsActivity.class));
-						return true;
-					}
-				});
+									@Override
+									public boolean onPreferenceClick(
+											final Preference preference) {
+										startActivity(AlarmDatabase
+												.changeAlarmSettings(getPackageManager()));
+										// startActivity(new
+										// Intent(SettingsActivity.this,
+										// AlarmsActivity.class));
+										return true;
+									}
+								});
 
-		getPreferenceScreen()
-				.findPreference(getText(R.string.pref_calibration))
-				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+				getPreferenceScreen().findPreference(
+						getText(R.string.pref_calibration))
+						.setOnPreferenceClickListener(
+								new OnPreferenceClickListener() {
 
-					@Override
-					public boolean onPreferenceClick(final Preference preference) {
-						startActivity(new Intent(SettingsActivity.this,
-								CalibrationWizardActivity.class));
-						return true;
-					}
-				});
+									@Override
+									public boolean onPreferenceClick(
+											final Preference preference) {
+										startActivity(new Intent(
+												SettingsActivity.this,
+												CalibrationWizardActivity.class));
+										return true;
+									}
+								});
+			}
+		}).start();
+
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 
-		final SharedPreferences.Editor ed = getSharedPreferences(
-				getString(R.string.prefs_version), Context.MODE_PRIVATE).edit();
-		ed.putInt(getString(R.string.prefs_version),
-				getResources().getInteger(R.integer.prefs_version));
-		ed.commit();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				final SharedPreferences.Editor ed = getSharedPreferences(
+						getString(R.string.prefs_version), Context.MODE_PRIVATE)
+						.edit();
+				ed.putInt(getString(R.string.prefs_version), getResources()
+						.getInteger(R.integer.prefs_version));
+				ed.commit();
+			}
+		}).start();
+
 	}
 }
