@@ -13,7 +13,7 @@ import com.androsz.electricsleep.util.AlarmDatabase;
 
 public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 
-	public static int DEFAULT_MAX_SENSITIVITY = 100;
+	public static int DEFAULT_MAX_SENSITIVITY = 500;
 	public static int DEFAULT_MIN_SENSITIVITY = 0;
 	public static int DEFAULT_ALARM_SENSITIVITY = -1;
 

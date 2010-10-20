@@ -1,14 +1,14 @@
 package com.androsz.electricsleep.app;
 
-import java.io.IOException;
-import java.io.StreamCorruptedException;
-import java.util.List;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
+import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
+import android.view.View;
+import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
@@ -18,6 +18,7 @@ import com.androsz.electricsleep.view.SleepChartView;
 public class ReviewSleepActivity extends CustomTitlebarActivity {
 
 	private SleepChartView sleepChartView;
+	private long rowId;
 
 	private void addChartView() {
 		sleepChartView = (SleepChartView) findViewById(R.id.sleep_movement_chart);
@@ -33,6 +34,8 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 				finish();
 			} else {
 				cursor.moveToPosition((int) uriEnding);
+				rowId = cursor.getPosition();
+				sleepChartView.syncWithCursor(cursor);
 			}
 		} else {
 			cursor = managedQuery(uri, null, null, null, null);
@@ -41,51 +44,56 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 				finish();
 			} else {
 				cursor.moveToFirst();
+				rowId = cursor.getPosition();
+				sleepChartView.syncWithCursor(cursor);
 			}
-		}
-
-		final int dateTimeIndex = cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME);
-		final int xIndex = cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_X);
-		final int yIndex = cursor
-				.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_Y);
-		final int min = cursor
-				.getInt(cursor
-						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN));
-		final int max = cursor
-				.getInt(cursor
-						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX));
-		final int alarm = cursor
-				.getInt(cursor
-						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
-
-		this.setTitle("Sleep: " + cursor.getString(dateTimeIndex));
-
-		try {
-			sleepChartView.syncByCopying((List<Double>) SleepHistoryDatabase
-					.byteArrayToObject(cursor.getBlob(xIndex)),
-					(List<Double>) SleepHistoryDatabase
-							.byteArrayToObject(cursor.getBlob(yIndex)), min,
-					max, alarm);
-		} catch (final StreamCorruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			cursor.close();
 		}
 	}
 
 	@Override
 	protected int getContentAreaLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.activity_sleep;
+	}
+
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		showTitleButton1(android.R.drawable.ic_menu_delete);
+	}
+
+	public void onTitleButton1Click(final View v) {
+		final SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
+		try {
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(
+					ReviewSleepActivity.this)
+					.setMessage("Delete this sleep record?")
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+
+									shdb.deleteRow(rowId);
+									Toast.makeText(ReviewSleepActivity.this,
+											"Deleted sleep record.",
+											Toast.LENGTH_SHORT).show();
+									finish();
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									dialog.cancel();
+								}
+							});
+			dialog.show();
+		} finally {
+			shdb.close();
+		}
 	}
 
 	@Override
@@ -107,13 +115,7 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				addChartView();
-			}
-		}).start();
+		addChartView();
 	}
 
 	@Override

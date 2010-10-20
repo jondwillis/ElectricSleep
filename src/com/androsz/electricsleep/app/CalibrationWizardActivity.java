@@ -20,8 +20,8 @@ import android.widget.ViewFlipper;
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 
-public class CalibrationWizardActivity extends CustomTitlebarActivity implements
-		OnInitListener {
+public class CalibrationWizardActivity extends CustomTitlebarWizardActivity
+		implements OnInitListener {
 
 	private class DelayedStartAlarmCalibrationTask extends
 			AsyncTask<Void, Void, Void> {
@@ -46,7 +46,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			stopService(i);
 			i.putExtra("interval", ALARM_CALIBRATION_TIME);
 			i.putExtra("min", minCalibration);
-			i.putExtra("max", maxCalibration);
+			i.putExtra("alarm", SettingsActivity.DEFAULT_MAX_SENSITIVITY);
 			startService(i);
 		}
 
@@ -54,50 +54,6 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		protected void onPreExecute() {
 			startActivityForResult(new Intent(CalibrationWizardActivity.this,
 					CalibrateForResultActivity.class), R.id.alarmTest);
-
-			notifyUser(CalibrationWizardActivity.this
-					.getString(R.string.starting_in));
-		}
-	}
-
-	private class DelayedStartMaxCalibrationTask extends
-			AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(final Void... params) {
-
-			try {
-				Thread.sleep(DELAYED_START_TIME);
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onCancelled() {
-			final Intent i = new Intent(CalibrationWizardActivity.this,
-					SleepAccelerometerService.class);
-			stopService(i);
-		}
-
-		@Override
-		protected void onPostExecute(final Void result) {
-			notifyUser(CalibrationWizardActivity.this
-					.getString(R.string.start_moving));
-			final Intent i = new Intent(CalibrationWizardActivity.this,
-					SleepAccelerometerService.class);
-			stopService(i);
-			i.putExtra("interval", MAXIMUM_CALIBRATION_TIME);
-			i.putExtra("min", minCalibration);
-			i.putExtra("max", SettingsActivity.DEFAULT_MAX_SENSITIVITY);
-			startService(i);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			startActivityForResult(new Intent(CalibrationWizardActivity.this,
-					CalibrateForResultActivity.class), R.id.maxTest);
 
 			notifyUser(CalibrationWizardActivity.this
 					.getString(R.string.starting_in));
@@ -134,7 +90,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 			stopService(i);
 			i.putExtra("interval", MINIMUM_CALIBRATION_TIME);
 			i.putExtra("min", SettingsActivity.DEFAULT_MIN_SENSITIVITY);
-			i.putExtra("max", SettingsActivity.DEFAULT_MAX_SENSITIVITY);
+			i.putExtra("alarm", SettingsActivity.DEFAULT_MAX_SENSITIVITY);
 			startService(i);
 		}
 
@@ -148,10 +104,7 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		}
 	}
 
-	private ViewFlipper viewFlipper;
-
 	private int minCalibration;
-	private int maxCalibration;
 	private int alarmTriggerCalibration;
 
 	private TextToSpeech textToSpeech;
@@ -164,8 +117,6 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 
 	public static final int MINIMUM_CALIBRATION_TIME = 30000;
 
-	private static final int MAXIMUM_CALIBRATION_TIME = 10000;
-
 	private static final int ALARM_CALIBRATION_TIME = 5000;
 
 	private static final int DELAYED_START_TIME = 5000;
@@ -175,39 +126,18 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		startActivityForResult(checkIntent, TEST_TTS_INSTALLED);
 	}
-	
 
 	public void onTitleButton1Click(final View v) {
-		int messageId = (useTTS = !useTTS) ? R.string.message_tts_on : R.string.message_tts_off;
+		int messageId = (useTTS = !useTTS) ? R.string.message_tts_on
+				: R.string.message_tts_off;
+
+		showTitleButton1(useTTS ? android.R.drawable.ic_lock_silent_mode_off : android.R.drawable.ic_lock_silent_mode);
 		notifyUser(getString(messageId));
 	}
 
-	private boolean doWizardActivity() {
-		boolean didActivity = false;
-		final int currentChildId = viewFlipper.getCurrentView().getId();
-		switch (currentChildId) {
-		case R.id.minTest:
-			currentTask = new DelayedStartMinCalibrationTask().execute(null,
-					null, null);
-			didActivity = true;
-			break;
-		case R.id.maxTest:
-			currentTask = new DelayedStartMaxCalibrationTask().execute(null,
-					null, null);
-			didActivity = true;
-			break;
-		case R.id.alarmTest:
-			currentTask = new DelayedStartAlarmCalibrationTask().execute(null,
-					null, null);
-			didActivity = true;
-			break;
-		}
-		return didActivity;
-	}
-
 	@Override
-	protected int getContentAreaLayoutId() {
-		return R.layout.activity_calibrate;
+	protected int getWizardLayoutId() {
+		return R.layout.wizard_calibration;
 	}
 
 	private void notifyUser(final String message) {
@@ -242,16 +172,6 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 					+ minCalibration);
 			stopService(new Intent(this, SleepAccelerometerService.class));
 			break;
-		case R.id.maxTest:
-			maxCalibration = resultCode;
-			final float ratioMax = (float) Math.abs(MAXIMUM_CALIBRATION_TIME
-					- MINIMUM_CALIBRATION_TIME)
-					/ MINIMUM_CALIBRATION_TIME;
-			maxCalibration += minCalibration / ratioMax;
-			notifyUser(getString(R.string.maximum_sensitivity_set_to) + " "
-					+ maxCalibration);
-			stopService(new Intent(this, SleepAccelerometerService.class));
-			break;
 		case R.id.alarmTest:
 			alarmTriggerCalibration = resultCode;
 			final float ratioAlarm = (float) Math.abs(ALARM_CALIBRATION_TIME
@@ -282,16 +202,10 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 	}
 
 	@Override
-	public void onBackPressed() {
-		onLeftButtonClick(null);
-	}
-
-	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		showTitleButton1(R.drawable.ic_title_alarm);
-		viewFlipper = (ViewFlipper) findViewById(R.id.wizardViewFlipper);
-		setupNavigationButtons();
+		showTitleButton1(android.R.drawable.ic_lock_silent_mode_off);
+		checkTextToSpeechInstalled();
 	}
 
 	@Override
@@ -306,20 +220,6 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		ttsAvailable = true;
 	}
 
-	public void onLeftButtonClick(final View v) {
-
-		if (viewFlipper.getDisplayedChild() != 0) {
-			viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.slide_left_in));
-			viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.slide_left_out));
-			viewFlipper.showPrevious();
-			setupNavigationButtons();
-		} else {
-			super.onBackPressed();
-		}
-	}
-
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedState) {
 
@@ -328,11 +228,10 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		viewFlipper.setDisplayedChild(savedState.getInt("child"));
 
 		minCalibration = savedState.getInt("min");
-		maxCalibration = savedState.getInt("max");
 		alarmTriggerCalibration = savedState.getInt("alarm");
 
 		useTTS = savedState.getBoolean("useTTS");
-		
+
 		if (textToSpeech == null) {
 			textToSpeech = new TextToSpeech(this, this);
 		}
@@ -340,40 +239,28 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		setupNavigationButtons();
 	}
 
-	public void onRightButtonClick(final View v) {
-		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-				R.anim.slide_right_in));
-		viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-				R.anim.slide_right_out));
+	protected void onPrepareLastSlide() {
+		final TextView textViewMin = (TextView) findViewById(R.id.minResult);
+		textViewMin.setText("" + minCalibration);
+		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
+		textViewAlarm.setText("" + alarmTriggerCalibration);
+	}
 
-		final int lastChildIndex = viewFlipper.getChildCount() - 1;
-		final int displayedChildIndex = viewFlipper.getDisplayedChild();
+	protected void onFinishWizardActivity() {
+		final SharedPreferences.Editor ed = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext()).edit();
+		ed.putInt(getString(R.string.pref_minimum_sensitivity), minCalibration);
+		ed.putInt(getString(R.string.pref_alarm_trigger_sensitivity),
+				alarmTriggerCalibration);
+		ed.commit();
 
-		if (displayedChildIndex == lastChildIndex) {
-			final SharedPreferences.Editor ed = PreferenceManager
-					.getDefaultSharedPreferences(getBaseContext()).edit();
-			ed.putInt(getString(R.string.pref_minimum_sensitivity),
-					minCalibration);
-			ed.putInt(getString(R.string.pref_maximum_sensitivity),
-					maxCalibration);
-			ed.putInt(getString(R.string.pref_alarm_trigger_sensitivity),
-					alarmTriggerCalibration);
-			ed.commit();
-
-			final SharedPreferences.Editor ed2 = getSharedPreferences(
-					getString(R.string.prefs_version), Context.MODE_PRIVATE)
-					.edit();
-			ed2.putInt(getString(R.string.prefs_version), getResources()
-					.getInteger(R.integer.prefs_version));
-			ed2.commit();
-			ed.commit();
-			finish();
-		} else {
-			if (!doWizardActivity()) {
-				viewFlipper.showNext();
-				setupNavigationButtons();
-			}
-		}
+		final SharedPreferences.Editor ed2 = getSharedPreferences(
+				getString(R.string.prefs_version), Context.MODE_PRIVATE).edit();
+		ed2.putInt(getString(R.string.prefs_version), getResources()
+				.getInteger(R.integer.prefs_version));
+		ed2.commit();
+		ed.commit();
+		finish();
 	}
 
 	@Override
@@ -382,35 +269,26 @@ public class CalibrationWizardActivity extends CustomTitlebarActivity implements
 		outState.putInt("child", viewFlipper.getDisplayedChild());
 
 		outState.putInt("min", minCalibration);
-		outState.putInt("max", maxCalibration);
 		outState.putInt("alarm", alarmTriggerCalibration);
 		outState.putBoolean("useTTS", useTTS);
 	}
 
-	private void setupNavigationButtons() {
-		final Button leftButton = (Button) findViewById(R.id.leftButton);
-		final Button rightButton = (Button) findViewById(R.id.rightButton);
-		final int lastChildIndex = viewFlipper.getChildCount() - 1;
-		final int displayedChildIndex = viewFlipper.getDisplayedChild();
-		if (displayedChildIndex == 0) {
-			leftButton.setText(R.string.exit);
-			rightButton.setText(R.string.next);
-			checkTextToSpeechInstalled();
-		} else if (displayedChildIndex == lastChildIndex) {
-			leftButton.setText(R.string.previous);
-			rightButton.setText(R.string.finish);
-
-			final TextView textViewMin = (TextView) findViewById(R.id.minResult);
-			textViewMin.setText("" + minCalibration);
-			final TextView textViewMax = (TextView) findViewById(R.id.maxResult);
-			textViewMax.setText("" + maxCalibration);
-			final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
-			textViewAlarm.setText("" + alarmTriggerCalibration);
-
-		} else if (displayedChildIndex > 0
-				&& displayedChildIndex < lastChildIndex) {
-			leftButton.setText(R.string.previous);
-			rightButton.setText(R.string.next);
+	@Override
+	protected boolean onWizardActivity() {
+		boolean didActivity = false;
+		final int currentChildId = viewFlipper.getCurrentView().getId();
+		switch (currentChildId) {
+		case R.id.minTest:
+			currentTask = new DelayedStartMinCalibrationTask().execute(null,
+					null, null);
+			didActivity = true;
+			break;
+		case R.id.alarmTest:
+			currentTask = new DelayedStartAlarmCalibrationTask().execute(null,
+					null, null);
+			didActivity = true;
+			break;
 		}
+		return didActivity;
 	}
 }

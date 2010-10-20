@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/wizardViewFlipper" android:layout_height="wrap_content"
+	android:layout_width="match_parent">
+	<LinearLayout android:layout_height="wrap_content"
+		android:orientation="vertical" android:layout_width="match_parent">
+		<TextView style="@style/TextHeader" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="@string/calibrate_title_welcome"
+			android:layout_gravity="center_horizontal"></TextView>
+
+		<TextView android:layout_height="wrap_content" style="@style/TextBody"
+			android:text="@string/calibrate_description_welcome"
+			android:layout_width="wrap_content"></TextView>
+	</LinearLayout>
+	<LinearLayout android:layout_height="wrap_content"
+		android:orientation="vertical" android:layout_width="match_parent">
+		<TextView style="@style/TextHeader" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_gravity="center_horizontal"
+			android:text="@string/calibrate_title_placement"></TextView>
+
+		<TextView android:layout_height="wrap_content" style="@style/TextBody"
+			android:text="@string/calibrate_description_placement"
+			android:layout_width="wrap_content"></TextView>
+	</LinearLayout>
+	<LinearLayout android:layout_height="wrap_content"
+		android:orientation="vertical" android:layout_width="match_parent"
+		android:id="@+id/minTest">
+		<TextView android:layout_height="wrap_content" style="@style/TextHeader"
+			android:text="@string/calibrate_title_min" android:layout_width="wrap_content"
+			android:layout_gravity="center_horizontal"></TextView>
+
+		<TextView android:layout_height="wrap_content"
+			android:text="@string/calibrate_description_min" style="@style/TextBody"
+			android:layout_width="match_parent"></TextView>
+		<TextView android:text="@string/calibrate_directions_min"
+			style="@style/TextBody" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:paddingTop="12dip"></TextView>
+	</LinearLayout>
+
+	<LinearLayout android:layout_height="wrap_content"
+		android:orientation="vertical" android:layout_width="match_parent"
+		android:id="@+id/alarmTest">
+		<TextView android:layout_height="wrap_content" style="@style/TextHeader"
+			android:layout_width="wrap_content" android:layout_gravity="center_horizontal"
+			android:text="@string/calibrate_title_alarm"></TextView>
+
+		<TextView android:layout_height="wrap_content" style="@style/TextBody"
+			android:layout_width="match_parent" android:text="@string/calibrate_description_alarm"></TextView>
+		<TextView style="@style/TextBody" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:paddingTop="12dip"
+			android:text="@string/calibrate_directions_alarm"></TextView>
+	</LinearLayout>
+	<LinearLayout android:layout_height="wrap_content"
+		android:orientation="vertical" android:layout_width="match_parent">
+		<TextView android:layout_height="wrap_content" style="@style/TextHeader"
+			android:layout_width="wrap_content" android:layout_gravity="center_horizontal"
+			android:text="@string/calibrate_title_results"></TextView>
+
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="match_parent" style="@style/TextHeaderTwo"
+			android:text="@string/calibrate_title_min"></TextView>
+		<TextView style="@style/TextBody" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:paddingTop="12dip"
+			android:id="@+id/minResult"></TextView>
+		<TextView style="@style/TextBody" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:paddingTop="12dip"
+			android:id="@+id/maxResult"></TextView>
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="match_parent" style="@style/TextHeaderTwo"
+			android:text="@string/calibrate_title_alarm"></TextView>
+		<TextView style="@style/TextBody" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:paddingTop="12dip"
+			android:id="@+id/alarmResult"></TextView>
+	</LinearLayout>
+</ViewFlipper>

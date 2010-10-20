@@ -54,7 +54,6 @@ public class SleepAccelerometerService extends Service implements
 	private int totalNumberOfSensorChanges = 0;
 
 	private int minSensitivity = SettingsActivity.DEFAULT_MIN_SENSITIVITY;
-	private int maxSensitivity = SettingsActivity.DEFAULT_MAX_SENSITIVITY;
 	private int alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
 	private boolean airplaneMode = true;
@@ -75,7 +74,6 @@ public class SleepAccelerometerService extends Service implements
 			i.putExtra("currentSeriesX", currentSeriesX);
 			i.putExtra("currentSeriesY", currentSeriesY);
 			i.putExtra("min", minSensitivity);
-			i.putExtra("max", maxSensitivity);
 			i.putExtra("alarm", alarmTriggerSensitivity);
 			sendBroadcast(i);
 			// }
@@ -99,7 +97,6 @@ public class SleepAccelerometerService extends Service implements
 		saveIntent.putExtra("currentSeriesX", currentSeriesX);
 		saveIntent.putExtra("currentSeriesY", currentSeriesY);
 		saveIntent.putExtra("min", minSensitivity);
-		saveIntent.putExtra("max", maxSensitivity);
 		saveIntent.putExtra("alarm", alarmTriggerSensitivity);
 
 		// send start/end time as well
@@ -258,7 +255,7 @@ public class SleepAccelerometerService extends Service implements
 		final double x = currentTime;
 		final double y = java.lang.Math.max(
 				minSensitivity,
-				java.lang.Math.min(maxSensitivity, deltaTime
+				java.lang.Math.min(alarmTriggerSensitivity, deltaTime
 						/ averageTimeBetweenUpdates));
 
 		if (deltaTime >= updateInterval) {
@@ -290,7 +287,6 @@ public class SleepAccelerometerService extends Service implements
 				i.putExtra("x", x);
 				i.putExtra("y", y);
 				i.putExtra("min", minSensitivity);
-				i.putExtra("max", maxSensitivity);
 				i.putExtra("alarm", alarmTriggerSensitivity);
 				sendBroadcast(i);
 			}
@@ -318,15 +314,14 @@ public class SleepAccelerometerService extends Service implements
 	public int onStartCommand(final Intent intent, final int flags,
 			final int startId) {
 		if (intent != null && startId == 1) {
-			updateInterval = intent.getIntExtra("interval", updateInterval);
-			minSensitivity = intent.getIntExtra("min", minSensitivity);
-			maxSensitivity = intent.getIntExtra("max", maxSensitivity);
+			updateInterval = intent.getIntExtra("interval", CalibrationWizardActivity.MINIMUM_CALIBRATION_TIME);
+			minSensitivity = intent.getIntExtra("min", SettingsActivity.DEFAULT_MIN_SENSITIVITY);
 			alarmTriggerSensitivity = intent.getIntExtra("alarm",
-					alarmTriggerSensitivity);
+					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
-			useAlarm = intent.getBooleanExtra("useAlarm", useAlarm);
-			alarmWindow = intent.getIntExtra("alarmWindow", alarmWindow);
-			airplaneMode = intent.getBooleanExtra("airplaneMode", airplaneMode);
+			useAlarm = intent.getBooleanExtra("useAlarm", false);
+			alarmWindow = intent.getIntExtra("alarmWindow", 0);
+			airplaneMode = intent.getBooleanExtra("airplaneMode", false);
 			currentSeriesX = new ArrayList<Double>();
 			currentSeriesY = new ArrayList<Double>();
 			toggleAirplaneMode(true);

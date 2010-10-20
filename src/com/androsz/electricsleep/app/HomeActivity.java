@@ -115,7 +115,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
-		showTitleButton1(R.drawable.ic_title_export);
+		showTitleButton1(R.drawable.ic_title_share);
 		// showTitleButton2(R.drawable.ic_title_refresh);
 		setHomeButtonAsLogo();
 
@@ -124,9 +124,8 @@ public class HomeActivity extends CustomTitlebarActivity {
 		final int prefsVersion = userPrefs.getInt(
 				getString(R.string.prefs_version), 0);
 		if (prefsVersion == 0) {
-			// todo
+			startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
 		}
-
 	}
 
 	public void onHistoryClick(final View v) {
@@ -173,8 +172,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 						.getDefaultSharedPreferences(HomeActivity.this);
 				final int minSensitivity = userPrefs.getInt(
 						getString(R.string.pref_minimum_sensitivity), -1);
-				final int maxSensitivity = userPrefs.getInt(
-						getString(R.string.pref_maximum_sensitivity), -1);
 				final int alarmTriggerSensitivity = userPrefs.getInt(
 						getString(R.string.pref_alarm_trigger_sensitivity), -1);
 
@@ -185,7 +182,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 				final boolean airplaneMode = userPrefs.getBoolean(
 						getString(R.string.pref_airplane_mode), false);
 
-				if (maxSensitivity < 0 || minSensitivity < 0
+				if (minSensitivity < 0
 						|| alarmTriggerSensitivity < 0 || useAlarm
 						&& alarmWindow < 0) {
 					final AlertDialog.Builder dialog = new AlertDialog.Builder(
@@ -230,7 +227,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 				final Intent serviceIntent = new Intent(HomeActivity.this,
 						SleepAccelerometerService.class);
 				serviceIntent.putExtra("min", minSensitivity);
-				serviceIntent.putExtra("max", maxSensitivity);
 				serviceIntent.putExtra("alarm", alarmTriggerSensitivity);
 				serviceIntent.putExtra("useAlarm", useAlarm);
 				serviceIntent.putExtra("alarmWindow", alarmWindow);
@@ -240,6 +236,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 	}
 
 	public void onTitleButton1Click(final View v) {
-		Toast.makeText(this, "ohhh", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "this will be used to share the app with friends later...", Toast.LENGTH_SHORT).show();
 	}
 }

@@ -32,10 +32,6 @@ public class SleepChartView extends ChartView implements Serializable {
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
 
-	public XYSeries xySeriesAlarmTrigger;
-
-	public XYSeriesRenderer xySeriesAlarmTriggerRenderer;
-
 	public SleepChartView(final Context context) {
 		super(context);
 	}
@@ -55,25 +51,15 @@ public class SleepChartView extends ChartView implements Serializable {
 					.getColor(R.color.primary1));
 			xySeriesMovementRenderer.setColor(Color.TRANSPARENT);
 
-			// set up alarm trigger series/renderer
-			xySeriesAlarmTrigger = new XYSeries("alarmTrigger");
-			xySeriesAlarmTriggerRenderer = new XYSeriesRenderer();
-			xySeriesAlarmTriggerRenderer.setFillBelowLine(true);
-			xySeriesAlarmTriggerRenderer.setFillBelowLineColor(getResources()
-					.getColor(R.color.background_transparent_lighten));
-			xySeriesAlarmTriggerRenderer.setColor(Color.TRANSPARENT);
-
 			// add series to the dataset
 			xyMultipleSeriesDataset = new XYMultipleSeriesDataset();
 			xyMultipleSeriesDataset.addSeries(xySeriesMovement);
-			xyMultipleSeriesDataset.addSeries(xySeriesAlarmTrigger);
 
 			// set up the dataset renderer
 			xyMultipleSeriesRenderer = new XYMultipleSeriesRenderer();
 			xyMultipleSeriesRenderer
 					.addSeriesRenderer(xySeriesMovementRenderer);
-			xyMultipleSeriesRenderer
-					.addSeriesRenderer(xySeriesAlarmTriggerRenderer);
+			
 			xyMultipleSeriesRenderer.setShowLegend(false);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(17);
 			xyMultipleSeriesRenderer.setLabelsTextSize(17);
@@ -107,7 +93,7 @@ public class SleepChartView extends ChartView implements Serializable {
 		return xySeriesMovement.getItemCount() > 1;
 	}
 
-	protected void redraw(final int min, final int max, final int alarm) {
+	protected void redraw(final int min, final int alarm) {
 		if (makesSenseToDisplay()) {
 			final double firstX = xySeriesMovement.mX.get(0);
 			final double lastX = xySeriesMovement.mX.get(xySeriesMovement.mX
@@ -116,32 +102,26 @@ public class SleepChartView extends ChartView implements Serializable {
 			xyMultipleSeriesRenderer.setXAxisMax(lastX);
 
 			xyMultipleSeriesRenderer.setYAxisMin(min);
-			xyMultipleSeriesRenderer.setYAxisMax(max);
-
-			// reconfigure the alarm trigger line..
-			xySeriesAlarmTrigger.clear();
-
-			xySeriesAlarmTrigger.add(firstX, alarm);
-			xySeriesAlarmTrigger.add(lastX, alarm);
+			xyMultipleSeriesRenderer.setYAxisMax(alarm);
 
 			repaint();
 		}
 	}
 
-	public void syncByAdding(final Double x, final Double y, final int min,
-			final int max, final int alarm) {
+	public void syncByAdding(final Double x, final Double y, final int min, final int alarm) {
 		xySeriesMovement.mX.add(x);
 		xySeriesMovement.mY.add(y);
-		redraw(min, max, alarm);
+		redraw(min, alarm);
 	}
 
 	public void syncByCopying(final List<Double> x, final List<Double> y,
-			final int min, final int max, final int alarm) {
+			final int min, final int alarm) {
 		xySeriesMovement.mX = x;
 		xySeriesMovement.mY = y;
-		redraw(min, max, alarm);
+		redraw(min, alarm);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void syncWithCursor(final Cursor cursor) {
 		final String name = cursor
 				.getString(cursor
@@ -171,14 +151,11 @@ public class SleepChartView extends ChartView implements Serializable {
 		final int min = cursor
 				.getInt(cursor
 						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MIN));
-		final int max = cursor
-				.getInt(cursor
-						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_MAX));
 		final int alarm = cursor
 				.getInt(cursor
 						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
 
 		xyMultipleSeriesRenderer.setChartTitle(name);
-		redraw(min, max, alarm);
+		redraw(min, alarm);
 	}
 }

@@ -57,7 +57,7 @@ public class SleepHistoryDatabase {
 		private static final String FTS_TABLE_CREATE = "CREATE VIRTUAL TABLE "
 				+ FTS_VIRTUAL_TABLE + " USING fts3 (" + KEY_SLEEP_DATE_TIME
 				+ ", " + KEY_SLEEP_DATA_X + ", " + KEY_SLEEP_DATA_Y + ", "
-				+ KEY_SLEEP_DATA_MIN + ", " + KEY_SLEEP_DATA_MAX + ", "
+				+ KEY_SLEEP_DATA_MIN + ", "
 				+ KEY_SLEEP_DATA_ALARM + ");";
 
 		SleepHistoryDBOpenHelper(final Context context) {
@@ -88,7 +88,6 @@ public class SleepHistoryDatabase {
 						objectToByteArray(sleepChartDataY));
 
 				initialValues.put(KEY_SLEEP_DATA_MIN, min);
-				initialValues.put(KEY_SLEEP_DATA_MAX, max);
 				initialValues.put(KEY_SLEEP_DATA_ALARM, alarm);
 				insertResult = db
 						.insert(FTS_VIRTUAL_TABLE, null, initialValues);
@@ -116,7 +115,6 @@ public class SleepHistoryDatabase {
 	public static final String KEY_SLEEP_DATA_X = "sleep_data_x";
 	public static final String KEY_SLEEP_DATA_Y = "sleep_data_y";
 	public static final String KEY_SLEEP_DATA_MIN = "sleep_data_min";
-	public static final String KEY_SLEEP_DATA_MAX = "sleep_data_max";
 
 	public static final String KEY_SLEEP_DATA_ALARM = "sleep_data_alarm";
 	private static final String DATABASE_NAME = "sleephistory";
@@ -159,7 +157,6 @@ public class SleepHistoryDatabase {
 		map.put(KEY_SLEEP_DATA_X, KEY_SLEEP_DATA_X);
 		map.put(KEY_SLEEP_DATA_Y, KEY_SLEEP_DATA_Y);
 		map.put(KEY_SLEEP_DATA_MIN, KEY_SLEEP_DATA_MIN);
-		map.put(KEY_SLEEP_DATA_MAX, KEY_SLEEP_DATA_MAX);
 		map.put(KEY_SLEEP_DATA_ALARM, KEY_SLEEP_DATA_ALARM);
 
 		map.put(BaseColumns._ID, "rowid AS " + BaseColumns._ID);

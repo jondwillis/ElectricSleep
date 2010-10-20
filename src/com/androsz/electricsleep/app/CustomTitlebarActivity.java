@@ -64,6 +64,11 @@ public abstract class CustomTitlebarActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menuItemTutorial:
+			startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
+			return true;
+		case R.id.menuItemAbout:
+			return true;
 		case R.id.menuItemDonate:
 			final Uri marketUri = Uri
 					.parse("market://details?id=com.androsz.electricsleepdonate");

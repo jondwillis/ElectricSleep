@@ -57,8 +57,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 						intent.getDoubleExtra("y", 0),
 						intent.getIntExtra("min",
 								SettingsActivity.DEFAULT_MIN_SENSITIVITY),
-						intent.getIntExtra("max",
-								SettingsActivity.DEFAULT_MAX_SENSITIVITY),
 						intent.getIntExtra("alarm",
 								SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
@@ -90,8 +88,6 @@ public class SleepActivity extends CustomTitlebarActivity {
 									.getSerializableExtra("currentSeriesY"),
 							intent.getIntExtra("min",
 									SettingsActivity.DEFAULT_MIN_SENSITIVITY),
-							intent.getIntExtra("max",
-									SettingsActivity.DEFAULT_MAX_SENSITIVITY),
 							intent.getIntExtra("alarm",
 									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 

@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 
 public class CalibrateForResultActivity extends Activity {
@@ -41,11 +42,8 @@ public class CalibrateForResultActivity extends Activity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final LinearLayout container = new LinearLayout(this);
-		final ProgressBar progress = new ProgressBar(this);
-
-		container.addView(progress, 72, 72);
-		setContentView(container);
+		
+		setContentView(R.layout.activity_calibrate_for_result);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
