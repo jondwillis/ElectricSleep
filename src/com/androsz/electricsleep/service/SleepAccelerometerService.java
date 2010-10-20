@@ -216,12 +216,13 @@ public class SleepAccelerometerService extends Service implements
 	public void onDestroy() {
 		super.onDestroy();
 
+		unregisterReceiver(pokeSyncChartReceiver);
+		unregisterReceiver(stopAndSaveSleepReceiver);
+
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				unregisterReceiver(pokeSyncChartReceiver);
-				unregisterReceiver(stopAndSaveSleepReceiver);
 
 				sensorManager
 						.unregisterListener(SleepAccelerometerService.this);
@@ -233,7 +234,7 @@ public class SleepAccelerometerService extends Service implements
 
 				currentSeriesX = new ArrayList<Double>();
 				currentSeriesY = new ArrayList<Double>();
-				
+
 				toggleAirplaneMode(false);
 
 				stopForeground(true);
@@ -366,14 +367,13 @@ public class SleepAccelerometerService extends Service implements
 	}
 
 	private void toggleAirplaneMode(boolean enabling) {
-		if(airplaneMode)
-		{
-		    Settings.System.putInt(getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 
-		                            enabling ? 1 : 0);
-		    
-		    Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-		    intent.putExtra("state", enabling);
-		    sendBroadcast(intent);
+		if (airplaneMode) {
+			Settings.System.putInt(getContentResolver(),
+					Settings.System.AIRPLANE_MODE_ON, enabling ? 1 : 0);
+
+			Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+			intent.putExtra("state", enabling);
+			sendBroadcast(intent);
 		}
 	}
 }

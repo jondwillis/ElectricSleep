@@ -168,10 +168,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 	}
 
 	public void onSleepClick(final View v) throws Exception {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
+		
 				final SharedPreferences userPrefs = PreferenceManager
 						.getDefaultSharedPreferences(HomeActivity.this);
 				final int minSensitivity = userPrefs.getInt(
@@ -240,8 +237,6 @@ public class HomeActivity extends CustomTitlebarActivity {
 				serviceIntent.putExtra("airplaneMode", airplaneMode);
 				enforceCalibrationBeforeStartingSleep(serviceIntent,
 						new Intent(HomeActivity.this, SleepActivity.class));
-			}
-		}).start();
 	}
 
 	public void onTitleButton1Click(final View v) {

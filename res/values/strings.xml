@@ -291,7 +291,7 @@
 		<item>115</item>
 		<item>120</item>
 	</string-array>
-	<string name="title_pref_alarm_window">Alarm Window Length</string>
+	<string name="title_pref_alarm_window">Before Alarm Window Length</string>
 	<string name="summary_pref_alarm_window">The window of time before your alarm is set to go
 		off during which ElectricSleep will try to wake you.</string>
 	<string name="pref_alarm_window">alarmWindow</string>

@@ -82,7 +82,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			final SleepHistoryCursorAdapter sleepHistory = new SleepHistoryCursorAdapter(
 					this, cursor);
 			mListView.setAdapter(sleepHistory);
-
+			mListView.setVerticalFadingEdgeEnabled(false);
 			mListView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 			// mListView.setWillNotCacheDrawing(true);
 			if (DeviceUtil.getCpuClockSpeed() > 550) { // anything faster than a

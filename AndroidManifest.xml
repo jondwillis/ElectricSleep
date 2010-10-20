@@ -15,6 +15,8 @@
 		<activity android:name=".app.SleepActivity" android:label="@string/title_sleep" />
 		<activity android:name=".app.CalibrationWizardActivity"
 			android:label="@string/title_calibrate" />
+		<activity android:name=".app.HelloWizardActivity"
+			android:label="@string/title_calibrate" />
 		<activity android:name=".app.HistoryActivity" android:label="@string/title_history" />
 		<activity android:name=".app.CalibrateForResultActivity"
 			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog" />

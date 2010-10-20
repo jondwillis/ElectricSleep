@@ -26,6 +26,9 @@ import java.io.StreamCorruptedException;
 import java.util.HashMap;
 import java.util.List;
 
+import com.androsz.electricsleep.R;
+
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
@@ -187,7 +190,6 @@ public class SleepHistoryDatabase {
 			final List<Double> sleepChartDataX,
 			final List<Double> sleepChartDataY, final int min, final int max,
 			final int alarm) throws IOException {
-
 		try {
 			databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
 					sleepChartDataY, min, max, alarm);
