@@ -6,7 +6,7 @@
 		when sleeping</string>
 	<string name="summary_pref_airplane_mode_on">Airplane mode will be automatically enabled when
 		sleeping</string>
-	<string name="title_pref_airplane_mode">Airplane Mode during sleep</string>
+	<string name="title_pref_airplane_mode">Airplane Mode Sleep</string>
 	<string name="pref_airplane_mode">airplaneMode</string>
 	<string name="title_misc">Miscellaneous</string>
 	<string name="rate_title">Rate how easily you awoke and how refreshed you
@@ -185,8 +185,9 @@
 		minute and requires you briefly simulate your sleeping
 		conditions.\nWhy?\n
 		<li>
-			There are many different
-			<b> Android devices.</b>
+			There are many 
+			<b>different</b> 
+			Android devices.
 		</li>
 		\n
 		<li>
@@ -268,7 +269,7 @@
 		<item>115</item>
 		<item>120</item>
 	</string-array>
-	
+
 	<string name="title_pref_alarm_window">Pre-Alarm Window</string>
 	<string name="summary_pref_alarm_window">The window of time before your alarm is set to go
 		off during which ElectricSleep will try to wake you.</string>
