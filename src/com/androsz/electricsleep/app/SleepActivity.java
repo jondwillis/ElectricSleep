@@ -81,15 +81,14 @@ public class SleepActivity extends CustomTitlebarActivity {
 			// sleepChartView.xySeriesMovement.mY = (List<Double>) intent
 			// .getSerializableExtra("currentSeriesY");
 
-			sleepChartView
-					.syncByCopying((List<Double>) intent
-							.getSerializableExtra("currentSeriesX"),
-							(List<Double>) intent
-									.getSerializableExtra("currentSeriesY"),
-							intent.getIntExtra("min",
+			sleepChartView.syncByCopying((List<Double>) intent
+					.getSerializableExtra("currentSeriesX"),
+					(List<Double>) intent
+							.getSerializableExtra("currentSeriesY"), intent
+							.getIntExtra("min",
 									SettingsActivity.DEFAULT_MIN_SENSITIVITY),
-							intent.getIntExtra("alarm",
-									SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
+					intent.getIntExtra("alarm",
+							SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
 			if (sleepChartView.makesSenseToDisplay()
 					&& waitForSeriesData != null) {
@@ -180,7 +179,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 			// Formatter formatter = new Formatter();
 			Toast.makeText(this, "Bound to alarm @ " + dateTime,
 					Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 
 		}
 	}

@@ -26,9 +26,6 @@ import java.io.StreamCorruptedException;
 import java.util.HashMap;
 import java.util.List;
 
-import com.androsz.electricsleep.R;
-
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,8 +54,7 @@ public class SleepHistoryDatabase {
 		private static final String FTS_TABLE_CREATE = "CREATE VIRTUAL TABLE "
 				+ FTS_VIRTUAL_TABLE + " USING fts3 (" + KEY_SLEEP_DATE_TIME
 				+ ", " + KEY_SLEEP_DATA_X + ", " + KEY_SLEEP_DATA_Y + ", "
-				+ KEY_SLEEP_DATA_MIN + ", "
-				+ KEY_SLEEP_DATA_ALARM + ");";
+				+ KEY_SLEEP_DATA_MIN + ", " + KEY_SLEEP_DATA_ALARM + ");";
 
 		SleepHistoryDBOpenHelper(final Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -190,7 +186,7 @@ public class SleepHistoryDatabase {
 		try {
 			databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
 					sleepChartDataY, min, max, alarm);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

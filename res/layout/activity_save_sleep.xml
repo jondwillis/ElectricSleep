@@ -13,7 +13,8 @@
 	<Button android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true" android:id="@+id/save_sleep_btn_save"
 		android:layout_toLeftOf="@+id/save_sleep_btn_discard" android:text="@string/save"
-		android:onClick="onSaveClick" android:drawableLeft="@android:drawable/ic_menu_save" android:layout_width="wrap_content"></Button>
+		android:onClick="onSaveClick" android:drawableLeft="@android:drawable/ic_menu_save"
+		android:layout_width="wrap_content"></Button>
 	<Button android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true" android:id="@+id/save_sleep_btn_discard"

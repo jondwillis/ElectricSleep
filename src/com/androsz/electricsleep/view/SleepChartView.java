@@ -59,7 +59,7 @@ public class SleepChartView extends ChartView implements Serializable {
 			xyMultipleSeriesRenderer = new XYMultipleSeriesRenderer();
 			xyMultipleSeriesRenderer
 					.addSeriesRenderer(xySeriesMovementRenderer);
-			
+
 			xyMultipleSeriesRenderer.setShowLegend(false);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(17);
 			xyMultipleSeriesRenderer.setLabelsTextSize(17);
@@ -108,7 +108,8 @@ public class SleepChartView extends ChartView implements Serializable {
 		}
 	}
 
-	public void syncByAdding(final Double x, final Double y, final int min, final int alarm) {
+	public void syncByAdding(final Double x, final Double y, final int min,
+			final int alarm) {
 		xySeriesMovement.mX.add(x);
 		xySeriesMovement.mY.add(y);
 		redraw(min, alarm);

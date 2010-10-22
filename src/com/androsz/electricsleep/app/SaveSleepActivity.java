@@ -29,6 +29,10 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 				.setOnRatingBarChangeListener(this);
 	}
 
+	public void onDiscardClick(final View v) {
+		finish();
+	}
+
 	@Override
 	public void onRatingChanged(final RatingBar ratingBar, final float rating,
 			final boolean fromUser) {
@@ -50,10 +54,6 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 		saveIntent.putExtras(getIntent().getExtras());
 		sendBroadcast(saveIntent);
-		finish();
-	}
-	
-	public void onDiscardClick(final View v) {
 		finish();
 	}
 }

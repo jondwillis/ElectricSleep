@@ -23,8 +23,12 @@
 			android:title="@string/title_pref_minimum_sensitivity"
 			android:summary="@string/summary_minimum_sensitivity" android:key="@string/pref_minimum_sensitivity"
 			android:defaultValue="0" />
-		
-		<com.androsz.electricsleep.preference.SeekBarPreference android:title="@string/title_pref_alarm_trigger_sensitivity" android:summary="@string/summary_alarm_trigger_sensitivity" android:key="@string/pref_alarm_trigger_sensitivity" android:defaultValue="33" />
+
+		<com.androsz.electricsleep.preference.SeekBarPreference
+			android:title="@string/title_pref_alarm_trigger_sensitivity"
+			android:summary="@string/summary_alarm_trigger_sensitivity"
+			android:key="@string/pref_alarm_trigger_sensitivity"
+			android:defaultValue="33" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/title_misc">
 		<CheckBoxPreference android:key="@string/pref_airplane_mode"

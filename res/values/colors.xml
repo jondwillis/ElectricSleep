@@ -3,7 +3,7 @@
 	<color name="text">#ffffffff</color>
 	<color name="text_alt">#ffA4C639</color>
 	<color name="titlebar_separator">#ffffffff</color>
-	<color name="secondary1">#ff363636</color><!-- ff30587c  ff97c03d-->
+	<color name="secondary1">#ff363636</color><!-- ff30587c ff97c03d -->
 	<color name="secondary2">#ffcccccc</color>
 	<color name="secondary3">#ff111111</color>
 	<color name="primary1">#ffA4C639</color>

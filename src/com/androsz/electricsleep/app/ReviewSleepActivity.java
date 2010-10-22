@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -61,6 +59,34 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 		showTitleButton1(android.R.drawable.ic_menu_delete);
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	protected void onRestoreInstanceState(final Bundle savedState) {
+		try {
+			super.onRestoreInstanceState(savedState);
+			sleepChartView = (SleepChartView) savedState
+					.getSerializable("sleepChartView");
+		} catch (final RuntimeException re) {
+
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		addChartView();
+	}
+
+	@Override
+	protected void onSaveInstanceState(final Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable("sleepChartView", sleepChartView);
+	}
+
 	public void onTitleButton1Click(final View v) {
 		final SleepHistoryDatabase shdb = new SleepHistoryDatabase(this);
 		try {
@@ -94,33 +120,5 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 		} finally {
 			shdb.close();
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onRestoreInstanceState(final Bundle savedState) {
-		try {
-			super.onRestoreInstanceState(savedState);
-			sleepChartView = (SleepChartView) savedState
-					.getSerializable("sleepChartView");
-		} catch (final RuntimeException re) {
-
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		addChartView();
-	}
-
-	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable("sleepChartView", sleepChartView);
 	}
 }

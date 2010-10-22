@@ -7,15 +7,15 @@
 	<style name="Theme.electricsleep">
 		<item name="android:windowContentOverlay">@android:color/transparent</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
-		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item> 
+		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
 		<item name="android:windowTitleSize">@dimen/title_height</item>
-	</style> 
-	
-	<style name="WindowTitleBackground" parent="android:WindowTitleBackground">    
- 
-        <item name="android:background">@android:color/transparent</item>        
- 
-    </style> 
+	</style>
+
+	<style name="WindowTitleBackground" parent="android:WindowTitleBackground">
+
+		<item name="android:background">@android:color/transparent</item>
+
+	</style>
 
 	<style name="HomeButton">
 		<item name="android:padding">8dip</item>
@@ -80,15 +80,15 @@
 		<item name="android:background">@drawable/gradient_lighten</item>
 	</style>
 
-	
 
-	
 
-	
 
-	
 
-	
+
+
+
+
+
 
 	<style name="ListItem">
 		<item name="android:minHeight">?android:attr/listPreferredItemHeight</item>

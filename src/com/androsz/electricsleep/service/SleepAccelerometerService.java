@@ -314,8 +314,10 @@ public class SleepAccelerometerService extends Service implements
 	public int onStartCommand(final Intent intent, final int flags,
 			final int startId) {
 		if (intent != null && startId == 1) {
-			updateInterval = intent.getIntExtra("interval", CalibrationWizardActivity.MINIMUM_CALIBRATION_TIME);
-			minSensitivity = intent.getIntExtra("min", SettingsActivity.DEFAULT_MIN_SENSITIVITY);
+			updateInterval = intent.getIntExtra("interval",
+					CalibrationWizardActivity.MINIMUM_CALIBRATION_TIME);
+			minSensitivity = intent.getIntExtra("min",
+					SettingsActivity.DEFAULT_MIN_SENSITIVITY);
 			alarmTriggerSensitivity = intent.getIntExtra("alarm",
 					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
@@ -335,6 +337,18 @@ public class SleepAccelerometerService extends Service implements
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SENSOR_DELAY);
+	}
+
+	private void toggleAirplaneMode(final boolean enabling) {
+		if (airplaneMode) {
+			Settings.System.putInt(getContentResolver(),
+					Settings.System.AIRPLANE_MODE_ON, enabling ? 1 : 0);
+
+			final Intent intent = new Intent(
+					Intent.ACTION_AIRPLANE_MODE_CHANGED);
+			intent.putExtra("state", enabling);
+			sendBroadcast(intent);
+		}
 	}
 
 	private boolean triggerAlarmIfNecessary(final long currentTime,
@@ -359,16 +373,5 @@ public class SleepAccelerometerService extends Service implements
 			}
 		}
 		return false;
-	}
-
-	private void toggleAirplaneMode(boolean enabling) {
-		if (airplaneMode) {
-			Settings.System.putInt(getContentResolver(),
-					Settings.System.AIRPLANE_MODE_ON, enabling ? 1 : 0);
-
-			Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-			intent.putExtra("state", enabling);
-			sendBroadcast(intent);
-		}
 	}
 }

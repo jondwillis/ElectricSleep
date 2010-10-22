@@ -11,11 +11,8 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
@@ -127,14 +124,6 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity
 		startActivityForResult(checkIntent, TEST_TTS_INSTALLED);
 	}
 
-	public void onTitleButton1Click(final View v) {
-		int messageId = (useTTS = !useTTS) ? R.string.message_tts_on
-				: R.string.message_tts_off;
-
-		showTitleButton1(useTTS ? android.R.drawable.ic_lock_silent_mode_off : android.R.drawable.ic_lock_silent_mode);
-		notifyUser(getString(messageId));
-	}
-
 	@Override
 	protected int getWizardLayoutId() {
 		return R.layout.wizard_calibration;
@@ -209,6 +198,24 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity
 	}
 
 	@Override
+	protected void onFinishWizardActivity() {
+		final SharedPreferences.Editor ed = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext()).edit();
+		ed.putInt(getString(R.string.pref_minimum_sensitivity), minCalibration);
+		ed.putInt(getString(R.string.pref_alarm_trigger_sensitivity),
+				alarmTriggerCalibration);
+		ed.commit();
+
+		final SharedPreferences.Editor ed2 = getSharedPreferences(
+				getString(R.string.prefs_version), Context.MODE_PRIVATE).edit();
+		ed2.putInt(getString(R.string.prefs_version), getResources()
+				.getInteger(R.integer.prefs_version));
+		ed2.commit();
+		ed.commit();
+		finish();
+	}
+
+	@Override
 	public void onInit(final int arg0) {
 		if (arg0 == TextToSpeech.SUCCESS) {
 			if (textToSpeech.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_AVAILABLE) {
@@ -218,6 +225,14 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity
 			}
 		}
 		ttsAvailable = true;
+	}
+
+	@Override
+	protected void onPrepareLastSlide() {
+		final TextView textViewMin = (TextView) findViewById(R.id.minResult);
+		textViewMin.setText("" + minCalibration);
+		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
+		textViewAlarm.setText("" + alarmTriggerCalibration);
 	}
 
 	@Override
@@ -239,30 +254,6 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity
 		setupNavigationButtons();
 	}
 
-	protected void onPrepareLastSlide() {
-		final TextView textViewMin = (TextView) findViewById(R.id.minResult);
-		textViewMin.setText("" + minCalibration);
-		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
-		textViewAlarm.setText("" + alarmTriggerCalibration);
-	}
-
-	protected void onFinishWizardActivity() {
-		final SharedPreferences.Editor ed = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext()).edit();
-		ed.putInt(getString(R.string.pref_minimum_sensitivity), minCalibration);
-		ed.putInt(getString(R.string.pref_alarm_trigger_sensitivity),
-				alarmTriggerCalibration);
-		ed.commit();
-
-		final SharedPreferences.Editor ed2 = getSharedPreferences(
-				getString(R.string.prefs_version), Context.MODE_PRIVATE).edit();
-		ed2.putInt(getString(R.string.prefs_version), getResources()
-				.getInteger(R.integer.prefs_version));
-		ed2.commit();
-		ed.commit();
-		finish();
-	}
-
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -271,6 +262,15 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity
 		outState.putInt("min", minCalibration);
 		outState.putInt("alarm", alarmTriggerCalibration);
 		outState.putBoolean("useTTS", useTTS);
+	}
+
+	public void onTitleButton1Click(final View v) {
+		final int messageId = (useTTS = !useTTS) ? R.string.message_tts_on
+				: R.string.message_tts_off;
+
+		showTitleButton1(useTTS ? android.R.drawable.ic_lock_silent_mode_off
+				: android.R.drawable.ic_lock_silent_mode);
+		notifyUser(getString(messageId));
 	}
 
 	@Override

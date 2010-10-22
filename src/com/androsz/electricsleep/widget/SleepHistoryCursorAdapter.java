@@ -23,7 +23,7 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 	@Override
 	public void bindView(final View view, final Context context,
 			final Cursor cursor) {
-		
+
 		System.gc();
 		final SleepChartView sleepChartView = (SleepChartView) view
 				.findViewById(R.id.sleep_history_list_item_sleepchartview);

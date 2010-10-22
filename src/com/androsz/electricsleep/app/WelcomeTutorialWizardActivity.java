@@ -11,12 +11,6 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 	}
 
 	@Override
-	protected boolean onWizardActivity() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	protected void onFinishWizardActivity() {
 		finish();
 	}
@@ -25,5 +19,11 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 	protected void onPrepareLastSlide() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected boolean onWizardActivity() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

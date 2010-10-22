@@ -167,75 +167,74 @@ public class HomeActivity extends CustomTitlebarActivity {
 	}
 
 	public void onSleepClick(final View v) throws Exception {
-		
-				final SharedPreferences userPrefs = PreferenceManager
-						.getDefaultSharedPreferences(HomeActivity.this);
-				final int minSensitivity = userPrefs.getInt(
-						getString(R.string.pref_minimum_sensitivity), -1);
-				final int alarmTriggerSensitivity = userPrefs.getInt(
-						getString(R.string.pref_alarm_trigger_sensitivity), -1);
 
-				final boolean useAlarm = userPrefs.getBoolean(
-						getString(R.string.pref_use_alarm), false);
-				final int alarmWindow = Integer.parseInt(userPrefs.getString(
-						getString(R.string.pref_alarm_window), "-1"));
-				final boolean airplaneMode = userPrefs.getBoolean(
-						getString(R.string.pref_airplane_mode), false);
+		final SharedPreferences userPrefs = PreferenceManager
+				.getDefaultSharedPreferences(HomeActivity.this);
+		final int minSensitivity = userPrefs.getInt(
+				getString(R.string.pref_minimum_sensitivity), -1);
+		final int alarmTriggerSensitivity = userPrefs.getInt(
+				getString(R.string.pref_alarm_trigger_sensitivity), -1);
 
-				if (minSensitivity < 0
-						|| alarmTriggerSensitivity < 0 || useAlarm
-						&& alarmWindow < 0) {
-					final AlertDialog.Builder dialog = new AlertDialog.Builder(
-							HomeActivity.this)
-							.setMessage(getString(R.string.invalid_settings))
-							.setCancelable(false)
-							.setPositiveButton("Calibrate",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											startActivity(new Intent(
-													HomeActivity.this,
-													CalibrationWizardActivity.class));
-										}
-									})
-							.setNeutralButton("Manual",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											startActivity(new Intent(
-													HomeActivity.this,
-													SettingsActivity.class));
-										}
-									})
-							.setNegativeButton("Cancel",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											dialog.cancel();
-										}
-									});
-					dialog.show();
-					return;
-				}
+		final boolean useAlarm = userPrefs.getBoolean(
+				getString(R.string.pref_use_alarm), false);
+		final int alarmWindow = Integer.parseInt(userPrefs.getString(
+				getString(R.string.pref_alarm_window), "-1"));
+		final boolean airplaneMode = userPrefs.getBoolean(
+				getString(R.string.pref_airplane_mode), false);
 
-				final Intent serviceIntent = new Intent(HomeActivity.this,
-						SleepAccelerometerService.class);
-				serviceIntent.putExtra("min", minSensitivity);
-				serviceIntent.putExtra("alarm", alarmTriggerSensitivity);
-				serviceIntent.putExtra("useAlarm", useAlarm);
-				serviceIntent.putExtra("alarmWindow", alarmWindow);
-				serviceIntent.putExtra("airplaneMode", airplaneMode);
-				enforceCalibrationBeforeStartingSleep(serviceIntent,
-						new Intent(HomeActivity.this, SleepActivity.class));
+		if (minSensitivity < 0 || alarmTriggerSensitivity < 0 || useAlarm
+				&& alarmWindow < 0) {
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(
+					HomeActivity.this)
+					.setMessage(getString(R.string.invalid_settings))
+					.setCancelable(false)
+					.setPositiveButton("Calibrate",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											CalibrationWizardActivity.class));
+								}
+							})
+					.setNeutralButton("Manual",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									startActivity(new Intent(HomeActivity.this,
+											SettingsActivity.class));
+								}
+							})
+					.setNegativeButton("Cancel",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(
+										final DialogInterface dialog,
+										final int id) {
+									dialog.cancel();
+								}
+							});
+			dialog.show();
+			return;
+		}
+
+		final Intent serviceIntent = new Intent(HomeActivity.this,
+				SleepAccelerometerService.class);
+		serviceIntent.putExtra("min", minSensitivity);
+		serviceIntent.putExtra("alarm", alarmTriggerSensitivity);
+		serviceIntent.putExtra("useAlarm", useAlarm);
+		serviceIntent.putExtra("alarmWindow", alarmWindow);
+		serviceIntent.putExtra("airplaneMode", airplaneMode);
+		enforceCalibrationBeforeStartingSleep(serviceIntent, new Intent(
+				HomeActivity.this, SleepActivity.class));
 	}
 
 	public void onTitleButton1Click(final View v) {
-		Toast.makeText(this, "this will be used to share the app with friends later...", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this,
+				"this will be used to share the app with friends later...",
+				Toast.LENGTH_SHORT).show();
 	}
 }

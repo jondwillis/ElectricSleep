@@ -173,10 +173,6 @@ public abstract class XYChart extends AbstractChart {
 		if (maxY - minY != 0) {
 			yPixelsPerUnit = (float) ((bottom - top) / (maxY - minY));
 		}
-		
-
-
-		
 
 		final boolean showLabels = mRenderer.isShowLabels();
 		final boolean showGrid = mRenderer.isShowGrid();
@@ -227,7 +223,7 @@ public abstract class XYChart extends AbstractChart {
 					}
 				}
 			}
-			
+
 			for (int i = 0; i < sLength; i++) {
 				final XYSeries series = mDataset.getSeriesAt(i);
 				if (series.getItemCount() == 0) {
@@ -247,14 +243,18 @@ public abstract class XYChart extends AbstractChart {
 					points[j + 1] = (float) (bottom - yPixelsPerUnit
 							* (series.getY(index) - minY));
 				}
-				drawSeries(canvas, paint, points, seriesRenderer,
-						Math.min(bottom, (float) (bottom + yPixelsPerUnit * minY)),
-						i);
+				drawSeries(
+						canvas,
+						paint,
+						points,
+						seriesRenderer,
+						Math.min(bottom, (float) (bottom + yPixelsPerUnit
+								* minY)), i);
 				if (isRenderPoints(seriesRenderer)) {
 					final ScatterChart pointsChart = new ScatterChart(mDataset,
 							mRenderer);
-					pointsChart.drawSeries(canvas, paint, points, seriesRenderer,
-							0, i);
+					pointsChart.drawSeries(canvas, paint, points,
+							seriesRenderer, 0, i);
 				}
 				paint.setTextSize(mRenderer.getChartValuesTextSize());
 				if (or == Orientation.HORIZONTAL) {

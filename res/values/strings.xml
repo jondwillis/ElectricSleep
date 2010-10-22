@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="about">About</string>
-	<string name="tutorial">Welcome Tutorial</string>
+	<string name="welcome_tutorial">Welcome Tutorial</string>
 	<string name="summary_pref_airplane_mode_off">Airplane mode will not be automatically enabled
 		when sleeping</string>
 	<string name="summary_pref_airplane_mode_on">Airplane mode will be automatically enabled when
@@ -185,8 +185,8 @@
 		minute and requires you briefly simulate your sleeping
 		conditions.\nWhy?\n
 		<li>
-			There are many 
-			<b>different</b> 
+			There are many
+			<b>different</b>
 			Android devices.
 		</li>
 		\n
