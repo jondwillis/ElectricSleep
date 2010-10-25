@@ -247,20 +247,18 @@ public class SleepAccelerometerService extends Service implements
 
 			// this should help reduce both runtime memory and saved data memory
 			// later on.
-			//final int yOneAgoIndex = currentSeriesY.size() - 1;
-			//final int yTwoAgoIndex = currentSeriesY.size() - 2;
-			boolean syncChart = false;
-			/*if (yTwoAgoIndex > 0) {
-				final double oneAgo = currentSeriesY.get(yOneAgoIndex);
-				final double twoAgo = currentSeriesY.get(yTwoAgoIndex);
-				if (Math.round(oneAgo) == Math.round(twoAgo)
-						&& Math.round(oneAgo) == Math.round(y)) {
-					currentSeriesX.remove(yOneAgoIndex);
-					currentSeriesY.remove(yOneAgoIndex);
-					// flag to sync instead of update
-					syncChart = true;
-				}
-			}*/
+			// final int yOneAgoIndex = currentSeriesY.size() - 1;
+			// final int yTwoAgoIndex = currentSeriesY.size() - 2;
+			final boolean syncChart = false;
+			/*
+			 * if (yTwoAgoIndex > 0) { final double oneAgo =
+			 * currentSeriesY.get(yOneAgoIndex); final double twoAgo =
+			 * currentSeriesY.get(yTwoAgoIndex); if (Math.round(oneAgo) ==
+			 * Math.round(twoAgo) && Math.round(oneAgo) == Math.round(y)) {
+			 * currentSeriesX.remove(yOneAgoIndex);
+			 * currentSeriesY.remove(yOneAgoIndex); // flag to sync instead of
+			 * update syncChart = true; } }
+			 */
 
 			currentSeriesX.add(x);
 			currentSeriesY.add(y);
@@ -339,8 +337,7 @@ public class SleepAccelerometerService extends Service implements
 	private boolean triggerAlarmIfNecessary(final long currentTime,
 			final double y) {
 		if (useAlarm) {
-			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
-					"com.androsz.electricsleep.deskclock");
+			final AlarmDatabase adb = new AlarmDatabase(getContentResolver());
 			final Alarm alarm = adb.getNearestEnabledAlarm();
 			final Calendar alarmTime = alarm.getNearestAlarmDate();
 			alarmTime.add(Calendar.MINUTE, alarmWindow * -1);

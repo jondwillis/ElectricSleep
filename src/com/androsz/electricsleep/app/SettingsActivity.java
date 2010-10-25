@@ -8,8 +8,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.alarmclock.AlarmClock;
 import com.androsz.electricsleep.preference.CustomTitlebarPreferenceActivity;
-import com.androsz.electricsleep.util.AlarmDatabase;
 
 public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 
@@ -62,12 +62,12 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 									@Override
 									public boolean onPreferenceClick(
 											final Preference preference) {
-										
-										startActivity(AlarmDatabase
-												.changeAlarmSettings(getPackageManager()));
-										// startActivity(new
-										// Intent(SettingsActivity.this,
-										// AlarmsActivity.class));
+
+										// startActivity(AlarmDatabase
+										// .changeAlarmSettings(getPackageManager()));
+										startActivity(new Intent(
+												SettingsActivity.this,
+												AlarmClock.class));
 										return true;
 									}
 								});

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.alarmclock.AlarmClock;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
 import com.androsz.electricsleep.util.Alarm;
 import com.androsz.electricsleep.util.AlarmDatabase;
@@ -165,8 +166,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
 
 		try {
-			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
-					"com.androsz.electricsleep.deskclock");
+			final AlarmDatabase adb = new AlarmDatabase(getContentResolver());
 			final Alarm alarm = adb.getNearestEnabledAlarm();
 			final Calendar alarmTime = alarm.getNearestAlarmDate();
 
@@ -195,7 +195,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 		new AlertDialog.Builder(this)
 				.setMessage("Are you sure you want to end sleep monitoring?")
 				.setCancelable(false)
-				.setPositiveButton("Yes",
+				.setPositiveButton(getString(R.string.yes),
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(final DialogInterface dialog,
@@ -205,16 +205,17 @@ public class SleepActivity extends CustomTitlebarActivity {
 								finish();
 							}
 						})
-				.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(final DialogInterface dialog,
-							final int id) {
-					}
-				}).show();
+				.setNegativeButton(getString(R.string.no),
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(final DialogInterface dialog,
+									final int id) {
+							}
+						}).show();
 	}
 
 	public void onTitleButton2Click(final View v) {
-		startActivity(AlarmDatabase.changeAlarmSettings(getPackageManager()));
+		startActivity(new Intent(this, AlarmClock.class));
 	}
 
 	private void showWaitForSeriesDataIfNeeded() {

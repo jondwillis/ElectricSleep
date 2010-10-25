@@ -23,14 +23,13 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 
 	}
 
+	public void onSkipTutorialClick(final View v) {
+		finish();
+	}
+
 	@Override
 	protected boolean onWizardActivity() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-	
-	public void onSkipTutorialClick(View v)
-	{
-		finish();
 	}
 }

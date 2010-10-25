@@ -2,11 +2,9 @@ package com.androsz.electricsleep.preference;
 
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.app.HomeActivity;
-import com.androsz.electricsleep.app.SettingsActivity;
 
 public abstract class CustomTitlebarPreferenceActivity extends
 		PreferenceActivity {
@@ -53,8 +50,8 @@ public abstract class CustomTitlebarPreferenceActivity extends
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
-		//final MenuInflater inflater = getMenuInflater();
-		//inflater.inflate(R.menu.titlebar_menu, menu);
+		// final MenuInflater inflater = getMenuInflater();
+		// inflater.inflate(R.menu.titlebar_menu, menu);
 		return false;
 	}
 
@@ -66,20 +63,15 @@ public abstract class CustomTitlebarPreferenceActivity extends
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		/*switch (item.getItemId()) {
-		case R.id.menuItemDonate:
-			final Uri marketUri = Uri
-					.parse("market://details?id=com.androsz.electricsleepdonate");
-			final Intent marketIntent = new Intent(Intent.ACTION_VIEW,
-					marketUri);
-			startActivity(marketIntent);
-			return true;
-		case R.id.menuItemSettings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		default:
-			return false;
-		}*/
+		/*
+		 * switch (item.getItemId()) { case R.id.menuItemDonate: final Uri
+		 * marketUri = Uri
+		 * .parse("market://details?id=com.androsz.electricsleepdonate"); final
+		 * Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+		 * startActivity(marketIntent); return true; case R.id.menuItemSettings:
+		 * startActivity(new Intent(this, SettingsActivity.class)); return true;
+		 * default: return false; }
+		 */
 		return false;
 	}
 

@@ -104,7 +104,8 @@ public class HistoryActivity extends CustomTitlebarActivity {
 					try {
 						final AlertDialog.Builder dialog = new AlertDialog.Builder(
 								HistoryActivity.this)
-								.setMessage(getString(R.string.delete_sleep_record))
+								.setMessage(
+										getString(R.string.delete_sleep_record))
 								.setPositiveButton(getString(R.string.yes),
 										new DialogInterface.OnClickListener() {
 											@Override

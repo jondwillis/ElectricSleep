@@ -48,7 +48,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? count
 						/ (count / numberOfDesiredGroupedPoints)
 						: count;
-						
+
 				try {
 					if (numberOfDesiredGroupedPoints < count) {
 						final int pointsPerGroup = count

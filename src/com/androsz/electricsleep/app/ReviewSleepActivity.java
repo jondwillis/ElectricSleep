@@ -101,7 +101,8 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 										final int id) {
 
 									shdb.deleteRow(rowId);
-									Toast.makeText(ReviewSleepActivity.this,
+									Toast.makeText(
+											ReviewSleepActivity.this,
 											getString(R.string.deleted_sleep_record),
 											Toast.LENGTH_SHORT).show();
 									finish();

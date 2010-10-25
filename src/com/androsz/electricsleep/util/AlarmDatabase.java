@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -157,47 +156,6 @@ public class AlarmDatabase {
 	}
 
 	/**
-	 * Call startActivity() on result of this method to show default UI for
-	 * changing Alarm Clock settings
-	 * 
-	 * @param packageManager
-	 *            may be null
-	 * @return Intent for changing alarmclock settings
-	 */
-	public static Intent changeAlarmSettings(final PackageManager packageManager) {
-		final Intent i = new Intent();
-		i.setAction(Intent.ACTION_MAIN);
-
-		i.setClassName("com.androsz.electricsleep.deskclock",
-				"com.androsz.electricsleep.deskclock.AlarmClock");
-		ResolveInfo resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null) {
-			return i; // 2.2
-		}
-		
-		
-
-		i.setClassName("com.htc.android.worldclock",
-				"com.htc.android.worldclock.WorldClockTabControl");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null) {
-			return i; // HTC custom UI
-		}
-
-		i.setClassName("com.motorola.blur.alarmclock",
-				"com.motorola.blur.alarmclock.AlarmClock");
-		resolved = packageManager.resolveActivity(i,
-				PackageManager.MATCH_DEFAULT_ONLY);
-		if (resolved != null) {
-			return i; // Motoblur clock
-		}
-
-		return null;
-	}
-
-	/**
 	 * returns number of days from today until next alarmclock
 	 * 
 	 * @param c
@@ -237,7 +195,8 @@ public class AlarmDatabase {
 	}
 
 	public static void triggerAlarm(final Context context, final Alarm alarm) {
-		final Intent intent = new Intent("com.androsz.electricsleep.deskclock.ALARM_ALERT");
+		final Intent intent = new Intent(
+				"com.androsz.electricsleep.alarmclock.ALARM_ALERT");
 
 		final Parcel out = Parcel.obtain();
 		alarm.writeToParcel(out, 0);
@@ -264,6 +223,18 @@ public class AlarmDatabase {
 	private static int column_message;
 
 	private static int column_alert;
+
+	/**
+	 * Creates database connection with no updates subscription. You'd probably
+	 * need to subscribe for updates
+	 * 
+	 * @param contentResolver
+	 *            get from context
+	 */
+	public AlarmDatabase(final ContentResolver contentResolver) {
+		this(contentResolver, (ContentObserver) null,
+				"com.androsz.electricsleep.alarmclock");
+	}
 
 	/**
 	 * Creates database connection and subscribes for updates
@@ -310,18 +281,6 @@ public class AlarmDatabase {
 				contentObserver.run();
 			}
 		}, packageName);
-	}
-
-	/**
-	 * Creates database connection with no updates subscription. You'd probably
-	 * need to subscribe for updates
-	 * 
-	 * @param contentResolver
-	 *            get from context
-	 */
-	public AlarmDatabase(final ContentResolver contentResolver,
-			final String packageName) {
-		this(contentResolver, (ContentObserver) null, packageName);
 	}
 
 	@Override
