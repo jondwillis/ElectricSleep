@@ -48,7 +48,7 @@ public class SleepChartView extends ChartView implements Serializable {
 			xySeriesMovementRenderer = new XYSeriesRenderer();
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(getResources()
-					.getColor(R.color.primary1));
+					.getColor(R.color.primary1_transparent));
 			xySeriesMovementRenderer.setColor(Color.TRANSPARENT);
 
 			// add series to the dataset

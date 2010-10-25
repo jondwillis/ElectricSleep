@@ -116,7 +116,7 @@ public class SleepAccelerometerService extends Service implements
 	private void createSaveSleepNotification() {
 		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-		final int icon = R.drawable.home_btn_sleep;
+		final int icon = R.drawable.home_btn_sleep_pressed;
 		final CharSequence tickerText = getText(R.string.notification_save_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
@@ -188,25 +188,19 @@ public class SleepAccelerometerService extends Service implements
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		new Thread(new Runnable() {
+		startForeground(NOTIFICATION_ID, createServiceNotification());
 
-			@Override
-			public void run() {
-				startForeground(NOTIFICATION_ID, createServiceNotification());
+		registerReceiver(pokeSyncChartReceiver, new IntentFilter(
+				POKE_SYNC_CHART));
 
-				registerReceiver(pokeSyncChartReceiver, new IntentFilter(
-						POKE_SYNC_CHART));
+		registerReceiver(stopAndSaveSleepReceiver, new IntentFilter(
+				STOP_AND_SAVE_SLEEP));
 
-				registerReceiver(stopAndSaveSleepReceiver, new IntentFilter(
-						STOP_AND_SAVE_SLEEP));
+		registerAccelerometerListener();
 
-				registerAccelerometerListener();
+		obtainWakeLock();
 
-				obtainWakeLock();
-
-				dateStarted = new Date();
-			}
-		}).start();
+		dateStarted = new Date();
 	}
 
 	@Override
@@ -216,28 +210,19 @@ public class SleepAccelerometerService extends Service implements
 		unregisterReceiver(pokeSyncChartReceiver);
 		unregisterReceiver(stopAndSaveSleepReceiver);
 
-		new Thread(new Runnable() {
+		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
-			@Override
-			public void run() {
+		partialWakeLock.release();
 
-				sensorManager
-						.unregisterListener(SleepAccelerometerService.this);
+		// tell monitoring activities that sleep has ended
+		sendBroadcast(new Intent(SLEEP_STOPPED));
 
-				partialWakeLock.release();
+		currentSeriesX = new ArrayList<Double>();
+		currentSeriesY = new ArrayList<Double>();
 
-				// tell monitoring activities that sleep has ended
-				sendBroadcast(new Intent(SLEEP_STOPPED));
+		toggleAirplaneMode(false);
 
-				currentSeriesX = new ArrayList<Double>();
-				currentSeriesY = new ArrayList<Double>();
-
-				toggleAirplaneMode(false);
-
-				stopForeground(true);
-			}
-		}).start();
-
+		stopForeground(true);
 	}
 
 	@Override
@@ -262,10 +247,10 @@ public class SleepAccelerometerService extends Service implements
 
 			// this should help reduce both runtime memory and saved data memory
 			// later on.
-			final int yOneAgoIndex = currentSeriesY.size() - 1;
-			final int yTwoAgoIndex = currentSeriesY.size() - 2;
+			//final int yOneAgoIndex = currentSeriesY.size() - 1;
+			//final int yTwoAgoIndex = currentSeriesY.size() - 2;
 			boolean syncChart = false;
-			if (yTwoAgoIndex > 0) {
+			/*if (yTwoAgoIndex > 0) {
 				final double oneAgo = currentSeriesY.get(yOneAgoIndex);
 				final double twoAgo = currentSeriesY.get(yTwoAgoIndex);
 				if (Math.round(oneAgo) == Math.round(twoAgo)
@@ -275,7 +260,7 @@ public class SleepAccelerometerService extends Service implements
 					// flag to sync instead of update
 					syncChart = true;
 				}
-			}
+			}*/
 
 			currentSeriesX.add(x);
 			currentSeriesY.add(y);
@@ -355,7 +340,7 @@ public class SleepAccelerometerService extends Service implements
 			final double y) {
 		if (useAlarm) {
 			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
-					"com.android.deskclock");
+					"com.androsz.electricsleep.deskclock");
 			final Alarm alarm = adb.getNearestEnabledAlarm();
 			final Calendar alarmTime = alarm.getNearestAlarmDate();
 			alarmTime.add(Calendar.MINUTE, alarmWindow * -1);

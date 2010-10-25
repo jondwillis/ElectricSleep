@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.widget.Toast;
 
 import com.androsz.electricsleep.app.ReviewSleepActivity;
 import com.androsz.electricsleep.app.SettingsActivity;
@@ -28,28 +29,28 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				final SleepHistoryDatabase shdb = new SleepHistoryDatabase(
 						context);
 
+				final int min = intent.getIntExtra("min",
+						SettingsActivity.DEFAULT_MIN_SENSITIVITY);
+				final int max = intent.getIntExtra("max",
+						SettingsActivity.DEFAULT_MAX_SENSITIVITY);
+				final int alarm = intent.getIntExtra("alarm",
+						SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+
+				final String name = intent.getStringExtra("name");
+
+				List<Double> mX = (List<Double>) intent
+						.getSerializableExtra("currentSeriesX");
+				List<Double> mY = (List<Double>) intent
+						.getSerializableExtra("currentSeriesY");
+				final int count = mY.size();
+
+				int numberOfDesiredGroupedPoints = 200;
+				numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? count
+						/ (count / numberOfDesiredGroupedPoints)
+						: count;
+						
 				try {
-					final int min = intent.getIntExtra("min",
-							SettingsActivity.DEFAULT_MIN_SENSITIVITY);
-					final int max = intent.getIntExtra("max",
-							SettingsActivity.DEFAULT_MAX_SENSITIVITY);
-					final int alarm = intent.getIntExtra("alarm",
-							SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
-
-					final String name = intent.getStringExtra("name");
-
-					List<Double> mX = (List<Double>) intent
-							.getSerializableExtra("currentSeriesX");
-					List<Double> mY = (List<Double>) intent
-							.getSerializableExtra("currentSeriesY");
-					final int count = mY.size();
-
-					int numberOfDesiredGroupedPoints = 200;
-					numberOfDesiredGroupedPoints = count > numberOfDesiredGroupedPoints ? count
-							/ (count / numberOfDesiredGroupedPoints)
-							: count;
-					//
-					if (numberOfDesiredGroupedPoints != count) {
+					if (numberOfDesiredGroupedPoints < count) {
 						final int pointsPerGroup = count
 								/ numberOfDesiredGroupedPoints + 1;
 						final List<Double> lessDetailedX = new ArrayList<Double>(
@@ -93,34 +94,32 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 					} else {
 						shdb.addSleep(context, name, mX, mY, min, max, alarm);
 					}
-
-					long rowId = -1;
-
-					final Cursor c = shdb.getSleepMatches(name, new String[] {
-							BaseColumns._ID,
-							SleepHistoryDatabase.KEY_SLEEP_DATE_TIME });
-					c.moveToFirst();
-					rowId = c.getLong(0);
-					c.close();
-
-					final Intent reviewSleepIntent = new Intent(context,
-							ReviewSleepActivity.class);
-					final Uri uri = Uri.withAppendedPath(
-							SleepContentProvider.CONTENT_URI,
-							String.valueOf(rowId));
-					reviewSleepIntent.setData(uri);
-					// reviewSleepIntent.putExtra("position", position);
-
-					reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-							| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-					context.startActivity(reviewSleepIntent);
 				} catch (final IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} finally {
-					shdb.close();
+					Toast.makeText(context,
+							"An error occurred while saving sleep",
+							Toast.LENGTH_LONG).show();
+
 				}
+
+				final Cursor c = shdb.getSleepMatches(name, new String[] {
+						BaseColumns._ID,
+						SleepHistoryDatabase.KEY_SLEEP_DATE_TIME });
+				c.moveToFirst();
+				final long rowId = c.getLong(0);
+				c.close();
+
+				final Intent reviewSleepIntent = new Intent(context,
+						ReviewSleepActivity.class);
+				final Uri uri = Uri.withAppendedPath(
+						SleepContentProvider.CONTENT_URI, String.valueOf(rowId));
+				reviewSleepIntent.setData(uri);
+				// reviewSleepIntent.putExtra("position", position);
+
+				reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
+
+				context.startActivity(reviewSleepIntent);
+				shdb.close();
 			}
 		}).start();
 

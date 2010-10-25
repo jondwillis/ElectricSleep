@@ -15,7 +15,7 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 
 	public static int DEFAULT_MAX_SENSITIVITY = 500;
 	public static int DEFAULT_MIN_SENSITIVITY = 0;
-	public static int DEFAULT_ALARM_SENSITIVITY = -1;
+	public static int DEFAULT_ALARM_SENSITIVITY = 33;
 
 	public static boolean areSensitivitiesValid(final int minSensitivity,
 			final int maxSensitivity, final int alarmSensitivity) {
@@ -62,6 +62,7 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity {
 									@Override
 									public boolean onPreferenceClick(
 											final Preference preference) {
+										
 										startActivity(AlarmDatabase
 												.changeAlarmSettings(getPackageManager()));
 										// startActivity(new

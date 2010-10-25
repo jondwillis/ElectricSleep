@@ -85,10 +85,11 @@ public class HistoryActivity extends CustomTitlebarActivity {
 			mListView.setVerticalFadingEdgeEnabled(false);
 			mListView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
 			// mListView.setWillNotCacheDrawing(true);
-			if (DeviceUtil.getCpuClockSpeed() > 550) { // anything faster than a
-														// droid *should* be
-														// able to handle smooth
-														// scrolling
+			if (DeviceUtil.getCpuClockSpeed() >= 600) {
+				// anything faster than a
+				// droid *should* be
+				// able to handle smooth
+				// scrolling
 				mListView.setScrollingCacheEnabled(false);
 			}
 			mListView.setScrollbarFadingEnabled(false);
@@ -103,8 +104,8 @@ public class HistoryActivity extends CustomTitlebarActivity {
 					try {
 						final AlertDialog.Builder dialog = new AlertDialog.Builder(
 								HistoryActivity.this)
-								.setMessage("Delete this sleep record?")
-								.setPositiveButton("Yes",
+								.setMessage(getString(R.string.delete_sleep_record))
+								.setPositiveButton(getString(R.string.yes),
 										new DialogInterface.OnClickListener() {
 											@Override
 											public void onClick(
@@ -114,7 +115,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 												shdb.deleteRow(rowid);
 												Toast.makeText(
 														HistoryActivity.this,
-														"Deleted sleep record.",
+														getString(R.string.deleted_sleep_record),
 														Toast.LENGTH_SHORT)
 														.show();
 												mListView
@@ -122,7 +123,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 												showResults(query);
 											}
 										})
-								.setNegativeButton("No",
+								.setNegativeButton(getString(R.string.no),
 										new DialogInterface.OnClickListener() {
 											@Override
 											public void onClick(

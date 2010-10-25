@@ -55,7 +55,7 @@ public class SeekBarPreference extends DialogPreference {
 		layout.addView(textView);
 
 		seekBar = new SeekBar(context);
-		seekBar.setMax(100);
+		seekBar.setMax(200);
 		seekBar.setLayoutParams(new ViewGroup.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));

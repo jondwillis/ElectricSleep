@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-
 	<PreferenceCategory android:title="@string/title_pref_alarms">
 		<CheckBoxPreference android:summaryOn="@string/summary_pref_use_alarm_on"
 			android:summaryOff="@string/summary_pref_use_alarm_off" android:key="@string/pref_use_alarm"

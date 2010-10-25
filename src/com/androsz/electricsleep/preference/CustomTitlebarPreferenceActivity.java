@@ -53,9 +53,9 @@ public abstract class CustomTitlebarPreferenceActivity extends
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
-		final MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.titlebar_menu, menu);
-		return true;
+		//final MenuInflater inflater = getMenuInflater();
+		//inflater.inflate(R.menu.titlebar_menu, menu);
+		return false;
 	}
 
 	public void onHomeClick(final View v) {
@@ -66,7 +66,7 @@ public abstract class CustomTitlebarPreferenceActivity extends
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		switch (item.getItemId()) {
+		/*switch (item.getItemId()) {
 		case R.id.menuItemDonate:
 			final Uri marketUri = Uri
 					.parse("market://details?id=com.androsz.electricsleepdonate");
@@ -79,7 +79,8 @@ public abstract class CustomTitlebarPreferenceActivity extends
 			return true;
 		default:
 			return false;
-		}
+		}*/
+		return false;
 	}
 
 	public void setHomeButtonAsLogo() {

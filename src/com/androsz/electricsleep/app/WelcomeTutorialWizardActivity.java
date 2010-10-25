@@ -1,5 +1,7 @@
 package com.androsz.electricsleep.app;
 
+import android.view.View;
+
 import com.androsz.electricsleep.R;
 
 public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity {
@@ -25,5 +27,10 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 	protected boolean onWizardActivity() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void onSkipTutorialClick(View v)
+	{
+		finish();
 	}
 }

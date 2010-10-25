@@ -8,15 +8,15 @@
 	</alarm>
 	<alarm>
 		<name>Android DeskClock</name>
-		<package>com.android.deskclock</package>
-		<configIntent>com.android.deskclock.AlarmClock</configIntent>
-		<alarmContent>com.android.deskclock/alarm</alarmContent>
+		<package>com.androsz.electricsleep.deskclock</package>
+		<configIntent>com.androsz.electricsleep.deskclock.AlarmClock</configIntent>
+		<alarmContent>com.androsz.electricsleep.deskclock/alarm</alarmContent>
 	</alarm>
 	<alarm>
 		<name>Google DeskClock</name>
 		<package>com.google.android.deskclock</package>
-		<configIntent>com.android.deskclock.AlarmClock</configIntent>
-		<alarmContent>com.android.deskclock/alarm</alarmContent>
+		<configIntent>com.androsz.electricsleep.deskclock.AlarmClock</configIntent>
+		<alarmContent>com.androsz.electricsleep.deskclock/alarm</alarmContent>
 	</alarm>
 	<alarm>
 		<name>HTC WorldClock</name>

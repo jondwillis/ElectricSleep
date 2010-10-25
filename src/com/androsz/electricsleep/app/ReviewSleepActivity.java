@@ -41,8 +41,9 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 			if (cursor == null) {
 				finish();
 			} else {
+				rowId = Long.parseLong(uri.getLastPathSegment());
+				showTitleButton1(android.R.drawable.ic_menu_delete);
 				cursor.moveToFirst();
-				rowId = cursor.getPosition();
 				sleepChartView.syncWithCursor(cursor);
 			}
 		}
@@ -56,7 +57,6 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		showTitleButton1(android.R.drawable.ic_menu_delete);
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 		try {
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(
 					ReviewSleepActivity.this)
-					.setMessage("Delete this sleep record?")
-					.setPositiveButton("Yes",
+					.setMessage(getString(R.string.delete_sleep_record))
+					.setPositiveButton(getString(R.string.yes),
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(
@@ -102,12 +102,12 @@ public class ReviewSleepActivity extends CustomTitlebarActivity {
 
 									shdb.deleteRow(rowId);
 									Toast.makeText(ReviewSleepActivity.this,
-											"Deleted sleep record.",
+											getString(R.string.deleted_sleep_record),
 											Toast.LENGTH_SHORT).show();
 									finish();
 								}
 							})
-					.setNegativeButton("No",
+					.setNegativeButton(getString(R.string.no),
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(

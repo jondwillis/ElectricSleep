@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="skip_tutorial">Skip Tutorial</string>
+    <string name="electricsleep_about">About Electricsleep</string>
+	<string name="electricsleep_description">
+		ElectricSleep is a new way to sleep. After you
+		place your Android device near you on your
+		bed/placeofslumber, ElectricSleep
+		will record data from your device\'s
+		accelerometer all night.\n\n
+		The movements it records help signify
+		sleep stages. Aside from
+		providing analysis and insight into your sleep
+		patterns, you can set
+		an alarm to wake you during light sleep, so you
+		wake more easily than
+		with a traditionally-fixed alarm.
+	</string>
+	<string name="title_review_sleep">Review Sleep</string>
+	<string name="title_welcome">Welcome to ElectricSleep!</string>
+	<string name="no">No</string>
+	<string name="yes">Yes</string>
+	<string name="deleted_sleep_record">Deleted sleep record.</string>
+	<string name="delete_sleep_record">Delete this sleep record?</string>
 	<string name="about">About</string>
 	<string name="welcome_tutorial">Welcome Tutorial</string>
 	<string name="summary_pref_airplane_mode_off">Airplane mode will not be automatically enabled
@@ -77,7 +99,7 @@
 		movement that signifies that you are in light
 		sleep and set off alarms if enabled.
 	</string>
-	<string name="calibrate_title_alarm">Light Sleep Trigger Sensitivity</string>
+	<string name="calibrate_title_alarm">Calibrate Light Sleep Sensitivity</string>
 	<string name="calibrate_description_placement">
 		ElectricSleep uses your device\'s accelerometer to record movement
 		during sleep. As such, your device must move slightly when you move
@@ -172,7 +194,7 @@
 		trigger alarm
 		to go off.</string>
 	<string name="exit">Exit</string>
-	<string name="calibrate_title_min">Deep Sleep \'Noise\' Sensitivity</string>
+	<string name="calibrate_title_min">Calibrate Deep Sleep Sensitivity</string>
 	<string name="calibrate_description_min">
 		<b>Goal:</b>
 		find the cut-off level to remove
@@ -268,6 +290,13 @@
 		<item>110</item>
 		<item>115</item>
 		<item>120</item>
+	</string-array>
+
+	<string-array name="array_prefs_alarm_binding">
+		<item>Google Deskclock</item>
+		<item>Curvefish Clock</item>
+		<item>HTC WorldClock</item>
+		<item>Motoblur Clock</item>
 	</string-array>
 
 	<string name="title_pref_alarm_window">Pre-Alarm Window</string>

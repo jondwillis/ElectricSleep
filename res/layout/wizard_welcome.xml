@@ -2,26 +2,20 @@
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/wizardViewFlipper" android:layout_height="wrap_content"
 	android:layout_width="match_parent">
-	<LinearLayout android:layout_height="wrap_content"
-		android:orientation="vertical" android:layout_width="match_parent">
+	<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
 		<TextView style="@style/TextHeader" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:text="@string/calibrate_title_welcome"
-			android:layout_gravity="center_horizontal"></TextView>
+			android:layout_width="wrap_content" android:layout_gravity="center_horizontal" android:text="@string/title_welcome"></TextView>
 
-		<TextView android:layout_height="wrap_content" style="@style/TextBody"
-			android:text="@string/calibrate_description_welcome"
-			android:layout_width="wrap_content"></TextView>
-	</LinearLayout>
-	<LinearLayout android:layout_height="wrap_content"
-		android:orientation="vertical" android:layout_width="match_parent">
-		<TextView style="@style/TextHeader" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:layout_gravity="center_horizontal"
-			android:text="@string/calibrate_title_placement"></TextView>
+		<ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_gravity="center"></ImageView><TextView android:layout_height="wrap_content" style="@style/TextBody"
+			android:layout_width="wrap_content" android:text="placeholder" android:layout_gravity="center"></TextView>
+	
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/skip_tutorial" android:id="@+id/ButtonSkipTutorial" android:onClick="onSkipTutorialClick" android:layout_gravity="bottom|center_horizontal"></Button>
+</LinearLayout><LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="match_parent">
+		<TextView style="@style/TextHeader" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_horizontal" android:text="@string/electricsleep_about"></TextView>
 
-		<TextView android:layout_height="wrap_content" style="@style/TextBody"
-			android:text="@string/calibrate_description_placement"
-			android:layout_width="wrap_content"></TextView>
+		<TextView android:layout_height="wrap_content" style="@style/TextBody" android:layout_width="wrap_content" android:text="@string/electricsleep_description"></TextView>
 	</LinearLayout>
+	
 	<LinearLayout android:layout_height="wrap_content"
 		android:orientation="vertical" android:layout_width="match_parent"
 		android:id="@+id/minTest">

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.androsz.electricsleep" android:versionCode="1"
-	android:versionName="0.1" android:installLocation="internalOnly">
+	android:versionName="0.1" android:installLocation="internalOnly" >
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
-		android:theme="@style/Theme.electricsleep">
+		android:theme="@style/Theme.electricsleep" android:debuggable="true">
 
 		<activity android:name=".app.HomeActivity" android:label="@string/app_name">
 			<intent-filter>
@@ -22,7 +22,7 @@
 		<activity android:name=".app.HistoryActivity" android:label="@string/title_history" />
 		<activity android:name=".app.CalibrateForResultActivity"
 			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog" />
-		<activity android:name=".app.ReviewSleepActivity" />
+		<activity android:name=".app.ReviewSleepActivity" android:label="@string/title_review_sleep" />
 		<activity android:name=".app.SaveSleepActivity"
 			android:label="@string/title_save_sleep" />
 

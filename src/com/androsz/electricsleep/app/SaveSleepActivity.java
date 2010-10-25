@@ -54,6 +54,7 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 		saveIntent.putExtras(getIntent().getExtras());
 		sendBroadcast(saveIntent);
+		startActivity(new Intent(this, HistoryActivity.class));
 		finish();
 	}
 }

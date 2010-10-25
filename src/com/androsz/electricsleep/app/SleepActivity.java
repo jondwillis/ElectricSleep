@@ -166,7 +166,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 
 		try {
 			final AlarmDatabase adb = new AlarmDatabase(getContentResolver(),
-					"com.android.deskclock");
+					"com.androsz.electricsleep.deskclock");
 			final Alarm alarm = adb.getNearestEnabledAlarm();
 			final Calendar alarmTime = alarm.getNearestAlarmDate();
 

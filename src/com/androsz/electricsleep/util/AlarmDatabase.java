@@ -168,13 +168,15 @@ public class AlarmDatabase {
 		final Intent i = new Intent();
 		i.setAction(Intent.ACTION_MAIN);
 
-		i.setClassName("com.android.deskclock",
-				"com.android.deskclock.AlarmClock");
+		i.setClassName("com.androsz.electricsleep.deskclock",
+				"com.androsz.electricsleep.deskclock.AlarmClock");
 		ResolveInfo resolved = packageManager.resolveActivity(i,
 				PackageManager.MATCH_DEFAULT_ONLY);
 		if (resolved != null) {
 			return i; // 2.2
 		}
+		
+		
 
 		i.setClassName("com.htc.android.worldclock",
 				"com.htc.android.worldclock.WorldClockTabControl");
@@ -235,7 +237,7 @@ public class AlarmDatabase {
 	}
 
 	public static void triggerAlarm(final Context context, final Alarm alarm) {
-		final Intent intent = new Intent("com.android.deskclock.ALARM_ALERT");
+		final Intent intent = new Intent("com.androsz.electricsleep.deskclock.ALARM_ALERT");
 
 		final Parcel out = Parcel.obtain();
 		alarm.writeToParcel(out, 0);
