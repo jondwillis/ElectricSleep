@@ -54,7 +54,7 @@ public class SleepHistoryDatabase {
 		private static final String FTS_TABLE_CREATE = "CREATE VIRTUAL TABLE "
 				+ FTS_VIRTUAL_TABLE + " USING fts3 (" + KEY_SLEEP_DATE_TIME
 				+ ", " + KEY_SLEEP_DATA_X + ", " + KEY_SLEEP_DATA_Y + ", "
-				+ KEY_SLEEP_DATA_MIN + ", " + KEY_SLEEP_DATA_ALARM + ");";
+				+ KEY_SLEEP_DATA_MIN + ", " + KEY_SLEEP_DATA_ALARM + ", " + KEY_SLEEP_DATA_RATING + ");";
 
 		SleepHistoryDBOpenHelper(final Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,8 +68,7 @@ public class SleepHistoryDatabase {
 		 */
 		public long addSleep(final String sleepDateTime,
 				final List<Double> sleepChartDataX,
-				final List<Double> sleepChartDataY, final int min,
-				final int max, final int alarm) throws IOException {
+				final List<Double> sleepChartDataY, final int min, final int alarm, final int rating) throws IOException {
 
 			final SQLiteDatabase db = getWritableDatabase();
 
@@ -85,6 +84,8 @@ public class SleepHistoryDatabase {
 
 				initialValues.put(KEY_SLEEP_DATA_MIN, min);
 				initialValues.put(KEY_SLEEP_DATA_ALARM, alarm);
+				initialValues.put(KEY_SLEEP_DATA_RATING, rating);
+				
 				insertResult = db
 						.insert(FTS_VIRTUAL_TABLE, null, initialValues);
 			} finally {
@@ -111,12 +112,13 @@ public class SleepHistoryDatabase {
 	public static final String KEY_SLEEP_DATA_X = "sleep_data_x";
 	public static final String KEY_SLEEP_DATA_Y = "sleep_data_y";
 	public static final String KEY_SLEEP_DATA_MIN = "sleep_data_min";
-
 	public static final String KEY_SLEEP_DATA_ALARM = "sleep_data_alarm";
+	public static final String KEY_SLEEP_DATA_RATING = "sleep_data_rating";
+	
 	private static final String DATABASE_NAME = "sleephistory";
 	private static final String FTS_VIRTUAL_TABLE = "FTSsleephistory";
 
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	public static Object byteArrayToObject(final byte[] bytes)
 			throws StreamCorruptedException, IOException,
@@ -154,6 +156,7 @@ public class SleepHistoryDatabase {
 		map.put(KEY_SLEEP_DATA_Y, KEY_SLEEP_DATA_Y);
 		map.put(KEY_SLEEP_DATA_MIN, KEY_SLEEP_DATA_MIN);
 		map.put(KEY_SLEEP_DATA_ALARM, KEY_SLEEP_DATA_ALARM);
+		map.put(KEY_SLEEP_DATA_RATING, KEY_SLEEP_DATA_RATING);
 
 		map.put(BaseColumns._ID, "rowid AS " + BaseColumns._ID);
 		map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS "
@@ -181,13 +184,12 @@ public class SleepHistoryDatabase {
 	 */
 	public void addSleep(final Context context, final String sleepDateTime,
 			final List<Double> sleepChartDataX,
-			final List<Double> sleepChartDataY, final int min, final int max,
-			final int alarm) throws IOException {
+			final List<Double> sleepChartDataY, final int min,
+			final int alarm, final int rating) throws IOException {
 		try {
 			databaseOpenHelper.addSleep(sleepDateTime, sleepChartDataX,
-					sleepChartDataY, min, max, alarm);
+					sleepChartDataY, min, alarm, rating);
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -197,9 +199,11 @@ public class SleepHistoryDatabase {
 	}
 
 	public boolean deleteRow(final long id) {
-		return databaseOpenHelper.getWritableDatabase().delete(
-				FTS_VIRTUAL_TABLE, "rowid=?",
+		SQLiteDatabase db = databaseOpenHelper.getWritableDatabase();
+		boolean value = db.delete(FTS_VIRTUAL_TABLE, "rowid=?",
 				new String[] { Long.toString(id) }) > 0;
+		db.close();
+		return value;
 	}
 
 	/**

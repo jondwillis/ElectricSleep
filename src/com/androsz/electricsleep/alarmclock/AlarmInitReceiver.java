@@ -41,6 +41,6 @@ public class AlarmInitReceiver extends BroadcastReceiver {
 			Alarms.saveSnoozeAlert(context, -1, -1);
 			Alarms.disableExpiredAlarms(context);
 		}
-		Alarms.setNextAlert(context);
+		Alarms.setNextAlert(context, -1);
 	}
 }

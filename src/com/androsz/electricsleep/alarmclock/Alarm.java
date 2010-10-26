@@ -292,7 +292,7 @@ public final class Alarm implements Parcelable {
 		c.setTimeInMillis(System.currentTimeMillis());
 		hour = c.get(Calendar.HOUR_OF_DAY);
 		minutes = c.get(Calendar.MINUTE);
-		vibrate = true;
+		vibrate = false;
 		daysOfWeek = new DaysOfWeek(0);
 		alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 	}

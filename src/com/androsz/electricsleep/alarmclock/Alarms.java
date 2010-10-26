@@ -111,7 +111,7 @@ public class Alarms {
 		if (alarm.enabled) {
 			clearSnoozeIfNeeded(context, timeInMillis);
 		}
-		setNextAlert(context);
+		setNextAlert(context, -1);
 		return timeInMillis;
 	}
 
@@ -150,7 +150,7 @@ public class Alarms {
 		return c;
 	}
 
-	public static Alarm calculateNextAlert(final Context context) {
+	public static Alarm calculateNextAlert(final Context context, final long timeToIgnore) {
 		Alarm alarm = null;
 		long minTime = Long.MAX_VALUE;
 		final long now = System.currentTimeMillis();
@@ -169,7 +169,7 @@ public class Alarms {
 						enableAlarmInternal(context, a, false);
 						continue;
 					}
-					if (a.time < minTime) {
+					if (a.time < minTime && a.time != timeToIgnore) {
 						minTime = a.time;
 						alarm = a;
 					}
@@ -247,7 +247,7 @@ public class Alarms {
 				alarmId);
 		contentResolver.delete(uri, "", null);
 
-		setNextAlert(context);
+		setNextAlert(context, -1);
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class Alarms {
 	public static void enableAlarm(final Context context, final int id,
 			final boolean enabled) {
 		enableAlarmInternal(context, id, enabled);
-		setNextAlert(context);
+		setNextAlert(context, -1);
 	}
 
 	private static void enableAlarmInternal(final Context context,
@@ -520,7 +520,7 @@ public class Alarms {
 			ed.commit();
 		}
 		// Set the next alert after updating the snooze.
-		setNextAlert(context);
+		setNextAlert(context, -1);
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class Alarms {
 			clearSnoozeIfNeeded(context, timeInMillis);
 		}
 
-		setNextAlert(context);
+		setNextAlert(context, -1);
 
 		return timeInMillis;
 	}
@@ -560,9 +560,9 @@ public class Alarms {
 	 * changes alarm settings. Activates snooze if set, otherwise loads all
 	 * alarms, activates next alert.
 	 */
-	public static void setNextAlert(final Context context) {
+	public static void setNextAlert(final Context context, final long timeToIgnore) {
 		if (!enableSnoozeAlert(context)) {
-			final Alarm alarm = calculateNextAlert(context);
+			final Alarm alarm = calculateNextAlert(context, timeToIgnore);
 			if (alarm != null) {
 				enableAlert(context, alarm, alarm.time);
 			} else {

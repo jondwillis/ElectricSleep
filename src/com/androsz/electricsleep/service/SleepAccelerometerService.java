@@ -19,22 +19,24 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.alarmclock.AlarmAlertFullScreen;
+import com.androsz.electricsleep.alarmclock.AlarmReceiver;
+import com.androsz.electricsleep.alarmclock.Alarms;
 import com.androsz.electricsleep.app.CalibrationWizardActivity;
 import com.androsz.electricsleep.app.SaveSleepActivity;
 import com.androsz.electricsleep.app.SettingsActivity;
 import com.androsz.electricsleep.app.SleepActivity;
-import com.androsz.electricsleep.util.Alarm;
-import com.androsz.electricsleep.util.AlarmDatabase;
+import com.androsz.electricsleep.alarmclock.Alarm;
 
 public class SleepAccelerometerService extends Service implements
 		SensorEventListener {
 	public static final String POKE_SYNC_CHART = "com.androsz.electricsleep.POKE_SYNC_CHART";
-	public static final String ALARM_TRIGGERED = "com.androsz.electricsleep.ALARM_TRIGGERED";
 	public static final String STOP_AND_SAVE_SLEEP = "com.androsz.electricsleep.STOP_AND_SAVE_SLEEP";
 	public static final String SLEEP_STOPPED = "com.androsz.electricsleep.SLEEP_STOPPED";
 
@@ -86,6 +88,14 @@ public class SleepAccelerometerService extends Service implements
 			final Intent saveIntent = addExtrasToSaveSleepIntent(new Intent(
 					SleepAccelerometerService.this, SaveSleepActivity.class));
 			startActivity(saveIntent);
+			stopSelf();
+		}
+	};
+
+	private final BroadcastReceiver alarmDoneReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			createSaveSleepNotification();
 			stopSelf();
 		}
 	};
@@ -196,6 +206,8 @@ public class SleepAccelerometerService extends Service implements
 		registerReceiver(stopAndSaveSleepReceiver, new IntentFilter(
 				STOP_AND_SAVE_SLEEP));
 
+		registerReceiver(alarmDoneReceiver, new IntentFilter(
+				Alarms.ALARM_DONE_ACTION));
 		registerAccelerometerListener();
 
 		obtainWakeLock();
@@ -209,6 +221,7 @@ public class SleepAccelerometerService extends Service implements
 
 		unregisterReceiver(pokeSyncChartReceiver);
 		unregisterReceiver(stopAndSaveSleepReceiver);
+		unregisterReceiver(alarmDoneReceiver);
 
 		sensorManager.unregisterListener(SleepAccelerometerService.this);
 
@@ -337,21 +350,29 @@ public class SleepAccelerometerService extends Service implements
 	private boolean triggerAlarmIfNecessary(final long currentTime,
 			final double y) {
 		if (useAlarm) {
-			final AlarmDatabase adb = new AlarmDatabase(getContentResolver());
-			final Alarm alarm = adb.getNearestEnabledAlarm();
-			final Calendar alarmTime = alarm.getNearestAlarmDate();
-			alarmTime.add(Calendar.MINUTE, alarmWindow * -1);
-			final long alarmMillis = alarmTime.getTimeInMillis();
-			if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
-				alarm.time = currentTime;
+			// final AlarmDatabase adb = new
+			// AlarmDatabase(getContentResolver());
+			final Alarm alarm = Alarms.calculateNextAlert(this, -1);// adb.getNearestEnabledAlarm();
+			if (alarm != null) {
+				final Calendar alarmTime = Calendar.getInstance();
+				alarmTime.setTimeInMillis(alarm.time);
+				alarmTime.add(Calendar.MINUTE, alarmWindow * -1);
+				final long alarmMillis = alarmTime.getTimeInMillis();
+				if (currentTime >= alarmMillis && y >= alarmTriggerSensitivity) {
+					//alarm.time = 0;
 
-				createSaveSleepNotification();
+					final Intent i = new Intent(Alarms.ALARM_ALERT_ACTION);
+					final Parcel out = Parcel.obtain();
+	                alarm.writeToParcel(out, 0);
+	                out.setDataPosition(0);
+	                i.putExtra("intent.extra.alarm_raw", out.marshall());
+					//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					//i.putExtra(SCREEN_OFF, false);
+					//startActivity(i);
+					sendBroadcast(i);
 
-				com.androsz.electricsleep.util.AlarmDatabase.triggerAlarm(this,
-						alarm);
-
-				stopSelf();
-				return true;
+					return true;
+				}
 			}
 		}
 		return false;

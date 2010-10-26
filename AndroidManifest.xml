@@ -43,7 +43,7 @@
 			android:exported="true" />
 			
 		<activity android:name=".alarmclock.SettingsActivity"
-			android:label="@string/settings" android:taskAffinity=""
+			android:label="@string/alarmclock_settings" android:taskAffinity=""
 			android:excludeFromRecents="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

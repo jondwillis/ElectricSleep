@@ -246,7 +246,7 @@ public class AlarmClock extends
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		getMenuInflater().inflate(R.menu.alarm_list_menu, menu);
-		return super.onCreateOptionsMenu(menu);
+		return true;//super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

@@ -129,7 +129,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		} else {
 			// Enable the next alert if there is one. The above call to
 			// enableAlarm will call setNextAlert so avoid calling it twice.
-			Alarms.setNextAlert(context);
+			Alarms.setNextAlert(context, alarm.time);
 		}
 
 		// Play the alarm alert and vibrate the device.

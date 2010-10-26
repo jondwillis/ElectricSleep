@@ -16,10 +16,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
+import com.androsz.electricsleep.alarmclock.Alarm;
 import com.androsz.electricsleep.alarmclock.AlarmClock;
+import com.androsz.electricsleep.alarmclock.Alarms;
 import com.androsz.electricsleep.service.SleepAccelerometerService;
-import com.androsz.electricsleep.util.Alarm;
-import com.androsz.electricsleep.util.AlarmDatabase;
 import com.androsz.electricsleep.view.SleepChartView;
 
 public class SleepActivity extends CustomTitlebarActivity {
@@ -166,19 +166,21 @@ public class SleepActivity extends CustomTitlebarActivity {
 		sendBroadcast(new Intent(SleepAccelerometerService.POKE_SYNC_CHART));
 
 		try {
-			final AlarmDatabase adb = new AlarmDatabase(getContentResolver());
-			final Alarm alarm = adb.getNearestEnabledAlarm();
-			final Calendar alarmTime = alarm.getNearestAlarmDate();
+			final Alarm alarm = Alarms.calculateNextAlert(this, -1);// adb.getNearestEnabledAlarm();
+			if (alarm != null) {
+				final Calendar alarmTime = Calendar.getInstance();
+				alarmTime.setTimeInMillis(alarm.time);
 
-			java.text.DateFormat df = DateFormat.getDateFormat(this);// .getDateFormat(this);
-			String dateTime = df.format(alarmTime.getTime());
-			df = DateFormat.getTimeFormat(this);
-			dateTime = df.format(alarmTime.getTime()) + " on " + dateTime;
-			// CharSequence cs = "":
-			// StringBuilder sb = new StringBuilder();
-			// Formatter formatter = new Formatter();
-			Toast.makeText(this, "Bound to alarm @ " + dateTime,
-					Toast.LENGTH_LONG).show();
+				java.text.DateFormat df = DateFormat.getDateFormat(this);// .getDateFormat(this);
+				String dateTime = df.format(alarmTime.getTime());
+				df = DateFormat.getTimeFormat(this);
+				dateTime = df.format(alarmTime.getTime()) + " on " + dateTime;
+				// CharSequence cs = "":
+				// StringBuilder sb = new StringBuilder();
+				// Formatter formatter = new Formatter();
+				Toast.makeText(this, "Bound to alarm @ " + dateTime,
+						Toast.LENGTH_LONG).show();
+			}
 		} catch (final Exception e) {
 
 		}

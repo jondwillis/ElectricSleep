@@ -20,7 +20,7 @@
         android:title="@string/add_alarm"
         android:icon="@drawable/ic_menu_add"/>
     <item android:id="@+id/menu_item_settings"
-        android:title="@string/settings"
+        android:title="@string/alarmclock_settings"
         android:icon="@android:drawable/ic_menu_preferences"/>
 </menu>
 

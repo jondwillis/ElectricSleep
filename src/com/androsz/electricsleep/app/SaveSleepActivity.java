@@ -49,7 +49,7 @@ public class SaveSleepActivity extends CustomTitlebarActivity implements
 			return;
 		}
 
-		getIntent().putExtra("rating", rating);
+		getIntent().putExtra("rating", (int)rating);
 
 		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
 		saveIntent.putExtras(getIntent().getExtras());

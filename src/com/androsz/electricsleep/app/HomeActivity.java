@@ -68,7 +68,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 					HomeActivity.this)
 					.setMessage(message)
 					.setCancelable(false)
-					.setPositiveButton("Calibrate",
+					.setPositiveButton(getString(R.string.calibrate),
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(
@@ -78,7 +78,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 											CalibrationWizardActivity.class));
 								}
 							})
-					.setNeutralButton("Manual",
+					.setNeutralButton(getString(R.string.manual),
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(
@@ -88,7 +88,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 											SettingsActivity.class));
 								}
 							})
-					.setNegativeButton("Cancel",
+					.setNegativeButton(getString(R.string.cancel),
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(

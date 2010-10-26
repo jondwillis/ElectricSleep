@@ -7,8 +7,11 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.widget.RatingBar;
 
 import com.androsz.electricsleep.R;
 import com.androsz.electricsleep.achartengine.ChartView;
@@ -31,6 +34,8 @@ public class SleepChartView extends ChartView implements Serializable {
 	public XYSeries xySeriesMovement;
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
+
+	public int rating;
 
 	public SleepChartView(final Context context) {
 		super(context);
@@ -103,8 +108,31 @@ public class SleepChartView extends ChartView implements Serializable {
 
 			xyMultipleSeriesRenderer.setYAxisMin(min);
 			xyMultipleSeriesRenderer.setYAxisMax(alarm);
-
 			repaint();
+		}
+	}
+
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		if (rating < 6 && rating > 0) {
+			Drawable dStarOn = getResources().getDrawable(
+					R.drawable.rate_star_small_on);
+			Drawable dStarOff = getResources().getDrawable(
+					R.drawable.rate_star_small_off);
+			int width = dStarOn.getMinimumWidth();
+			int height = dStarOn.getMinimumHeight();
+			int numOffStars = 5 - rating;
+			int centerThemDangStarz = (canvas.getWidth() - (width * 5)) / 2;
+			for (int i = 0; i < rating; i++) {
+				dStarOn.setBounds(width * (i) + centerThemDangStarz, height, width * (i) + width +centerThemDangStarz,
+						height * 2);
+				dStarOn.draw(canvas);
+			}
+			for (int i = 0; i < numOffStars; i++) {
+				dStarOff.setBounds(width * (i + rating) + centerThemDangStarz, height, width
+						* (i + rating) + width + centerThemDangStarz, height * 2);
+				dStarOff.draw(canvas);
+			}
 		}
 	}
 
@@ -127,7 +155,8 @@ public class SleepChartView extends ChartView implements Serializable {
 		final String name = cursor
 				.getString(cursor
 						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATE_TIME));
-
+		// final int rating =
+		// cursor.getInt(cursor.getColumnIndexOrThrow(SleepHistoryDatabase.))
 		try {
 
 			xySeriesMovement.mX = (List<Double>) SleepHistoryDatabase
@@ -155,6 +184,9 @@ public class SleepChartView extends ChartView implements Serializable {
 		final int alarm = cursor
 				.getInt(cursor
 						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM));
+		rating = cursor
+				.getInt(cursor
+						.getColumnIndexOrThrow(SleepHistoryDatabase.KEY_SLEEP_DATA_RATING));
 
 		xyMultipleSeriesRenderer.setChartTitle(name);
 		redraw(min, alarm);

@@ -93,7 +93,8 @@ public class SleepContentProvider extends ContentProvider {
 				SleepHistoryDatabase.KEY_SLEEP_DATA_X,
 				SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
 				SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
-				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM };
+				SleepHistoryDatabase.KEY_SLEEP_DATA_ALARM,
+				SleepHistoryDatabase.KEY_SLEEP_DATA_RATING };
 
 		return sleepHistoryDatabase.getSleep(rowId, columns);
 	}

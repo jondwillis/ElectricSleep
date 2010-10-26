@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androsz.electricsleep.R;
 
@@ -68,6 +69,7 @@ public abstract class CustomTitlebarActivity extends Activity {
 			startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
 			return true;
 		case R.id.menuItemAbout:
+			Toast.makeText(this, "this will be used later to show changelogs, dev/support info :P", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.menuItemDonate:
 			final Uri marketUri = Uri
@@ -80,8 +82,9 @@ public abstract class CustomTitlebarActivity extends Activity {
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
-			return false;
+			break;
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void setHomeButtonAsLogo() {

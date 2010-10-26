@@ -31,12 +31,11 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 
 				final int min = intent.getIntExtra("min",
 						SettingsActivity.DEFAULT_MIN_SENSITIVITY);
-				final int max = intent.getIntExtra("max",
-						SettingsActivity.DEFAULT_MAX_SENSITIVITY);
 				final int alarm = intent.getIntExtra("alarm",
 						SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 				final String name = intent.getStringExtra("name");
+				final int rating = intent.getIntExtra("rating", 5);
 
 				List<Double> mX = (List<Double>) intent
 						.getSerializableExtra("currentSeriesX");
@@ -90,9 +89,9 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 							}
 						}
 						shdb.addSleep(context, name, lessDetailedX,
-								lessDetailedY, min, max, alarm);
+								lessDetailedY, min, alarm, rating);
 					} else {
-						shdb.addSleep(context, name, mX, mY, min, max, alarm);
+						shdb.addSleep(context, name, mX, mY, min, alarm, rating);
 					}
 				} catch (final IOException e) {
 					Toast.makeText(context,
