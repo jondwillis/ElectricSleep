@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent" android:layout_width="match_parent"
-	android:background="@drawable/gradient_background_vert">
-	<com.androsz.electricsleep.view.SleepChartView
-		android:id="@+id/sleep_movement_chart" android:layout_width="match_parent"
-		android:layout_height="match_parent" android:layout_margin="4dip"
-		android:orientation="horizontal" />
+	android:layout_height="fill_parent" android:layout_width="fill_parent"
+	android:orientation="vertical">
+	<!-- <ScrollView android:layout_gravity="top" android:layout_width="match_parent" 
+		android:padding="4dip" android:layout_height="wrap_content" android:layout_weight="1"> -->
+	<LinearLayout android:layout_width="fill_parent"
+		android:orientation="vertical" android:layout_height="wrap_content">
+		<TextView android:id="@+id/text_sleep_no_alarm"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:drawableLeft="@drawable/exclamation" android:text="@string/sleep_no_alarm" />
+		<View android:layout_width="match_parent" android:layout_height="1dip"
+			android:background="@color/background_transparent_lighten"
+			android:id="@+id/div_sleep_no_alarm" />
+		<TextView android:id="@+id/text_sleep_plugged_in"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:drawableLeft="@drawable/exclamation" android:text="@string/sleep_plugged_in" />
+		<View android:layout_width="match_parent" android:layout_height="1dip"
+			android:background="@color/background_transparent_lighten"
+			android:id="@+id/div_sleep_plugged_in" />
+		<TextView android:id="@+id/text_sleep_dim"
+			android:layout_height="wrap_content" android:text="@string/sleep_dim"
+			android:layout_width="wrap_content" android:drawableLeft="@drawable/exclamation" />
+	</LinearLayout>
+	<!-- </ScrollView> -->
+	<com.androsz.electricsleepbeta.widget.SleepChart
+		android:id="@+id/sleep_movement_chart" android:layout_height="wrap_content"
+		android:layout_gravity="bottom" android:layout_width="match_parent"
+		android:layout_margin="4dip" android:visibility="gone"></com.androsz.electricsleepbeta.widget.SleepChart>
+	<LinearLayout android:layout_width="match_parent"
+		android:layout_height="match_parent" android:id="@+id/wait_for_sleep_data">
+		<ProgressBar android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:indeterminate="true"
+			android:layout_gravity="left|center_vertical"></ProgressBar>
+		<TextView android:layout_width="match_parent"
+			android:gravity="center" android:text="@string/dialog_wait_for_sleep_data_message"
+			android:layout_height="wrap_content" android:layout_gravity="right|center_vertical"></TextView>
+	</LinearLayout>
 </LinearLayout>

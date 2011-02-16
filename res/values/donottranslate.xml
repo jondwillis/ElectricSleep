@@ -1,20 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- String matching the lock screen format for displaying the date. -->
-    <string name="full_wday_month_day_no_year">EEEE, MMMM d</string>
+	<!-- String matching the lock screen format for displaying the date. -->
+	<string name="full_wday_month_day_no_year">EEEE, MMMM d</string>
+	<string name="analytics_ua_number">UA-19363335-1</string>
+	<string name="pref_sensor_delay">sensorDelay</string>
+	<string name="pref_force_screen">forceScreenOn</string>
+	<string name="pref_airplane_mode">airplaneMode</string>
+	<string name="pref_silent_mode">silentMode</string>
+	<string name="pref_last_sleep_row">lastSavedSleepRow</string>
+	<string name="pref_use_alarm">useAlarm</string>
+	<string name="pref_alarm_trigger_sensitivity">alarmTriggerSensitivity</string>
+	<string name="pref_alarm_window">alarmWindow</string>
+	<string name="pref_alarms">alarms</string>
+	<string-array name="array_prefs_sensor_delay_values">
+		<item>3</item>
+		<item>2</item>
+	</string-array>
+	<string-array name="array_prefs_alarm_window_values">
+		<item>5</item>
+		<item>10</item>
+		<item>15</item>
+		<item>20</item>
+		<item>25</item>
+		<item>30</item>
+		<item>35</item>
+		<item>40</item>
+		<item>45</item>
+		<item>50</item>
+		<item>55</item>
+		<item>60</item>
+		<item>65</item>
+		<item>70</item>
+		<item>75</item>
+		<item>80</item>
+		<item>85</item>
+		<item>90</item>
+		<item>95</item>
+		<item>100</item>
+		<item>105</item>
+		<item>110</item>
+		<item>115</item>
+		<item>120</item>
+	</string-array>
+	<!-- Order of month year label in month view -->
+	<string name="month_year">%B %Y</string>
+
 </resources>

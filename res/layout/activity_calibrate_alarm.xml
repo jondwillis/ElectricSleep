@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_gravity="center" android:layout_height="fill_parent"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/warming_up_text"
+		android:text="@string/warming_up" android:layout_gravity="center_vertical|center_horizontal|center"></TextView>
+
+	<com.androsz.electricsleepbeta.widget.SleepChart
+		android:id="@+id/calibration_sleep_chart" android:layout_margin="4dip"
+		android:layout_gravity="left" android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:layout_weight="100"
+		android:visibility="gone" />
+
+	<com.androsz.electricsleepbeta.widget.DecimalSeekBar
+		android:layout_height="wrap_content" android:id="@+id/calibration_level_seekbar"
+		android:layout_width="fill_parent" android:layout_gravity="bottom"
+		android:layout_weight="0.1" android:visibility="gone" />
+	<Button android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:text="@string/done"
+		android:onClick="onDoneClick" android:layout_gravity="bottom|right"
+		android:layout_weight="0.25"></Button>
+
+</LinearLayout>

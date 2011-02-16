@@ -12,20 +12,26 @@
 	</style>
 
 	<style name="WindowTitleBackground" parent="android:WindowTitleBackground">
-
 		<item name="android:background">@android:color/transparent</item>
-
 	</style>
 
 	<style name="HomeButton">
 		<item name="android:padding">8dip</item>
 		<item name="android:layout_gravity">center_vertical</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:layout_weight">1</item>
 		<item name="android:gravity">center_horizontal</item>
 		<item name="android:textSize">@dimen/text_size_large</item>
 		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">@color/primary1</item>
+		<item name="android:background">@null</item>
+
+	</style>
+
+	<style name="AppwidgetButton">
+		<item name="android:layout_gravity">center_vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:gravity">center_horizontal</item>
+		<item name="android:textSize">@dimen/text_size_medium</item>
 		<item name="android:textColor">@color/primary1</item>
 		<item name="android:background">@null</item>
 	</style>
@@ -105,31 +111,42 @@
 		<item name="android:lineSpacingMultiplier">1.1</item>
 		<item name="android:textColor">@color/text</item>
 	</style>
-	
+
 	<!-- alarmclock -->
 	<style name="clock">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-    </style>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_gravity">center_horizontal</item>
+	</style>
 
-    <!-- This theme is similar to the Theme.Dialog.Alert but does not rely on a
-         non-public resource. -->
-    <style name="alarm_alert" parent="android:Theme.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-    
-    <style name="ButtonStripRight">
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/btn_strip_trans_right</item>
-    </style>
+	<!-- This theme is similar to the Theme.Dialog.Alert but does not rely on 
+		a non-public resource. -->
+	<style name="alarm_alert" parent="android:Theme.Dialog">
+		<item name="android:windowBackground">@android:color/transparent</item>
+	</style>
 
-    <style name="alarm_list_left_column">
-        <item name="android:layout_width">68dip</item>
-        <item name="android:layout_height">68dip</item>
-    </style>
+	<style name="alarm_list_left_column">
+		<item name="android:layout_width">68dip</item>
+		<item name="android:layout_height">68dip</item>
+	</style>
 
+	<!-- calendar -->
+	<style name="MonthView_DayLabel">
+		<item name="android:layout_width">29dip</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:gravity">center</item>
+		<item name="android:paddingTop">2dip</item>
+		<item name="android:paddingBottom">2dip</item>
+		<item name="android:textAppearance">@style/TextAppearance_MonthView_DayLabel</item>
+	</style>
+	<style name="TextAppearance_MonthView_DayLabel">
+		<item name="android:textSize">14sp</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">@color/daynames_text_color</item>
+	</style>
+	<style name="CalendarTheme" parent="android:Theme.Black">
+		<item name="android:windowContentOverlay">@null</item>
+	</style>
 
 </resources>

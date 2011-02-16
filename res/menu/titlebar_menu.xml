@@ -8,6 +8,8 @@
 		android:id="@+id/menuItemAbout" android:title="@string/about"></item>
 	<item android:id="@+id/menuItemDonate" android:title="@string/donate"
 		android:icon="@android:drawable/ic_menu_myplaces"></item>
+	<item android:id="@+id/menuItemReport" android:title="@string/title_report"
+		android:icon="@android:drawable/ic_menu_send"></item>
 	<item android:title="@string/title_settings" android:id="@+id/menuItemSettings"
 		android:icon="@android:drawable/ic_menu_preferences"></item>
 

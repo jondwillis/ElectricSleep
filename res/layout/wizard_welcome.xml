@@ -1,30 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/wizardViewFlipper" android:layout_height="wrap_content"
-	android:layout_width="match_parent">
-	<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
-		<TextView style="@style/TextHeader" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:layout_gravity="center_horizontal" android:text="@string/title_welcome"></TextView>
+<com.androsz.electricsleepbeta.widget.ViewFlipperBugfix
+	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/wizardViewFlipper"
+	android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<ScrollView android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<RelativeLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent">
+			<TextView style="@style/TextHeader" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="@string/title_welcome"
+				android:layout_alignParentTop="true"
+				android:layout_centerHorizontal="true" android:id="@+id/welcomeTitle"></TextView>
+			<TextView android:layout_height="wrap_content" style="@style/TextBody"
+				android:layout_width="wrap_content" android:text="@string/electricsleep_description"
+				android:layout_below="@+id/welcomeTitle"
+				android:layout_centerHorizontal="true"></TextView>
+		</RelativeLayout>
+	</ScrollView>
+	<ScrollView android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<RelativeLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent">
+			<TextView style="@style/TextHeader" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="@string/electricsleep_about"
+				android:id="@+id/how_it_works" android:layout_centerHorizontal="true"></TextView>
 
-		<ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_gravity="center"></ImageView><TextView android:layout_height="wrap_content" style="@style/TextBody"
-			android:layout_width="wrap_content" android:text="placeholder" android:layout_gravity="center"></TextView>
-	
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/skip_tutorial" android:id="@+id/ButtonSkipTutorial" android:onClick="onSkipTutorialClick" android:layout_gravity="bottom|center_horizontal"></Button>
-</LinearLayout><LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="match_parent">
-		<TextView style="@style/TextHeader" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_horizontal" android:text="@string/electricsleep_about"></TextView>
+			<ImageView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:src="@android:drawable/ic_menu_preferences"
+				android:layout_below="@+id/how_it_works" android:id="@+id/imgConfigure"
+				android:tint="@android:color/white" android:layout_margin="15dip"></ImageView>
+			<TextView android:layout_height="wrap_content" android:id="@+id/textConfigure"
+				android:layout_width="wrap_content" android:layout_toRightOf="@+id/imgConfigure"
+				android:layout_alignTop="@+id/imgConfigure" android:text="@string/how_configure"
+				style="@style/TextHeaderTwo"></TextView>
 
-		<TextView android:layout_height="wrap_content" style="@style/TextBody" android:layout_width="wrap_content" android:text="@string/electricsleep_description"></TextView>
-	</LinearLayout><LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="match_parent" android:id="@+id/accountCreation">
-		<TextView android:layout_height="wrap_content" style="@style/TextHeader" android:layout_width="wrap_content" android:layout_gravity="center_horizontal" android:text="@string/account_creation" android:enabled="false"></TextView>
+			<ImageView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_toRightOf="@+id/welcomeTitle"
+				android:src="@drawable/home_btn_sleep" android:layout_below="@+id/imgConfigure"
+				android:id="@+id/imgSleep" android:layout_margin="10dip"></ImageView>
+			<TextView android:layout_height="wrap_content" android:id="@+id/textSleep"
+				android:layout_width="wrap_content" android:layout_toRightOf="@+id/imgConfigure"
+				android:layout_alignTop="@+id/imgSleep" android:text="@string/how_sleep"
+				style="@style/TextHeaderTwo"></TextView>
 
-		
-		<TextView style="@style/TextBody" android:layout_height="wrap_content" android:layout_width="wrap_content" android:paddingTop="12dip" android:text="This does nothing!!! ...under construction" android:enabled="false"></TextView>
-	
-<EditText android:layout_height="wrap_content" android:hint="@string/username" android:id="@+id/editTextUsername" android:layout_width="match_parent" android:enabled="false"></EditText><EditText android:layout_height="wrap_content" android:id="@+id/editTextUsername" android:layout_width="match_parent" android:hint="@string/password" android:enabled="false"></EditText>
-</LinearLayout>
-	
-	
+			<ImageView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_toRightOf="@+id/welcomeTitle"
+				android:layout_margin="15dip" android:id="@+id/imgAlarm"
+				android:src="@drawable/ic_menu_alarms" android:tint="@android:color/white"
+				android:layout_below="@+id/imgSleep"></ImageView>
+			<TextView android:layout_height="wrap_content" android:id="@+id/textAlarm"
+				android:layout_width="wrap_content" style="@style/TextHeaderTwo"
+				android:layout_toRightOf="@+id/imgConfigure"
+				android:layout_alignTop="@+id/imgAlarm" android:text="@string/how_wake"></TextView>
 
-	
-	
-</ViewFlipper>
+			<ImageView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_toRightOf="@+id/welcomeTitle"
+				android:layout_margin="10dip" android:id="@+id/imgReview"
+				android:layout_below="@+id/imgAlarm" android:src="@drawable/home_btn_history"></ImageView>
+			<TextView android:layout_height="wrap_content" android:id="@+id/textReview"
+				android:layout_width="wrap_content" android:layout_toRightOf="@+id/imgConfigure"
+				style="@style/TextHeaderTwo" android:layout_alignTop="@+id/imgReview"
+				android:text="@string/how_review"></TextView>
+		</RelativeLayout>
+	</ScrollView>
+</com.androsz.electricsleepbeta.widget.ViewFlipperBugfix>
