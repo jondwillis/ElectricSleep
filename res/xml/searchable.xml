@@ -15,9 +15,9 @@
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
 	android:label="@string/search_label" android:hint="@string/search_hint"
 	android:searchSettingsDescription="@string/settings_description"
-	android:searchSuggestAuthority="com.androsz.electricsleepbeta.db.SleepContentProvider"
+	android:searchSuggestAuthority="com.androsz.electricsleep.db.SleepContentProvider"
 	android:searchSuggestIntentAction="android.intent.action.VIEW"
-	android:searchSuggestIntentData="content://com.androsz.electricsleepbeta.db.SleepContentProvider/dictionary"
+	android:searchSuggestIntentData="content://com.androsz.electricsleep.db.SleepContentProvider/dictionary"
 	android:searchSuggestSelection=" ?" android:searchSuggestThreshold="1"
 	android:includeInGlobalSearch="false">
 </searchable>

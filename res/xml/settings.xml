@@ -34,7 +34,7 @@
 	<PreferenceCategory android:title="@string/title_calibrate">
 		<Preference android:key="@string/pref_calibration"
 			android:title="@string/title_pref_calibration" android:summary="@string/summary_pref_calibration"></Preference>
-		<com.androsz.electricsleepbeta.preference.SeekBarPreference
+		<com.androsz.electricsleep.preference.SeekBarPreference
 			android:summary="@string/summary_alarm_trigger_sensitivity"
 			android:enabled="true" android:title="@string/title_pref_alarm_trigger_sensitivity"
 			android:key="@string/pref_alarm_trigger_sensitivity"

@@ -91,7 +91,7 @@
 			android:textAppearance="@style/TextHeader" android:id="@+id/home_last_sleep_title_text"
 			android:layout_width="fill_parent"></TextView>
 	</RelativeLayout>
-	<com.androsz.electricsleepbeta.widget.SleepChart
+	<com.androsz.electricsleep.widget.SleepChart
 		android:id="@+id/home_sleep_chart" android:layout_below="@+id/home_stats_container" android:layout_toRightOf="@+id/home_button_container"
 		android:visibility="gone" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_marginTop="5dip"

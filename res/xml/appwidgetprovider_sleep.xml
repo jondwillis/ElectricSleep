@@ -2,4 +2,4 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
 	android:minWidth="72dip" android:minHeight="72dip"
 	android:updatePeriodMillis="0" android:initialLayout="@layout/appwidget_sleep" />
-<!-- android:configure="com.androsz.electricsleepbeta.app.SettingsActivity" --> 
+<!-- android:configure="com.androsz.electricsleep.app.SettingsActivity" --> 

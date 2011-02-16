@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.androsz.electricsleepbeta.widget.ViewFlipperBugfix
+<com.androsz.electricsleep.widget.ViewFlipperBugfix
 	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/wizardViewFlipper"
 	android:layout_height="wrap_content" android:layout_width="fill_parent">
 	<ScrollView android:layout_width="wrap_content"
@@ -75,4 +75,4 @@
 				android:id="@+id/screenResult"></TextView>
 		</LinearLayout>
 	</ScrollView>
-</com.androsz.electricsleepbeta.widget.ViewFlipperBugfix>
+</com.androsz.electricsleep.widget.ViewFlipperBugfix>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.androsz.electricsleepbeta.widget.FlingableTabHost
+<com.androsz.electricsleep.widget.FlingableTabHost
 	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/tabhost"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:layout_marginTop="5dip">
@@ -81,10 +81,10 @@
 					</TableLayout>
 				</LinearLayout>
 			</ScrollView>
-			<com.androsz.electricsleepbeta.widget.ReviewSleepChart
+			<com.androsz.electricsleep.widget.ReviewSleepChart
 				android:id="@+id/sleep_movement_chart" android:layout_width="fill_parent"
 				android:layout_height="fill_parent" android:orientation="horizontal"
 				android:padding="4dip" />
 		</FrameLayout>
 	</LinearLayout>
-</com.androsz.electricsleepbeta.widget.FlingableTabHost>
+</com.androsz.electricsleep.widget.FlingableTabHost>
