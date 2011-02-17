@@ -1,4 +1,5 @@
-package com.androsz.electricsleep.util;
+//has to be in util so that beta sleep records can still be used.
+package com.androsz.electricsleepbeta.util;
 
 import java.io.Serializable;
 

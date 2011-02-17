@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.androsz.electricsleep.achartengine.util.MathHelper;
-import com.androsz.electricsleep.util.PointD;
+import com.androsz.electricsleepbeta.util.PointD;
 
 /**
  * An XY series encapsulates values for XY charts like line, time, area,

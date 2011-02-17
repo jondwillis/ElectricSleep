@@ -17,7 +17,7 @@ import com.androsz.electricsleep.app.SettingsActivity;
 import com.androsz.electricsleep.app.SleepMonitoringService;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.db.SleepRecord;
-import com.androsz.electricsleep.util.PointD;
+import com.androsz.electricsleepbeta.util.PointD;
 
 public class SaveSleepReceiver extends BroadcastReceiver {
 

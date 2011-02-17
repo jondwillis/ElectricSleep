@@ -17,21 +17,31 @@
 
 package com.androsz.electricsleep.db;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+
+import com.androsz.electricsleep.util.IntentUtil;
+
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.BaseColumns;
 
 /**
- * Provides access to the dictionary database.
+ * Provides access to the sleep database.
  */
 public class SleepContentProvider extends ContentProvider {
 
-	public static String AUTHORITY = "com.androsz.electricsleepbeta.db.sleepcontentprovider";
+	public static String AUTHORITY = "com.androsz.electricsleep.db.sleepcontentprovider";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/sleephistory");
 
@@ -137,7 +147,8 @@ public class SleepContentProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		sleepHistoryDatabase = new SleepHistoryDatabase(getContext());
+		Context context = getContext();
+		sleepHistoryDatabase = new SleepHistoryDatabase(context);
 		return true;
 	}
 

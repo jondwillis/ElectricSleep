@@ -157,59 +157,7 @@ public class HomeActivity extends CustomTitlebarActivity {
 
 			if (WelcomeTutorialWizardActivity
 					.enforceCalibrationBeforeStartingSleep(this)) {
-				// we've already calibrated... now show the beta-ending-donate
-				// message
-				final boolean betaEndingShown = userPrefs.getBoolean(
-						"betaEndingShown", false);
-				if (!betaEndingShown) {
-					userPrefs.edit().putBoolean("betaEndingShown", true)
-							.commit();
-					final AlertDialog.Builder dialog = new AlertDialog.Builder(
-							this)
-							.setTitle(R.string.beta_has_ended)
-							.setMessage(
-									R.string.beta_has_ended_message)
-							.setPositiveButton(getString(R.string.donate),
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											analytics.trackPageView("donate");
-											final Uri marketUri = Uri
-													.parse("market://details?id=com.androsz.electricsleepdonate");
-											final Intent marketIntent = new Intent(
-													Intent.ACTION_VIEW,
-													marketUri);
-											startActivity(marketIntent);
-										}
-									})
-							.setNeutralButton(getString(R.string.manual),
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											analytics
-													.trackPageView("manualInstall");
-											startActivity(new Intent(
-													"android.intent.action.VIEW",
-													Uri.parse("http://code.google.com/p/electricsleep/downloads/list")));
-										}
-									})
-							.setNegativeButton(getString(R.string.ok),
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												final DialogInterface dialog,
-												final int id) {
-											dialog.cancel();
-										}
-									});
-					dialog.show();
-				}
 			}
-
 		}
 	}
 

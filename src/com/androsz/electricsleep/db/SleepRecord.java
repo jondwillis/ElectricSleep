@@ -24,7 +24,7 @@ import android.text.format.Time;
 import android.util.Log;
 
 import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.util.PointD;
+import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepRecord {
 

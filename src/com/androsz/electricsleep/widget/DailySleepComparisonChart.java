@@ -14,7 +14,7 @@ import com.androsz.electricsleep.achartengine.model.XYMultipleSeriesDataset;
 import com.androsz.electricsleep.achartengine.model.XYSeries;
 import com.androsz.electricsleep.achartengine.renderer.XYMultipleSeriesRenderer;
 import com.androsz.electricsleep.achartengine.renderer.XYSeriesRenderer;
-import com.androsz.electricsleep.util.PointD;
+import com.androsz.electricsleepbeta.util.PointD;
 
 public class DailySleepComparisonChart extends ChartView implements
 		Serializable {

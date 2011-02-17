@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="beta_has_ended_message">Thank you for participating! This beta version will not be updated anymore.
-To continue receiving updates through Android Market, please purchase and install the donate version.
-Otherwise, you can continue using the free beta, or you can download and install new versions manually.</string>
-    <string name="beta_has_ended">Beta has ended</string>
 	<string name="screen_will_dim">Screen will dim in 15 seconds.</string>
 	<string name="legend_light_sleep_trigger">Light Sleep Trigger</string>
 	<string name="legend_movement">Movement</string>
@@ -250,7 +246,7 @@ Otherwise, you can continue using the free beta, or you can download and install
 	<string name="finish">Finish</string>
 	<string name="back">Back</string>
 	<string name="next">Next</string>
-	<string name="app_name">ElectricSleep Beta</string>
+	<string name="app_name">ElectricSleep</string>
 
 	<string name="description_logo">ElectricSleep</string>
 	<string name="description_home">Home</string>

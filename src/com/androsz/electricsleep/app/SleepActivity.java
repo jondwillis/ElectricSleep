@@ -22,8 +22,8 @@ import com.androsz.electricsleep.alarmclock.Alarm;
 import com.androsz.electricsleep.alarmclock.AlarmClock;
 import com.androsz.electricsleep.alarmclock.Alarms;
 import com.androsz.electricsleep.content.StartSleepReceiver;
-import com.androsz.electricsleep.util.PointD;
 import com.androsz.electricsleep.widget.SleepChart;
+import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepActivity extends CustomTitlebarActivity {
 

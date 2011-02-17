@@ -17,14 +17,24 @@
 
 package com.androsz.electricsleep.db;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.nio.channels.FileChannel;
+
+import com.androsz.electricsleep.util.DeviceUtil;
+import com.androsz.electricsleep.util.IntentUtil;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.Environment;
 
 /**
  * Contains logic to return specific words from the dictionary, and load the
@@ -55,38 +65,46 @@ public class SleepHistoryDatabase {
 		}
 
 		@Override
-		public void onCreate(final SQLiteDatabase db) {
-			db.execSQL(FTS_TABLE_CREATE);
+		public void onCreate(SQLiteDatabase db) {
+			if (Environment.MEDIA_MOUNTED.equals(Environment
+					.getExternalStorageState())) {
+				File externalDb = new File(
+						Environment.getExternalStorageDirectory().getAbsolutePath(),
+						SleepHistoryDatabase.DATABASE_NAME);
+				if(externalDb.exists())
+				{
+					File data = Environment.getDataDirectory();
+					
+					String restoredDbPath = "/data/com.androsz.electricsleep/databases/";
+					File restoredDb = new File(data + restoredDbPath, DATABASE_NAME);
+					try {
+						db.close();
+						DeviceUtil.copyFile(externalDb, restoredDb);
+					} catch (IOException e) {
+						db.execSQL(FTS_TABLE_CREATE);
+					}
+				}
+				else
+				{
+					db.execSQL(FTS_TABLE_CREATE);
+				}
+				
+			}
+			else
+			{
+				db.execSQL(FTS_TABLE_CREATE);
+			}
 		}
 
 		@Override
 		public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
 				final int newVersion) {
-			/*
-			 * if (db.needUpgrade(newVersion)) { // db.beginTransaction(); final
-			 * List<String> columns = DBUtils.GetColumns(db, FTS_VIRTUAL_TABLE);
-			 * db.execSQL(String.format("ALTER table %s RENAME TO _%s",
-			 * FTS_VIRTUAL_TABLE, FTS_VIRTUAL_TABLE));
-			 * 
-			 * onCreate(db);
-			 * 
-			 * columns.retainAll(DBUtils.GetColumns(db, FTS_VIRTUAL_TABLE));
-			 * final String cols = DBUtils.join(columns, ",");
-			 * 
-			 * db.execSQL(String.format(
-			 * "INSERT INTO %s (%s) SELECT %s from _%s", FTS_VIRTUAL_TABLE,
-			 * cols, cols, FTS_VIRTUAL_TABLE));
-			 * 
-			 * db.execSQL("DROP TABLE IF EXISTS _" + FTS_VIRTUAL_TABLE); //
-			 * db.setTransactionSuccessful(); } else
-			 */{
-				db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
-				onCreate(db);
-			}
+			db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+			onCreate(db);
 		}
 	}
 
-	private static final String DATABASE_NAME = "sleephistory";
+	public static final String DATABASE_NAME = "sleephistory";
 
 	private static final int DATABASE_VERSION = 5;
 	public static final String FTS_VIRTUAL_TABLE = "FTSsleephistory";
