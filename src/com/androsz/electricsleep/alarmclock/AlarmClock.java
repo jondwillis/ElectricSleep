@@ -42,7 +42,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.app.SettingsActivity;
 
 /**

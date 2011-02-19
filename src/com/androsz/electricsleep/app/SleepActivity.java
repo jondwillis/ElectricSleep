@@ -17,7 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.alarmclock.Alarm;
 import com.androsz.electricsleep.alarmclock.AlarmClock;
 import com.androsz.electricsleep.alarmclock.Alarms;

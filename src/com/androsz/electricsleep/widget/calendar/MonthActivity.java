@@ -38,7 +38,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.app.CustomTitlebarActivity;
 import com.androsz.electricsleep.db.SleepContentProvider;
 

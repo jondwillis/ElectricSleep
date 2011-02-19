@@ -33,7 +33,7 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.preference.CustomTitlebarPreferenceActivity;
 
 /**

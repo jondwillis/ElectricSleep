@@ -29,7 +29,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.PowerManager;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.util.SharedWakeLock;
 
 /**

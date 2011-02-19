@@ -68,30 +68,26 @@ public class SleepHistoryDatabase {
 		public void onCreate(SQLiteDatabase db) {
 			if (Environment.MEDIA_MOUNTED.equals(Environment
 					.getExternalStorageState())) {
-				File externalDb = new File(
-						Environment.getExternalStorageDirectory().getAbsolutePath(),
+				File externalDb = new File(Environment
+						.getExternalStorageDirectory().getAbsolutePath(),
 						SleepHistoryDatabase.DATABASE_NAME);
-				if(externalDb.exists())
-				{
+				if (externalDb.exists()) {
 					File data = Environment.getDataDirectory();
-					
-					String restoredDbPath = "/data/com.androsz.electricsleep/databases/";
-					File restoredDb = new File(data + restoredDbPath, DATABASE_NAME);
+
+					String restoredDbPath = "/data/com.androsz.electricsleepdonate/databases/";
+					File restoredDb = new File(data + restoredDbPath,
+							DATABASE_NAME);
 					try {
 						db.close();
 						DeviceUtil.copyFile(externalDb, restoredDb);
 					} catch (IOException e) {
 						db.execSQL(FTS_TABLE_CREATE);
 					}
-				}
-				else
-				{
+				} else {
 					db.execSQL(FTS_TABLE_CREATE);
 				}
-				
-			}
-			else
-			{
+
+			} else {
 				db.execSQL(FTS_TABLE_CREATE);
 			}
 		}
@@ -233,20 +229,23 @@ public class SleepHistoryDatabase {
 		 * mechanism by which the ContentProvider does not need to know the real
 		 * column names
 		 */
-		final SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-		builder.setTables(FTS_VIRTUAL_TABLE);
-		builder.setProjectionMap(SleepRecord.COLUMN_MAP);
-		final SQLiteDatabase db = databaseOpenHelper.getReadableDatabase();
-		final Cursor cursor = builder.query(db, columns, selection,
-				selectionArgs, null, null, null);
+		try {
+			final SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+			builder.setTables(FTS_VIRTUAL_TABLE);
+			builder.setProjectionMap(SleepRecord.COLUMN_MAP);
+			final SQLiteDatabase db = databaseOpenHelper.getReadableDatabase();
+			final Cursor cursor = builder.query(db, columns, selection,
+					selectionArgs, null, null, null);
 
-		if (cursor == null)
-			return null;
-		else if (!cursor.moveToFirst()) {
-			cursor.close();
+			if (cursor == null)
+				return null;
+			else if (!cursor.moveToFirst()) {
+				cursor.close();
+				return null;
+			}
+			return cursor;
+		} catch (Exception e) {
 			return null;
 		}
-		return cursor;
 	}
-
 }

@@ -21,7 +21,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.alarmclock.AlarmClock;
 import com.androsz.electricsleep.content.StartSleepReceiver;
 import com.androsz.electricsleep.db.SleepContentProvider;

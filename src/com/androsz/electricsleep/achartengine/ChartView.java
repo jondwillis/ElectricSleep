@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.achartengine.chart.AbstractChart;
 import com.androsz.electricsleep.achartengine.chart.XYChart;
 import com.androsz.electricsleep.achartengine.renderer.DefaultRenderer;

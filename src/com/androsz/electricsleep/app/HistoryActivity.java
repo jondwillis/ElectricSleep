@@ -16,8 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androsz.electricsleep.R;
-import com.androsz.electricsleep.R.string;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.db.SleepContentProvider;
 import com.androsz.electricsleep.db.SleepHistoryDatabase;
 import com.androsz.electricsleep.db.SleepRecord;
@@ -210,7 +209,7 @@ public class HistoryActivity extends CustomTitlebarActivity {
 				// do exact searches only.
 				searchFor = "\"" + searchFor + "\"";
 			} else {
-				searchFor = getString(string.to);
+				searchFor = getString(R.string.to);
 			}
 			new QuerySleepTask().execute(searchFor);
 		}

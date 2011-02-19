@@ -33,7 +33,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 /**
  * Displays the time

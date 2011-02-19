@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.achartengine.ChartView;
 import com.androsz.electricsleep.achartengine.chart.AbstractChart;
 import com.androsz.electricsleep.achartengine.chart.TimeChart;

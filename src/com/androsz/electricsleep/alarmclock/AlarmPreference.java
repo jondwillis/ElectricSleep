@@ -23,7 +23,7 @@ import android.net.Uri;
 import android.preference.RingtonePreference;
 import android.util.AttributeSet;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 /**
  * The RingtonePreference does not have a way to get/set the current ringtone so

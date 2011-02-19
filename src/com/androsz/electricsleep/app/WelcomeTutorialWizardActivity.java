@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity {
 

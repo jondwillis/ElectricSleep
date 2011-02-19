@@ -52,7 +52,7 @@ import android.view.ViewConfiguration;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.app.HistoryActivity;
 import com.androsz.electricsleep.app.ReviewSleepActivity;
 import com.androsz.electricsleep.db.SleepContentProvider;

@@ -29,7 +29,7 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.alarmclock.Alarm;
 import com.androsz.electricsleep.alarmclock.Alarms;
 import com.androsz.electricsleep.content.StartSleepReceiver;

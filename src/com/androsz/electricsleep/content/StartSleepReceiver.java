@@ -8,7 +8,7 @@ import android.hardware.SensorManager;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.app.SettingsActivity;
 import com.androsz.electricsleep.app.SleepActivity;
 import com.androsz.electricsleep.app.SleepMonitoringService;

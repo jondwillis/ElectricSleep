@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 

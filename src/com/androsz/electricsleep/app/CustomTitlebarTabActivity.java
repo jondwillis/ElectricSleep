@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public abstract class CustomTitlebarTabActivity extends CustomTitlebarActivity {
 	protected TabHost tabHost = null;

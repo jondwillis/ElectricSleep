@@ -23,7 +23,7 @@ import android.provider.BaseColumns;
 import android.text.format.Time;
 import android.util.Log;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepRecord {

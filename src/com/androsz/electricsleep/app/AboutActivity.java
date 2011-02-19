@@ -5,7 +5,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public class AboutActivity extends CustomTitlebarActivity {
 	@Override

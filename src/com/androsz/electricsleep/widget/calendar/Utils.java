@@ -33,7 +33,7 @@ import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.ViewFlipper;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public class Utils {
 	private static final int CLEAR_ALPHA_MASK = 0x00FFFFFF;

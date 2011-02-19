@@ -3,7 +3,7 @@ package com.androsz.electricsleep.app;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public class CheckForScreenBugActivity extends CalibrateForResultActivity {
 

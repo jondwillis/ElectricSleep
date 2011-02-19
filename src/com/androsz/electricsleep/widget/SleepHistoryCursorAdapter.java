@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 
 public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 

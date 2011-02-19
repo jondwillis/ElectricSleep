@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class CustomTitlebarActivity extends Activity {

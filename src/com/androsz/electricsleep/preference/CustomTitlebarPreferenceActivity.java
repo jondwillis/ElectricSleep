@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.androsz.electricsleep.R;
+import com.androsz.electricsleepdonate.R;
 import com.androsz.electricsleep.app.HomeActivity;
 import com.androsz.electricsleep.app.SettingsActivity;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
