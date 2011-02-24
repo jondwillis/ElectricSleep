@@ -80,6 +80,8 @@ public class SleepHistoryDatabase {
 					try {
 						db.close();
 						DeviceUtil.copyFile(externalDb, restoredDb);
+						db = SQLiteDatabase.openDatabase(restoredDbPath, null,
+								SQLiteDatabase.OPEN_READONLY);
 					} catch (IOException e) {
 						db.execSQL(FTS_TABLE_CREATE);
 					}
@@ -229,23 +231,19 @@ public class SleepHistoryDatabase {
 		 * mechanism by which the ContentProvider does not need to know the real
 		 * column names
 		 */
-		try {
-			final SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-			builder.setTables(FTS_VIRTUAL_TABLE);
-			builder.setProjectionMap(SleepRecord.COLUMN_MAP);
-			final SQLiteDatabase db = databaseOpenHelper.getReadableDatabase();
-			final Cursor cursor = builder.query(db, columns, selection,
-					selectionArgs, null, null, null);
+		final SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+		builder.setTables(FTS_VIRTUAL_TABLE);
+		builder.setProjectionMap(SleepRecord.COLUMN_MAP);
+		final SQLiteDatabase db = databaseOpenHelper.getReadableDatabase();
+		final Cursor cursor = builder.query(db, columns, selection,
+				selectionArgs, null, null, null);
 
-			if (cursor == null)
-				return null;
-			else if (!cursor.moveToFirst()) {
-				cursor.close();
-				return null;
-			}
-			return cursor;
-		} catch (Exception e) {
+		if (cursor == null)
+			return null;
+		else if (!cursor.moveToFirst()) {
+			cursor.close();
 			return null;
 		}
+		return cursor;
 	}
 }
