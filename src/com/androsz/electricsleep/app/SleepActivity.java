@@ -174,7 +174,7 @@ public class SleepActivity extends CustomTitlebarActivity {
 					dimScreenTask.cancel(true);
 				}
 				dimScreenTask = new DimScreenTask();
-				dimScreenTask.execute(null);
+				dimScreenTask.execute((Void[])null);
 
 			} else {
 				textSleepDim.setVisibility(View.GONE);
