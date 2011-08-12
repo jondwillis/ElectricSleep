@@ -13,9 +13,9 @@
 		android:persistent="false" android:title="@string/enable_alarm" />
 	<Preference android:key="time" android:persistent="false"
 		android:title="@string/time" />
-	<com.androsz.electricsleep.alarmclock.RepeatPreference
+	<com.androsz.electricsleepbeta.alarmclock.RepeatPreference
 		android:key="setRepeat" android:persistent="false" android:title="@string/alarm_repeat" />
-	<com.androsz.electricsleep.alarmclock.AlarmPreference
+	<com.androsz.electricsleepbeta.alarmclock.AlarmPreference
 		android:ringtoneType="all" android:showDefault="false"
 		android:showSilent="true" android:key="alarm" android:title="@string/alert"
 		android:persistent="false" />

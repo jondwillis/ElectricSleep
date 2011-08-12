@@ -17,7 +17,7 @@
 		Using the button attribute produces a left-aligned image that has some kind 
 		of minimum height. If the bar is a checkbox, it is too tall and is clipped 
 		on the right. -->
-	<com.androsz.electricsleep.alarmclock.DontPressWithParentLayout
+	<com.androsz.electricsleepbeta.alarmclock.DontPressWithParentLayout
 		android:id="@+id/indicator" style="@style/alarm_list_left_column"
 		android:background="@drawable/clock_selector" android:gravity="center"
 		android:orientation="vertical">
@@ -29,7 +29,7 @@
 		<ImageView android:id="@+id/bar_onoff" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:paddingTop="4dip" android:src="@drawable/ic_indicator_off" />
-	</com.androsz.electricsleep.alarmclock.DontPressWithParentLayout>
+	</com.androsz.electricsleepbeta.alarmclock.DontPressWithParentLayout>
 
 	<ImageView android:src="@drawable/divider_vertical_dark"
 		android:background="?android:attr/windowBackground"
@@ -39,7 +39,7 @@
 
 	<!-- A layout that displays the time. Shows time, am/pm (if 12-hour), and 
 		an optional line below, used for day/days of week -->
-	<com.androsz.electricsleep.alarmclock.DigitalClock
+	<com.androsz.electricsleepbeta.alarmclock.DigitalClock
 		android:id="@+id/digitalClock" android:layout_width="wrap_content"
 		android:layout_height="fill_parent" android:gravity="center_vertical"
 		android:layout_weight="1" android:orientation="vertical"
@@ -70,6 +70,6 @@
 			android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall"
 			android:textColor="?android:attr/textColorSecondary" />
 
-	</com.androsz.electricsleep.alarmclock.DigitalClock>
+	</com.androsz.electricsleepbeta.alarmclock.DigitalClock>
 
 </LinearLayout>

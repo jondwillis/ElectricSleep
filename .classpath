@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/jon/workspace/ElectricSleep/libs/libGoogleAnalytics-1.2.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="libs/libGoogleAnalytics.jar"/>
+	<classpathentry kind="src" path="ActionBarSherlock_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

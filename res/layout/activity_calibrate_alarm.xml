@@ -7,13 +7,13 @@
 		android:layout_height="wrap_content" android:id="@+id/warming_up_text"
 		android:text="@string/warming_up" android:layout_gravity="center_vertical|center_horizontal|center"></TextView>
 
-	<com.androsz.electricsleep.widget.SleepChart
+	<com.androsz.electricsleepbeta.widget.SleepChart
 		android:id="@+id/calibration_sleep_chart" android:layout_margin="4dip"
 		android:layout_gravity="left" android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:layout_weight="100"
 		android:visibility="gone" />
 
-	<com.androsz.electricsleep.widget.DecimalSeekBar
+	<com.androsz.electricsleepbeta.widget.DecimalSeekBar
 		android:layout_height="wrap_content" android:id="@+id/calibration_level_seekbar"
 		android:layout_width="fill_parent" android:layout_gravity="bottom"
 		android:layout_weight="0.1" android:visibility="gone" />

@@ -1,159 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.androsz.electricsleepdonate" android:versionCode="3"
-	android:versionName="0.7.1" android:installLocation="internalOnly">
+	package="com.androsz.electricsleepbeta" android:versionCode="18"
+	android:versionName="1.0" android:installLocation="internalOnly">
 
-	<application android:icon="@drawable/icon" android:label="@string/app_name"
-		android:theme="@style/Theme.electricsleep" android:debuggable="false">
+	<supports-screens android:normalScreens="true"
+		android:largeScreens="true" android:xlargeScreens="true"
+		android:anyDensity="true" />
 
-		<activity android:name="com.androsz.electricsleep.app.HomeActivity"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-
-		<activity android:name="com.androsz.electricsleep.app.SleepActivity"
-			android:label="@string/title_sleep" />
-
-		<activity android:name="com.androsz.electricsleep.app.DimSleepActivity"
-			android:label="@string/title_sleep" android:noHistory="true" />
-
-		<activity android:name="com.androsz.electricsleep.app.AboutActivity"
-			android:label="@string/about" />
-
-		<activity
-			android:name="com.androsz.electricsleep.app.CalibrationWizardActivity"
-			android:label="@string/title_calibrate" />
-
-		<activity
-			android:name="com.androsz.electricsleep.app.WelcomeTutorialWizardActivity"
-			android:label="@string/welcome_tutorial" />
-
-		<activity android:name="com.androsz.electricsleep.app.HelloWizardActivity"
-			android:label="@string/title_calibrate" />
-
-		<activity android:name="com.androsz.electricsleep.app.HistoryActivity"
-			android:label="@string/title_history" />
-
-		<activity android:name="com.androsz.electricsleep.app.CalibrateAlarmActivity"
-			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog" />
-
-		<activity
-			android:name="com.androsz.electricsleep.app.CheckForScreenBugActivity"
-			android:label="@string/go_into_standy" android:theme="@android:style/Theme.Dialog" />
-
-		<activity android:name="com.androsz.electricsleep.app.ReviewSleepActivity"
-			android:label="@string/title_review_sleep" />
-
-		<activity android:name="com.androsz.electricsleep.app.SaveSleepActivity"
-			android:label="@string/title_save_sleep" android:windowSoftInputMode="stateUnchanged" />
-
-		<activity android:name="com.androsz.electricsleep.app.SettingsActivity"
-			android:label="@string/title_settings" />
-
-		<activity android:name="com.androsz.electricsleep.alarmclock.AlarmClock"
-			android:label="@string/alarm_list_title" android:taskAffinity=""
-			android:excludeFromRecents="true"
-			android:configChanges="orientation|keyboardHidden|keyboard|navigation"
-			android:exported="true" />
-
-		<activity android:name="com.androsz.electricsleep.alarmclock.SettingsActivity"
-			android:label="@string/alarmclock_settings" android:taskAffinity=""
-			android:excludeFromRecents="true">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-			</intent-filter>
-		</activity>
-
-		<activity android:name="com.androsz.electricsleep.alarmclock.SetAlarm"
-			android:label="@string/set_alarm" android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
-
-		<activity android:name="com.androsz.electricsleep.alarmclock.AlarmAlert"
-			android:excludeFromRecents="true" android:theme="@style/alarm_alert"
-			android:launchMode="singleInstance" android:taskAffinity=""
-			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
-
-		<!-- This activity is basically the same as AlarmAlert but with a more 
-			generic theme. It also shows as full screen (with status bar) but with the 
-			wallpaper background. -->
-		<activity
-			android:name="com.androsz.electricsleep.alarmclock.AlarmAlertFullScreen"
-			android:excludeFromRecents="true"
-			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-			android:launchMode="singleInstance" android:taskAffinity=""
-			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
-
-		<activity
-			android:name="com.androsz.electricsleep.widget.calendar.MonthActivity" />
-
-		<receiver android:name="com.androsz.electricsleep.alarmclock.AlarmReceiver">
-			<intent-filter>
-				<action android:name="com.androsz.electricsleep.alarmclock.ALARM_ALERT" />
-				<action android:name="com.androsz.electricsleep.alarmclock.alarm_killed" />
-				<action android:name="com.androsz.electricsleep.alarmclock.cancel_snooze" />
-			</intent-filter>
-		</receiver>
-
-		<!-- This service receives the same intent as AlarmReceiver but it does 
-			not respond to the same broadcast. The AlarmReceiver will receive the alert 
-			broadcast and will start this service with the same intent. The service plays 
-			the alarm alert and vibrates the device. This allows the alert to continue 
-			playing even if another activity causes the AlarmAlert activity to pause. -->
-		<service android:name="com.androsz.electricsleep.alarmclock.AlarmKlaxon">
-			<intent-filter>
-				<action android:name="com.androsz.electricsleep.alarmclock.ALARM_ALERT" />
-			</intent-filter>
-		</service>
-
-		<receiver android:name="com.androsz.electricsleep.appwidget.SleepWidget"
-			android:label="@string/title_sleep" android:icon="@drawable/icon">
-			<intent-filter>
-				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
-			<meta-data android:name="android.appwidget.provider"
-				android:resource="@xml/appwidgetprovider_sleep" />
-		</receiver>
-
-		<receiver android:name="com.androsz.electricsleep.alarmclock.AlarmInitReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<action android:name="android.intent.action.TIME_SET" />
-				<action android:name="android.intent.action.TIMEZONE_CHANGED" />
-				<action android:name="android.intent.action.LOCALE_CHANGED" />
-			</intent-filter>
-		</receiver>
-
-		<receiver android:name="com.androsz.electricsleep.content.SaveSleepReceiver"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="com.androsz.electricsleep.SAVE_SLEEP" />
-			</intent-filter>
-		</receiver>
-
-		<receiver android:name="com.androsz.electricsleep.content.StartSleepReceiver"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="com.androsz.electricsleep.START_SLEEP" />
-			</intent-filter>
-		</receiver>
-
-		<service android:name="com.androsz.electricsleep.app.SleepMonitoringService"
-			android:icon="@drawable/icon" android:label="@string/app_name" />
-
-		<service
-			android:name="com.androsz.electricsleep.app.CheckForScreenBugAccelerometerService"
-			android:icon="@drawable/icon" android:label="@string/app_name" />
-
-		<provider android:name="com.androsz.electricsleep.db.SleepContentProvider"
-			android:authorities="com.androsz.electricsleep.db.sleepcontentprovider" />
-
-		<provider android:name="com.androsz.electricsleep.alarmclock.AlarmProvider"
-			android:authorities="com.androsz.electricsleep.alarmclock" />
-	</application>
-
-	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="11" />
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="13" />
 
 	<uses-feature android:name="android.hardware.sensor.accelerometer"
 		android:required="true" />
@@ -168,5 +22,157 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+	<application android:name=".app.StrictDebuggableApplication"
+		android:icon="@drawable/icon" android:label="@string/app_name"
+		android:theme="@style/Theme.electricsleep" android:debuggable="false"
+		android:hardwareAccelerated="true">
+
+		<activity android:name=".app.HomeActivity"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".app.SleepActivity"
+			android:label="@string/title_sleep" />
+
+		<activity android:name=".app.DimSleepActivity"
+			android:label="@string/title_sleep" android:noHistory="true" />
+
+		<activity android:name=".app.AboutActivity"
+			android:label="@string/about" />
+
+		<activity
+			android:name=".app.CalibrationWizardActivity"
+			android:label="@string/title_calibrate" />
+
+		<activity
+			android:name="com.androsz.electricsleepbeta.app.WelcomeTutorialWizardActivity"
+			android:label="@string/welcome_tutorial" />
+
+		<activity android:name=".app.HelloWizardActivity"
+			android:label="@string/title_calibrate" />
+
+		<activity android:name=".app.HistoryActivity"
+			android:label="@string/title_history" />
+
+		<activity android:name=".app.CalibrateAlarmActivity"
+			android:label="@string/calibrating" android:theme="@android:style/Theme.Dialog" />
+
+		<activity
+			android:name=".app.CheckForScreenBugActivity"
+			android:label="@string/go_into_standy" android:theme="@android:style/Theme.Dialog" />
+
+		<activity android:name=".app.ReviewSleepActivity"
+			android:label="@string/title_review_sleep" />
+
+		<activity android:name=".app.SaveSleepActivity"
+			android:label="@string/title_save_sleep" android:windowSoftInputMode="stateUnchanged" />
+
+		<activity android:name=".app.SettingsActivity"
+			android:label="@string/title_settings" />
+
+		<activity android:name=".alarmclock.AlarmClock"
+			android:label="@string/alarm_list_title" android:taskAffinity=""
+			android:excludeFromRecents="true"
+			android:configChanges="orientation|keyboardHidden|keyboard|navigation"
+			android:exported="true" />
+
+		<activity android:name=".alarmclock.SettingsActivity"
+			android:label="@string/alarmclock_settings" android:taskAffinity=""
+			android:excludeFromRecents="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".alarmclock.SetAlarm"
+			android:label="@string/set_alarm" android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
+
+		<activity android:name=".alarmclock.AlarmAlert"
+			android:excludeFromRecents="true" android:theme="@style/alarm_alert"
+			android:launchMode="singleInstance" android:taskAffinity=""
+			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
+
+		<!-- This activity is basically the same as AlarmAlert but with a more 
+			generic theme. It also shows as full screen (with status bar) but with the 
+			wallpaper background. -->
+		<activity
+			android:name=".alarmclock.AlarmAlertFullScreen"
+			android:excludeFromRecents="true"
+			android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+			android:launchMode="singleInstance" android:taskAffinity=""
+			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
+
+		<activity
+			android:name=".widget.calendar.MonthActivity" />
+
+		<receiver android:name=".alarmclock.AlarmReceiver">
+			<intent-filter>
+				<action android:name="com.androsz.electricsleepbeta.alarmclock.ALARM_ALERT" />
+				<action android:name="com.androsz.electricsleepbeta.alarmclock.alarm_killed" />
+				<action android:name="com.androsz.electricsleepbeta.alarmclock.cancel_snooze" />
+			</intent-filter>
+		</receiver>
+
+		<!-- This service receives the same intent as AlarmReceiver but it does 
+			not respond to the same broadcast. The AlarmReceiver will receive the alert 
+			broadcast and will start this service with the same intent. The service plays 
+			the alarm alert and vibrates the device. This allows the alert to continue 
+			playing even if another activity causes the AlarmAlert activity to pause. -->
+		<service android:name=".alarmclock.AlarmKlaxon">
+			<intent-filter>
+				<action android:name="com.androsz.electricsleepbeta.alarmclock.ALARM_ALERT" />
+			</intent-filter>
+		</service>
+
+		<receiver android:name=".appwidget.SleepWidget"
+			android:label="@string/title_sleep" android:icon="@drawable/icon">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+				android:resource="@xml/appwidgetprovider_sleep" />
+		</receiver>
+
+		<receiver android:name=".alarmclock.AlarmInitReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.TIME_SET" />
+				<action android:name="android.intent.action.TIMEZONE_CHANGED" />
+				<action android:name="android.intent.action.LOCALE_CHANGED" />
+			</intent-filter>
+		</receiver>
+
+		<receiver android:name=".content.SaveSleepReceiver"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="com.androsz.electricsleepbeta.SAVE_SLEEP" />
+			</intent-filter>
+		</receiver>
+
+		<receiver android:name=".content.StartSleepReceiver"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="com.androsz.electricsleepbeta.START_SLEEP" />
+			</intent-filter>
+		</receiver>
+
+		<service android:name=".app.SleepMonitoringService"
+			android:icon="@drawable/icon" android:label="@string/app_name" />
+
+		<service
+			android:name=".app.CheckForScreenBugAccelerometerService"
+			android:icon="@drawable/icon" android:label="@string/app_name" />
+
+		<provider android:name=".db.SleepContentProvider"
+			android:authorities="com.androsz.electricsleepbeta.db.sleepcontentprovider" />
+
+		<provider android:name=".alarmclock.AlarmProvider"
+			android:authorities="com.androsz.electricsleepbeta.alarmclock" />
+	</application>
 
 </manifest> 

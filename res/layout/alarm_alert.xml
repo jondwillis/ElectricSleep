@@ -25,7 +25,7 @@
 			android:gravity="fill_horizontal" android:src="@drawable/dialog_divider_horizontal_light"
 			android:layout_marginLeft="10dip" android:layout_marginRight="10dip" />
 
-		<com.androsz.electricsleep.alarmclock.DigitalClock
+		<com.androsz.electricsleepbeta.alarmclock.DigitalClock
 			style="@style/clock" android:paddingTop="30dip"
 			android:paddingBottom="30dip" android:baselineAligned="true"
 			android:gravity="center_horizontal">
@@ -39,7 +39,7 @@
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:textColor="?android:attr/textColorPrimary" />
 
-		</com.androsz.electricsleep.alarmclock.DigitalClock>
+		</com.androsz.electricsleepbeta.alarmclock.DigitalClock>
 
 		<LinearLayout android:layout_width="wrap_content"
 			android:layout_height="wrap_content" style="@android:style/ButtonBar">
