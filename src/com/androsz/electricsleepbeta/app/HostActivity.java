@@ -61,8 +61,7 @@ public abstract class HostActivity extends AnalyticActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		final android.view.MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.titlebar_menu, menu);
+		getMenuInflater().inflate(R.menu.titlebar_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 

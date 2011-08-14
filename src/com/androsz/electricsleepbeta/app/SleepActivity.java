@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,6 +28,20 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepActivity extends HostActivity {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_stop_sleep:
+			sendBroadcast(new Intent(SleepMonitoringService.STOP_AND_SAVE_SLEEP));
+			finish();
+			break;
+		case R.id.menu_item_alarms:
+			startActivity(new Intent(this, AlarmClock.class));
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	private class DimScreenTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -230,16 +245,13 @@ public class SleepActivity extends HostActivity {
 		setTitle(R.string.monitoring_sleep);
 		super.onCreate(savedInstanceState);
 
-		//showTitleButton1(R.drawable.ic_title_stop_default);
-		//showTitleButton2(R.drawable.ic_title_alarm);
 		registerReceiver(sleepStoppedReceiver, new IntentFilter(
 				SleepMonitoringService.SLEEP_STOPPED));
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add("Stop");
-		menu.add("Alarms");
+		getMenuInflater().inflate(R.menu.menu_monitorying_sleep, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -290,16 +302,6 @@ public class SleepActivity extends HostActivity {
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(SLEEP_CHART, sleepChart);
-	}
-
-	public void onTitleButton1Click(final View v) {
-
-		sendBroadcast(new Intent(SleepMonitoringService.STOP_AND_SAVE_SLEEP));
-		finish();
-	}
-
-	public void onTitleButton2Click(final View v) {
-		startActivity(new Intent(this, AlarmClock.class));
 	}
 
 	private void showOrHideWarnings() {

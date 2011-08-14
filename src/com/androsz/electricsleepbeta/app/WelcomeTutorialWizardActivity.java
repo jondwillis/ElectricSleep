@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -86,7 +87,8 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 		super.onCreate(savedInstanceState);
 		required = getIntent().hasExtra("required");
 		if (required) {
-			this.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			ActionBar bar = getSupportActionBar();
+			bar.setDisplayHomeAsUpEnabled(false);
 		}
 	}
 

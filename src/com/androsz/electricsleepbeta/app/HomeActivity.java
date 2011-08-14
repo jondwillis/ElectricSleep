@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBar;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -84,34 +85,35 @@ public class HomeActivity extends HostActivity {
 						.setText(getString(R.string.home_last_sleep_title_text));
 
 				cursor.moveToFirst();
-				int avgSleepScore = 0;
-				int avgDuration = 0;
-				int avgSpikes = 0;
-				int avgFellAsleep = 0;
-				int count = 0;
-				do {
-					count++;
-					final SleepRecord sleepRecord = new SleepRecord(cursor);
-					avgSleepScore += sleepRecord.getSleepScore();
-					avgDuration += sleepRecord.duration;
-					avgSpikes += sleepRecord.spikes;
-					avgFellAsleep += sleepRecord.getTimeToFallAsleep();
-				} while (cursor.moveToNext());
+                int avgSleepScore = 0;
+                long avgDuration = 0;
+                int avgSpikes = 0;
+                long avgFellAsleep = 0;
+                int count = 0;
+                do {
+                        count++;
+                        final SleepRecord sleepRecord = new SleepRecord(cursor);
+                        avgSleepScore += sleepRecord.getSleepScore();
+                        avgDuration += sleepRecord.duration;
+                        avgSpikes += sleepRecord.spikes;
+                        avgFellAsleep += sleepRecord.getTimeToFallAsleep();
+                } while (cursor.moveToNext());
 
-				avgSleepScore /= count;
-				avgDuration /= count;
-				avgSpikes /= count;
-				avgFellAsleep /= count;
+                final float invCount = 1.0f / (float)count;
+                avgSleepScore *= invCount;
+                avgDuration *= invCount;
+                avgSpikes *= invCount;
+                avgFellAsleep *= invCount;
 
-				avgScoreText.setText(avgSleepScore + "%");
-				avgDurationText.setText(SleepRecord.getTimespanText(
-						avgDuration, getResources()));
-				avgSpikesText.setText(avgSpikes + "");
-				avgFellAsleepText.setText(SleepRecord.getTimespanText(
-						avgFellAsleep, getResources()));
+                avgScoreText.setText(avgSleepScore + "%");
+                avgDurationText.setText(SleepRecord.getTimespanText(
+                                avgDuration, getResources()));
+                avgSpikesText.setText(avgSpikes + "");
+                avgFellAsleepText.setText(SleepRecord.getTimespanText(
+                                avgFellAsleep, getResources()));
 
-				reviewTitleText
-						.setText(getString(R.string.home_review_title_text));
+                reviewTitleText
+                                .setText(getString(R.string.home_review_title_text));
 			}
 		}
 
@@ -142,7 +144,8 @@ public class HomeActivity extends HostActivity {
 
 		// showTitleButton1(R.drawable.ic_title_share);
 		// showTitleButton2(R.drawable.ic_title_refresh);
-		this.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		ActionBar bar = getSupportActionBar();
+		bar.setDisplayHomeAsUpEnabled(false);
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
