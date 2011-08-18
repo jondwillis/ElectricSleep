@@ -8,7 +8,7 @@
 	the specific language governing permissions and limitations under the License. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:layout_width="match_parent" android:layout_height="wrap_content"
 	android:orientation="horizontal">
 
 	<!-- I can't use a normal checkbox here for a couple reasons: 1. The checkbox 
@@ -33,7 +33,7 @@
 
 	<ImageView android:src="@drawable/divider_vertical_dark"
 		android:background="?android:attr/windowBackground"
-		android:layout_width="wrap_content" android:layout_height="fill_parent"
+		android:layout_width="wrap_content" android:layout_height="match_parent"
 		android:paddingTop="4dip" android:paddingBottom="4dip"
 		android:scaleType="fitXY" android:gravity="fill_vertical" />
 
@@ -41,11 +41,11 @@
 		an optional line below, used for day/days of week -->
 	<com.androsz.electricsleepbeta.alarmclock.DigitalClock
 		android:id="@+id/digitalClock" android:layout_width="wrap_content"
-		android:layout_height="fill_parent" android:gravity="center_vertical"
+		android:layout_height="match_parent" android:gravity="center_vertical"
 		android:layout_weight="1" android:orientation="vertical"
 		android:paddingLeft="16dip" android:paddingRight="16dip">
 
-		<LinearLayout android:layout_width="fill_parent"
+		<LinearLayout android:layout_width="match_parent"
 			android:layout_height="wrap_content" android:baselineAligned="true">
 
 			<TextView android:id="@+id/timeDisplay"
@@ -66,7 +66,7 @@
 		</LinearLayout>
 
 		<TextView android:id="@+id/daysOfWeek"
-			android:includeFontPadding="false" android:layout_width="fill_parent"
+			android:includeFontPadding="false" android:layout_width="match_parent"
 			android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceSmall"
 			android:textColor="?android:attr/textColorSecondary" />
 

@@ -55,7 +55,7 @@ public class SeekBarPreference extends DialogPreference {
 
 		final LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setMinimumWidth(400);
 		layout.setPadding(20, 20, 20, 20);
@@ -72,7 +72,7 @@ public class SeekBarPreference extends DialogPreference {
 		seekBar = new DecimalSeekBar(context);
 		seekBar.setMax(Math.round(SettingsActivity.MAX_ALARM_SENSITIVITY));
 		seekBar.setLayoutParams(new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));
 
 		seekBar.setProgress(getPersistedFloat(0));

@@ -25,7 +25,7 @@
 
 	<application android:name=".app.StrictDebuggableApplication"
 		android:icon="@drawable/icon" android:label="@string/app_name"
-		android:theme="@style/Theme.electricsleep" android:debuggable="false"
+		android:theme="@style/Theme.electricsleep" android:debuggable="true"
 		android:hardwareAccelerated="true">
 
 		<activity android:name=".app.HomeActivity"
@@ -70,7 +70,8 @@
 			android:label="@string/title_review_sleep" />
 
 		<activity android:name=".app.SaveSleepActivity"
-			android:label="@string/title_save_sleep" android:windowSoftInputMode="stateUnchanged" />
+			android:label="@string/title_save_sleep" 
+			android:excludeFromRecents="true"  android:windowSoftInputMode="stateUnchanged" />
 
 		<activity android:name=".app.SettingsActivity"
 			android:label="@string/title_settings" />

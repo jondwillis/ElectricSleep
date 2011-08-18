@@ -118,7 +118,6 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 
 	@Override
 	protected void onPrepareLastSlide() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override

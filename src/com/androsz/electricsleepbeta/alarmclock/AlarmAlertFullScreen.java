@@ -136,6 +136,13 @@ public class AlarmAlertFullScreen extends Activity {
 	protected void onCreate(final Bundle icicle) {
 		super.onCreate(icicle);
 
+		try
+		{
+			this.setTheme(android.R.style.Theme_Holo_Dialog); //will only work for 3.0+ devices
+		}catch(Throwable whocares)
+		{
+			
+		}
 		mAlarm = getIntent().getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
 
 		// Get the volume/camera button behavior setting

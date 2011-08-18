@@ -11,6 +11,9 @@ import com.androsz.electricsleepbeta.R;
 
 public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 
+	private final static int CALIBRATE_REQUEST_CODE = 0xDEAD;
+	private final static int SCREEN_TEST_REQUEST_CODE = 0xBEEF;
+	
 	private class AlarmCalibrationTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -32,7 +35,7 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 		@Override
 		protected void onPreExecute() {
 			startActivityForResult(new Intent(CalibrationWizardActivity.this,
-					CalibrateAlarmActivity.class), R.id.alarmTest);
+					CalibrateAlarmActivity.class), CALIBRATE_REQUEST_CODE);
 		}
 	}
 
@@ -58,7 +61,7 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 		@Override
 		protected void onPreExecute() {
 			startActivityForResult(new Intent(CalibrationWizardActivity.this,
-					CheckForScreenBugActivity.class), R.id.screenTest);
+					CheckForScreenBugActivity.class), SCREEN_TEST_REQUEST_CODE);
 		}
 	}
 
@@ -86,11 +89,11 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 			return;
 		}
 		switch (requestCode) {
-		case R.id.alarmTest:
+		case CALIBRATE_REQUEST_CODE:
 			alarmTriggerCalibration = data.getDoubleExtra("y", 0);
 			stopService(new Intent(this, SleepMonitoringService.class));
 			break;
-		case R.id.screenTest:
+		case SCREEN_TEST_REQUEST_CODE:
 			screenBugPresent = data.getAction().equals(
 					CheckForScreenBugAccelerometerService.BUG_PRESENT);
 			break;

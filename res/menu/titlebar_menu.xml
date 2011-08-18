@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-
 	<item android:id="@+id/menuItemTutorial" android:icon="@android:drawable/ic_menu_help"
 		android:title="@string/welcome_tutorial"></item>
 	<item android:icon="@android:drawable/ic_menu_info_details"
@@ -12,5 +10,4 @@
 		android:icon="@android:drawable/ic_menu_send"></item>
 	<item android:title="@string/title_settings" android:id="@+id/menuItemSettings"
 		android:icon="@android:drawable/ic_menu_preferences"></item>
-
 </menu>

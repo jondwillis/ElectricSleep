@@ -20,6 +20,7 @@ import com.androsz.electricsleepbeta.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.util.MathUtils;
 
 public class SleepChart extends ChartView implements Serializable {
 
@@ -86,15 +87,16 @@ public class SleepChart extends ChartView implements Serializable {
 
 			xyMultipleSeriesRenderer.setPanEnabled(false, false);
 			xyMultipleSeriesRenderer.setZoomEnabled(false, false);
-			final float textSize = 18;
+			final float textSize = MathUtils.calculatePxFromDip(getContext(), 14);
+			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			xyMultipleSeriesRenderer.setLegendHeight(60);
+			xyMultipleSeriesRenderer.setLegendHeight(MathUtils.calculatePxFromDip(getContext(), 40));
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
 			xyMultipleSeriesRenderer.setXLabels(6);
-			xyMultipleSeriesRenderer.setYLabels(5);
+			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(
 					R.color.text));

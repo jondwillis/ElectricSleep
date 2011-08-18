@@ -8,19 +8,18 @@
 	the specific language governing permissions and limitations under the License. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:gravity="center">
+	android:layout_width="320dp" android:layout_height="wrap_content"
+	android:gravity="center" android:weightSum="1">
 
-	<LinearLayout android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:layout_gravity="center"
-		android:gravity="center_horizontal" android:background="@drawable/dialog"
-		android:orientation="vertical">
+	<LinearLayout android:layout_height="wrap_content" android:layout_gravity="center"
+		android:gravity="center_horizontal"
+		android:orientation="vertical" android:layout_width="match_parent">
 
 		<TextView android:id="@+id/alertTitle" style="?android:attr/textAppearanceLarge"
 			android:padding="5dip" android:singleLine="true" android:ellipsize="end"
-			android:gravity="center" android:layout_width="fill_parent"
+			android:gravity="center" android:layout_width="match_parent"
 			android:layout_height="wrap_content" />
-		<ImageView android:layout_width="fill_parent"
+		<ImageView android:layout_width="match_parent"
 			android:layout_height="1dip" android:scaleType="fitXY"
 			android:gravity="fill_horizontal" android:src="@drawable/dialog_divider_horizontal_light"
 			android:layout_marginLeft="10dip" android:layout_marginRight="10dip" />
@@ -28,7 +27,7 @@
 		<com.androsz.electricsleepbeta.alarmclock.DigitalClock
 			style="@style/clock" android:paddingTop="30dip"
 			android:paddingBottom="30dip" android:baselineAligned="true"
-			android:gravity="center_horizontal">
+			android:gravity="center_horizontal" android:layout_height="wrap_content" android:layout_width="match_parent">
 
 			<TextView android:id="@+id/timeDisplay"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -42,7 +41,7 @@
 		</com.androsz.electricsleepbeta.alarmclock.DigitalClock>
 
 		<LinearLayout android:layout_width="wrap_content"
-			android:layout_height="wrap_content" style="@android:style/ButtonBar">
+			android:layout_height="wrap_content" >
 
 			<Button android:id="@+id/snooze" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_weight="3"

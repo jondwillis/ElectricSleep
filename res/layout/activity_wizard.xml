@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="fill_parent" android:layout_width="fill_parent"
+	android:layout_height="match_parent" android:layout_width="match_parent"
 	android:orientation="vertical" android:layout_margin="0dip">
 
 	<ViewStub android:id="@+id/wizardViewFlipperStub"
 		android:layout_weight="1" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_margin="8dip" />
+		android:layout_width="match_parent" android:layout_margin="8dip" />
 	<RelativeLayout android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_gravity="bottom|center_horizontal"
+		android:layout_width="match_parent" android:layout_gravity="bottom|center_horizontal"
 		android:background="@color/primary1_transparent">
 		<Button android:layout_height="wrap_content" android:id="@+id/leftButton"
 			android:onClick="onLeftButtonClick" android:drawableLeft="@drawable/arrow_left"

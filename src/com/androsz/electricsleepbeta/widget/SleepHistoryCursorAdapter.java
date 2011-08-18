@@ -5,10 +5,10 @@ import java.io.StreamCorruptedException;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ResourceCursorAdapter;
 
 import com.androsz.electricsleepbeta.R;
 

@@ -24,15 +24,6 @@ public abstract class AnalyticFragment extends Fragment {
 		analytics = GoogleAnalyticsTracker.getInstance();
 		analytics.start(getString(R.string.analytics_ua_number), a);
 		analytics.trackPageView("/" + this.getClass().getCanonicalName());
-		
-		final boolean DEVELOPER_MODE = (getActivity().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0;
-		// TODO
-		if (DEVELOPER_MODE) {
-			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-					.detectAll().penaltyFlashScreen().build());
-			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-					.detectAll().penaltyLog().penaltyDeath().build());
-		}
 	}
 
 	public abstract void onClick(View v);

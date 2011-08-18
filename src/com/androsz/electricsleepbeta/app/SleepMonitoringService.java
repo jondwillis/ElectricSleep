@@ -1,5 +1,6 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -50,16 +51,18 @@ public class SleepMonitoringService extends Service implements
 
 			final PointD sleepPoint = new PointD(x, y);
 			if (sleepData.size() >= MAX_POINTS_IN_A_GRAPH) {
-				sleepData.add(sleepPoint);
 				sleepData.remove(0);
-			} else {
-				sleepData.add(sleepPoint);
 			}
+
+			sleepData.add(sleepPoint);
+
 			// append the two doubles in sleepPoint to file
 			try {
 				synchronized (sDataLock) {
 					final FileOutputStream fos = openFileOutput(SLEEP_DATA,
 							Context.MODE_APPEND);
+					final BufferedOutputStream bos = new BufferedOutputStream(
+							fos);
 					fos.write(PointD.toByteArray(sleepPoint));
 					fos.close();
 				}
@@ -297,14 +300,19 @@ public class SleepMonitoringService extends Service implements
 		toggleAirplaneMode(false);
 
 		stopForeground(true);
-		synchronized (updateTimer) {
-			updateTimer.cancel();
-		}
+		updateTimer.cancel();
 
-		final SharedPreferences.Editor ed = getSharedPreferences(
-				SERVICE_IS_RUNNING, Context.MODE_PRIVATE).edit();
-		ed.putBoolean(SERVICE_IS_RUNNING, false);
-		ed.commit();
+		new AsyncTask<Void, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				final SharedPreferences.Editor ed = getSharedPreferences(
+						SERVICE_IS_RUNNING, Context.MODE_PRIVATE).edit();
+				ed.putBoolean(SERVICE_IS_RUNNING, false);
+				ed.commit();
+				return null;
+			}
+		}.execute();
 
 		super.onDestroy();
 	}
@@ -314,10 +322,8 @@ public class SleepMonitoringService extends Service implements
 		if (waitForSensorsToWarmUp < 5) {
 			if (waitForSensorsToWarmUp == 4) {
 				waitForSensorsToWarmUp++;
-				synchronized (updateTimer) {
-					updateTimer.scheduleAtFixedRate(new UpdateTimerTask(),
-							updateInterval, updateInterval);
-				}
+				updateTimer.scheduleAtFixedRate(new UpdateTimerTask(),
+						updateInterval, updateInterval);
 
 				gravity[0] = event.values[0];
 				gravity[1] = event.values[1];
@@ -376,18 +382,24 @@ public class SleepMonitoringService extends Service implements
 			startForeground(NOTIFICATION_ID, createServiceNotification());
 
 			obtainWakeLock();
-			registerAccelerometerListener();
-
-			toggleSilentMode(true);
-			toggleAirplaneMode(true);
 
 			new AsyncTask<Void, Void, Void>() {
 
 				@Override
-				protected Void doInBackground(Void... params) {
-					// TODO: doesn't happen more than once? right?
-					deleteFile(SleepMonitoringService.SLEEP_DATA);
+				protected void onPostExecute(Void result) {
+					registerAccelerometerListener();
 
+					toggleSilentMode(true);
+					toggleAirplaneMode(true);
+				}
+
+				@Override
+				protected Void doInBackground(Void... params) {
+					if (!alreadyDeletedResidualFile) {
+						// TODO: doesn't happen more than once? right?
+						deleteFile(SleepMonitoringService.SLEEP_DATA);
+						alreadyDeletedResidualFile = true;
+					}
 					final SharedPreferences.Editor ed = getSharedPreferences(
 							SERVICE_IS_RUNNING, Context.MODE_PRIVATE).edit();
 					ed.putBoolean(SERVICE_IS_RUNNING, true);
@@ -398,6 +410,8 @@ public class SleepMonitoringService extends Service implements
 		}
 		return startId;
 	}
+
+	private boolean alreadyDeletedResidualFile = false;
 
 	private void registerAccelerometerListener() {
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

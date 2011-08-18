@@ -17,6 +17,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -35,6 +37,15 @@ import com.androsz.electricsleepbeta.widget.calendar.MonthActivity;
  * offers to users.
  */
 public class HomeActivity extends HostActivity {
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+		menu.findItem(R.id.menuItemDonate).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_WITH_TEXT
+						| MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		return result;
+	}
 
 	private class LoadLastSleepChartTask extends
 			AsyncTask<String, Void, Cursor> {
@@ -69,51 +80,47 @@ public class HomeActivity extends HostActivity {
 				try {
 					sleepChart.sync(cursor);
 				} catch (final StreamCorruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (final IllegalArgumentException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (final IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (final ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				lastSleepTitleText
 						.setText(getString(R.string.home_last_sleep_title_text));
 
 				cursor.moveToFirst();
-                int avgSleepScore = 0;
-                long avgDuration = 0;
-                int avgSpikes = 0;
-                long avgFellAsleep = 0;
-                int count = 0;
-                do {
-                        count++;
-                        final SleepRecord sleepRecord = new SleepRecord(cursor);
-                        avgSleepScore += sleepRecord.getSleepScore();
-                        avgDuration += sleepRecord.duration;
-                        avgSpikes += sleepRecord.spikes;
-                        avgFellAsleep += sleepRecord.getTimeToFallAsleep();
-                } while (cursor.moveToNext());
+				int avgSleepScore = 0;
+				long avgDuration = 0;
+				int avgSpikes = 0;
+				long avgFellAsleep = 0;
+				int count = 0;
+				do {
+					count++;
+					final SleepRecord sleepRecord = new SleepRecord(cursor);
+					avgSleepScore += sleepRecord.getSleepScore();
+					avgDuration += sleepRecord.duration;
+					avgSpikes += sleepRecord.spikes;
+					avgFellAsleep += sleepRecord.getTimeToFallAsleep();
+				} while (cursor.moveToNext());
 
-                final float invCount = 1.0f / (float)count;
-                avgSleepScore *= invCount;
-                avgDuration *= invCount;
-                avgSpikes *= invCount;
-                avgFellAsleep *= invCount;
+				final float invCount = 1.0f / (float) count;
+				avgSleepScore *= invCount;
+				avgDuration *= invCount;
+				avgSpikes *= invCount;
+				avgFellAsleep *= invCount;
 
-                avgScoreText.setText(avgSleepScore + "%");
-                avgDurationText.setText(SleepRecord.getTimespanText(
-                                avgDuration, getResources()));
-                avgSpikesText.setText(avgSpikes + "");
-                avgFellAsleepText.setText(SleepRecord.getTimespanText(
-                                avgFellAsleep, getResources()));
+				avgScoreText.setText(avgSleepScore + "%");
+				avgDurationText.setText(SleepRecord.getTimespanText(
+						avgDuration, getResources()));
+				avgSpikesText.setText(avgSpikes + "");
+				avgFellAsleepText.setText(SleepRecord.getTimespanText(
+						avgFellAsleep, getResources()));
 
-                reviewTitleText
-                                .setText(getString(R.string.home_review_title_text));
+				reviewTitleText
+						.setText(getString(R.string.home_review_title_text));
 			}
 		}
 
@@ -142,8 +149,6 @@ public class HomeActivity extends HostActivity {
 
 		super.onCreate(savedInstanceState);
 
-		// showTitleButton1(R.drawable.ic_title_share);
-		// showTitleButton2(R.drawable.ic_title_refresh);
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
 		new AsyncTask<Void, Void, Void>() {

@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.Menu;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -49,9 +50,24 @@ import com.androsz.electricsleepbeta.app.SettingsActivity;
 /**
  * AlarmClock application.
  */
-public class AlarmClock extends
-		com.androsz.electricsleepbeta.app.HostActivity implements
-		OnItemClickListener {
+public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
+		implements OnItemClickListener {
+
+	@Override
+	public boolean onOptionsItemSelected(android.support.v4.view.MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_add_alarm:
+			addNewAlarm();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_alarm_clock, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
 	private class AlarmTimeAdapter extends CursorAdapter {
 		public AlarmTimeAdapter(final Context context, final Cursor cursor) {
@@ -149,7 +165,6 @@ public class AlarmClock extends
 
 	@Override
 	protected int getContentAreaLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.alarm_clock;
 	}
 
@@ -229,8 +244,11 @@ public class AlarmClock extends
 	public void onCreateContextMenu(final ContextMenu menu, final View view,
 			final ContextMenuInfo menuInfo) {
 		// Inflate the menu from xml.
-		getMenuInflater().inflate(R.menu.context_menu, menu);
-
+		// super.getMenuInflater().inflate(R.menu.context_menu, (Menu)menu);
+		menu.add(Menu.NONE, R.id.enable_alarm, Menu.NONE, R.string.enable_alarm);
+		menu.add(Menu.NONE, R.id.edit_alarm, Menu.NONE,
+				R.string.menu_edit_alarm);
+		menu.add(Menu.NONE, R.id.delete_alarm, Menu.NONE, R.string.delete_alarm);
 		// Use the current item to create a custom view for the header.
 		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 		final Cursor c = (Cursor) mAlarmsList.getAdapter().getItem(
@@ -295,20 +313,5 @@ public class AlarmClock extends
 		mAlarmsList.setCacheColorHint(0);
 		mAlarmsList.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.gradient_background_vert));
-
-		final View addAlarm = findViewById(R.id.add_alarm);
-		addAlarm.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(final View v) {
-				addNewAlarm();
-			}
-		});
-		// Make the entire view selected when focused.
-		addAlarm.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(final View v, final boolean hasFocus) {
-				v.setSelected(hasFocus);
-			}
-		});
 	}
 }

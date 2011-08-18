@@ -322,13 +322,18 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		// Enable "Revert" to go back to the original Alarm.
 		final Button revert = (Button) findViewById(R.id.alarm_revert);
 		revert.setEnabled(true);
-		new AsyncTask<Void, Void, Void>() {
+		new AsyncTask<Void, Void, Long>() {
 
 			@Override
-			protected Void doInBackground(Void... params) {
-				popAlarmSetToast(SetAlarm.this, saveAlarm());
-				return null;
+			protected Long doInBackground(Void... params) {
+				return saveAlarm();
 			}
+			
+			@Override
+			protected void onPostExecute(Long result) {
+				popAlarmSetToast(SetAlarm.this, result);
+			}
+
 		}.execute();
 
 	}
@@ -355,9 +360,8 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		}
 		return time;
 	}
-	
-	private long saveAlarmAndEnableRevert()
-	{
+
+	private long saveAlarmAndEnableRevert() {
 		final Button revert = (Button) findViewById(R.id.alarm_revert);
 		revert.setEnabled(true);
 		return saveAlarm();

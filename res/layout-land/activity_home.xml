@@ -1,10 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/home_container" android:layout_height="fill_parent"
-	android:layout_width="fill_parent">
+	android:id="@+id/home_container" android:layout_height="match_parent"
+	android:layout_width="match_parent">
 	<LinearLayout android:layout_width="wrap_content"
 		android:id="@+id/home_button_container"
 		android:layout_alignParentLeft="true" android:orientation="vertical"
-		android:layout_marginLeft="4dip" android:layout_height="fill_parent"
+		android:layout_marginLeft="4dip" android:layout_height="match_parent"
 		android:layout_centerVertical="true">
 		<Button android:drawableTop="@drawable/home_btn_sleep"
 			android:layout_width="wrap_content" android:id="@+id/home_btn_sleep"
@@ -31,12 +31,12 @@
 			android:gravity="center" android:layout_centerHorizontal="true"
 			android:text="@string/home_review_title_text_empty"
 			android:textAppearance="@style/TextHeader" android:id="@+id/home_review_title_text"
-			android:layout_width="fill_parent"></TextView>
+			android:layout_width="match_parent"></TextView>
 		<TableLayout android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:layout_below="@+id/home_review_title_text"
+			android:layout_width="match_parent" android:layout_below="@+id/home_review_title_text"
 			android:id="@+id/home_statistics_dashboard">
 			<TableRow android:layout_height="wrap_content"
-				android:layout_width="fill_parent">
+				android:layout_width="match_parent">
 				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:layout_weight="1"
 					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
@@ -47,7 +47,7 @@
 					android:id="@+id/value_score_text"></TextView>
 			</TableRow>
 			<TableRow android:layout_height="wrap_content"
-				android:layout_width="fill_parent">
+				android:layout_width="match_parent">
 				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:layout_weight="1"
 					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
@@ -58,7 +58,7 @@
 					android:text="x"></TextView>
 			</TableRow>
 			<TableRow android:layout_height="wrap_content"
-				android:layout_width="fill_parent">
+				android:layout_width="match_parent">
 				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:layout_weight="1"
 					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
@@ -69,7 +69,7 @@
 					android:text="x"></TextView>
 			</TableRow>
 			<TableRow android:layout_height="wrap_content"
-				android:layout_width="fill_parent">
+				android:layout_width="match_parent">
 				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:layout_weight="1"
 					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
@@ -89,11 +89,11 @@
 			android:layout_centerHorizontal="true"
 			android:text="@string/home_review_title_text_empty"
 			android:textAppearance="@style/TextHeader" android:id="@+id/home_last_sleep_title_text"
-			android:layout_width="fill_parent"></TextView>
+			android:layout_width="match_parent"></TextView>
 	</RelativeLayout>
 	<com.androsz.electricsleepbeta.widget.SleepChart
 		android:id="@+id/home_sleep_chart" android:layout_below="@+id/home_stats_container" android:layout_toRightOf="@+id/home_button_container"
-		android:visibility="gone" android:layout_width="fill_parent"
+		android:visibility="gone" android:layout_width="match_parent"
 		android:layout_height="wrap_content" android:layout_marginTop="5dip"
 		android:layout_marginRight="4dip" android:layout_marginLeft="-4dip" />
 </RelativeLayout>

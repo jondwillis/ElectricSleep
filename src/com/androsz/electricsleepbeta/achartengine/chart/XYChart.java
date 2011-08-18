@@ -120,7 +120,7 @@ public abstract class XYChart extends AbstractChart {
 		final Orientation or = mRenderer.getOrientation();
 		if (or == Orientation.VERTICAL) {
 			right -= legendSize;
-			bottom += legendSize - 20;
+			bottom += legendSize 	;
 		}
 		final int angle = or.getAngle();
 		final boolean rotate = angle == 90;

@@ -59,6 +59,15 @@ public class StartSleepReceiver extends BroadcastReceiver {
 	public void onReceive(final Context context, final Intent intent) {
 		new AsyncTask<Void, Void, Void>() {
 
+			Intent serviceIntent;
+
+			@Override
+			protected void onPostExecute(Void result) {
+				enforceCalibrationBeforeStartingSleep(context, serviceIntent,
+						new Intent(context, SleepActivity.class)
+								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+			}
+
 			@Override
 			protected Void doInBackground(Void... params) {
 				final SharedPreferences userPrefs = context
@@ -81,7 +90,7 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				final boolean forceScreenOn = userPrefs.getBoolean(
 						context.getString(R.string.pref_force_screen), false);
 
-				final Intent serviceIntent = new Intent(context,
+				serviceIntent = new Intent(context,
 						SleepMonitoringService.class);
 				serviceIntent.putExtra(EXTRA_ALARM, alarmTriggerSensitivity);
 				serviceIntent.putExtra(EXTRA_SENSOR_DELAY, sensorDelay);
@@ -91,11 +100,9 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				serviceIntent.putExtra(EXTRA_SILENT_MODE, silentMode);
 				serviceIntent.putExtra(EXTRA_FORCE_SCREEN_ON, forceScreenOn);
 
-				enforceCalibrationBeforeStartingSleep(context, serviceIntent,
-						new Intent(context, SleepActivity.class)
-								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 				return null;
 			}
+
 		}.execute();
 	}
 }

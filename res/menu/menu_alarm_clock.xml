@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:showAsAction="always|withText" android:title="@string/add_alarm" android:icon="@drawable/add_alarm" android:id="@+id/menu_item_add_alarm"></item>
+    
+</menu>

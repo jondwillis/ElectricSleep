@@ -37,7 +37,7 @@
 
 	<style name="TitleBarAction">
 		<item name="android:layout_width">@dimen/title_height</item>
-		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_height">match_parent</item>
 		<item name="android:background">@drawable/title_button</item>
 	</style>
 
@@ -52,20 +52,20 @@
 
 	<style name="TitleBarSeparator">
 		<item name="android:layout_width">1px</item>
-		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_height">match_parent</item>
 		<item name="android:background">@color/titlebar_separator</item>
 	</style>
 
 	<style name="TitleBarSpring">
 		<item name="android:layout_width">0dp</item>
-		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_height">match_parent</item>
 		<item name="android:layout_weight">1</item>
 	</style>
 
 	<style name="TitleBarText">
 		<item name="android:id">@id/title_text</item>
 		<item name="android:layout_width">0dp</item>
-		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_height">match_parent</item>
 		<item name="android:layout_weight">1</item>
 		<item name="android:gravity">center_vertical</item>
 		<item name="android:textSize">@dimen/text_size_large</item>
@@ -113,8 +113,8 @@
 
 	<!-- alarmclock -->
 	<style name="clock">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
 		<item name="android:layout_gravity">center_horizontal</item>
 	</style>
 

@@ -21,10 +21,10 @@ public class StrictDebuggableApplication extends Application {
 									.detectAll().penaltyFlashScreen()
 									.penaltyLog().build());
 				} catch (Throwable throwable) {
-					// api level 9+
+					// api level 10-
 					StrictMode
 							.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-									.detectAll().penaltyLog().penaltyDeath()
+									.detectAll().penaltyLog().penaltyDialog()
 									.build());
 				}
 				StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()

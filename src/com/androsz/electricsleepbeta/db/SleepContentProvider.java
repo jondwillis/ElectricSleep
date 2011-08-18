@@ -54,8 +54,8 @@ public class SleepContentProvider extends ContentProvider {
 	private SleepHistoryDatabase sleepHistoryDatabase;
 
 	// UriMatcher stuff
-	private static final int SEARCH_WORDS = 0;
-	private static final int GET_WORD = 1;
+	private static final int SEARCH_SLEEP = 0;
+	private static final int GET_SLEEP = 1;
 	private static final int SEARCH_SUGGEST = 2;
 	private static final int REFRESH_SHORTCUT = 3;
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
@@ -67,8 +67,8 @@ public class SleepContentProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		// to get definitions...
-		matcher.addURI(AUTHORITY, "sleephistory", SEARCH_WORDS);
-		matcher.addURI(AUTHORITY, "sleephistory/#", GET_WORD);
+		matcher.addURI(AUTHORITY, "sleephistory", SEARCH_SLEEP);
+		matcher.addURI(AUTHORITY, "sleephistory/#", GET_SLEEP);
 		// to get suggestions...
 		matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY,
 				SEARCH_SUGGEST);
@@ -127,9 +127,9 @@ public class SleepContentProvider extends ContentProvider {
 	@Override
 	public String getType(final Uri uri) {
 		switch (sURIMatcher.match(uri)) {
-		case SEARCH_WORDS:
+		case SEARCH_SLEEP:
 			return WORDS_MIME_TYPE;
-		case GET_WORD:
+		case GET_SLEEP:
 			return DEFINITION_MIME_TYPE;
 		case SEARCH_SUGGEST:
 			return SearchManager.SUGGEST_MIME_TYPE;
@@ -174,15 +174,17 @@ public class SleepContentProvider extends ContentProvider {
 				// "selectionArgs must be provided for the Uri: " + uri);
 			}
 			return getSuggestions(selectionArgs[0]);
-		case SEARCH_WORDS:
+		case SEARCH_SLEEP:
 			if (selectionArgs == null) {
 				selectionArgs = new String[] { "" };
 				// throw new IllegalArgumentException(
 				// "selectionArgs must be provided for the Uri: " + uri);
 			}
 			return search(selectionArgs[0]);
-		case GET_WORD:
-			return getSleep(uri);
+		case GET_SLEEP:
+			Cursor c = getSleep(uri);
+			c.setNotificationUri(getContext().getContentResolver(), uri);
+			return c;
 		case REFRESH_SHORTCUT:
 			return refreshShortcut(uri);
 		default:
@@ -215,13 +217,6 @@ public class SleepContentProvider extends ContentProvider {
 
 	private Cursor search(String query) {
 		query = query.toLowerCase();
-		// final String[] columns = new String[] { BaseColumns._ID,
-		// SleepHistoryDatabase.KEY_SLEEP_DATE_TIME,
-		// SleepHistoryDatabase.KEY_SLEEP_DATA_X,
-		// SleepHistoryDatabase.KEY_SLEEP_DATA_Y,
-		// SleepHistoryDatabase.KEY_SLEEP_DATA_MIN,
-		// SleepHistoryDatabase.KEY_SLEEP_DATA_MAX, SleepHistoryDatabase. };
-
 		return sleepHistoryDatabase.getSleepMatches(query, null);
 	}
 

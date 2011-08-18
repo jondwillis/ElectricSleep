@@ -142,7 +142,7 @@
 	<string name="save">Save</string>
 	<string name="discard">Discard</string>
 	<string name="home_last_sleep_title_text_empty">...</string>
-	<string name="home_last_sleep_title_text">Last Night\'s Sleep Chart</string>
+	<string name="home_last_sleep_title_text">Most Recent</string>
 	<string name="home_review_title_text_empty">No sleep to review...</string>
 	<string name="home_review_title_text">Sleep Averages</string>
 	<string name="to">to</string>

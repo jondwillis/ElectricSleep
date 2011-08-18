@@ -251,7 +251,7 @@ public class SleepActivity extends HostActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_monitorying_sleep, menu);
+		getMenuInflater().inflate(R.menu.menu_monitoring_sleep, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
