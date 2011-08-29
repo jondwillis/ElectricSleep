@@ -228,6 +228,10 @@ public class SleepRecord {
 				final SleepRecord s = new SleepRecord(c);
 				final long startTime = s.getStartTime();
 				if (startTime > start && startTime < end) {
+					List<PointD> justFirstAndLast = new ArrayList<PointD>();
+					justFirstAndLast.add(s.chartData.get(0));
+					justFirstAndLast.add(s.chartData.get(s.chartData.size() - 1));
+					s.chartData = justFirstAndLast; //remove reference to the list, helps lessen memory usage
 					events.add(s);
 				}
 			} while (c.moveToNext());

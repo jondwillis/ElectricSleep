@@ -1,6 +1,7 @@
 package com.androsz.electricsleepbeta.content;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -11,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.provider.BaseColumns;
 
 import com.androsz.electricsleepbeta.app.SettingsActivity;
@@ -26,10 +28,18 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 	public static final String EXTRA_SUCCESS = "success";
 	public static final String EXTRA_NOTE = "note";
 	public static final String EXTRA_RATING = "rating";
-	public static String SAVE_SLEEP_COMPLETED = "com.androsz.electricsleepbeta.SAVE_SLEEP_COMPLETED";
+	public static final String SAVE_SLEEP_COMPLETED = "com.androsz.electricsleepbeta.SAVE_SLEEP_COMPLETED";
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
+
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+
+				return null;
+			}
+		}.execute();
 
 		new Thread(new Runnable() {
 
@@ -44,29 +54,40 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				final int rating = intent.getIntExtra(EXTRA_RATING, 5);
 				final String note = intent.getStringExtra(EXTRA_NOTE);
 
-				// FileInputStream fis;
-				RandomAccessFile raFile;
+				FileInputStream fis;
+				//RandomAccessFile raFile;
 				List<PointD> originalData = null;
 				try {
-					// fis = context
-					// .openFileInput(SleepMonitoringService.SLEEP_DATA);
+
 					synchronized (SleepMonitoringService.sDataLock) {
 						final File dataFile = context
 								.getFileStreamPath(SleepMonitoringService.SLEEP_DATA);
-						raFile = new RandomAccessFile(dataFile, "r");
+						//raFile = new RandomAccessFile(dataFile, "r");
+						fis = context
+								.openFileInput(SleepMonitoringService.SLEEP_DATA);
 						final long length = dataFile.length();
 						final int chunkSize = 16;
+						if (length % chunkSize != 0) {
+							context.sendBroadcast(new Intent(
+									SAVE_SLEEP_COMPLETED).putExtra(
+									EXTRA_IO_EXCEPTION, "corrupt file"));
+							return;
+						}
 						originalData = new ArrayList<PointD>((int) (length
 								/ chunkSize / 2));
 						if (length >= chunkSize) {
-							// just do one giant IO operation to load whole file
-							// into memory
-							final byte[] buffer = new byte[(int) length];
-							raFile.read(buffer);
-							raFile.close();
+							final byte[] wholeFile = new byte[(int) length];
+							byte[] buffer = new byte[8192];
+				            int bytesRead = 0;
+				            int dstPos = 0;
+				            while ((bytesRead = fis.read(buffer)) != -1) {
+				            	System.arraycopy(buffer, 0, wholeFile, dstPos, bytesRead);
+				            	dstPos+=bytesRead;
+				            }
+							fis.close();
 							final byte[] chunk = new byte[chunkSize];
-							for (int i = 0; i < buffer.length; i += chunkSize) {
-								System.arraycopy(buffer, i, chunk, 0, chunkSize);
+							for (int i = 0; i < wholeFile.length; i += chunkSize) {
+								System.arraycopy(wholeFile, i, chunk, 0, chunkSize);
 								originalData.add(PointD.fromByteArray(chunk));
 							}
 						}
@@ -219,7 +240,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				final Cursor c = shdb.getSleepMatches(name, new String[] {
 						BaseColumns._ID, SleepRecord.KEY_TITLE });
 
-				if (c == null) {
+ 				if (c == null) {
 					/*
 					 * Toast.makeText( context,
 					 * "Could not find the recently saved sleep in the sleep database- report this!"

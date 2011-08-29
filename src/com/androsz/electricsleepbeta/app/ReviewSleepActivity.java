@@ -8,22 +8,23 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
+import android.support.v4.app.ActionBar.Tab;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepHistoryDatabase;
 import com.androsz.electricsleepbeta.db.SleepRecord;
-import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class ReviewSleepActivity extends HostActivity implements
-		LoaderManager.LoaderCallbacks<Cursor> {
+		LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
+
 	private class DeleteSleepTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -55,7 +56,6 @@ public class ReviewSleepActivity extends HostActivity implements
 	}
 
 	ProgressDialog progress;
-	private SleepChart sleepChart;
 
 	private Uri uri;
 
@@ -67,56 +67,30 @@ public class ReviewSleepActivity extends HostActivity implements
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_review_sleep);
 		progress = new ProgressDialog(this);
+		
+		chartFragment = new ReviewSleepChartFragment();
+		analysisFragment = new ReviewSleepAnalysisFragment();
+
 		ActionBar bar = getSupportActionBar();
-		bar.addTab(bar.newTab().setText(R.string.sleep_chart)); // layout
-																// R.id.sleep_movement_chart
-		bar.addTab(bar.newTab().setText(R.string.analysis));// addTab(R.id.sleep_analysis_table,
-															// R.string.analysis);
+		bar.addTab(bar.newTab().setText(R.string.sleep_chart)
+				.setTabListener(this));
+		bar.addTab(bar.newTab().setText(R.string.analysis).setTabListener(this));
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		uri = getIntent().getData();
+		// If selectedTab is not saved to the savedInstanceState,
+		// 0 is returned by default.
+		if (savedInstanceState != null) {
+			int selectedTab = savedInstanceState.getInt("selectedTab");
+			bar.setSelectedNavigationItem(selectedTab);
+			uri = Uri.parse(savedInstanceState.getString("uri"));
+		} else {
+			uri = getIntent().getData();
+		}
 
 		getSupportLoaderManager().initLoader(0, null, this);
-/*
-		new AsyncTask<Uri, Void, Cursor>() {
 
-			@Override
-			protected Cursor doInBackground(Uri... params) {
-				return managedQuery(params[0], null, null, null, null);
-			}
-
-			@Override
-			protected void onPostExecute(final Cursor cursor) {
-				if (cursor == null) {
-					finish();
-					return;
-				}
-				boolean worked = cursor.moveToFirst();
-				if (worked) {
-					final SleepRecord sleepRecord = new SleepRecord(cursor);
-
-					((TextView) findViewById(R.id.value_score_text))
-							.setText(sleepRecord.getSleepScore() + "%");
-					((TextView) findViewById(R.id.value_duration_text))
-							.setText(sleepRecord
-									.getDurationText(getResources()));
-					((TextView) findViewById(R.id.value_spikes_text))
-							.setText(sleepRecord.spikes + "");
-					((TextView) findViewById(R.id.value_fell_asleep_text))
-							.setText(sleepRecord
-									.getFellAsleepText(getResources()));
-					((TextView) findViewById(R.id.value_note_text))
-							.setText(sleepRecord.note);
-
-					((RatingBar) findViewById(R.id.value_rating_bar))
-							.setRating(sleepRecord.rating);
-
-					sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
-					sleepChart.sync(sleepRecord);
-				}
-			}
-		}.execute(uri);*/
 	}
 
 	@Override
@@ -135,15 +109,12 @@ public class ReviewSleepActivity extends HostActivity implements
 	}
 
 	@Override
-	protected void onRestoreInstanceState(final Bundle savedState) {
-		super.onRestoreInstanceState(savedState);
-		uri = Uri.parse(savedState.getString("uri"));
-	}
-
-	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString("uri", uri.toString());
+		ActionBar bar = getSupportActionBar();
+		int selectedTab = bar.getSelectedTab().getPosition();
+		outState.putInt("selectedTab", selectedTab);
 	}
 
 	@Override
@@ -183,30 +154,41 @@ public class ReviewSleepActivity extends HostActivity implements
 		return new CursorLoader(this, uri, null, null, null, null);
 	}
 
+	ReviewSleepChartFragment chartFragment;
+	ReviewSleepAnalysisFragment analysisFragment;
+
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		data.moveToFirst();
-		final SleepRecord sleepRecord = new SleepRecord(data);
+		SleepRecord sleepRecord = new SleepRecord(data);
 
-		((TextView) findViewById(R.id.value_score_text)).setText(sleepRecord
-				.getSleepScore() + "%");
-		((TextView) findViewById(R.id.value_duration_text)).setText(sleepRecord
-				.getDurationText(getResources()));
-		((TextView) findViewById(R.id.value_spikes_text))
-				.setText(sleepRecord.spikes + "");
-		((TextView) findViewById(R.id.value_fell_asleep_text))
-				.setText(sleepRecord.getFellAsleepText(getResources()));
-		((TextView) findViewById(R.id.value_note_text))
-				.setText(sleepRecord.note);
-
-		((RatingBar) findViewById(R.id.value_rating_bar))
-				.setRating(sleepRecord.rating);
-
-		sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
-		sleepChart.sync(sleepRecord);
+		chartFragment.setSleepRecord(sleepRecord);
+		analysisFragment.setSleepRecord(sleepRecord);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+	}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		// ft passed here is always null... (not sure why, but its in the docs)
+
+		ft = getSupportFragmentManager().beginTransaction();
+		if (tab.getPosition() == 0) {
+			ft.replace(R.id.frags, chartFragment);
+		} else {
+			ft.replace(R.id.frags, analysisFragment);
+		}
+		ft.commit();
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
 }

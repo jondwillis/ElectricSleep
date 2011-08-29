@@ -12,7 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
-public class DimSleepActivity extends Activity {
+public class DimSleepActivity extends AnalyticActivity {
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		finish(); //if we're going away, really go away.
+	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -21,7 +27,7 @@ public class DimSleepActivity extends Activity {
 		final Window win = getWindow();
 		final WindowManager.LayoutParams winParams = win.getAttributes();
 		winParams.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-				| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+				//| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 				| WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
 		// set screen brightness to the lowest possible without turning screen
@@ -37,7 +43,7 @@ public class DimSleepActivity extends Activity {
 				buttonBrightness.set(winParams,
 						WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF);
 			} catch (final Exception e) {
-				e.printStackTrace();
+				this.trackEvent("buttonBrightnessFail", 1);
 			}
 		} else {
 			winParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
@@ -60,4 +66,5 @@ public class DimSleepActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 		setContentView(blackness);
 	}
+	
 }

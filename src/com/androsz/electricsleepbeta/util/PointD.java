@@ -17,11 +17,11 @@ public class PointD implements Serializable {
 		return new PointD(x, y);
 	}
 
-	private static byte[] toByta(final double data) {
-		return toByta(Double.doubleToRawLongBits(data));
+	private static byte[] toByte(final double data) {
+		return toByte(Double.doubleToRawLongBits(data));
 	}
 
-	private static byte[] toByta(final long data) {
+	private static byte[] toByte(final long data) {
 		return new byte[] { (byte) (data >> 56 & 0xff),
 				(byte) (data >> 48 & 0xff), (byte) (data >> 40 & 0xff),
 				(byte) (data >> 32 & 0xff), (byte) (data >> 24 & 0xff),
@@ -31,8 +31,8 @@ public class PointD implements Serializable {
 
 	public static byte[] toByteArray(final PointD point) {
 		final byte[] bytes = new byte[16];
-		System.arraycopy(toByta(point.x), 0, bytes, 0, 8);
-		System.arraycopy(toByta(point.y), 0, bytes, 8, 8);
+		System.arraycopy(toByte(point.x), 0, bytes, 0, 8);
+		System.arraycopy(toByte(point.y), 0, bytes, 8, 8);
 		return bytes;
 	}
 

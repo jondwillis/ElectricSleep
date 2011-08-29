@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="screen_will_dim">Screen will dim in 15 seconds.</string>
+	<string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS ANYTHING.</string>
 	<string name="legend_light_sleep_trigger">Light Sleep Trigger</string>
 	<string name="legend_movement">Movement</string>
 	<string name="warming_up">Warming up sensors, please wait.</string>
@@ -715,4 +715,5 @@
 	</string>
 	<string name="sleep_no_alarm">No alarm has been set. ElectricSleep will not wake
 		you up.</string>
+	<string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
 </resources>

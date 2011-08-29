@@ -125,7 +125,7 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 			// sendBroadcast(new
 			// Intent(SleepMonitoringService.POKE_SYNC_CHART));
 		}
-		sleepChart = (SleepChart) savedState.getSerializable(SLEEP_CHART);
+		sleepChart = (SleepChart) savedState.getParcelable(SLEEP_CHART);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(SLEEP_CHART, sleepChart);
+		outState.putParcelable(SLEEP_CHART, sleepChart);
 	}
 
 }

@@ -3,7 +3,6 @@ package com.androsz.electricsleepbeta.app;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.os.StrictMode;
-import android.util.Log;
 
 public class StrictDebuggableApplication extends Application {
 
@@ -24,11 +23,10 @@ public class StrictDebuggableApplication extends Application {
 					// api level 10-
 					StrictMode
 							.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-									.detectAll().penaltyLog().penaltyDialog()
-									.build());
+									.detectAll().penaltyLog().build());
 				}
 				StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-						.detectAll().penaltyLog().penaltyDeath().build());
+						.detectAll().penaltyLog().build());
 			}
 		} catch (Throwable throwable) {
 		}

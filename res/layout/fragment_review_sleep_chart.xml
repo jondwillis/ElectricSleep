@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent">
+	<com.androsz.electricsleepbeta.widget.ReviewSleepChart
+		android:id="@+id/sleep_movement_chart" android:layout_width="match_parent"
+		android:layout_height="match_parent" android:orientation="horizontal"
+		android:padding="8dip" />
+</LinearLayout>

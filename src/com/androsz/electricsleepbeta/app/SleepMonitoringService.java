@@ -61,8 +61,6 @@ public class SleepMonitoringService extends Service implements
 				synchronized (sDataLock) {
 					final FileOutputStream fos = openFileOutput(SLEEP_DATA,
 							Context.MODE_APPEND);
-					final BufferedOutputStream bos = new BufferedOutputStream(
-							fos);
 					fos.write(PointD.toByteArray(sleepPoint));
 					fos.close();
 				}

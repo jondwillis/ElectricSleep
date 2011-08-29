@@ -29,6 +29,8 @@ public abstract class AnalyticActivity extends FragmentActivity {
 
 		GoogleAnalyticsSessionManager.getInstance(getApplication())
 				.incrementActivityCount();
+		
+		
 	}
 
 	@Override

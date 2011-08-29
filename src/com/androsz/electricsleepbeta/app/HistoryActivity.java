@@ -25,7 +25,24 @@ import com.androsz.electricsleepbeta.db.SleepHistoryDatabase;
 import com.androsz.electricsleepbeta.db.SleepRecord;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
-public class HistoryActivity extends HostActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HistoryActivity extends HostActivity implements
+		LoaderManager.LoaderCallbacks<Cursor> {
+
+	private final class ListOnItemClickListener implements OnItemClickListener {
+		@Override
+		public void onItemClick(final AdapterView<?> parent,
+				final View view, final int position, final long id) {
+			// Build the Intent used to open WordActivity with a
+			// specific word Uri
+			final Intent reviewSleepIntent = new Intent(
+					HistoryActivity.this, ReviewSleepActivity.class);
+			final Uri data = Uri.withAppendedPath(
+					SleepContentProvider.CONTENT_URI,
+					String.valueOf(id));
+			reviewSleepIntent.setData(data);
+			startActivity(reviewSleepIntent);
+		}
+	}
 
 	private class DeleteSleepTask extends AsyncTask<Long, Void, Void> {
 
@@ -40,8 +57,9 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 
 		@Override
 		protected void onPostExecute(final Void results) {
-			//mListView.removeAllViewsInLayout();
-			//getSupportLoaderManager().restartLoader(0, getLoaderArgs(getIntent()), HistoryActivity.this);
+			// mListView.removeAllViewsInLayout();
+			getSupportLoaderManager().restartLoader(0,
+					getLoaderArgs(getIntent(), false), HistoryActivity.this);
 			Toast.makeText(HistoryActivity.this,
 					getString(R.string.deleted_sleep_record),
 					Toast.LENGTH_SHORT).show();
@@ -66,7 +84,7 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 
 	private ListView mListView;
 	private SleepHistoryCursorAdapter sleepHistoryAdapter;
-	
+
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_history;
@@ -86,9 +104,9 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 
 		sleepHistoryAdapter = new SleepHistoryCursorAdapter(
 				HistoryActivity.this, null);
-		
+
 		mListView.setAdapter(sleepHistoryAdapter);
-		
+
 		final Intent intent = getIntent();
 
 		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -98,16 +116,19 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 			startActivity(reviewIntent);
 			finish();
 		} else {
-			getSupportLoaderManager().initLoader(0, getLoaderArgs(intent), this);
+			getSupportLoaderManager().initLoader(0,
+					getLoaderArgs(intent, true), this);
 		}
 	}
 
-	private Bundle getLoaderArgs(final Intent intent) {
+	private Bundle getLoaderArgs(final Intent intent, boolean init) {
 		// set searchFor parameter if it exists
 		String searchFor = intent.getStringExtra(SEARCH_FOR);
 		if (searchFor != null) {
-			HistoryActivity.this.setTitle(HistoryActivity.this.getTitle()
-					+ " " + searchFor);
+			if (init) {
+				HistoryActivity.this.setTitle(HistoryActivity.this.getTitle()
+						+ " " + searchFor);
+			}
 			// do exact searches only.
 			searchFor = "\"" + searchFor + "\"";
 		} else {
@@ -132,8 +153,9 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 
 		progress.setMessage(getString(R.string.querying_sleep_database));
 		progress.show();
-		return new CursorLoader(this, SleepContentProvider.CONTENT_URI, null, null,
-				new String[] { args.getString(SEARCH_FOR) }, SleepRecord.KEY_TITLE);
+		return new CursorLoader(this, SleepContentProvider.CONTENT_URI, null,
+				null, new String[] { args.getString(SEARCH_FOR) },
+				SleepRecord.KEY_TITLE);
 	}
 
 	@Override
@@ -144,70 +166,49 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 			mTextView.setText(getString(R.string.no_results));
 			mListView.setVisibility(View.GONE);
 		} else {
+			if (data.getCount() == 1) {
+				mListView.getAdapter().getItem(0);
+			}
 			sleepHistoryAdapter.swapCursor(data);
 			mTextView.setVisibility(View.GONE);
 			mListView.setVisibility(View.VISIBLE);
-			
 
-			mListView
-					.setOnItemLongClickListener(new OnItemLongClickListener() {
+			mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-						@Override
-						public boolean onItemLongClick(
-								final AdapterView<?> parent,
-								final View view, final int position,
-								final long rowId) {
-							final AlertDialog.Builder dialog = new AlertDialog.Builder(
-									HistoryActivity.this)
-									.setMessage(
-											getString(R.string.delete_sleep_record))
-									.setPositiveButton(
-											getString(R.string.ok),
-											new DialogInterface.OnClickListener() {
-												@Override
-												public void onClick(
-														final DialogInterface dialog,
-														final int id) {
+				@Override
+				public boolean onItemLongClick(final AdapterView<?> parent,
+						final View view, final int position, final long rowId) {
+					final AlertDialog.Builder dialog = new AlertDialog.Builder(
+							HistoryActivity.this)
+							.setMessage(getString(R.string.delete_sleep_record))
+							.setPositiveButton(getString(R.string.ok),
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												final DialogInterface dialog,
+												final int id) {
 
-													new DeleteSleepTask()
-															.execute(rowId,
-																	null,
-																	null);
-												}
-											})
-									.setNegativeButton(
-											getString(R.string.cancel),
-											new DialogInterface.OnClickListener() {
-												@Override
-												public void onClick(
-														final DialogInterface dialog,
-														final int id) {
-													dialog.cancel();
-												}
-											});
-							dialog.show();
-							return true;
-						}
+											new DeleteSleepTask().execute(
+													rowId, null, null);
+										}
+									})
+							.setNegativeButton(getString(R.string.cancel),
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												final DialogInterface dialog,
+												final int id) {
+											dialog.cancel();
+										}
+									});
+					dialog.show();
+					return true;
+				}
 
-					});
+			});
 
 			// Define the on-click listener for the list items
-			mListView.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(final AdapterView<?> parent,
-						final View view, final int position, final long id) {
-					// Build the Intent used to open WordActivity with a
-					// specific word Uri
-					final Intent reviewSleepIntent = new Intent(
-							getApplicationContext(),
-							ReviewSleepActivity.class);
-					final Uri data = Uri.withAppendedPath(
-							SleepContentProvider.CONTENT_URI,
-							String.valueOf(id));
-					reviewSleepIntent.setData(data);
-					startActivity(reviewSleepIntent);
-				}
-			});
+			mListView.setOnItemClickListener(new ListOnItemClickListener());
 		}
 		if (progress != null && progress.isShowing()) {
 			progress.dismiss();

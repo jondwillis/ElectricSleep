@@ -31,13 +31,13 @@ public abstract class HostActivity extends AnalyticActivity {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menuItemTutorial:
+		case R.id.menu_item_tutorial:
 			startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
 			break;
-		case R.id.menuItemAbout:
+		case R.id.menu_item_about:
 			startActivity(new Intent(this, AboutActivity.class));
 			break;
-		case R.id.menuItemDonate:
+		case R.id.menu_item_donate:
 			trackPageView("donate");
 			final Uri marketUri = Uri
 					.parse("market://details?id=com.androsz.electricsleepdonate");
@@ -45,10 +45,10 @@ public abstract class HostActivity extends AnalyticActivity {
 					marketUri);
 			startActivity(marketIntent);
 			break;
-		case R.id.menuItemSettings:
+		case R.id.menu_item_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			break;
-		case R.id.menuItemReport:
+		case R.id.menu_item_report:
 			startActivity(new Intent(
 					"android.intent.action.VIEW",
 					Uri.parse("http://code.google.com/p/electricsleep/issues/entry")));

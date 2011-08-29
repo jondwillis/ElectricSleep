@@ -242,8 +242,8 @@ public class SleepActivity extends HostActivity {
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
-		setTitle(R.string.monitoring_sleep);
 		super.onCreate(savedInstanceState);
+		setTitle(R.string.monitoring_sleep);
 
 		registerReceiver(sleepStoppedReceiver, new IntentFilter(
 				SleepMonitoringService.SLEEP_STOPPED));
@@ -275,7 +275,7 @@ public class SleepActivity extends HostActivity {
 
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedState) {
-		sleepChart = (SleepChart) savedState.getSerializable(SLEEP_CHART);
+		sleepChart = (SleepChart) savedState.getParcelable(SLEEP_CHART);
 		super.onRestoreInstanceState(savedState);
 	}
 
@@ -301,7 +301,7 @@ public class SleepActivity extends HostActivity {
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(SLEEP_CHART, sleepChart);
+		outState.putParcelable(SLEEP_CHART, sleepChart);
 	}
 
 	private void showOrHideWarnings() {

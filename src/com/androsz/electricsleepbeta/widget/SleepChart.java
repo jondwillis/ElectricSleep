@@ -7,6 +7,8 @@ import java.io.StreamCorruptedException;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Canvas;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 
 import com.androsz.electricsleepbeta.R;
@@ -22,9 +24,7 @@ import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.db.SleepRecord;
 import com.androsz.electricsleepbeta.util.MathUtils;
 
-public class SleepChart extends ChartView implements Serializable {
-
-	private static final long serialVersionUID = -5692853786456847694L;
+public class SleepChart extends ChartView implements Parcelable {
 
 	public XYMultipleSeriesDataset xyMultipleSeriesDataset;
 
@@ -48,6 +48,38 @@ public class SleepChart extends ChartView implements Serializable {
 
 	public SleepChart(final Context context, final AttributeSet as) {
 		super(context, as);
+	}
+
+	public SleepChart(final Context context, Parcel in) {
+		super(context);
+		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) in
+				.readSerializable();
+		xyMultipleSeriesRenderer = (XYMultipleSeriesRenderer) in
+				.readSerializable();
+		xySeriesMovement = (XYSeries) in.readSerializable();
+		xySeriesMovementRenderer = (XYSeriesRenderer) in.readSerializable();
+		xySeriesCalibration = (XYSeries) in.readSerializable();
+		xySeriesCalibrationRenderer = (XYSeriesRenderer) in.readSerializable();
+		calibrationLevel = in.readDouble();
+		rating = in.readInt();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeSerializable(xyMultipleSeriesDataset);
+		dest.writeSerializable(xyMultipleSeriesRenderer);
+		dest.writeSerializable(xySeriesMovement);
+		dest.writeSerializable(xySeriesMovementRenderer);
+		dest.writeSerializable(xySeriesCalibration);
+		dest.writeSerializable(xySeriesCalibrationRenderer);
+		dest.writeDouble(calibrationLevel);
+		dest.writeInt(rating);
+
 	}
 
 	@Override
@@ -87,11 +119,13 @@ public class SleepChart extends ChartView implements Serializable {
 
 			xyMultipleSeriesRenderer.setPanEnabled(false, false);
 			xyMultipleSeriesRenderer.setZoomEnabled(false, false);
-			final float textSize = MathUtils.calculatePxFromDip(getContext(), 14);
+			final float textSize = MathUtils.calculatePxFromDip(getContext(),
+					14);
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			xyMultipleSeriesRenderer.setLegendHeight(MathUtils.calculatePxFromDip(getContext(), 40));
+			xyMultipleSeriesRenderer.setLegendHeight(MathUtils
+					.calculatePxFromDip(getContext(), 40));
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
@@ -197,4 +231,5 @@ public class SleepChart extends ChartView implements Serializable {
 		reconfigure();
 		repaint();
 	}
+
 }
