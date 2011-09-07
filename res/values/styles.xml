@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- Base application theme is the default theme. -->
-	<style name="Theme" parent="@style/Theme.Sherlock"></style>
+	<!-- Base application theme is the default theme.
+	<style name="Theme" ></style>
 
-	<style name="Theme.electricsleep" parent="@style/Theme.Sherlock">
-		<!--<item name="android:windowContentOverlay">@android:color/transparent</item>
+	<style name="Theme.electricsleep"  parent="@Style/Theme.Sherlock"> 
+		<item name="android:windowContentOverlay">@android:color/transparent</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
-		<item name="android:windowTitleSize">@dimen/title_height</item> -->
+		<item name="android:windowTitleSize">@dimen/title_height</item>
 	</style>
 
-	<style name="WindowTitleBackground"><!-- parent="@android:style/windowTitleBackground" -->
+	<style name="WindowTitleBackground"> parent="@android:style/windowTitleBackground" 
 		<item name="android:background">@android:color/transparent</item>
-	</style>
+	</style> -->
 
 	<style name="HomeButton">
 		<item name="android:padding">8dip</item>

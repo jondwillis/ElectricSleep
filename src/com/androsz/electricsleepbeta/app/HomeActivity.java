@@ -20,8 +20,8 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
-import android.widget.RatingBar;
-import android.widget.RelativeLayout;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
@@ -62,10 +62,9 @@ public class HomeActivity extends HostActivity {
 		protected void onPostExecute(final Cursor cursor) {
 			final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
 			final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
-			final RelativeLayout container = (RelativeLayout) findViewById(R.id.home_stats_container);
+			final ViewGroup container = (ViewGroup) findViewById(R.id.home_stats_container);
 			if (cursor == null) {
 				container.setVisibility(View.GONE);
-				sleepChart.setVisibility(View.GONE);
 				reviewTitleText
 						.setText(getString(R.string.home_review_title_text_empty));
 				lastSleepTitleText
@@ -77,8 +76,6 @@ public class HomeActivity extends HostActivity {
 				final TextView avgSpikesText = (TextView) findViewById(R.id.value_spikes_text);
 				final TextView avgFellAsleepText = (TextView) findViewById(R.id.value_fell_asleep_text);
 				cursor.moveToLast();
-				sleepChart.setVisibility(View.VISIBLE);
-				container.setVisibility(View.VISIBLE);
 				try {
 					sleepChart.sync(cursor);
 				} catch (final StreamCorruptedException e) {
@@ -123,6 +120,8 @@ public class HomeActivity extends HostActivity {
 
 				reviewTitleText
 						.setText(getString(R.string.home_review_title_text));
+				container.setVisibility(View.VISIBLE);
+				sleepChart.setVisibility(View.VISIBLE);
 			}
 		}
 

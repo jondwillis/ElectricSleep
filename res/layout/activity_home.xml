@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
 	android:layout_width="match_parent" android:layout_height="wrap_content">
 	<LinearLayout android:layout_height="wrap_content"
 		android:layout_alignParentTop="true" android:id="@+id/home_button_container"
@@ -20,78 +21,87 @@
 	<View android:layout_below="@+id/home_button_container"
 		android:layout_width="match_parent" android:layout_height="1dip"
 		android:background="@color/background_transparent_lighten" />
-	<RelativeLayout android:layout_height="wrap_content"
-		android:id="@+id/home_stats_container" android:layout_width="match_parent"
-		android:layout_below="@+id/home_button_container" android:visibility="gone">
 
-		<TextView android:layout_height="wrap_content"
-			android:gravity="center" android:layout_centerHorizontal="true"
-			android:text="@string/home_review_title_text_empty"
-			android:textAppearance="@style/TextHeader" android:id="@+id/home_review_title_text"
-			android:layout_width="match_parent"></TextView>
-		<TableLayout android:layout_height="wrap_content"
-			android:layout_width="match_parent" android:layout_below="@+id/home_review_title_text"
-			android:id="@+id/home_statistics_dashboard" android:layout_margin="5dp"
-			android:padding="5dp">
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_score_text" android:text="@string/sleep_score"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:text="x"
-					android:id="@+id/value_score_text"></TextView>
-			</TableRow>
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_duration_text" android:text="@string/duration"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:id="@+id/value_duration_text"
-					android:text="x"></TextView>
-			</TableRow>
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_spikes_text" android:text="@string/spikes"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:id="@+id/value_spikes_text"
-					android:text="x"></TextView>
-			</TableRow>
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_fell_asleep_text" android:text="@string/fell_asleep"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:id="@+id/value_fell_asleep_text"
-					android:text="x"></TextView>
-			</TableRow>
-		</TableLayout>
-		<View android:layout_above="@+id/home_last_sleep_title_text"
-			android:layout_width="match_parent" android:layout_height="1dip"
-			android:background="@color/background_transparent_lighten" />
+	<ScrollView android:id="@+id/home_stats_container"
+		android:layout_width="match_parent" android:visibility="visible"
+		android:layout_height="match_parent" android:layout_below="@+id/home_button_container">
+		<RelativeLayout android:layout_height="wrap_content"
+			android:layout_width="match_parent" android:layout_toRightOf="@+id/home_button_container">
+			<com.google.ads.AdView android:id="@+id/adView"
+				android:gravity="center" android:layout_centerHorizontal="true"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				ads:adUnitId="a14e64057e1e23e" ads:adSize="BANNER"
+				ads:loadAdOnCreate="true" />
 
-		<TextView android:layout_height="wrap_content"
-			android:gravity="center" android:layout_below="@+id/home_statistics_dashboard"
-			android:layout_centerHorizontal="true"
-			android:text="@string/home_review_title_text_empty"
-			android:textAppearance="@style/TextHeader" android:id="@+id/home_last_sleep_title_text"
-			android:layout_width="match_parent"></TextView>
-	</RelativeLayout>
-	<com.androsz.electricsleepbeta.widget.SleepChart
-		android:id="@+id/home_sleep_chart" android:layout_below="@+id/home_stats_container"
-		android:visibility="gone" android:layout_width="match_parent"
-		android:layout_height="wrap_content" android:layout_marginTop="10dip"
-		android:layout_marginRight="4dip" android:layout_marginLeft="-4dip" />
+			<TextView android:layout_height="wrap_content"
+				android:layout_below="@+id/adView" android:gravity="center"
+				android:layout_centerHorizontal="true"
+				android:text="@string/home_review_title_text_empty"
+				android:textAppearance="@style/TextHeader" android:id="@+id/home_review_title_text"
+				android:layout_width="match_parent"></TextView>
+			<TableLayout android:layout_height="wrap_content"
+				android:layout_width="match_parent" android:layout_below="@+id/home_review_title_text"
+				android:id="@+id/home_statistics_dashboard">
+				<TableRow android:layout_height="wrap_content"
+					android:layout_width="match_parent">
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:layout_weight="1"
+						style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
+						android:id="@+id/header_score_text" android:text="@string/sleep_score"></TextView>
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" style="@style/TextHeaderTwo"
+						android:layout_gravity="right|center_vertical" android:text="x"
+						android:id="@+id/value_score_text"></TextView>
+				</TableRow>
+				<TableRow android:layout_height="wrap_content"
+					android:layout_width="match_parent">
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:layout_weight="1"
+						style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
+						android:id="@+id/header_duration_text" android:text="@string/duration"></TextView>
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" style="@style/TextHeaderTwo"
+						android:layout_gravity="right|center_vertical" android:id="@+id/value_duration_text"
+						android:text="x"></TextView>
+				</TableRow>
+				<TableRow android:layout_height="wrap_content"
+					android:layout_width="match_parent">
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:layout_weight="1"
+						style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
+						android:id="@+id/header_spikes_text" android:text="@string/spikes"></TextView>
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" style="@style/TextHeaderTwo"
+						android:layout_gravity="right|center_vertical" android:id="@+id/value_spikes_text"
+						android:text="x"></TextView>
+				</TableRow>
+				<TableRow android:layout_height="wrap_content"
+					android:layout_width="match_parent">
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:layout_weight="1"
+						style="@style/TextHeaderTwo" android:layout_gravity="left|center_vertical"
+						android:id="@+id/header_fell_asleep_text" android:text="@string/fell_asleep"></TextView>
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" style="@style/TextHeaderTwo"
+						android:layout_gravity="right|center_vertical" android:id="@+id/value_fell_asleep_text"
+						android:text="x"></TextView>
+				</TableRow>
+			</TableLayout>
+			<View android:layout_above="@+id/home_last_sleep_title_text"
+				android:layout_width="match_parent" android:layout_height="1dip"
+				android:background="@color/background_transparent_lighten" />
+
+			<TextView android:layout_height="wrap_content"
+				android:gravity="center" android:layout_below="@+id/home_statistics_dashboard"
+				android:layout_centerHorizontal="true"
+				android:text="@string/home_review_title_text_empty"
+				android:textAppearance="@style/TextHeader" android:id="@+id/home_last_sleep_title_text"
+				android:layout_width="match_parent"></TextView>
+			<com.androsz.electricsleepbeta.widget.SleepChart
+				android:id="@+id/home_sleep_chart" android:layout_below="@+id/home_last_sleep_title_text"
+				android:visibility="gone" android:layout_width="match_parent"
+				android:layout_height="500dp" android:layout_marginTop="5dip"
+				android:layout_marginRight="4dip" android:layout_marginLeft="-4dip" />
+		</RelativeLayout>
+	</ScrollView>
 </RelativeLayout>

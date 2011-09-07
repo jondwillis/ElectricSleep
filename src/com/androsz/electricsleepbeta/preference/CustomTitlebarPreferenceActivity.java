@@ -46,7 +46,7 @@ public abstract class CustomTitlebarPreferenceActivity extends
 		//getWindow().setFormat(PixelFormat.RGBA_8888);
 		//requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		super.onCreate(savedInstanceState);
-		setTheme(R.style.Theme_electricsleep);
+		setTheme(R.style.Theme_Sherlock);
 		final ListView lvw = getListView();
 		lvw.setCacheColorHint(0);
 		lvw.setBackgroundDrawable(getResources().getDrawable(
