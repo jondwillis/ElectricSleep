@@ -27,7 +27,7 @@
 
 	<LinearLayout android:layout_width="match_parent"
 		android:layout_height="match_parent" android:orientation="vertical">
-		<com.google.ads.AdView android:id="@+id/adView"
+		<com.androsz.electricsleepbeta.widget.BlockableAdView android:id="@+id/adView"
 			android:layout_height="wrap_content" ads:adUnitId="a14e64057e1e23e"
 			ads:adSize="BANNER" ads:loadAdOnCreate="true" android:layout_gravity="center"
 			android:layout_width="wrap_content" />

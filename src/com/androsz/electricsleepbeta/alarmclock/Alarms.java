@@ -309,7 +309,7 @@ public class Alarms {
 				final Alarm alarm = new Alarm(cur);
 				// A time of 0 means this alarm repeats. If the time is
 				// non-zero, check if the time is before now.
-				if (alarm.time != 0 && alarm.time < now) {
+				if (alarm.time != 0 && !alarm.daysOfWeek.isRepeatSet() && alarm.time < now) {
 					if (Log.LOGV) {
 						Log.v("** DISABLE " + alarm.id + " now " + now
 								+ " set " + alarm.time);

@@ -136,7 +136,7 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 	 * This must be false for production. If true, turns on logging, test code,
 	 * etc.
 	 */
-	static final boolean DEBUG = true;
+	static final boolean DEBUG = false;
 
 	private ListView mAlarmsList;
 

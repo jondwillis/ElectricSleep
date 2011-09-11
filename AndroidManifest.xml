@@ -98,8 +98,7 @@
 		<activity android:name=".alarmclock.SetAlarm" android:label="@string/set_alarm"
 			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
 
-		<activity android:name=".alarmclock.AlarmAlert"
-			android:excludeFromRecents="true" android:theme="@style/alarm_alert"
+		<activity android:name=".alarmclock.AlarmAlert"	android:excludeFromRecents="true"
 			android:launchMode="singleInstance" android:taskAffinity=""
 			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
 

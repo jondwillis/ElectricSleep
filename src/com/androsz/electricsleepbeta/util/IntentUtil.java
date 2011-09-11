@@ -4,7 +4,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 
 public class IntentUtil {
@@ -29,5 +31,16 @@ public class IntentUtil {
 		final List<ResolveInfo> list = packageManager.queryBroadcastReceivers(
 				intent, 0);
 		return list.size() > 0;
+	}
+
+	public static boolean isApplicationInstalled(final Context context,
+			final String packageName) {
+		final PackageManager packageManager = context.getPackageManager();
+		try {
+			packageManager.getApplicationInfo(packageName, 0);
+			return true;
+		} catch (NameNotFoundException whocares) {
+			return false;
+		}
 	}
 }
