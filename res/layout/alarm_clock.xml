@@ -16,12 +16,12 @@
 		android:gravity="fill_horizontal" android:src="@android:drawable/divider_horizontal_dark" />
 
 	<ListView android:id="@+id/alarms_list" android:layout_width="match_parent"
-		android:layout_height="wrap_content" android:layout_weight="1" />
+		android:layout_height="match_parent" android:layout_weight="1" />
 
-	<LinearLayout android:layout_width="match_parent"
+	<!-- <LinearLayout android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:orientation="horizontal">
 
-		<!-- <com.androsz.electricsleepbeta.alarmclock.DigitalClock style="@style/ButtonStripRight" 
+		<com.androsz.electricsleepbeta.alarmclock.DigitalClock style="@style/ButtonStripRight" 
 			android:layout_width="match_parent" android:layout_height="match_parent"> <LinearLayout 
 			android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="true"> 
 			<TextView android:id="@+id/timeDisplay" android:layout_width="wrap_content" 
@@ -29,8 +29,8 @@
 			android:textColor="?android:attr/textColorPrimary" /> <TextView android:id="@+id/am_pm" 
 			android:layout_width="wrap_content" android:layout_height="wrap_content" 
 			android:textAppearance="?android:attr/textAppearanceSmall" android:textStyle="bold" 
-			android:textColor="?android:attr/textColorPrimary" /> </LinearLayout> </com.androsz.electricsleepbeta.alarmclock.DigitalClock> -->
+			android:textColor="?android:attr/textColorPrimary" /> </LinearLayout> </com.androsz.electricsleepbeta.alarmclock.DigitalClock> 
 
-	</LinearLayout>
+	</LinearLayout>-->
 
 </LinearLayout>

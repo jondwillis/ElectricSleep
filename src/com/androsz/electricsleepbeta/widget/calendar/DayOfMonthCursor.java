@@ -36,8 +36,8 @@ import android.util.MonthDisplayHelper;
  */
 public class DayOfMonthCursor extends MonthDisplayHelper {
 
-	private int mRow;
 	private int mColumn;
+	private int mRow;
 
 	/**
 	 * @param year
@@ -91,10 +91,12 @@ public class DayOfMonthCursor extends MonthDisplayHelper {
 	 *         depending on whether the selection is in the first or last row.
 	 */
 	public int getSelectedMonthOffset() {
-		if (isWithinCurrentMonth(mRow, mColumn))
+		if (isWithinCurrentMonth(mRow, mColumn)) {
 			return 0;
-		if (mRow == 0)
+		}
+		if (mRow == 0) {
 			return -1;
+		}
 		return 1;
 	}
 
@@ -120,8 +122,9 @@ public class DayOfMonthCursor extends MonthDisplayHelper {
 			mColumn--;
 		}
 
-		if (isWithinCurrentMonth(mRow, mColumn))
+		if (isWithinCurrentMonth(mRow, mColumn)) {
 			return false;
+		}
 
 		// need to flip to last day of previous month
 		previousMonth();
@@ -144,8 +147,9 @@ public class DayOfMonthCursor extends MonthDisplayHelper {
 			mColumn++;
 		}
 
-		if (isWithinCurrentMonth(mRow, mColumn))
+		if (isWithinCurrentMonth(mRow, mColumn)) {
 			return false;
+		}
 
 		// need to flip to first day of next month
 		nextMonth();

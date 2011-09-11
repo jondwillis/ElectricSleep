@@ -27,52 +27,52 @@ import android.graphics.Typeface;
  * An abstract renderer to be extended by the multiple series classes.
  */
 public class DefaultRenderer implements Serializable {
-	private static final long serialVersionUID = 2621775532648145174L;
 	/** A no color constant. */
 	public static final int NO_COLOR = Color.TRANSPARENT;
 	/** The default background color. */
 	public static final int BACKGROUND_COLOR = NO_COLOR;
-	/** The default color for text. */
-	public static final int TEXT_COLOR = Color.LTGRAY;
 	/** A text font for regular text, like the chart labels. */
 	private static final Typeface REGULAR_TEXT_FONT = Typeface.create(
 			Typeface.SERIF, Typeface.NORMAL);
-	/** The typeface name for the texts. */
-	private String textTypefaceName = REGULAR_TEXT_FONT.toString();
-	/** The typeface style for the texts. */
-	private int textTypefaceStyle = Typeface.NORMAL;
-	/** The chart background color. */
-	private int mBackgroundColor;
+	private static final long serialVersionUID = 2621775532648145174L;
+	/** The default color for text. */
+	public static final int TEXT_COLOR = Color.LTGRAY;
+	/** The antialiasing flag. */
+	private boolean antialiasing = true;
 	/** If the background color is applied. */
 	private boolean mApplyBackgroundColor;
-	/** If the axes are visible. */
-	private boolean mShowAxes = true;
 	/** The axes color. */
 	private int mAxesColor = TEXT_COLOR;
-	/** If the labels are visible. */
-	private boolean mShowLabels = true;
+	/** The chart background color. */
+	private int mBackgroundColor;
 	/** The labels color. */
 	private int mLabelsColor = TEXT_COLOR;
 	/** The labels text size. */
 	private float mLabelsTextSize = 9;
-	/** If the legend is visible. */
-	private boolean mShowLegend = true;
+	/** The legend height. */
+	private int mLegendHeight = 0;
 	/** The legend text size. */
 	private float mLegendTextSize = 12;
-	/** If the grid should be displayed. */
-	private boolean mShowGrid = false;
+	/** The margins size. */
+	private int[] mMargins = new int[] { 10, 20, 0, 0 };
 	/** The simple renderers that are included in this multiple series renderer. */
 	private final List<SimpleSeriesRenderer> mRenderers = new ArrayList<SimpleSeriesRenderer>();
-	/** The antialiasing flag. */
-	private boolean antialiasing = true;
+	/** If the axes are visible. */
+	private boolean mShowAxes = true;
+	/** If the grid should be displayed. */
+	private boolean mShowGrid = false;
+	/** If the labels are visible. */
+	private boolean mShowLabels = true;
+	/** If the legend is visible. */
+	private boolean mShowLegend = true;
+	/** The typeface name for the texts. */
+	private String textTypefaceName = REGULAR_TEXT_FONT.toString();
+	/** The typeface style for the texts. */
+	private int textTypefaceStyle = Typeface.NORMAL;
 	/** The X axis labels alignment. */
 	private Align xLabelsAlign = Align.CENTER;
 	/** The Y axis labels alignment. */
 	private Align yLabelsAlign = Align.CENTER;
-	/** The legend height. */
-	private int mLegendHeight = 0;
-	/** The margins size. */
-	private int[] mMargins = new int[] { 10, 20, 0, 0 };
 
 	/**
 	 * Adds a simple renderer to the multiple renderer.

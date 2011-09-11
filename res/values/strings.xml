@@ -279,10 +279,7 @@
 	<string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
-	<string name="dialog_wait_for_sleep_data_message">Have a restful sleep!\n\nThere\'s nothing to
-		display
-		yet, check back later!</string>
-
+	<string name="dialog_wait_for_sleep_data_message">Sleep well! (this area will display a chart throughout the night)</string>
 	<string name="title_pref_alarm_trigger_sensitivity">Light Sleep Sensitivity</string>
 	<string name="summary_alarm_trigger_sensitivity">Level of movement that signifies light sleep will
 		trigger alarm
@@ -716,4 +713,7 @@
 	<string name="sleep_no_alarm">No alarm has been set. ElectricSleep will not wake
 		you up.</string>
 	<string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
+	<string name="export">Export</string>
+	<string name="export_all">Export All</string>
+	<string name="delete_all">Delete All</string>
 </resources>

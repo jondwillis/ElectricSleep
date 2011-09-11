@@ -13,15 +13,30 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.util.PointD;
 import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 import com.androsz.electricsleepbeta.widget.SleepChart;
-import com.androsz.electricsleepbeta.util.PointD;
 
 public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 
 	private static final String SLEEP_CHART = "sleepChart";
 
 	SleepChart sleepChart;
+
+	private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+
+			sleepChart = (SleepChart) findViewById(R.id.calibration_sleep_chart);
+
+			// inlined for efficiency
+			sleepChart.xySeriesMovement.xyList = (List<PointD>) intent
+					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
+			sleepChart.reconfigure();
+			sleepChart.repaint();
+		}
+	};
 
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
@@ -44,21 +59,6 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 						.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
 						sleepChart.getCalibrationLevel());
 			}
-		}
-	};
-
-	private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
-		@SuppressWarnings("unchecked")
-		@Override
-		public void onReceive(final Context context, final Intent intent) {
-
-			sleepChart = (SleepChart) findViewById(R.id.calibration_sleep_chart);
-
-			// inlined for efficiency
-			sleepChart.xySeriesMovement.xyList = (List<PointD>) intent
-					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
-			sleepChart.reconfigure();
-			sleepChart.repaint();
 		}
 	};
 

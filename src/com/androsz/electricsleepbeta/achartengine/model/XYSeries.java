@@ -31,18 +31,18 @@ public class XYSeries implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -224488951294506127L;
+	/** The maximum value for the X axis. */
+	private double mMaxX = -MathHelper.NULL_VALUE;
+	/** The maximum value for the Y axis. */
+	private double mMaxY = -MathHelper.NULL_VALUE;
+	/** The minimum value for the X axis. */
+	private double mMinX = MathHelper.NULL_VALUE;
+	/** The minimum value for the Y axis. */
+	private double mMinY = MathHelper.NULL_VALUE;
 	/** The series title. */
 	private String mTitle;
 	/** A list to contain the values for the X axis. */
 	public List<PointD> xyList = new ArrayList<PointD>();
-	/** The minimum value for the X axis. */
-	private double mMinX = MathHelper.NULL_VALUE;
-	/** The maximum value for the X axis. */
-	private double mMaxX = -MathHelper.NULL_VALUE;
-	/** The minimum value for the Y axis. */
-	private double mMinY = MathHelper.NULL_VALUE;
-	/** The maximum value for the Y axis. */
-	private double mMaxY = -MathHelper.NULL_VALUE;
 
 	/**
 	 * Builds a new XY series.

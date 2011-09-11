@@ -38,10 +38,16 @@ import com.androsz.electricsleepbeta.achartengine.util.MathHelper;
  * The XY chart rendering class.
  */
 public abstract class XYChart extends AbstractChart {
+	/** The grid color. */
+	protected static final int GRID_COLOR = Color.argb(75, 200, 200, 200);
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1190807015976243650L;
+	/** The calculated range. */
+	private final double[] calcRange = new double[4];
+	/** The canvas center point. */
+	private PointF mCenter;
 	/** The multiple series dataset. */
 	protected XYMultipleSeriesDataset mDataset;
 	/** The multiple series renderer. */
@@ -50,14 +56,8 @@ public abstract class XYChart extends AbstractChart {
 	private float mScale;
 	/** The current translate value. */
 	private float mTranslate;
-	/** The canvas center point. */
-	private PointF mCenter;
 	/** The visible chart area, in screen coordinates. */
 	private Rect screenR;
-	/** The calculated range. */
-	private final double[] calcRange = new double[4];
-	/** The grid color. */
-	protected static final int GRID_COLOR = Color.argb(75, 200, 200, 200);
 
 	/**
 	 * Builds a new XY chart instance.
@@ -120,7 +120,7 @@ public abstract class XYChart extends AbstractChart {
 		final Orientation or = mRenderer.getOrientation();
 		if (or == Orientation.VERTICAL) {
 			right -= legendSize;
-			bottom += legendSize 	;
+			bottom += legendSize;
 		}
 		final int angle = or.getAngle();
 		final boolean rotate = angle == 90;

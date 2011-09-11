@@ -26,29 +26,29 @@ import com.androsz.electricsleepbeta.achartengine.util.MathHelper;
  */
 public class DialRenderer extends DefaultRenderer {
 	public enum Type {
-		NEEDLE, ARROW;
+		ARROW, NEEDLE;
 	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3572391386828539967L;
+	/** The end angle in the dial range. */
+	private double mAngleMax = 30;
+	/** The start angle in the dial range. */
+	private double mAngleMin = 330;
 	/** The chart title. */
 	private String mChartTitle = "";
 	/** The chart title text size. */
 	private float mChartTitleTextSize = 15;
-	/** The start angle in the dial range. */
-	private double mAngleMin = 330;
-	/** The end angle in the dial range. */
-	private double mAngleMax = 30;
-	/** The start value in dial range. */
-	private double mMinValue = MathHelper.NULL_VALUE;
+	/** The spacing for the major ticks. */
+	private double mMajorTickSpacing = MathHelper.NULL_VALUE;
 	/** The end value in dial range. */
 	private double mMaxValue = -MathHelper.NULL_VALUE;
 	/** The spacing for the minor ticks. */
 	private double mMinorTickSpacing = MathHelper.NULL_VALUE;
-	/** The spacing for the major ticks. */
-	private double mMajorTickSpacing = MathHelper.NULL_VALUE;
+	/** The start value in dial range. */
+	private double mMinValue = MathHelper.NULL_VALUE;
 
 	/** An array of the renderers types (default is NEEDLE). */
 	private final List<Type> visualTypes = new ArrayList<Type>();
@@ -133,8 +133,9 @@ public class DialRenderer extends DefaultRenderer {
 	 * @return the visual type
 	 */
 	public Type getVisualTypeForIndex(int index) {
-		if (index < visualTypes.size())
+		if (index < visualTypes.size()) {
 			return visualTypes.get(index);
+		}
 		return Type.NEEDLE;
 	}
 

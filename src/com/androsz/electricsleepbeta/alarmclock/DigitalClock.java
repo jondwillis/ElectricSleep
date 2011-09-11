@@ -74,18 +74,14 @@ public class DigitalClock extends LinearLayout {
 	}
 
 	private final static String M12 = "h:mm";
+	private AmPm mAmPm;
+	private boolean mAttached;
 	private Calendar mCalendar;
 	private String mFormat;
-	private TextView mTimeDisplay;
-	private AmPm mAmPm;
 	private ContentObserver mFormatChangeObserver;
-
-	private boolean mLive = true;
-	private boolean mAttached;
 
 	/* called by system on minute ticks */
 	private final Handler mHandler = new Handler();
-
 	private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
@@ -104,6 +100,10 @@ public class DigitalClock extends LinearLayout {
 		}
 	};
 
+	private boolean mLive = true;
+
+	private TextView mTimeDisplay;
+
 	public DigitalClock(final Context context) {
 		this(context, null);
 	}
@@ -120,8 +120,9 @@ public class DigitalClock extends LinearLayout {
 			Log.v("onAttachedToWindow " + this);
 		}
 
-		if (mAttached)
+		if (mAttached) {
 			return;
+		}
 		mAttached = true;
 
 		if (mLive) {
@@ -145,8 +146,9 @@ public class DigitalClock extends LinearLayout {
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
 
-		if (!mAttached)
+		if (!mAttached) {
 			return;
+		}
 		mAttached = false;
 
 		if (mLive) {

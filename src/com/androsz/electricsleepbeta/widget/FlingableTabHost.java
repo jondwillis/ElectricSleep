@@ -16,10 +16,10 @@ import com.androsz.electricsleepbeta.util.MathUtils;
 public class FlingableTabHost extends TabHost {
 	GestureDetector mGestureDetector;
 
-	Animation mRightInAnimation;
-	Animation mRightOutAnimation;
 	Animation mLeftInAnimation;
 	Animation mLeftOutAnimation;
+	Animation mRightInAnimation;
+	Animation mRightOutAnimation;
 
 	public FlingableTabHost(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
@@ -37,7 +37,7 @@ public class FlingableTabHost extends TabHost {
 
 		final int minScaledFlingVelocity = ViewConfiguration.get(context)
 				.getScaledMinimumFlingVelocity(); // 5 = fudge by
-														// experimentation
+													// experimentation
 
 		mGestureDetector = new GestureDetector(
 				new GestureDetector.SimpleOnGestureListener() {
@@ -49,7 +49,7 @@ public class FlingableTabHost extends TabHost {
 						final int tabCount = getTabWidget().getTabCount();
 						final int currentTab = getCurrentTab();
 						if (Math.abs(velocityX) > minScaledFlingVelocity
-								&& Math.abs(velocityY) < minScaledFlingVelocity*2) {
+								&& Math.abs(velocityY) < minScaledFlingVelocity * 2) {
 
 							final boolean right = velocityX < 0;
 							final int newTab = MathUtils.constrain(currentTab
@@ -77,8 +77,9 @@ public class FlingableTabHost extends TabHost {
 
 	@Override
 	public boolean onInterceptTouchEvent(final MotionEvent ev) {
-		if (mGestureDetector.onTouchEvent(ev))
+		if (mGestureDetector.onTouchEvent(ev)) {
 			return true;
+		}
 		return super.onInterceptTouchEvent(ev);
 	}
 }

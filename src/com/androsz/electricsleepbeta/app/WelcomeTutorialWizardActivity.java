@@ -70,8 +70,9 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 							});
 			dialog.show();
 			return false;
-		} else
+		} else {
 			return true;
+		}
 	}
 
 	private boolean required = false;
@@ -87,17 +88,18 @@ public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity 
 		super.onCreate(savedInstanceState);
 		required = getIntent().hasExtra("required");
 		if (required) {
-			ActionBar bar = getSupportActionBar();
+			final ActionBar bar = getSupportActionBar();
 			bar.setDisplayHomeAsUpEnabled(false);
 		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
-		if (required)
+		if (required) {
 			return false;
-		else
+		} else {
 			return super.onCreateOptionsMenu(menu);
+		}
 	}
 
 	@Override

@@ -19,23 +19,23 @@ import com.androsz.electricsleepbeta.preference.CustomTitlebarPreferenceActivity
 public class SettingsActivity extends CustomTitlebarPreferenceActivity
 		implements Preference.OnPreferenceChangeListener {
 
-	public static double DEFAULT_MIN_SENSITIVITY = 0;
+	private static final int ALARM_STREAM_TYPE_BIT = 1 << AudioManager.STREAM_ALARM;
 	public static double DEFAULT_ALARM_SENSITIVITY = 0.33;
+	public static double DEFAULT_MIN_SENSITIVITY = 0;
+
+	private static final String KEY_ALARM_IN_SILENT_MODE = "alarm_in_silent_mode";
+
+	public static final String KEY_ALARM_SNOOZE = "snooze_duration";
+
+	public static final String KEY_VOLUME_BEHAVIOR = "volume_button_setting";
+
 	public static double MAX_ALARM_SENSITIVITY = 1;
-
-	// name of the preferences file that holds environmental preferences
-	// example: show the user a donate message once
-	public static final String PREFERENCES_ENVIRONMENT = "prefsVersion";
-
 	// name of the preferences file that holds ElectricSleep's main preferences
 	// this is actually what android uses as default..
 	public static String PREFERENCES = "com.androsz.electricsleep_preferences";
-
-	private static final int ALARM_STREAM_TYPE_BIT = 1 << AudioManager.STREAM_ALARM;
-
-	private static final String KEY_ALARM_IN_SILENT_MODE = "alarm_in_silent_mode";
-	public static final String KEY_ALARM_SNOOZE = "snooze_duration";
-	public static final String KEY_VOLUME_BEHAVIOR = "volume_button_setting";
+	// name of the preferences file that holds environmental preferences
+	// example: show the user a donate message once
+	public static final String PREFERENCES_ENVIRONMENT = "prefsVersion";
 
 	@Override
 	protected int getContentAreaLayoutId() {

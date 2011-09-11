@@ -44,6 +44,9 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		TimePickerDialog.OnTimeSetListener,
 		Preference.OnPreferenceChangeListener {
 
+	// Used to post runnables asynchronously.
+	private static final Handler sHandler = new Handler();
+
 	/**
 	 * format "Alarm set for 2 days 7 hours and 53 minutes from now"
 	 */
@@ -98,23 +101,21 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		toast.show();
 	}
 
-	private EditTextPreference mLabel;
-	private CheckBoxPreference mEnabledPref;
-	private Preference mTimePref;
 	private AlarmPreference mAlarmPref;
-	private CheckBoxPreference mVibratePref;
-	private RepeatPreference mRepeatPref;
-	private int mId;
+	private CheckBoxPreference mEnabledPref;
 	private int mHour;
-
+	private int mId;
+	private EditTextPreference mLabel;
 	private int mMinutes;
+	private Alarm mOriginalAlarm;
+
+	private RepeatPreference mRepeatPref;
 
 	private boolean mTimePickerCancelled;
 
-	private Alarm mOriginalAlarm;
+	private Preference mTimePref;
 
-	// Used to post runnables asynchronously.
-	private static final Handler sHandler = new Handler();
+	private CheckBoxPreference mVibratePref;
 
 	private void deleteAlarm() {
 		new AlertDialog.Builder(this)
@@ -175,9 +176,10 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 				final String val = (String) newValue;
 				// Set the summary based on the new label.
 				p.setSummary(val);
-				if (val != null && !val.equals(mLabel.getText()))
+				if (val != null && !val.equals(mLabel.getText())) {
 					// Call through to the generic listener.
 					return SetAlarm.this.onPreferenceChange(p, newValue);
+				}
 				return true;
 			}
 		});
@@ -328,7 +330,7 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 			protected Long doInBackground(Void... params) {
 				return saveAlarm();
 			}
-			
+
 			@Override
 			protected void onPostExecute(Long result) {
 				popAlarmSetToast(SetAlarm.this, result);

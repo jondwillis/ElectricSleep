@@ -69,82 +69,60 @@ public class MonthView extends View {
 		}
 	}
 
-	private static float mScale = 0; // Used for supporting different screen
-	// densities
-	private static int WEEK_GAP = 0;
-	private static int MONTH_DAY_GAP = 1;
-	private static float HOUR_GAP = 0f;
-	private static float MIN_EVENT_HEIGHT = 1f;
-	private static int MONTH_DAY_TEXT_SIZE = 20;
-	private static int WEEK_BANNER_HEIGHT = 17;
-	private static int WEEK_TEXT_SIZE = 15;
-	private static int WEEK_TEXT_PADDING = 3;
-	private static int EVENT_DOT_TOP_MARGIN = 5;
+	private static int BUSY_BITS_MARGIN = 4;
+	private static int BUSY_BITS_WIDTH = 10;
+	private static int DAY_NUMBER_OFFSET = 10;
 	private static int EVENT_DOT_LEFT_MARGIN = 7;
+	private static int EVENT_DOT_TOP_MARGIN = 5;
 	private static int EVENT_DOT_W_H = 10;
 	private static int EVENT_NUM_DAYS = 31;
-	private static int TEXT_TOP_MARGIN = 7;
-	private static int BUSY_BITS_WIDTH = 10;
-	private static int BUSY_BITS_MARGIN = 4;
-
-	private static int DAY_NUMBER_OFFSET = 10;
-
 	private static int HORIZONTAL_FLING_THRESHOLD = 33;
-	private int mCellHeight;
-	private int mBorder;
+	private static float HOUR_GAP = 0f;
+	private static float MIN_EVENT_HEIGHT = 1f;
+	private static int MONTH_DAY_GAP = 1;
+	private static int MONTH_DAY_TEXT_SIZE = 20;
+	private static float mScale = 0; // Used for supporting different screen
+	private static final int POPUP_DISMISS_DELAY = 3000;
+	private static final int POPUP_HEIGHT = 100;
+	/**
+	 * The selection modes are HIDDEN, PRESSED, SELECTED, and LONGPRESS.
+	 */
+	private static final int SELECTION_HIDDEN = 0;
 
-	private boolean mLaunchDayView;
+	private static final int SELECTION_LONGPRESS = 3;
 
-	private GestureDetector mGestureDetector;
-	private Time mToday;
-	private Time mViewCalendar;
+	private static final int SELECTION_PRESSED = 1;
+	private static final int SELECTION_SELECTED = 2;
+	private static int TEXT_TOP_MARGIN = 7;
 
-	private final Time mSavedTime = new Time(); // the time when we entered this
-												// view
+	private static int WEEK_BANNER_HEIGHT = 17;
 
-	// This Time object is used to set the time for the other Month view.
-	private final Time mOtherViewCalendar = new Time();
-
-	// This Time object is used for temporary calculations and is allocated
-	// once to avoid extra garbage collection
-	private final Time mTempTime = new Time();
-
-	private DayOfMonthCursor mCursor;
-	private Drawable mBoxSelected;
-	private Drawable mBoxPressed;
-	private Drawable mBoxLongPressed;
-
-	private int mCellWidth;
-	private Resources mResources;
-	private MonthActivity mParentActivity;
-	private final Navigator mNavigator;
-
-	private final EventGeometry mEventGeometry;
-
-	// Pre-allocate and reuse
-	private final Rect mRect = new Rect();
+	// densities
+	private static int WEEK_GAP = 0;
+	private static int WEEK_TEXT_PADDING = 3;
+	private static int WEEK_TEXT_SIZE = 15;
 
 	// An array of which days have events for quick reference
 	private final boolean[] eventDay = new boolean[31];
-	private PopupWindow mPopup;
-	private View mPopupView;
-	private static final int POPUP_HEIGHT = 100;
-	private int mPreviousPopupHeight;
-	private static final int POPUP_DISMISS_DELAY = 3000;
-
-	private final DismissPopup mDismissPopup = new DismissPopup();
-	// For drawing to an off-screen Canvas
-	private Bitmap mBitmap;
-	private Canvas mCanvas;
-	private boolean mRedrawScreen = true;
-	private final Rect mBitmapRect = new Rect();
-	private final RectF mRectF = new RectF();
 
 	private boolean mAnimating;
-	// These booleans disable features that were taken out of the spec.
-	private final boolean mShowWeekNumbers = false;
 
-	private final boolean mShowToast = false;
+	// For drawing to an off-screen Canvas
+	private Bitmap mBitmap;
+
+	private final Rect mBitmapRect = new Rect();
+	private int mBorder;
+	private Drawable mBoxLongPressed;
+	private Drawable mBoxPressed;
+
+	private Drawable mBoxSelected;
+	private int mBusybitsColor;
+	private Canvas mCanvas;
+	private int mCellHeight;
+
+	private int mCellWidth;
+
+	private DayOfMonthCursor mCursor;
 
 	// Bitmap caches.
 	// These improve performance by minimizing calls to NinePatchDrawable.draw()
@@ -154,42 +132,64 @@ public class MonthView extends View {
 	// width/height.
 	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(
 			4);
-	/**
-	 * The selection modes are HIDDEN, PRESSED, SELECTED, and LONGPRESS.
-	 */
-	private static final int SELECTION_HIDDEN = 0;
-	private static final int SELECTION_PRESSED = 1;
-	private static final int SELECTION_SELECTED = 2;
-
-	private static final int SELECTION_LONGPRESS = 3;
-
-	private int mSelectionMode = SELECTION_HIDDEN;
-
+	private final DismissPopup mDismissPopup = new DismissPopup();
+	private final EventGeometry mEventGeometry;
+	private final EventLoader mEventLoader;
+	private ArrayList<SleepRecord> mEvents = new ArrayList<SleepRecord>();
 	/**
 	 * The first Julian day of the current month.
 	 */
 	private int mFirstJulianDay;
 
-	private int mStartDay;
-
-	private final EventLoader mEventLoader;
-
-	private ArrayList<SleepRecord> mEvents = new ArrayList<SleepRecord>();
-
-	private Drawable mTodayBackground;
+	private GestureDetector mGestureDetector;
+	private boolean mLaunchDayView;
+	private int mMonthDayNumberColor;
+	private int mMonthOtherMonthBannerColor;
 	// Cached colors
 	private int mMonthOtherMonthColor;
-	private int mMonthWeekBannerColor;
-	private int mMonthOtherMonthBannerColor;
 	private int mMonthOtherMonthDayNumberColor;
-	private int mMonthDayNumberColor;
-	private int mMonthTodayNumberColor;
+
 	private int mMonthSaturdayColor;
 	private int mMonthSundayColor;
 
+	private int mMonthTodayNumberColor;
+
+	private int mMonthWeekBannerColor;
+	private final Navigator mNavigator;
+	// This Time object is used to set the time for the other Month view.
+	private final Time mOtherViewCalendar = new Time();
+	private MonthActivity mParentActivity;
+
+	private PopupWindow mPopup;
+
+	private View mPopupView;
+
+	private int mPreviousPopupHeight;
+
+	// Pre-allocate and reuse
+	private final Rect mRect = new Rect();
+
+	private final RectF mRectF = new RectF();
+
+	private boolean mRedrawScreen = true;
+
+	private Resources mResources;
+	private final Time mSavedTime = new Time(); // the time when we entered this
+												// view
+	private int mSelectionMode = SELECTION_HIDDEN;
+	private final boolean mShowToast = false;
+	// These booleans disable features that were taken out of the spec.
+	private final boolean mShowWeekNumbers = false;
+	private int mStartDay;
+	// This Time object is used for temporary calculations and is allocated
+	// once to avoid extra garbage collection
+	private final Time mTempTime = new Time();
+	private Time mToday;
+	private Drawable mTodayBackground;
+
 	// private int mMonthBgColor;
 
-	private int mBusybitsColor;
+	private Time mViewCalendar;
 
 	public MonthView(MonthActivity activity, Navigator navigator) {
 		super(activity);
@@ -245,8 +245,9 @@ public class MonthView extends View {
 	// This is called when the activity is paused so that the popup can
 	// be dismissed.
 	void dismissPopup() {
-		if (!mShowToast)
+		if (!mShowToast) {
 			return;
+		}
 
 		// Protect against null-pointer exceptions
 		if (mPopup != null) {
@@ -746,8 +747,9 @@ public class MonthView extends View {
 						final int distanceY = Math.abs((int) e2.getY()
 								- (int) e1.getY());
 						if (distanceY < HORIZONTAL_FLING_THRESHOLD
-								|| distanceY < distanceX)
+								|| distanceY < distanceX) {
 							return false;
+						}
 
 						// Switch to a different month
 						final Time time = mOtherViewCalendar;
@@ -1018,8 +1020,9 @@ public class MonthView extends View {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (mGestureDetector.onTouchEvent(event))
+		if (mGestureDetector.onTouchEvent(event)) {
 			return true;
+		}
 
 		return super.onTouchEvent(event);
 	}
@@ -1086,7 +1089,8 @@ public class MonthView extends View {
 								}
 							}
 						}
-						mParentActivity.setProgressBarIndeterminateVisibility(false);
+						mParentActivity
+								.setProgressBarIndeterminateVisibility(false);
 					}
 				}, null);
 	}
@@ -1132,12 +1136,13 @@ public class MonthView extends View {
 
 					shdb.close();
 
-					if (c == null)
+					if (c == null) {
 						// we may have lost the cursor since the
 						// applicableEvents were
 						// loaded.
 						// do nothing
 						return null;
+					}
 					final Uri data = Uri.withAppendedPath(
 							SleepContentProvider.CONTENT_URI,
 							String.valueOf(c.getLong(0)));
@@ -1185,8 +1190,9 @@ public class MonthView extends View {
 	}
 
 	private void updateEventDetails(int date) {
-		if (!mShowToast)
+		if (!mShowToast) {
 			return;
+		}
 
 		getHandler().removeCallbacks(mDismissPopup);
 		final ArrayList<SleepRecord> events = mEvents;

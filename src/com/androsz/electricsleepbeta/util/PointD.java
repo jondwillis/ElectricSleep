@@ -37,15 +37,17 @@ public class PointD implements Serializable {
 	}
 
 	private static double toDouble(final byte[] data) {
-		if (data == null || data.length != 8)
+		if (data == null || data.length != 8) {
 			return 0x0;
+		}
 		// ---------- simple:
 		return Double.longBitsToDouble(toLong(data));
 	}
 
 	private static long toLong(final byte[] data) {
-		if (data == null || data.length != 8)
+		if (data == null || data.length != 8) {
 			return 0x0;
+		}
 		// ----------
 		return (long) (0xff & data[0]) << 56 | (long) (0xff & data[1]) << 48
 				| (long) (0xff & data[2]) << 40 | (long) (0xff & data[3]) << 32

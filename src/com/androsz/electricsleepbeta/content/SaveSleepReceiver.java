@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +23,10 @@ import com.androsz.electricsleepbeta.util.PointD;
 public class SaveSleepReceiver extends BroadcastReceiver {
 
 	public static final String EXTRA_IO_EXCEPTION = "IOException";
-	public static final String EXTRA_ROW_ID = "rowId";
-	public static final String EXTRA_SUCCESS = "success";
 	public static final String EXTRA_NOTE = "note";
 	public static final String EXTRA_RATING = "rating";
+	public static final String EXTRA_ROW_ID = "rowId";
+	public static final String EXTRA_SUCCESS = "success";
 	public static final String SAVE_SLEEP_COMPLETED = "com.androsz.electricsleepbeta.SAVE_SLEEP_COMPLETED";
 
 	@Override
@@ -55,14 +54,14 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				final String note = intent.getStringExtra(EXTRA_NOTE);
 
 				FileInputStream fis;
-				//RandomAccessFile raFile;
+				// RandomAccessFile raFile;
 				List<PointD> originalData = null;
 				try {
 
 					synchronized (SleepMonitoringService.sDataLock) {
 						final File dataFile = context
 								.getFileStreamPath(SleepMonitoringService.SLEEP_DATA);
-						//raFile = new RandomAccessFile(dataFile, "r");
+						// raFile = new RandomAccessFile(dataFile, "r");
 						fis = context
 								.openFileInput(SleepMonitoringService.SLEEP_DATA);
 						final long length = dataFile.length();
@@ -77,17 +76,19 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 								/ chunkSize / 2));
 						if (length >= chunkSize) {
 							final byte[] wholeFile = new byte[(int) length];
-							byte[] buffer = new byte[8192];
-				            int bytesRead = 0;
-				            int dstPos = 0;
-				            while ((bytesRead = fis.read(buffer)) != -1) {
-				            	System.arraycopy(buffer, 0, wholeFile, dstPos, bytesRead);
-				            	dstPos+=bytesRead;
-				            }
+							final byte[] buffer = new byte[8192];
+							int bytesRead = 0;
+							int dstPos = 0;
+							while ((bytesRead = fis.read(buffer)) != -1) {
+								System.arraycopy(buffer, 0, wholeFile, dstPos,
+										bytesRead);
+								dstPos += bytesRead;
+							}
 							fis.close();
 							final byte[] chunk = new byte[chunkSize];
 							for (int i = 0; i < wholeFile.length; i += chunkSize) {
-								System.arraycopy(wholeFile, i, chunk, 0, chunkSize);
+								System.arraycopy(wholeFile, i, chunk, 0,
+										chunkSize);
 								originalData.add(PointD.fromByteArray(chunk));
 							}
 						}
@@ -240,7 +241,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				final Cursor c = shdb.getSleepMatches(name, new String[] {
 						BaseColumns._ID, SleepRecord.KEY_TITLE });
 
- 				if (c == null) {
+				if (c == null) {
 					/*
 					 * Toast.makeText( context,
 					 * "Could not find the recently saved sleep in the sleep database- report this!"

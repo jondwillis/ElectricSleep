@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.AttributeSet;
 import android.view.View;
 
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionManager;
@@ -17,33 +16,24 @@ public abstract class AnalyticFragment extends Fragment {
 
 	public abstract void onClick(View v);
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		String versionName = "?";
-		Activity a = getActivity();
+		final Activity a = getActivity();
 		try {
-			versionName = a.getPackageManager().getPackageInfo(a.getPackageName(),
-					0).versionName;
+			versionName = a.getPackageManager().getPackageInfo(
+					a.getPackageName(), 0).versionName;
 		} catch (final NameNotFoundException e) {
 			e.printStackTrace();
 		}
 
 		GoogleAnalyticsTracker.getInstance().setProductVersion(
 				a.getPackageName(), versionName);
-		
+
 		// Need to do this for every activity that uses google analytics
-		GoogleAnalyticsSessionManager.getInstance(getActivity().getApplication())
-				.incrementActivityCount();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		// Example of how to track a pageview event
-		trackPageView(getClass().getSimpleName());
+		GoogleAnalyticsSessionManager.getInstance(
+				getActivity().getApplication()).incrementActivityCount();
 	}
 
 	@Override
@@ -56,7 +46,14 @@ public abstract class AnalyticFragment extends Fragment {
 		// Need to do this for every activity that uses google analytics
 		GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();
 	}
-	
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Example of how to track a pageview event
+		trackPageView(getClass().getSimpleName());
+	}
 
 	protected void trackEvent(final String label, final int value) {
 		new AsyncTask<Void, Void, Void>() {
@@ -64,8 +61,9 @@ public abstract class AnalyticFragment extends Fragment {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
-							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
-				} catch (Throwable whocares) {
+							Integer.toString(VERSION.SDK_INT), Build.MODEL,
+							label, value);
+				} catch (final Throwable whocares) {
 				}
 				return null;
 			}
@@ -79,7 +77,7 @@ public abstract class AnalyticFragment extends Fragment {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
-				} catch (Throwable whocares) {
+				} catch (final Throwable whocares) {
 				}
 				return null;
 			}

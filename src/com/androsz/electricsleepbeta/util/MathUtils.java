@@ -3,14 +3,29 @@ package com.androsz.electricsleepbeta.util;
 import android.content.Context;
 
 /**
- * Math utility functions.
+ * Utility functions that, well, have mathematic purposes.
  */
 public final class MathUtils {
-	public static int calculatePxFromDip(Context context, int sizeInDip) {
-		final int dip = (int) (sizeInDip
+	
+	
+	public static int calculatePxFromDp(Context context, int sizeInDp) {
+		final float px = (int) (sizeInDp
 				* context.getResources().getDisplayMetrics().density + 0.5f);
-		return dip;
+		return Math.round(px);
 	}
+	
+	//For fonts!
+	public static int calculatePxFromSp(Context context, int sizeInSp) {
+		final float px = (int) (sizeInSp
+				* context.getResources().getDisplayMetrics().scaledDensity + 0.5f);
+		return Math.round(px);
+	}
+	
+	public static int getAbsoluteScreenHeightPx(Context context)
+	{
+		return context.getResources().getDisplayMetrics().heightPixels;
+	}
+
 	/**
 	 * Equivalent to Math.max(low, Math.min(high, amount));
 	 */
@@ -26,6 +41,7 @@ public final class MathUtils {
 		return amount < low ? low : amount > high ? high : amount;
 	}
 
+	//Cannot instantiate
 	private MathUtils() {
 	}
 }

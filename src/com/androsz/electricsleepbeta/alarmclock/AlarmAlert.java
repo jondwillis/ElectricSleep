@@ -31,17 +31,17 @@ import android.os.Message;
  */
 public class AlarmAlert extends AlarmAlertFullScreen {
 
-	// If we try to check the keyguard more than 5 times, just launch the full
-	// screen activity.
-	private int mKeyguardRetryCount;
 	private final int MAX_KEYGUARD_CHECKS = 5;
-
 	private final Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(final Message msg) {
 			handleScreenOff((KeyguardManager) msg.obj);
 		}
 	};
+
+	// If we try to check the keyguard more than 5 times, just launch the full
+	// screen activity.
+	private int mKeyguardRetryCount;
 
 	private final BroadcastReceiver mScreenOffReceiver = new BroadcastReceiver() {
 		@Override

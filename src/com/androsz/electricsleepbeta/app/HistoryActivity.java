@@ -8,6 +8,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -15,9 +20,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepContentProvider;
@@ -27,22 +29,6 @@ import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
 public class HistoryActivity extends HostActivity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
-
-	private final class ListOnItemClickListener implements OnItemClickListener {
-		@Override
-		public void onItemClick(final AdapterView<?> parent,
-				final View view, final int position, final long id) {
-			// Build the Intent used to open WordActivity with a
-			// specific word Uri
-			final Intent reviewSleepIntent = new Intent(
-					HistoryActivity.this, ReviewSleepActivity.class);
-			final Uri data = Uri.withAppendedPath(
-					SleepContentProvider.CONTENT_URI,
-					String.valueOf(id));
-			reviewSleepIntent.setData(data);
-			startActivity(reviewSleepIntent);
-		}
-	}
 
 	private class DeleteSleepTask extends AsyncTask<Long, Void, Void> {
 
@@ -76,18 +62,51 @@ public class HistoryActivity extends HostActivity implements
 		}
 	}
 
+	private final class ListOnItemClickListener implements OnItemClickListener {
+		@Override
+		public void onItemClick(final AdapterView<?> parent, final View view,
+				final int position, final long id) {
+			// Build the Intent used to open WordActivity with a
+			// specific word Uri
+			final Intent reviewSleepIntent = new Intent(HistoryActivity.this,
+					ReviewSleepActivity.class);
+			final Uri data = Uri.withAppendedPath(
+					SleepContentProvider.CONTENT_URI, String.valueOf(id));
+			reviewSleepIntent.setData(data);
+			startActivity(reviewSleepIntent);
+		}
+	}
+
 	public static final String SEARCH_FOR = "searchFor";
 
-	ProgressDialog progress;
+	private ListView mListView;
 
 	private TextView mTextView;
 
-	private ListView mListView;
+	ProgressDialog progress;
 	private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_history;
+	}
+
+	private Bundle getLoaderArgs(final Intent intent, boolean init) {
+		// set searchFor parameter if it exists
+		String searchFor = intent.getStringExtra(SEARCH_FOR);
+		if (searchFor != null) {
+			if (init) {
+				HistoryActivity.this.setTitle(HistoryActivity.this.getTitle()
+						+ " " + searchFor);
+			}
+			// do exact searches only.
+			searchFor = "\"" + searchFor + "\"";
+		} else {
+			searchFor = getString(R.string.to);
+		}
+		final Bundle args = new Bundle();
+		args.putString(SEARCH_FOR, searchFor);
+		return args;
 	}
 
 	@Override
@@ -121,33 +140,6 @@ public class HistoryActivity extends HostActivity implements
 		}
 	}
 
-	private Bundle getLoaderArgs(final Intent intent, boolean init) {
-		// set searchFor parameter if it exists
-		String searchFor = intent.getStringExtra(SEARCH_FOR);
-		if (searchFor != null) {
-			if (init) {
-				HistoryActivity.this.setTitle(HistoryActivity.this.getTitle()
-						+ " " + searchFor);
-			}
-			// do exact searches only.
-			searchFor = "\"" + searchFor + "\"";
-		} else {
-			searchFor = getString(R.string.to);
-		}
-		Bundle args = new Bundle();
-		args.putString(SEARCH_FOR, searchFor);
-		return args;
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		if (progress != null && progress.isShowing()) {
-			progress.dismiss();
-		}
-	}
-
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -156,6 +148,17 @@ public class HistoryActivity extends HostActivity implements
 		return new CursorLoader(this, SleepContentProvider.CONTENT_URI, null,
 				null, new String[] { args.getString(SEARCH_FOR) },
 				SleepRecord.KEY_TITLE);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_multiple_history, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		sleepHistoryAdapter.swapCursor(null);
 	}
 
 	@Override
@@ -216,7 +219,25 @@ public class HistoryActivity extends HostActivity implements
 	}
 
 	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		sleepHistoryAdapter.swapCursor(null);
+	public boolean onOptionsItemSelected(final MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_delete_all:
+			// TODO
+			break;
+		case R.id.menu_item_export_all:
+			// TODO
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		if (progress != null && progress.isShowing()) {
+			progress.dismiss();
+		}
+	}
+
 }

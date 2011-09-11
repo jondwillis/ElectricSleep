@@ -17,13 +17,8 @@ import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 
 public class SeekBarPreference extends DialogPreference {
 
-	private final Context context;
-	private DecimalSeekBar seekBar;
-	private TextView textView;
-
 	private static java.text.NumberFormat nf = java.text.NumberFormat
 			.getInstance();
-
 	static {
 		nf.setGroupingUsed(false);
 		nf.setMinimumFractionDigits(0);
@@ -32,6 +27,11 @@ public class SeekBarPreference extends DialogPreference {
 		nf.setMinimumFractionDigits(("" + (int) Math.pow(
 				DecimalSeekBar.PRECISION, 0.5)).length());
 	}
+	private final Context context;
+
+	private DecimalSeekBar seekBar;
+
+	private TextView textView;
 
 	public SeekBarPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);

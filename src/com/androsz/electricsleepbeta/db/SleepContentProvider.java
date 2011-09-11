@@ -17,23 +17,14 @@
 
 package com.androsz.electricsleepbeta.db;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
-
-import com.androsz.electricsleepbeta.util.IntentUtil;
-
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.BaseColumns;
 
 /**
@@ -45,20 +36,19 @@ public class SleepContentProvider extends ContentProvider {
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/sleephistory");
 
-	// MIME types used for searching words or looking up a single definition
-	public static final String WORDS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-			+ "/vnd.com.androsz.electricsleep";
 	public static final String DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
 			+ "/vnd.com.androsz.electricsleep";
+	private static final int GET_SLEEP = 1;
 
-	private SleepHistoryDatabase sleepHistoryDatabase;
+	private static final int REFRESH_SHORTCUT = 3;
 
 	// UriMatcher stuff
 	private static final int SEARCH_SLEEP = 0;
-	private static final int GET_SLEEP = 1;
 	private static final int SEARCH_SUGGEST = 2;
-	private static final int REFRESH_SHORTCUT = 3;
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
+	// MIME types used for searching words or looking up a single definition
+	public static final String WORDS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+			+ "/vnd.com.androsz.electricsleep";
 
 	/**
 	 * Builds up a UriMatcher for search suggestion and shortcut refresh
@@ -89,6 +79,8 @@ public class SleepContentProvider extends ContentProvider {
 				+ "/*", REFRESH_SHORTCUT);
 		return matcher;
 	}
+
+	private SleepHistoryDatabase sleepHistoryDatabase;
 
 	@Override
 	public int delete(final Uri uri, final String selection,
@@ -147,7 +139,7 @@ public class SleepContentProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		Context context = getContext();
+		final Context context = getContext();
 		sleepHistoryDatabase = new SleepHistoryDatabase(context);
 		return true;
 	}
@@ -182,7 +174,7 @@ public class SleepContentProvider extends ContentProvider {
 			}
 			return search(selectionArgs[0]);
 		case GET_SLEEP:
-			Cursor c = getSleep(uri);
+			final Cursor c = getSleep(uri);
 			c.setNotificationUri(getContext().getContentResolver(), uri);
 			return c;
 		case REFRESH_SHORTCUT:

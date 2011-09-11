@@ -11,9 +11,6 @@ import com.androsz.electricsleepbeta.R;
 
 public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 
-	private final static int CALIBRATE_REQUEST_CODE = 0xDEAD;
-	private final static int SCREEN_TEST_REQUEST_CODE = 0xBEEF;
-	
 	private class AlarmCalibrationTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -65,12 +62,16 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 		}
 	}
 
-	private double alarmTriggerCalibration;
-	private boolean screenBugPresent;
+	public static final int ALARM_CALIBRATION_TIME = 500;
+
+	private final static int CALIBRATE_REQUEST_CODE = 0xDEAD;
 
 	private static AsyncTask<Void, Void, Void> currentTask;
+	private final static int SCREEN_TEST_REQUEST_CODE = 0xBEEF;
 
-	public static final int ALARM_CALIBRATION_TIME = 500;
+	private double alarmTriggerCalibration;
+
+	private boolean screenBugPresent;
 
 	@Override
 	protected int getWizardLayoutId() {
@@ -113,7 +114,7 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 	}
 
 	@Override
-	protected void onFinishWizardActivity() {
+	protected void onFinishWizardActivity() throws IllegalStateException {
 		final SharedPreferences.Editor ed = getSharedPreferences(
 				SettingsActivity.PREFERENCES, 0).edit();
 		ed.putFloat(getString(R.string.pref_alarm_trigger_sensitivity),
@@ -121,17 +122,23 @@ public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
 		ed.putBoolean(getString(R.string.pref_force_screen), screenBugPresent);
 		ed.commit();
 
-		final SharedPreferences.Editor ed2 = getSharedPreferences(
-				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE)
-				.edit();
-		ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT, getResources()
-				.getInteger(R.integer.prefs_version));
-		ed2.commit();
+		if (ed.commit()) {
+			final SharedPreferences.Editor ed2 = getSharedPreferences(
+					SettingsActivity.PREFERENCES_ENVIRONMENT,
+					Context.MODE_PRIVATE).edit();
+			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT, getResources()
+					.getInteger(R.integer.prefs_version));
+			ed2.commit();
 
-		trackEvent("alarm-level",
-				(int) Math.round(alarmTriggerCalibration * 100));
-		trackEvent("screen-bug", screenBugPresent ? 1 : 0);
-		finish();
+			trackEvent("alarm-level",
+					(int) Math.round(alarmTriggerCalibration * 100));
+			trackEvent("screen-bug", screenBugPresent ? 1 : 0);
+			finish();
+		} else {
+			trackEvent("calibration-fail", 0);
+			throw new IllegalStateException(
+					"Calibration failed to write settings...");
+		}
 	}
 
 	@Override

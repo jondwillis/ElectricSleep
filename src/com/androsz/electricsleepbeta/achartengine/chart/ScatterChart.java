@@ -32,10 +32,10 @@ public class ScatterChart extends XYChart {
 	 * 
 	 */
 	private static final long serialVersionUID = 3114545319776565381L;
-	/** The point shape size. */
-	private static final float SIZE = 3;
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 10;
+	/** The point shape size. */
+	private static final float SIZE = 3;
 
 	/**
 	 * Builds a new scatter chart instance.

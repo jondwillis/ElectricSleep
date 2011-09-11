@@ -54,8 +54,9 @@ public class Pan extends AbstractTool {
 		final boolean limited = limits != null && limits.length == 4;
 		final double[] calcRange = mChart.getCalcRange();
 		if (range[0] == range[1] && calcRange[0] == calcRange[1]
-				|| range[2] == range[3] && calcRange[2] == calcRange[3])
+				|| range[2] == range[3] && calcRange[2] == calcRange[3]) {
 			return;
+		}
 		checkRange(range);
 
 		final PointF realPoint = mChart.toRealPoint(oldX, oldY);

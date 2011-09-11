@@ -1,6 +1,5 @@
 package com.androsz.electricsleepbeta.app;
 
-import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -35,8 +34,8 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
-import com.androsz.electricsleepbeta.util.SharedWakeLock;
 import com.androsz.electricsleepbeta.util.PointD;
+import com.androsz.electricsleepbeta.util.WakeLockManager;
 
 public class SleepMonitoringService extends Service implements
 		SensorEventListener {
@@ -82,26 +81,43 @@ public class SleepMonitoringService extends Service implements
 		}
 	}
 
+	public static final String EXTRA_ALARM_WINDOW = "alarmWindow";
+
+	public static final String EXTRA_ID = "id";
+	public static final String EXTRA_NAME = "name";
+	public static final String EXTRA_X = "x";
+	public static final String EXTRA_Y = "y";
+	private final static int INTERVAL = 5000;
+	public static int MAX_POINTS_IN_A_GRAPH = 200;
+	private static final int NOTIFICATION_ID = 0x1337a;
+	public static final String POKE_SYNC_CHART = "com.androsz.electricsleepbeta.POKE_SYNC_CHART";
 	// Object for intrinsic lock
 	public static final Object[] sDataLock = new Object[0];
 
-	public static int MAX_POINTS_IN_A_GRAPH = 200;
-	public static final String EXTRA_ID = "id";
-	public static final String EXTRA_Y = "y";
-	public static final String EXTRA_X = "x";
-	public static final String EXTRA_NAME = "name";
-	public static final String EXTRA_ALARM_WINDOW = "alarmWindow";
 	public static final String SERVICE_IS_RUNNING = "serviceIsRunning";
+
 	public static final String SLEEP_DATA = "sleepData";
-	private static final int NOTIFICATION_ID = 0x1337a;
-
-	public static final String POKE_SYNC_CHART = "com.androsz.electricsleepbeta.POKE_SYNC_CHART";
-
 	public static final String SLEEP_STOPPED = "com.androsz.electricsleepbeta.SLEEP_STOPPED";
 	public static final String STOP_AND_SAVE_SLEEP = "com.androsz.electricsleepbeta.STOP_AND_SAVE_SLEEP";
+
 	private boolean airplaneMode = false;
 
-	private boolean silentMode = false;
+	private double alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
+	private int alarmWindow = 30;
+
+	final float alpha = 0.8f;
+	private boolean alreadyDeletedResidualFile = false;
+
+	private Date dateStarted;
+
+	private boolean forceScreenOn = false;
+
+	private final float[] gravity = { 0, 0, 0 };
+
+	private double maxNetForce = SettingsActivity.DEFAULT_MIN_SENSITIVITY;
+	private int ringerModeBackup = AudioManager.RINGER_MODE_NORMAL;
+
+	public int sensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
 
 	private final BroadcastReceiver serviceReceiver = new BroadcastReceiver() {
 		@Override
@@ -130,39 +146,24 @@ public class SleepMonitoringService extends Service implements
 			}
 		}
 	};
-	private double alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
-
-	private int alarmWindow = 30;
-	private final ArrayList<PointD> sleepData = new ArrayList<PointD>();
-
-	private Date dateStarted;
-
-	private double maxNetForce = SettingsActivity.DEFAULT_MIN_SENSITIVITY;
-
-	private int testModeRate = Integer.MIN_VALUE;
-
-	public int sensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
-	private final static int INTERVAL = 5000;
-
-	private int updateInterval = INTERVAL;
-
-	private boolean useAlarm = false;
 
 	// private double averageForce = 0;
 
 	// private int numberOfSamples = 0;
 
-	private boolean forceScreenOn = false;
+	private boolean silentMode = false;
 
-	private final float[] gravity = { 0, 0, 0 };
+	private final ArrayList<PointD> sleepData = new ArrayList<PointD>();
 
-	final float alpha = 0.8f;
+	private int testModeRate = Integer.MIN_VALUE;
 
-	int waitForSensorsToWarmUp = 0;;
-
-	private int ringerModeBackup = AudioManager.RINGER_MODE_NORMAL;
+	private int updateInterval = INTERVAL;;
 
 	Timer updateTimer;
+
+	private boolean useAlarm = false;
+
+	int waitForSensorsToWarmUp = 0;
 
 	private Intent addExtrasToSaveSleepIntent(final Intent saveIntent) {
 		saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -248,13 +249,13 @@ public class SleepMonitoringService extends Service implements
 
 	private void obtainWakeLock() {
 		// if forcescreenon is on, hold a dim wakelock, otherwise, partial.
-		final int wakeLockType = forceScreenOn ? PowerManager.SCREEN_DIM_WAKE_LOCK
-				| PowerManager.ON_AFTER_RELEASE
-				| PowerManager.ACQUIRE_CAUSES_WAKEUP
+		final int wakeLockType = forceScreenOn ? 
+				(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE | PowerManager.ACQUIRE_CAUSES_WAKEUP
+				)
 
 				: PowerManager.PARTIAL_WAKE_LOCK;
 
-		SharedWakeLock.acquire(this, wakeLockType);
+		WakeLockManager.acquire(this, "sleepMonitoring", wakeLockType);
 	}
 
 	@Override
@@ -288,7 +289,7 @@ public class SleepMonitoringService extends Service implements
 	public void onDestroy() {
 		unregisterAccelerometerListener();
 
-		SharedWakeLock.release();
+		WakeLockManager.release("sleepMonitoring");
 
 		unregisterReceiver(serviceReceiver);
 
@@ -384,14 +385,6 @@ public class SleepMonitoringService extends Service implements
 			new AsyncTask<Void, Void, Void>() {
 
 				@Override
-				protected void onPostExecute(Void result) {
-					registerAccelerometerListener();
-
-					toggleSilentMode(true);
-					toggleAirplaneMode(true);
-				}
-
-				@Override
 				protected Void doInBackground(Void... params) {
 					if (!alreadyDeletedResidualFile) {
 						// TODO: doesn't happen more than once? right?
@@ -404,12 +397,18 @@ public class SleepMonitoringService extends Service implements
 					ed.commit();
 					return null;
 				}
+
+				@Override
+				protected void onPostExecute(Void result) {
+					registerAccelerometerListener();
+
+					toggleSilentMode(true);
+					toggleAirplaneMode(true);
+				}
 			}.execute();
 		}
 		return startId;
 	}
-
-	private boolean alreadyDeletedResidualFile = false;
 
 	private void registerAccelerometerListener() {
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.ActionBar.Tab;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -55,6 +54,10 @@ public class ReviewSleepActivity extends HostActivity implements
 		}
 	}
 
+	ReviewSleepAnalysisFragment analysisFragment;
+
+	ReviewSleepChartFragment chartFragment;
+
 	ProgressDialog progress;
 
 	private Uri uri;
@@ -69,11 +72,11 @@ public class ReviewSleepActivity extends HostActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_review_sleep);
 		progress = new ProgressDialog(this);
-		
+
 		chartFragment = new ReviewSleepChartFragment();
 		analysisFragment = new ReviewSleepAnalysisFragment();
 
-		ActionBar bar = getSupportActionBar();
+		final ActionBar bar = getSupportActionBar();
 		bar.addTab(bar.newTab().setText(R.string.sleep_chart)
 				.setTabListener(this));
 		bar.addTab(bar.newTab().setText(R.string.analysis).setTabListener(this));
@@ -82,7 +85,7 @@ public class ReviewSleepActivity extends HostActivity implements
 		// If selectedTab is not saved to the savedInstanceState,
 		// 0 is returned by default.
 		if (savedInstanceState != null) {
-			int selectedTab = savedInstanceState.getInt("selectedTab");
+			final int selectedTab = savedInstanceState.getInt("selectedTab");
 			bar.setSelectedNavigationItem(selectedTab);
 			uri = Uri.parse(savedInstanceState.getString("uri"));
 		} else {
@@ -94,27 +97,27 @@ public class ReviewSleepActivity extends HostActivity implements
 	}
 
 	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return new CursorLoader(this, uri, null, null, null, null);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_review_sleep, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
-
-		if (progress != null && progress.isShowing()) {
-			progress.dismiss();
-		}
+	public void onLoaderReset(Loader<Cursor> loader) {
 	}
 
 	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString("uri", uri.toString());
-		ActionBar bar = getSupportActionBar();
-		int selectedTab = bar.getSelectedTab().getPosition();
-		outState.putInt("selectedTab", selectedTab);
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		data.moveToFirst();
+		final SleepRecord sleepRecord = new SleepRecord(data);
+
+		chartFragment.setSleepRecord(sleepRecord);
+		analysisFragment.setSleepRecord(sleepRecord);
 	}
 
 	@Override
@@ -145,29 +148,29 @@ public class ReviewSleepActivity extends HostActivity implements
 							});
 			dialog.show();
 			break;
+		case R.id.menu_item_export_sleep_record:
+			// TODO
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, uri, null, null, null, null);
-	}
+	public void onPause() {
+		super.onPause();
 
-	ReviewSleepChartFragment chartFragment;
-	ReviewSleepAnalysisFragment analysisFragment;
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		data.moveToFirst();
-		SleepRecord sleepRecord = new SleepRecord(data);
-
-		chartFragment.setSleepRecord(sleepRecord);
-		analysisFragment.setSleepRecord(sleepRecord);
+		if (progress != null && progress.isShowing()) {
+			progress.dismiss();
+		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
+	protected void onSaveInstanceState(final Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("uri", uri.toString());
+		final ActionBar bar = getSupportActionBar();
+		final int selectedTab = bar.getSelectedTab().getPosition();
+		outState.putInt("selectedTab", selectedTab);
 	}
 
 	@Override

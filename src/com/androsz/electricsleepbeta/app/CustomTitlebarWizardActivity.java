@@ -34,7 +34,8 @@ public abstract class CustomTitlebarWizardActivity extends HostActivity {
 		setupNavigationButtons();
 	}
 
-	protected abstract void onFinishWizardActivity();
+	protected abstract void onFinishWizardActivity()
+			throws IllegalStateException;
 
 	public void onLeftButtonClick(final View v) {
 

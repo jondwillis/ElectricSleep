@@ -24,24 +24,10 @@ import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
-import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.util.PointD;
+import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class SleepActivity extends HostActivity {
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_item_stop_sleep:
-			sendBroadcast(new Intent(SleepMonitoringService.STOP_AND_SAVE_SLEEP));
-			finish();
-			break;
-		case R.id.menu_item_alarms:
-			startActivity(new Intent(this, AlarmClock.class));
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	private class DimScreenTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -74,36 +60,9 @@ public class SleepActivity extends HostActivity {
 
 	private static final String SLEEP_CHART = "sleepChart";
 
-	public static final String UPDATE_CHART = "com.androsz.electricsleepbeta.UPDATE_CHART";
-
 	public static final String SYNC_CHART = "com.androsz.electricsleepbeta.SYNC_CHART";
-	private SleepChart sleepChart;
-	private LinearLayout waitForSleepData;
-	private TextView textSleepNoAlarm;
-	private View divSleepNoAlarm;
-	private TextView textSleepPluggedIn;
-	private View divSleepPluggedIn;
 
-	private TextView textSleepDim;
-
-	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(final Context context, final Intent intent) {
-			sleepChart.sync(intent.getDoubleExtra(
-					SleepMonitoringService.EXTRA_X, 0), intent.getDoubleExtra(
-					SleepMonitoringService.EXTRA_Y, 0), intent.getDoubleExtra(
-					StartSleepReceiver.EXTRA_ALARM,
-					SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
-
-			if (sleepChart.makesSenseToDisplay()) {
-				sleepChart.setVisibility(View.VISIBLE);
-				waitForSleepData.setVisibility(View.GONE);
-			} else {
-				sleepChart.setVisibility(View.GONE);
-				waitForSleepData.setVisibility(View.VISIBLE);
-			}
-		}
-	};
+	public static final String UPDATE_CHART = "com.androsz.electricsleepbeta.UPDATE_CHART";
 
 	private final BroadcastReceiver batteryChangedReceiver = new BroadcastReceiver() {
 		@Override
@@ -118,7 +77,16 @@ public class SleepActivity extends HostActivity {
 			showOrHideWarnings();
 		}
 	};
-
+	AsyncTask<Void, Void, Void> dimScreenTask;
+	private View divSleepNoAlarm;
+	private View divSleepPluggedIn;
+	private SleepChart sleepChart;
+	private final BroadcastReceiver sleepStoppedReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+			finish();
+		}
+	};
 	private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
 		@SuppressWarnings("unchecked")
 		@Override
@@ -146,27 +114,9 @@ public class SleepActivity extends HostActivity {
 			if (useAlarm) {
 				new AsyncTask<Void, Void, String[]>() {
 					@Override
-					protected void onPostExecute(String[] result) {
-						if (result != null) {
-							sleepChart.xyMultipleSeriesRenderer
-									.setChartTitle(context.getString(
-											R.string.you_will_be_awoken_before,
-											result[0], result[1]));
-							textSleepNoAlarm.setVisibility(View.GONE);
-							divSleepNoAlarm.setVisibility(View.GONE);
-						} else {
-							sleepChart.xyMultipleSeriesRenderer
-									.setChartTitle("");
-							textSleepNoAlarm.setVisibility(View.VISIBLE);
-							divSleepNoAlarm.setVisibility(View.VISIBLE);
-						}
-						super.onPostExecute(result);
-					}
-
-					@Override
 					protected String[] doInBackground(Void... params) {
 						String[] result = null;
-						Alarm alarm = Alarms.calculateNextAlert(context);
+						final Alarm alarm = Alarms.calculateNextAlert(context);
 						try {
 							if (alarm != null) {
 								final Calendar alarmTime = Calendar
@@ -191,6 +141,24 @@ public class SleepActivity extends HostActivity {
 
 						}
 						return result;
+					}
+
+					@Override
+					protected void onPostExecute(String[] result) {
+						if (result != null) {
+							sleepChart.xyMultipleSeriesRenderer
+									.setChartTitle(context.getString(
+											R.string.you_will_be_awoken_before,
+											result[0], result[1]));
+							textSleepNoAlarm.setVisibility(View.GONE);
+							divSleepNoAlarm.setVisibility(View.GONE);
+						} else {
+							sleepChart.xyMultipleSeriesRenderer
+									.setChartTitle("");
+							textSleepNoAlarm.setVisibility(View.VISIBLE);
+							divSleepNoAlarm.setVisibility(View.VISIBLE);
+						}
+						super.onPostExecute(result);
 					}
 				}.execute();
 			} else {
@@ -226,14 +194,32 @@ public class SleepActivity extends HostActivity {
 		}
 	};
 
-	AsyncTask<Void, Void, Void> dimScreenTask;
+	private TextView textSleepDim;
 
-	private final BroadcastReceiver sleepStoppedReceiver = new BroadcastReceiver() {
+	private TextView textSleepNoAlarm;
+
+	private TextView textSleepPluggedIn;
+
+	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			finish();
+			sleepChart.sync(intent.getDoubleExtra(
+					SleepMonitoringService.EXTRA_X, 0), intent.getDoubleExtra(
+					SleepMonitoringService.EXTRA_Y, 0), intent.getDoubleExtra(
+					StartSleepReceiver.EXTRA_ALARM,
+					SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
+
+			if (sleepChart.makesSenseToDisplay()) {
+				sleepChart.setVisibility(View.VISIBLE);
+				waitForSleepData.setVisibility(View.GONE);
+			} else {
+				sleepChart.setVisibility(View.GONE);
+				waitForSleepData.setVisibility(View.VISIBLE);
+			}
 		}
 	};
+
+	private LinearLayout waitForSleepData;
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -259,6 +245,20 @@ public class SleepActivity extends HostActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(sleepStoppedReceiver);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_stop_sleep:
+			sendBroadcast(new Intent(SleepMonitoringService.STOP_AND_SAVE_SLEEP));
+			finish();
+			break;
+		case R.id.menu_item_alarms:
+			startActivity(new Intent(this, AlarmClock.class));
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -314,7 +314,8 @@ public class SleepActivity extends HostActivity {
 					+ textSleepNoAlarm.getVisibility();
 
 			// if all are gone...
-			visibility = visibility == 24 ? View.GONE : View.VISIBLE;
+			visibility = (visibility == (View.GONE * 3)) ? View.GONE
+					: View.VISIBLE;
 			landscapeWarnings.setVisibility(visibility);
 		}
 	}

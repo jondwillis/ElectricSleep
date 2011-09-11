@@ -16,16 +16,16 @@ import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 
 public class StartSleepReceiver extends BroadcastReceiver {
 
-	public final static String START_SLEEP = "com.androsz.electricsleepbeta.START_SLEEP";
+	public final static String EXTRA_AIRPLANE_MODE = "airplaneMode";
 
 	public final static String EXTRA_ALARM = "alarm";
 
-	public final static String EXTRA_SENSOR_DELAY = "sensorDelay";
-	public final static String EXTRA_USE_ALARM = "useAlarm";
 	public final static String EXTRA_ALARM_WINDOW = "alarmWindow";
-	public final static String EXTRA_AIRPLANE_MODE = "airplaneMode";
-	public final static String EXTRA_SILENT_MODE = "silentMode";
 	public final static String EXTRA_FORCE_SCREEN_ON = "forceScreenOn";
+	public final static String EXTRA_SENSOR_DELAY = "sensorDelay";
+	public final static String EXTRA_SILENT_MODE = "silentMode";
+	public final static String EXTRA_USE_ALARM = "useAlarm";
+	public final static String START_SLEEP = "com.androsz.electricsleepbeta.START_SLEEP";
 
 	public static void enforceCalibrationBeforeStartingSleep(
 			final Context context, final Intent service, final Intent activity) {
@@ -62,13 +62,6 @@ public class StartSleepReceiver extends BroadcastReceiver {
 			Intent serviceIntent;
 
 			@Override
-			protected void onPostExecute(Void result) {
-				enforceCalibrationBeforeStartingSleep(context, serviceIntent,
-						new Intent(context, SleepActivity.class)
-								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-			}
-
-			@Override
 			protected Void doInBackground(Void... params) {
 				final SharedPreferences userPrefs = context
 						.getSharedPreferences(SettingsActivity.PREFERENCES, 0);
@@ -101,6 +94,13 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				serviceIntent.putExtra(EXTRA_FORCE_SCREEN_ON, forceScreenOn);
 
 				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				enforceCalibrationBeforeStartingSleep(context, serviceIntent,
+						new Intent(context, SleepActivity.class)
+								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 			}
 
 		}.execute();

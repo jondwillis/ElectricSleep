@@ -27,10 +27,10 @@ public class CategorySeries implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5524479371643202576L;
-	/** The series title. */
-	private final String mTitle;
 	/** The series categories. */
 	private final List<String> mCategories = new ArrayList<String>();
+	/** The series title. */
+	private final String mTitle;
 	/** The series values. */
 	private final List<Double> mValues = new ArrayList<Double>();
 

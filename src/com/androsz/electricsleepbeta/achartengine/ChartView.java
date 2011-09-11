@@ -27,41 +27,41 @@ import com.androsz.electricsleepbeta.achartengine.tools.Zoom;
  * The view that encapsulates the graphical chart.
  */
 public abstract class ChartView extends View {
+	/** The zoom buttons background color. */
+	private static final int ZOOM_BUTTONS_COLOR = Color
+			.argb(175, 150, 150, 150);
+	/** The zoom area size. */
+	private static final int ZOOM_SIZE = 45;
+	/** The fit zoom tool. */
+	private FitZoom fitZoom;
+	/** The fit zoom icon. */
+	private Bitmap fitZoomImage;
 	/** The chart to be drawn. */
 	protected AbstractChart mChart;
-	/** The chart renderer. */
-	private XYMultipleSeriesRenderer mRenderer;
-	/** The view bounds. */
-	private final Rect mRect = new Rect();
 	/** The user interface thread handler. */
 	private Handler mHandler;
+	/** The paint to be used when drawing the chart. */
+	private final Paint mPaint = new Paint();
+	/** The view bounds. */
+	private final Rect mRect = new Rect();
+	/** The chart renderer. */
+	private XYMultipleSeriesRenderer mRenderer;
 	/** The old x coordinate. */
 	private float oldX;
 	/** The old y coordinate. */
 	private float oldY;
-	/** The zoom buttons rectangle. */
-	private final RectF zoomR = new RectF();
-	/** The zoom in icon. */
-	private Bitmap zoomInImage;
-	/** The zoom out icon. */
-	private Bitmap zoomOutImage;
-	/** The fit zoom icon. */
-	private Bitmap fitZoomImage;
-	/** The zoom area size. */
-	private static final int ZOOM_SIZE = 45;
-	/** The zoom buttons background color. */
-	private static final int ZOOM_BUTTONS_COLOR = Color
-			.argb(175, 150, 150, 150);
 	/** The pan tool. */
 	private Pan pan;
 	/** The zoom in tool. */
 	private Zoom zoomIn;
+	/** The zoom in icon. */
+	private Bitmap zoomInImage;
 	/** The zoom out tool. */
 	private Zoom zoomOut;
-	/** The fit zoom tool. */
-	private FitZoom fitZoom;
-	/** The paint to be used when drawing the chart. */
-	private final Paint mPaint = new Paint();
+	/** The zoom out icon. */
+	private Bitmap zoomOutImage;
+	/** The zoom buttons rectangle. */
+	private final RectF zoomR = new RectF();
 
 	/**
 	 * Creates a new graphical view.
@@ -146,7 +146,7 @@ public abstract class ChartView extends View {
 		if (mRenderer != null
 				&& (mRenderer.isPanXEnabled() || mRenderer.isZoomYEnabled()
 						|| mRenderer.isZoomXEnabled() || mRenderer
-						.isZoomYEnabled())) {
+							.isZoomYEnabled())) {
 			handleTouch(event);
 			return true;
 		}

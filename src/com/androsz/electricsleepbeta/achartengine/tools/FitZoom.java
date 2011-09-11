@@ -34,8 +34,9 @@ public class FitZoom extends AbstractTool {
 	 * Apply the tool.
 	 */
 	public void apply() {
-		if (mChart.getDataset() == null)
+		if (mChart.getDataset() == null) {
 			return;
+		}
 		if (mRenderer.isInitialRangeSet()) {
 			mRenderer.setRange(mRenderer.getInitialRange());
 		} else {

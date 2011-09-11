@@ -8,10 +8,10 @@
 	the specific language governing permissions and limitations under the License. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="320dp" android:layout_height="wrap_content"
+	android:layout_width="match_parent" android:layout_height="match_parent"
 	android:gravity="center" android:weightSum="1">
 
-	<LinearLayout android:layout_height="wrap_content" android:layout_gravity="center"
+	<LinearLayout android:layout_height="match_parent" android:layout_gravity="center"
 		android:gravity="center_horizontal"
 		android:orientation="vertical" android:layout_width="match_parent">
 
@@ -40,19 +40,11 @@
 
 		</com.androsz.electricsleepbeta.alarmclock.DigitalClock>
 
-		<LinearLayout android:layout_width="wrap_content"
-			android:layout_height="wrap_content" >
+		<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+			<Button android:text="@string/alarm_alert_snooze_text" android:layout_weight="3" android:layout_height="match_parent" android:id="@+id/snooze" android:layout_width="match_parent"></Button>
 
-			<Button android:id="@+id/snooze" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="3"
-				android:text="@string/alarm_alert_snooze_text" />
-
-			<!-- blank stretchable view -->
-			<View android:layout_width="2dip" android:layout_height="2dip"
-				android:layout_gravity="fill_horizontal" android:layout_weight="1" />
-
-			<Button android:id="@+id/dismiss" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="3"
+			<Button android:id="@+id/dismiss" android:layout_width="match_parent"
+				android:layout_height="wrap_content"
 				android:text="@string/alarm_alert_dismiss_text" />
 
 		</LinearLayout>

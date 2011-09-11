@@ -30,7 +30,7 @@ import android.os.Parcel;
 import android.os.PowerManager;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.util.SharedWakeLock;
+import com.androsz.electricsleepbeta.util.WakeLockManager;
 
 /**
  * Glue class: connects AlarmAlert IntentReceiver to AlarmAlert activity. Passes
@@ -99,7 +99,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 		// Maintain a cpu wake lock until the AlarmAlert and AlarmKlaxon can
 		// pick it up.
-		SharedWakeLock.acquire(context, PowerManager.PARTIAL_WAKE_LOCK
+		WakeLockManager.acquire(context, "klaxon", PowerManager.PARTIAL_WAKE_LOCK
 				| PowerManager.ACQUIRE_CAUSES_WAKEUP
 				| PowerManager.ON_AFTER_RELEASE);
 

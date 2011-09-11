@@ -31,14 +31,14 @@ import com.androsz.electricsleepbeta.achartengine.util.MathHelper;
  * The dial chart rendering class.
  */
 public class DialChart extends AbstractChart {
+	/** The radius of the needle. */
+	private static final int NEEDLE_RADIUS = 10;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7067026841373365639L;
 	/** The legend shape width. */
 	private static final int SHAPE_WIDTH = 10;
-	/** The radius of the needle. */
-	private static final int NEEDLE_RADIUS = 10;
 	/** The series dataset. */
 	private final CategorySeries mDataset;
 	/** The series renderer. */

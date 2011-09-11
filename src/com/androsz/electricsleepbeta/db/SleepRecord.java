@@ -30,19 +30,19 @@ public class SleepRecord {
 
 	public static final HashMap<String, String> COLUMN_MAP = buildColumnMap();
 
+	public static final String KEY_ALARM = "sleep_data_alarm";
+
+	// DATABASE_VERSION = 4
+	public static final String KEY_DURATION = "KEY_SLEEP_DATA_DURATION";
+	public static final String KEY_MIN = "sleep_data_min";
+	public static final String KEY_NOTE = "KEY_SLEEP_DATA_NOTE";
+	public static final String KEY_RATING = "sleep_data_rating";
+	public static final String KEY_SLEEP_DATA = "sleep_data";
+	public static final String KEY_SPIKES = "KEY_SLEEP_DATA_SPIKES";
+	public static final String KEY_TIME_FELL_ASLEEP = "KEY_SLEEP_DATA_TIME_FELL_ASLEEP";
 	// The columns we'll include in the dictionary table
 	// DATABASE_VERSION = 3
 	public static final String KEY_TITLE = SearchManager.SUGGEST_COLUMN_TEXT_1;
-
-	public static final String KEY_SLEEP_DATA = "sleep_data";
-	public static final String KEY_MIN = "sleep_data_min";
-	public static final String KEY_ALARM = "sleep_data_alarm";
-	public static final String KEY_RATING = "sleep_data_rating";
-	// DATABASE_VERSION = 4
-	public static final String KEY_DURATION = "KEY_SLEEP_DATA_DURATION";
-	public static final String KEY_SPIKES = "KEY_SLEEP_DATA_SPIKES";
-	public static final String KEY_TIME_FELL_ASLEEP = "KEY_SLEEP_DATA_TIME_FELL_ASLEEP";
-	public static final String KEY_NOTE = "KEY_SLEEP_DATA_NOTE";
 
 	/**
 	 * Builds a map for all columns that may be requested, which will be given
@@ -95,8 +95,9 @@ public class SleepRecord {
 	 *            the list of events, sorted into increasing time order
 	 */
 	static void computePositions(ArrayList<SleepRecord> eventsList) {
-		if (eventsList == null)
+		if (eventsList == null) {
 			return;
+		}
 
 		doComputePositions(eventsList);
 	}
@@ -154,10 +155,28 @@ public class SleepRecord {
 
 	public static int findFirstZeroBit(long val) {
 		for (int ii = 0; ii < 64; ++ii) {
-			if ((val & (1L << ii)) == 0)
+			if ((val & (1L << ii)) == 0) {
 				return ii;
+			}
 		}
 		return 64;
+	}
+
+	public static Calendar getTimeDiffCalendar(final long time) {
+		// set calendar to GMT +0
+		final Calendar timeDiffCalendar = Calendar.getInstance(TimeZone
+				.getTimeZone(TimeZone.getAvailableIDs(0)[0]));
+		timeDiffCalendar.setTimeInMillis(time);
+		return timeDiffCalendar;
+	}
+
+	public static CharSequence getTimespanText(long timespanMs,
+			final Resources res) {
+		final Calendar timespan = getTimeDiffCalendar(timespanMs);
+		final int hours = Math.min(24, timespan.get(Calendar.HOUR_OF_DAY));
+		final int minutes = timespan.get(Calendar.MINUTE);
+		return res.getQuantityString(R.plurals.hour, hours, hours) + " "
+				+ res.getQuantityString(R.plurals.minute, minutes, minutes);
 	}
 
 	/**
@@ -215,23 +234,28 @@ public class SleepRecord {
 
 			// Check if we should return early because there are more recent
 			// load requests waiting.
-			if (requestId != sequenceNumber.get())
+			if (requestId != sequenceNumber.get()) {
 				return;
+			}
 
 			count = c.getCount();
 
-			if (count == 0)
+			if (count == 0) {
 				return;
+			}
 
 			context.getResources();
 			do {
 				final SleepRecord s = new SleepRecord(c);
 				final long startTime = s.getStartTime();
-				if (startTime > start && startTime < end) {
-					List<PointD> justFirstAndLast = new ArrayList<PointD>();
+				if (startTime >= start && startTime <= end) {
+					final List<PointD> justFirstAndLast = new ArrayList<PointD>();
 					justFirstAndLast.add(s.chartData.get(0));
-					justFirstAndLast.add(s.chartData.get(s.chartData.size() - 1));
-					s.chartData = justFirstAndLast; //remove reference to the list, helps lessen memory usage
+					justFirstAndLast
+							.add(s.chartData.get(s.chartData.size() - 1));
+					s.chartData = justFirstAndLast; // remove reference to the
+													// list, helps lessen memory
+													// usage
 					events.add(s);
 				}
 			} while (c.moveToNext());
@@ -252,33 +276,33 @@ public class SleepRecord {
 		return baos.toByteArray();
 	}
 
-	// The coordinates of the event rectangle drawn on the screen.
-	public float left;
-
-	public float right;
-
-	public float top;
+	public final double alarm;
 	public float bottom;
-
-	private int mColumn;
-
-	private int mMaxColumns;
-
-	public final String title;
 
 	public List<PointD> chartData;
 
-	public final double min;
+	public final long duration;
+
+	public final long fellAsleep;
+
+	// The coordinates of the event rectangle drawn on the screen.
+	public float left;
+
+	private int mColumn;
 
 	//
 
-	public final double alarm;
+	public final double min;
 
-	public final int rating;
-	public final long duration;
-	public final int spikes;
-	public final long fellAsleep;
+	private int mMaxColumns;
 	public final String note;
+	public final int rating;
+	public float right;
+	public final int spikes;
+
+	public final String title;
+
+	public float top;
 
 	@SuppressWarnings("unchecked")
 	public SleepRecord(final Cursor cursor) {
@@ -336,15 +360,6 @@ public class SleepRecord {
 		return getTimespanText(duration, res);
 	}
 
-	public static CharSequence getTimespanText(long timespanMs,
-			final Resources res) {
-		final Calendar timespan = getTimeDiffCalendar(timespanMs);
-		final int hours = Math.min(24, timespan.get(Calendar.HOUR_OF_DAY));
-		final int minutes = timespan.get(Calendar.MINUTE);
-		return res.getQuantityString(R.plurals.hour, hours, hours) + " "
-				+ res.getQuantityString(R.plurals.minute, minutes, minutes);
-	}
-
 	public int getEndJulianDay() {
 		final Time local = new Time();
 		local.set(getEndTime());
@@ -364,10 +379,6 @@ public class SleepRecord {
 
 	public CharSequence getFellAsleepText(final Resources res) {
 		return getTimespanText(getTimeToFallAsleep(), res);
-	}
-
-	public long getTimeToFallAsleep() {
-		return this.fellAsleep - getStartTime();
 	}
 
 	public int getMaxColumns() {
@@ -412,12 +423,8 @@ public class SleepRecord {
 		return cal.get(Calendar.MINUTE) + (cal.get(Calendar.HOUR_OF_DAY) * 60);
 	}
 
-	public static Calendar getTimeDiffCalendar(final long time) {
-		// set calendar to GMT +0
-		final Calendar timeDiffCalendar = Calendar.getInstance(TimeZone
-				.getTimeZone(TimeZone.getAvailableIDs(0)[0]));
-		timeDiffCalendar.setTimeInMillis(time);
-		return timeDiffCalendar;
+	public long getTimeToFallAsleep() {
+		return this.fellAsleep - getStartTime();
 	}
 
 	public long insertIntoDb(final SQLiteDatabase db) throws IOException {

@@ -43,9 +43,10 @@ public class AlarmPreference extends RingtonePreference {
 
 	@Override
 	protected Uri onRestoreRingtone() {
-		if (RingtoneManager.isDefault(mAlert))
+		if (RingtoneManager.isDefault(mAlert)) {
 			return RingtoneManager.getActualDefaultRingtoneUri(getContext(),
 					RingtoneManager.TYPE_ALARM);
+		}
 		return mAlert;
 	}
 
@@ -56,25 +57,26 @@ public class AlarmPreference extends RingtonePreference {
 
 	public void setAlert(final Uri alert) {
 		mAlert = alert;
-		new AsyncTask<Void, Void, String>(){
-			
-			@Override
-			protected void onPostExecute(String result) {
-				if (result != null) {
-					setSummary(result);
-				}else {
-					setSummary(R.string.silent_alarm_summary);
-				}
-				super.onPostExecute(result);
-			}
+		new AsyncTask<Void, Void, String>() {
 
 			@Override
 			protected String doInBackground(Void... params) {
 				if (alert != null) {
-					Ringtone r = RingtoneManager.getRingtone(getContext(), alert);
+					final Ringtone r = RingtoneManager.getRingtone(
+							getContext(), alert);
 					return r.getTitle(getContext());
 				}
 				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				if (result != null) {
+					setSummary(result);
+				} else {
+					setSummary(R.string.silent_alarm_summary);
+				}
+				super.onPostExecute(result);
 			}
 		}.execute();
 	}

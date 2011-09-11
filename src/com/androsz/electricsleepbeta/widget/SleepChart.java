@@ -1,7 +1,6 @@
 package com.androsz.electricsleepbeta.widget;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.StreamCorruptedException;
 
 import android.content.Context;
@@ -26,21 +25,21 @@ import com.androsz.electricsleepbeta.util.MathUtils;
 
 public class SleepChart extends ChartView implements Parcelable {
 
-	public XYMultipleSeriesDataset xyMultipleSeriesDataset;
-
-	public XYMultipleSeriesRenderer xyMultipleSeriesRenderer;
-
-	public XYSeries xySeriesMovement;
-
-	public XYSeriesRenderer xySeriesMovementRenderer;
-
-	public XYSeries xySeriesCalibration;
-	public XYSeriesRenderer xySeriesCalibrationRenderer;
-
 	protected double calibrationLevel;// =
 										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
 	public int rating;
+
+	public XYMultipleSeriesDataset xyMultipleSeriesDataset;
+
+	public XYMultipleSeriesRenderer xyMultipleSeriesRenderer;
+
+	public XYSeries xySeriesCalibration;
+	public XYSeriesRenderer xySeriesCalibrationRenderer;
+
+	public XYSeries xySeriesMovement;
+
+	public XYSeriesRenderer xySeriesMovementRenderer;
 
 	public SleepChart(final Context context) {
 		super(context);
@@ -62,24 +61,6 @@ public class SleepChart extends ChartView implements Parcelable {
 		xySeriesCalibrationRenderer = (XYSeriesRenderer) in.readSerializable();
 		calibrationLevel = in.readDouble();
 		rating = in.readInt();
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeSerializable(xyMultipleSeriesDataset);
-		dest.writeSerializable(xyMultipleSeriesRenderer);
-		dest.writeSerializable(xySeriesMovement);
-		dest.writeSerializable(xySeriesMovementRenderer);
-		dest.writeSerializable(xySeriesCalibration);
-		dest.writeSerializable(xySeriesCalibrationRenderer);
-		dest.writeDouble(calibrationLevel);
-		dest.writeInt(rating);
-
 	}
 
 	@Override
@@ -119,13 +100,13 @@ public class SleepChart extends ChartView implements Parcelable {
 
 			xyMultipleSeriesRenderer.setPanEnabled(false, false);
 			xyMultipleSeriesRenderer.setZoomEnabled(false, false);
-			final float textSize = MathUtils.calculatePxFromDip(getContext(),
+			final float textSize = MathUtils.calculatePxFromSp(getContext(),
 					14);
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			xyMultipleSeriesRenderer.setLegendHeight(MathUtils
-					.calculatePxFromDip(getContext(), 40));
+			xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
+					.calculatePxFromDp(getContext(), 30) + textSize));
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
@@ -143,6 +124,11 @@ public class SleepChart extends ChartView implements Parcelable {
 			return timeChart;
 		}
 		return null;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
 	}
 
 	public double getCalibrationLevel() {
@@ -230,6 +216,19 @@ public class SleepChart extends ChartView implements Parcelable {
 		xyMultipleSeriesRenderer.setChartTitle(sleepRecord.title);
 		reconfigure();
 		repaint();
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeSerializable(xyMultipleSeriesDataset);
+		dest.writeSerializable(xyMultipleSeriesRenderer);
+		dest.writeSerializable(xySeriesMovement);
+		dest.writeSerializable(xySeriesMovementRenderer);
+		dest.writeSerializable(xySeriesCalibration);
+		dest.writeSerializable(xySeriesCalibrationRenderer);
+		dest.writeDouble(calibrationLevel);
+		dest.writeInt(rating);
+
 	}
 
 }

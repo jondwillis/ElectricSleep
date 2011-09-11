@@ -29,16 +29,7 @@ public abstract class AnalyticActivity extends FragmentActivity {
 
 		GoogleAnalyticsSessionManager.getInstance(getApplication())
 				.incrementActivityCount();
-		
-		
-	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		// Example of how to track a pageview event
-		trackPageView(getClass().getSimpleName());
 	}
 
 	@Override
@@ -52,14 +43,23 @@ public abstract class AnalyticActivity extends FragmentActivity {
 		GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// Example of how to track a pageview event
+		trackPageView(getClass().getSimpleName());
+	}
+
 	protected void trackEvent(final String label, final int value) {
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
-							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
-				} catch (Throwable whocares) {
+							Integer.toString(VERSION.SDK_INT), Build.MODEL,
+							label, value);
+				} catch (final Throwable whocares) {
 				}
 				return null;
 			}
@@ -73,7 +73,7 @@ public abstract class AnalyticActivity extends FragmentActivity {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
-				} catch (Throwable whocares) {
+				} catch (final Throwable whocares) {
 				}
 				return null;
 			}

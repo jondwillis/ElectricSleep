@@ -27,10 +27,10 @@ public class MultipleCategorySeries implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7131142223064075760L;
-	/** The series title. */
-	private final String mTitle;
 	/** The series local keys. */
 	private final List<String> mCategories = new ArrayList<String>();
+	/** The series title. */
+	private final String mTitle;
 	/** The series name. */
 	private final List<String[]> mTitles = new ArrayList<String[]>();
 	/** The series values. */

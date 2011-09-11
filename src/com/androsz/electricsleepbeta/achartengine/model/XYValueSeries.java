@@ -29,12 +29,12 @@ public class XYValueSeries extends XYSeries {
 	 * 
 	 */
 	private static final long serialVersionUID = 6878526239622198612L;
-	/** A list to contain the series values. */
-	private final List<Double> mValue = new ArrayList<Double>();
-	/** The minimum value. */
-	private double mMinValue = MathHelper.NULL_VALUE;
 	/** The maximum value. */
 	private double mMaxValue = -MathHelper.NULL_VALUE;
+	/** The minimum value. */
+	private double mMinValue = MathHelper.NULL_VALUE;
+	/** A list to contain the series values. */
+	private final List<Double> mValue = new ArrayList<Double>();
 
 	/**
 	 * Builds a new XY value series.

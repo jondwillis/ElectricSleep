@@ -17,24 +17,14 @@
 
 package com.androsz.electricsleepbeta.db;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
-import java.nio.channels.FileChannel;
-
-import com.androsz.electricsleepbeta.util.DeviceUtil;
-import com.androsz.electricsleepbeta.util.IntentUtil;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.os.Environment;
 
 /**
  * Contains logic to return specific words from the dictionary, and load the
@@ -66,31 +56,25 @@ public class SleepHistoryDatabase {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			/*if (Environment.MEDIA_MOUNTED.equals(Environment
-					.getExternalStorageState())) {
-				File externalDb = new File(Environment
-						.getExternalStorageDirectory().getAbsolutePath(),
-						SleepHistoryDatabase.DATABASE_NAME);
-				if (externalDb.exists()) {
-					File data = Environment.getDataDirectory();
-
-					String restoredDbPath = "/data/com.androsz.electricsleepdonate/databases/";
-					File restoredDb = new File(data + restoredDbPath,
-							DATABASE_NAME);
-					try {
-						db.close();
-						DeviceUtil.copyFile(externalDb, restoredDb);
-						db = SQLiteDatabase.openDatabase(restoredDbPath, null,
-								SQLiteDatabase.OPEN_READONLY);
-					} catch (IOException e) {
-						db.execSQL(FTS_TABLE_CREATE);
-					}
-				} else {
-					db.execSQL(FTS_TABLE_CREATE);
-				}
-
-			} else 
-			*/{
+			/*
+			 * if (Environment.MEDIA_MOUNTED.equals(Environment
+			 * .getExternalStorageState())) { File externalDb = new
+			 * File(Environment
+			 * .getExternalStorageDirectory().getAbsolutePath(),
+			 * SleepHistoryDatabase.DATABASE_NAME); if (externalDb.exists()) {
+			 * File data = Environment.getDataDirectory();
+			 * 
+			 * String restoredDbPath =
+			 * "/data/com.androsz.electricsleepdonate/databases/"; File
+			 * restoredDb = new File(data + restoredDbPath, DATABASE_NAME); try
+			 * { db.close(); DeviceUtil.copyFile(externalDb, restoredDb); db =
+			 * SQLiteDatabase.openDatabase(restoredDbPath, null,
+			 * SQLiteDatabase.OPEN_READONLY); } catch (IOException e) {
+			 * db.execSQL(FTS_TABLE_CREATE); } } else {
+			 * db.execSQL(FTS_TABLE_CREATE); }
+			 * 
+			 * } else
+			 */{
 				db.execSQL(FTS_TABLE_CREATE);
 			}
 		}
@@ -106,8 +90,8 @@ public class SleepHistoryDatabase {
 	public static final String DATABASE_NAME = "sleephistory";
 
 	private static final int DATABASE_VERSION = 5;
+	
 	public static final String FTS_VIRTUAL_TABLE = "FTSsleephistory";
-
 	/*
 	 * Note that FTS3 does not support column constraints and thus, you cannot
 	 * declare a primary key. However, "rowid" is automatically used as a unique
@@ -121,6 +105,7 @@ public class SleepHistoryDatabase {
 			+ ", " + SleepRecord.KEY_DURATION + ", " + SleepRecord.KEY_SPIKES
 			+ ", " + SleepRecord.KEY_TIME_FELL_ASLEEP + ", "
 			+ SleepRecord.KEY_NOTE + ");";
+
 
 	private final SleepHistoryDBOpenHelper databaseOpenHelper;
 
@@ -239,9 +224,9 @@ public class SleepHistoryDatabase {
 		final Cursor cursor = builder.query(db, columns, selection,
 				selectionArgs, null, null, null);
 
-		if (cursor == null)
+		if (cursor == null) {
 			return null;
-		else if (!cursor.moveToFirst()) {
+		} else if (!cursor.moveToFirst()) {
 			cursor.close();
 			return null;
 		}

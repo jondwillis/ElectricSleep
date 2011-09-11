@@ -45,21 +45,8 @@ public class Alarms {
 	// from the alarm manager.
 	public static final String ALARM_ALERT_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_ALERT";
 
-	// A public action sent by AlarmKlaxon when the alarm has stopped sounding
-	// for any reason (e.g. because it has been dismissed from
-	// AlarmAlertFullScreen,
-	// or killed due to an incoming phone call, etc).
-	public static final String ALARM_DONE_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_DONE";
-
-	// AlarmAlertFullScreen listens for this broadcast intent, so that other
-	// applications
-	// can snooze the alarm (after ALARM_ALERT_ACTION and before
-	// ALARM_DONE_ACTION).
-	public static final String ALARM_SNOOZE_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_SNOOZE";
-
-	// A public action that is broadcasted when the user cancels snoozing
-	// Other applications may listen for this.
-	public static final String ALARM_SNOOZE_CANCELED_BY_USER_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_SNOOZE_CANCELED_BY_USER";
+	// This string is used to indicate a silent alarm in the db.
+	public static final String ALARM_ALERT_SILENT = "com.androsz.electricsleepbeta.alarmclock.silent";
 
 	// AlarmAlertFullScreen listens for this broadcast intent, so that other
 	// applications
@@ -71,6 +58,19 @@ public class Alarms {
 	// Other applications may listen for this to.
 	public static final String ALARM_DISMISSED_BY_USER_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_DISMISSED_BY_USER";
 
+	// A public action sent by AlarmKlaxon when the alarm has stopped sounding
+	// for any reason (e.g. because it has been dismissed from
+	// AlarmAlertFullScreen,
+	// or killed due to an incoming phone call, etc).
+	public static final String ALARM_DONE_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_DONE";
+
+	// This string is used to identify the alarm id passed to SetAlarm from the
+	// list of alarms.
+	public static final String ALARM_ID = "alarm_id";
+
+	// This string is used when passing an Alarm object through an intent.
+	public static final String ALARM_INTENT_EXTRA = "intent.extra.alarm";
+
 	// This is a private action used by the AlarmKlaxon to update the UI to
 	// show the alarm has been killed.
 	public static final String ALARM_KILLED = "com.androsz.electricsleepbeta.alarmclock.alarm_killed";
@@ -79,27 +79,24 @@ public class Alarms {
 	// alarm played before being killed.
 	public static final String ALARM_KILLED_TIMEOUT = "com.androsz.electricsleepbeta.alarmclock.alarm_killed_timeout";
 
-	// This string is used to indicate a silent alarm in the db.
-	public static final String ALARM_ALERT_SILENT = "com.androsz.electricsleepbeta.alarmclock.silent";
-
-	// This intent is sent from the notification when the user cancels the
-	// snooze alert.
-	public static final String CANCEL_SNOOZE = "com.androsz.electricsleepbeta.alarmclock.cancel_snooze";
-
-	// This string is used when passing an Alarm object through an intent.
-	public static final String ALARM_INTENT_EXTRA = "intent.extra.alarm";
-
 	// This extra is the raw Alarm object data. It is used in the
 	// AlarmManagerService to avoid a ClassNotFoundException when filling in
 	// the Intent extras.
 	public static final String ALARM_RAW_DATA = "intent.extra.alarm_raw";
 
-	// This string is used to identify the alarm id passed to SetAlarm from the
-	// list of alarms.
-	public static final String ALARM_ID = "alarm_id";
+	// AlarmAlertFullScreen listens for this broadcast intent, so that other
+	// applications
+	// can snooze the alarm (after ALARM_ALERT_ACTION and before
+	// ALARM_DONE_ACTION).
+	public static final String ALARM_SNOOZE_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_SNOOZE";
 
-	public final static String PREF_SNOOZE_ID = "snooze_id";
-	final static String PREF_SNOOZE_TIME = "snooze_time";
+	// A public action that is broadcasted when the user cancels snoozing
+	// Other applications may listen for this.
+	public static final String ALARM_SNOOZE_CANCELED_BY_USER_ACTION = "com.androsz.electricsleepbeta.alarmclock.ALARM_SNOOZE_CANCELED_BY_USER";
+
+	// This intent is sent from the notification when the user cancels the
+	// snooze alert.
+	public static final String CANCEL_SNOOZE = "com.androsz.electricsleepbeta.alarmclock.cancel_snooze";
 
 	private final static String DM12 = "E h:mm aa";
 	private final static String DM24 = "E k:mm";
@@ -107,6 +104,9 @@ public class Alarms {
 	private final static String M12 = "h:mm aa";
 	// Shared with DigitalClock
 	final static String M24 = "kk:mm";
+
+	public final static String PREF_SNOOZE_ID = "snooze_id";
+	final static String PREF_SNOOZE_TIME = "snooze_time";
 
 	/**
 	 * Creates a new Alarm and fills in the given alarm's id.
@@ -328,10 +328,10 @@ public class Alarms {
 		final SharedPreferences prefs = context.getSharedPreferences(
 				SettingsActivity.PREFERENCES, 0);
 		final int snoozeId = prefs.getInt(PREF_SNOOZE_ID, -1);
-		if (snoozeId == -1)
+		if (snoozeId == -1) {
 			// No snooze set, do nothing.
 			return;
-		else if (snoozeId == id) {
+		} else if (snoozeId == id) {
 			// This is the same id so clear the shared prefs.
 			clearSnoozePreference(context, prefs);
 		}
@@ -354,8 +354,9 @@ public class Alarms {
 
 	private static void enableAlarmInternal(final Context context,
 			final Alarm alarm, final boolean enabled) {
-		if (alarm == null)
+		if (alarm == null) {
 			return;
+		}
 		final ContentResolver resolver = context.getContentResolver();
 
 		final ContentValues values = new ContentValues(2);
@@ -444,14 +445,16 @@ public class Alarms {
 				SettingsActivity.PREFERENCES, 0);
 
 		final int id = prefs.getInt(PREF_SNOOZE_ID, -1);
-		if (id == -1)
+		if (id == -1) {
 			return false;
+		}
 		final long time = prefs.getLong(PREF_SNOOZE_TIME, -1);
 
 		// Get the alarm from the db.
 		final Alarm alarm = getAlarm(context.getContentResolver(), id);
-		if (alarm == null)
+		if (alarm == null) {
 			return false;
+		}
 		// The time in the database is either 0 (repeating) or a specific time
 		// for a non-repeating alarm. Update this value so the AlarmReceiver
 		// has the right time to compare.

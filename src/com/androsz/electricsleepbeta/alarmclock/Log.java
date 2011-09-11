@@ -41,6 +41,6 @@ class Log {
 
 	static void v(final String logMe) {
 		android.util.Log.v(LOGTAG, /* SystemClock.uptimeMillis() + " " + */
-		logMe);
+				logMe);
 	}
 }

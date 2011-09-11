@@ -35,35 +35,23 @@ public final class Alarm implements Parcelable {
 	// Column definitions
 	// ////////////////////////////
 	public static class Columns implements BaseColumns {
-		/**
-		 * The content:// style URL for this table
-		 */
-		public static final Uri CONTENT_URI = Uri
-				.parse("content://com.androsz.electricsleepbeta.alarmclock/alarm");
+		public static final int ALARM_ALERT_INDEX = 8;
+
+		public static final int ALARM_DAYS_OF_WEEK_INDEX = 3;
+
+		public static final int ALARM_ENABLED_INDEX = 5;
+
+		public static final int ALARM_HOUR_INDEX = 1;
 
 		/**
-		 * Hour in 24-hour localtime 0 - 23.
-		 * <P>
-		 * Type: INTEGER
-		 * </P>
+		 * These save calls to cursor.getColumnIndexOrThrow() THEY MUST BE KEPT
+		 * IN SYNC WITH ABOVE QUERY COLUMNS
 		 */
-		public static final String HOUR = "hour";
+		public static final int ALARM_ID_INDEX = 0;
 
-		/**
-		 * Minutes in localtime 0 - 59
-		 * <P>
-		 * Type: INTEGER
-		 * </P>
-		 */
-		public static final String MINUTES = "minutes";
+		public static final int ALARM_MESSAGE_INDEX = 7;
 
-		/**
-		 * Days of week coded as integer
-		 * <P>
-		 * Type: INTEGER
-		 * </P>
-		 */
-		public static final String DAYS_OF_WEEK = "daysofweek";
+		public static final int ALARM_MINUTES_INDEX = 2;
 
 		/**
 		 * Alarm time in UTC milliseconds from the epoch.
@@ -73,29 +61,11 @@ public final class Alarm implements Parcelable {
 		 */
 		public static final String ALARM_TIME = "alarmtime";
 
-		/**
-		 * True if alarm is active
-		 * <P>
-		 * Type: BOOLEAN
-		 * </P>
-		 */
-		public static final String ENABLED = "enabled";
+		public static final int ALARM_TIME_INDEX = 4;
 
-		/**
-		 * True if alarm should vibrate
-		 * <P>
-		 * Type: BOOLEAN
-		 * </P>
-		 */
-		public static final String VIBRATE = "vibrate";
+		public static final int ALARM_TIME_TO_IGNORE_INDEX = 9;
 
-		/**
-		 * Message to show when alarm triggers Note: not currently used
-		 * <P>
-		 * Type: STRING
-		 * </P>
-		 */
-		public static final String MESSAGE = "message";
+		public static final int ALARM_VIBRATE_INDEX = 6;
 
 		/**
 		 * Audio alert to play when alarm triggers
@@ -106,6 +76,46 @@ public final class Alarm implements Parcelable {
 		public static final String ALERT = "alert";
 
 		/**
+		 * The content:// style URL for this table
+		 */
+		public static final Uri CONTENT_URI = Uri
+				.parse("content://com.androsz.electricsleepbeta.alarmclock/alarm");
+		/**
+		 * Days of week coded as integer
+		 * <P>
+		 * Type: INTEGER
+		 * </P>
+		 */
+		public static final String DAYS_OF_WEEK = "daysofweek";
+		/**
+		 * True if alarm is active
+		 * <P>
+		 * Type: BOOLEAN
+		 * </P>
+		 */
+		public static final String ENABLED = "enabled";
+		/**
+		 * Hour in 24-hour localtime 0 - 23.
+		 * <P>
+		 * Type: INTEGER
+		 * </P>
+		 */
+		public static final String HOUR = "hour";
+		/**
+		 * Message to show when alarm triggers Note: not currently used
+		 * <P>
+		 * Type: STRING
+		 * </P>
+		 */
+		public static final String MESSAGE = "message";
+		/**
+		 * Minutes in localtime 0 - 59
+		 * <P>
+		 * Type: INTEGER
+		 * </P>
+		 */
+		public static final String MINUTES = "minutes";
+		/**
 		 * Time to ignore - used for ignoring alarms that would normally happen
 		 * after smart alarm
 		 * <P>
@@ -113,34 +123,25 @@ public final class Alarm implements Parcelable {
 		 * </P>
 		 */
 		public static final String TIME_TO_IGNORE = "timeToIgnore";
-
+		/**
+		 * True if alarm should vibrate
+		 * <P>
+		 * Type: BOOLEAN
+		 * </P>
+		 */
+		public static final String VIBRATE = "vibrate";
+		// Used when filtering enabled alarms.
+		public static final String WHERE_ENABLED = ENABLED + "=1";
+		
+		static final String[] ALARM_QUERY_COLUMNS = { _ID, HOUR, MINUTES,
+			DAYS_OF_WEEK, ALARM_TIME, ENABLED, VIBRATE, MESSAGE, ALERT,
+			TIME_TO_IGNORE };
 		/**
 		 * The default sort order for this table
 		 */
-		public static final String DEFAULT_SORT_ORDER = HOUR + ", " + MINUTES
+		public static final String DEFAULT_SORT_ORDER = HOUR + ", " + MINUTES 
 				+ " ASC";
 
-		// Used when filtering enabled alarms.
-		public static final String WHERE_ENABLED = ENABLED + "=1";
-
-		static final String[] ALARM_QUERY_COLUMNS = { _ID, HOUR, MINUTES,
-				DAYS_OF_WEEK, ALARM_TIME, ENABLED, VIBRATE, MESSAGE, ALERT,
-				TIME_TO_IGNORE };
-
-		/**
-		 * These save calls to cursor.getColumnIndexOrThrow() THEY MUST BE KEPT
-		 * IN SYNC WITH ABOVE QUERY COLUMNS
-		 */
-		public static final int ALARM_ID_INDEX = 0;
-		public static final int ALARM_HOUR_INDEX = 1;
-		public static final int ALARM_MINUTES_INDEX = 2;
-		public static final int ALARM_DAYS_OF_WEEK_INDEX = 3;
-		public static final int ALARM_TIME_INDEX = 4;
-		public static final int ALARM_ENABLED_INDEX = 5;
-		public static final int ALARM_VIBRATE_INDEX = 6;
-		public static final int ALARM_MESSAGE_INDEX = 7;
-		public static final int ALARM_ALERT_INDEX = 8;
-		public static final int ALARM_TIME_TO_IGNORE_INDEX = 9;
 
 	}
 
@@ -182,8 +183,9 @@ public final class Alarm implements Parcelable {
 		 *            must be set to today
 		 */
 		public int getNextAlarm(final Calendar c) {
-			if (mDays == 0)
+			if (mDays == 0) {
 				return -1;
+			}
 
 			final int today = (c.get(Calendar.DAY_OF_WEEK) + 5) % 7;
 
@@ -222,13 +224,15 @@ public final class Alarm implements Parcelable {
 			final StringBuilder ret = new StringBuilder();
 
 			// no days
-			if (mDays == 0)
+			if (mDays == 0) {
 				return showNever ? context.getText(R.string.never).toString()
 						: "";
+			}
 
 			// every day
-			if (mDays == 0x7f)
+			if (mDays == 0x7f) {
 				return context.getText(R.string.every_day).toString();
+			}
 
 			// count selected days
 			int dayCount = 0, days = mDays;
@@ -277,23 +281,23 @@ public final class Alarm implements Parcelable {
 	// end Parcelable apis
 	// ////////////////////////////
 
-	// Public fields
-	public int id;
+	public Uri alert;
 
 	// ////////////////////////////
 	// End column definitions
 	// ////////////////////////////
 
+	public DaysOfWeek daysOfWeek;
 	public boolean enabled;
 	public int hour;
-	public int minutes;
-	public DaysOfWeek daysOfWeek;
-	public long time;
-	public boolean vibrate;
+	// Public fields
+	public int id;
 	public String label;
-	public Uri alert;
+	public int minutes;
 	public boolean silent;
+	public long time;
 	public long timeToIgnore;
+	public boolean vibrate;
 
 	// Creates a default alarm at the current time.
 	public Alarm() {
@@ -359,8 +363,9 @@ public final class Alarm implements Parcelable {
 	}
 
 	public String getLabelOrDefault(final Context context) {
-		if (label == null || label.length() == 0)
+		if (label == null || label.length() == 0) {
 			return context.getString(R.string.default_label);
+		}
 		return label;
 	}
 

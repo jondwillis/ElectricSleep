@@ -2,17 +2,12 @@ package com.androsz.electricsleepbeta.app;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
-import java.util.Calendar;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,7 +16,7 @@ import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout.LayoutParams;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
@@ -29,6 +24,7 @@ import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.db.SleepContentProvider;
 import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.util.MathUtils;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.widget.calendar.MonthActivity;
 
@@ -37,17 +33,6 @@ import com.androsz.electricsleepbeta.widget.calendar.MonthActivity;
  * offers to users.
  */
 public class HomeActivity extends HostActivity {
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
-		menu.findItem(R.id.menu_item_donate).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_WITH_TEXT
-						| MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		menu.findItem(R.id.menu_item_settings).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		return result;
-	}
 
 	private class LoadLastSleepChartTask extends
 			AsyncTask<String, Void, Cursor> {
@@ -87,6 +72,7 @@ public class HomeActivity extends HostActivity {
 				} catch (final ClassNotFoundException e) {
 					e.printStackTrace();
 				}
+				sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 3);
 				lastSleepTitleText
 						.setText(getString(R.string.home_last_sleep_title_text));
 
@@ -105,7 +91,7 @@ public class HomeActivity extends HostActivity {
 					avgFellAsleep += sleepRecord.getTimeToFallAsleep();
 				} while (cursor.moveToNext());
 
-				final float invCount = 1.0f / (float) count;
+				final float invCount = 1.0f / count;
 				avgSleepScore *= invCount;
 				avgDuration *= invCount;
 				avgSpikes *= invCount;
@@ -132,9 +118,9 @@ public class HomeActivity extends HostActivity {
 
 	}
 
-	private SleepChart sleepChart;
-
 	LoadLastSleepChartTask loadLastSleepChartTask;
+
+	private SleepChart sleepChart;
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -150,7 +136,7 @@ public class HomeActivity extends HostActivity {
 
 		super.onCreate(savedInstanceState);
 
-		ActionBar bar = getSupportActionBar();
+		final ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
 		new AsyncTask<Void, Void, Void>() {
 			@Override
@@ -175,7 +161,17 @@ public class HomeActivity extends HostActivity {
 				return null;
 			}
 		}.execute();
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		final boolean result = super.onCreateOptionsMenu(menu);
+		menu.findItem(R.id.menu_item_donate).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_WITH_TEXT
+						| MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		menu.findItem(R.id.menu_item_settings).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		return result;
 	}
 
 	public void onHistoryClick(final View v) {

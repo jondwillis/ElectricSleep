@@ -13,7 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 
-import com.androsz.electricsleepbeta.util.SharedWakeLock;
+import com.androsz.electricsleepbeta.util.WakeLockManager;
 
 public class CheckForScreenBugAccelerometerService extends Service implements
 		SensorEventListener {
@@ -29,7 +29,27 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 		}
 	}
 
+	public static final String BUG_NOT_PRESENT = "BUG_NOT_PRESENT";
+
+	public static final String BUG_PRESENT = "BUG_PRESENT";
+
+	private static final String LOCK_TAG = CheckForScreenBugAccelerometerService.class
+			.getName();
+
+	private boolean bugPresent = true;
+	boolean didNotTurnScreenOn = true;
+	private PowerManager powerManager;
+	private boolean screenIsOff = false;
+
+	private ScreenReceiver screenOnOffReceiver;
 	Handler serviceHandler = new Handler();
+
+	Runnable setScreenIsOffRunnable = new Runnable() {
+		@Override
+		public void run() {
+			screenIsOff = true;
+		}
+	};
 
 	Runnable turnScreenOnFallbackRunnable = new Runnable() {
 		@Override
@@ -41,26 +61,6 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 			turnScreenOn();
 		}
 	};
-
-	Runnable setScreenIsOffRunnable = new Runnable() {
-		@Override
-		public void run() {
-			screenIsOff = true;
-		}
-	};
-
-	private static final String LOCK_TAG = CheckForScreenBugAccelerometerService.class
-			.getName();
-	public static final String BUG_NOT_PRESENT = "BUG_NOT_PRESENT";
-	public static final String BUG_PRESENT = "BUG_PRESENT";
-	private ScreenReceiver screenOnOffReceiver;
-
-	private boolean bugPresent = true;
-	private boolean screenIsOff = false;
-
-	private PowerManager powerManager;
-
-	boolean didNotTurnScreenOn = true;
 
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, final int accuracy) {
@@ -86,7 +86,8 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 		// check here so that certain devices keep their screen on for at least
 		// 5 seconds (from turnScreenOn)
 		if (didNotTurnScreenOn) {
-			SharedWakeLock.release();
+			WakeLockManager.release("screenBugPartial");
+			WakeLockManager.release("screenBugDim");
 		}
 		super.onDestroy();
 	}
@@ -112,7 +113,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 			screenOnOffReceiver = new ScreenReceiver();
 			registerReceiver(screenOnOffReceiver, filter);
 			powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			SharedWakeLock.acquire(this, PowerManager.PARTIAL_WAKE_LOCK);
+			WakeLockManager.acquire(this, "screenBugPartial", PowerManager.PARTIAL_WAKE_LOCK);
 			registerAccelerometerListener();
 		}
 		return startId;
@@ -128,7 +129,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 
 	private void turnScreenOn() {
 		didNotTurnScreenOn = false;
-		SharedWakeLock.acquire(this, PowerManager.SCREEN_DIM_WAKE_LOCK
+		WakeLockManager.acquire(this, "screenBugDim", PowerManager.SCREEN_DIM_WAKE_LOCK
 				| PowerManager.ACQUIRE_CAUSES_WAKEUP
 				| PowerManager.ON_AFTER_RELEASE, 5000);
 		stopSelf();

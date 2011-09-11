@@ -27,16 +27,16 @@ public class XYSeriesRenderer extends SimpleSeriesRenderer {
 	 * 
 	 */
 	private static final long serialVersionUID = -2191468103451057815L;
-	/** If the chart points should be filled. */
-	private boolean mFillPoints = false;
 	/** If the chart should be filled below its line. */
 	private boolean mFillBelowLine = false;
 	/** The fill below the chart line color. */
 	private int mFillColor = Color.argb(125, 0, 0, 200);
-	/** The point style. */
-	private PointStyle mPointStyle = PointStyle.POINT;
+	/** If the chart points should be filled. */
+	private boolean mFillPoints = false;
 	/** The chart line width. */
 	private float mLineWidth = 1;
+	/** The point style. */
+	private PointStyle mPointStyle = PointStyle.POINT;
 
 	/**
 	 * Returns the fill below line color.

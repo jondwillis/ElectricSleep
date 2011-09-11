@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -26,50 +27,67 @@ public class SaveSleepActivity extends HostActivity implements
 
 	public static final String SAVE_SLEEP = "com.androsz.electricsleepbeta.SAVE_SLEEP";
 
-	private float rating = Float.NaN;
+	EditText noteEdit;
 
 	ProgressDialog progress;
 
-	EditText noteEdit;
+	private float rating = Float.NaN;
 
 	private final BroadcastReceiver saveCompletedReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 
-			// makes sure the next alert is set (fixes a bug with snoozing
-			// disabling repeated alarms)
-			Alarms.setNextAlert(context);
-			final Intent reviewSleepIntent = new Intent(context,
-					ReviewSleepActivity.class);
-			if (!intent.getBooleanExtra(SaveSleepReceiver.EXTRA_SUCCESS, false)) {
-				String why = getString(R.string.could_not_save_sleep) + " ";
-				final String ioException = intent
-						.getStringExtra(SaveSleepReceiver.EXTRA_IO_EXCEPTION);
-				if (ioException != null) {
-					why += ioException;
-				} else {
-					why += getString(R.string.sleep_too_brief_to_analyze);
+			new AsyncTask<Void, Void, String>() {
+
+				@Override
+				protected String doInBackground(Void... params) {
+					// makes sure the next alert is set (fixes a bug with
+					// snoozing
+					// disabling repeated alarms)
+					Alarms.setNextAlert(context);
+					final Intent reviewSleepIntent = new Intent(context,
+							ReviewSleepActivity.class);
+					if (!intent.getBooleanExtra(
+							SaveSleepReceiver.EXTRA_SUCCESS, false)) {
+						String why = getString(R.string.could_not_save_sleep)
+								+ " ";
+						final String ioException = intent
+								.getStringExtra(SaveSleepReceiver.EXTRA_IO_EXCEPTION);
+						if (ioException != null) {
+							why += ioException;
+						} else {
+							why += getString(R.string.sleep_too_brief_to_analyze);
+						}
+						return why;
+					}
+					final String rowId = intent
+							.getStringExtra(SaveSleepReceiver.EXTRA_ROW_ID);
+					if (rowId != null) {
+						final Uri uri = Uri.withAppendedPath(
+								SleepContentProvider.CONTENT_URI, rowId);
+						reviewSleepIntent.setData(uri);
+					}
+
+					reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+							| Intent.FLAG_ACTIVITY_NEW_TASK);
+
+					startActivity(reviewSleepIntent);
+					return null;
 				}
-				Toast.makeText(context, why, Toast.LENGTH_LONG).show();
-				progress.dismiss();
-				finish();
-				return;
-			}
-			final String rowId = intent
-					.getStringExtra(SaveSleepReceiver.EXTRA_ROW_ID);
-			if (rowId != null) {
-				final Uri uri = Uri.withAppendedPath(
-						SleepContentProvider.CONTENT_URI, rowId);
-				reviewSleepIntent.setData(uri);
-			}
 
-			reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-					| Intent.FLAG_ACTIVITY_NEW_TASK);
+				@Override
+				protected void onPostExecute(String result) {
+					if(result != null)
+					{
+						trackEvent(result, 0);
+						Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+					}
+					progress.dismiss();
+					finish();
+				}
+			}.execute();
 
-			startActivity(reviewSleepIntent);
-			progress.dismiss();
-			finish();
 		}
 	};
 
@@ -85,6 +103,7 @@ public class SaveSleepActivity extends HostActivity implements
 		((RatingBar) findViewById(R.id.save_sleep_rating_bar))
 				.setOnRatingBarChangeListener(this);
 		noteEdit = (EditText) findViewById(R.id.save_sleep_note_edit);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 	}
 
 	public void onDiscardClick(final View v) {

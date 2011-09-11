@@ -15,7 +15,7 @@
 
 		<VolumePreference android:dialogTitle="@string/alarm_volume_title"
 			android:streamType="alarm" android:summary="@string/alarm_volume_summary"
-			android:persistent="false" android:title="@string/alarm_volume_title" />
+			android:persistent="true" android:title="@string/alarm_volume_title" />
 
 		<ListPreference android:key="snooze_duration"
 			android:title="@string/snooze_duration_title" android:entries="@array/snooze_duration_entries"
@@ -29,7 +29,7 @@
 			android:entries="@array/volume_button_setting_entries"
 			android:entryValues="@array/volume_button_setting_values"
 			android:summary="@string/volume_button_setting_summary"
-			android:defaultValue="2" />
+			android:defaultValue="0" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/title_calibrate">
 		<Preference android:key="@string/pref_calibration"

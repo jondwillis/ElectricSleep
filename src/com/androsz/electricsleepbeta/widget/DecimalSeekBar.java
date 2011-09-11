@@ -6,10 +6,10 @@ import android.widget.SeekBar;
 
 public class DecimalSeekBar extends SeekBar {
 
-	public final static float PRECISION = 100f;
-
 	private static java.text.NumberFormat nf = java.text.NumberFormat
 			.getInstance();
+
+	public final static float PRECISION = 100f;
 
 	static {
 		nf.setGroupingUsed(false);

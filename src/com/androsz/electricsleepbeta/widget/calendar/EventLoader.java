@@ -33,8 +33,8 @@ import com.androsz.electricsleepbeta.db.SleepRecord;
 public class EventLoader {
 
 	private static class LoaderThread extends Thread {
-		LinkedBlockingQueue<LoadRequest> mQueue;
 		EventLoader mEventLoader;
+		LinkedBlockingQueue<LoadRequest> mQueue;
 
 		public LoaderThread(LinkedBlockingQueue<LoadRequest> queue,
 				EventLoader eventLoader) {
@@ -60,8 +60,9 @@ public class EventLoader {
 						request = mQueue.take();
 					}
 
-					if (request instanceof ShutdownRequest)
+					if (request instanceof ShutdownRequest) {
 						return;
+					}
 					request.processRequest(mEventLoader);
 				} catch (final InterruptedException ex) {
 					Log.e("Cal", "background LoaderThread interrupted!");
@@ -88,9 +89,9 @@ public class EventLoader {
 	 * 
 	 */
 	private static class LoadEventDaysRequest implements LoadRequest {
-		public int startDay;
-		public int numDays;
 		public boolean[] eventDays;
+		public int numDays;
+		public int startDay;
 		public Runnable uiCallback;
 
 		public LoadEventDaysRequest(int startDay, int numDays,
@@ -142,12 +143,12 @@ public class EventLoader {
 
 	private static class LoadEventsRequest implements LoadRequest {
 
-		public int id;
-		public long startMillis;
-		public int numDays;
-		public ArrayList<SleepRecord> events;
-		public Runnable successCallback;
 		public Runnable cancelCallback;
+		public ArrayList<SleepRecord> events;
+		public int id;
+		public int numDays;
+		public long startMillis;
+		public Runnable successCallback;
 
 		public LoadEventsRequest(int id, long startMillis, int numDays,
 				ArrayList<SleepRecord> events, final Runnable successCallback,
@@ -199,13 +200,13 @@ public class EventLoader {
 
 	private final Handler mHandler = new Handler();
 
-	private final AtomicInteger mSequenceNumber = new AtomicInteger();
-
 	private final LinkedBlockingQueue<LoadRequest> mLoaderQueue;
 
 	private LoaderThread mLoaderThread;
 
 	private final ContentResolver mResolver;
+
+	private final AtomicInteger mSequenceNumber = new AtomicInteger();
 
 	public EventLoader(Context context) {
 		mContext = context;

@@ -53,22 +53,6 @@ import com.androsz.electricsleepbeta.app.SettingsActivity;
 public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 		implements OnItemClickListener {
 
-	@Override
-	public boolean onOptionsItemSelected(android.support.v4.view.MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_item_add_alarm:
-			addNewAlarm();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_alarm_clock, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
 	private class AlarmTimeAdapter extends CursorAdapter {
 		public AlarmTimeAdapter(final Context context, final Cursor cursor) {
 			super(context, cursor);
@@ -152,16 +136,17 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 	 * This must be false for production. If true, turns on logging, test code,
 	 * etc.
 	 */
-	static final boolean DEBUG = false;
-	private SharedPreferences mPrefs;
-	private LayoutInflater mFactory;
+	static final boolean DEBUG = true;
+
 	private ListView mAlarmsList;
 
 	private Cursor mCursor;
+	private LayoutInflater mFactory;
+	private SharedPreferences mPrefs;
 
 	private void addNewAlarm() {
 		startActivity(new Intent(this, SetAlarm.class));
-	};
+	}
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -211,7 +196,7 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 			break;
 		}
 		return super.onContextItemSelected(item);
-	}
+	};
 
 	@Override
 	protected void onCreate(final Bundle icicle) {
@@ -219,9 +204,11 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 
 		new AsyncTask<Void, Void, Void>() {
 			@Override
-			protected void onPreExecute() {
-				mFactory = LayoutInflater.from(AlarmClock.this);
-				super.onPreExecute();
+			protected Void doInBackground(Void... params) {
+				mPrefs = getSharedPreferences(SettingsActivity.PREFERENCES, 0);
+				mCursor = Alarms.getAlarmsCursor(getContentResolver());
+				mCursor.deactivate();
+				return null;
 			}
 
 			@Override
@@ -231,11 +218,9 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 			}
 
 			@Override
-			protected Void doInBackground(Void... params) {
-				mPrefs = getSharedPreferences(SettingsActivity.PREFERENCES, 0);
-				mCursor = Alarms.getAlarmsCursor(getContentResolver());
-				mCursor.deactivate();
-				return null;
+			protected void onPreExecute() {
+				mFactory = LayoutInflater.from(AlarmClock.this);
+				super.onPreExecute();
 			}
 		}.execute();
 	}
@@ -245,10 +230,12 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 			final ContextMenuInfo menuInfo) {
 		// Inflate the menu from xml.
 		// super.getMenuInflater().inflate(R.menu.context_menu, (Menu)menu);
-		menu.add(Menu.NONE, R.id.enable_alarm, Menu.NONE, R.string.enable_alarm);
-		menu.add(Menu.NONE, R.id.edit_alarm, Menu.NONE,
-				R.string.menu_edit_alarm);
-		menu.add(Menu.NONE, R.id.delete_alarm, Menu.NONE, R.string.delete_alarm);
+		menu.add(android.view.Menu.NONE, R.id.enable_alarm,
+				android.view.Menu.NONE, R.string.enable_alarm);
+		menu.add(android.view.Menu.NONE, R.id.edit_alarm,
+				android.view.Menu.NONE, R.string.menu_edit_alarm);
+		menu.add(android.view.Menu.NONE, R.id.delete_alarm,
+				android.view.Menu.NONE, R.string.delete_alarm);
 		// Use the current item to create a custom view for the header.
 		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 		final Cursor c = (Cursor) mAlarmsList.getAdapter().getItem(
@@ -277,6 +264,12 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_alarm_clock, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		ToastMaster.cancelToast();
@@ -289,6 +282,16 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 		final Intent intent = new Intent(this, SetAlarm.class);
 		intent.putExtra(Alarms.ALARM_ID, (int) id);
 		startActivity(intent);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(android.support.v4.view.MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_add_alarm:
+			addNewAlarm();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void updateIndicatorAndAlarm(final boolean enabled,

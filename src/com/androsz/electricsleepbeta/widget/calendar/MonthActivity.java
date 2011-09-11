@@ -29,6 +29,8 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.View;
@@ -44,22 +46,15 @@ import com.androsz.electricsleepbeta.db.SleepContentProvider;
 
 public class MonthActivity extends HostActivity implements
 		ViewSwitcher.ViewFactory, Navigator, AnimationListener {
-	private Animation mInAnimationPast;
-	private Animation mInAnimationFuture;
-	private Animation mOutAnimationPast;
-	private Animation mOutAnimationFuture;
-	private ViewSwitcher mSwitcher;
-	private Time mTime;
-
-	private ContentResolver mContentResolver;
-	EventLoader mEventLoader;
-	private int mStartDay;
-
-	private static final int DAY_OF_WEEK_LABEL_IDS[] = { R.id.day0, R.id.day1,
-			R.id.day2, R.id.day3, R.id.day4, R.id.day5, R.id.day6 };
 	private static final int DAY_OF_WEEK_KINDS[] = { Calendar.SUNDAY,
 			Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
 			Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY };
+	private static final int DAY_OF_WEEK_LABEL_IDS[] = { R.id.day0, R.id.day1,
+			R.id.day2, R.id.day3, R.id.day4, R.id.day5, R.id.day6 };
+	private ContentResolver mContentResolver;
+	EventLoader mEventLoader;
+	private Animation mInAnimationFuture;
+	private Animation mInAnimationPast;
 
 	/**
 	 * Listens for intent broadcasts
@@ -75,7 +70,6 @@ public class MonthActivity extends HostActivity implements
 			}
 		}
 	};
-
 	// Create an observer so that we can update the views whenever a
 	// Calendar event changes.
 	private final ContentObserver mObserver = new ContentObserver(new Handler()) {
@@ -89,6 +83,14 @@ public class MonthActivity extends HostActivity implements
 			eventsChanged();
 		}
 	};
+	private Animation mOutAnimationFuture;
+
+	private Animation mOutAnimationPast;
+	private int mStartDay;
+
+	private ViewSwitcher mSwitcher;
+
+	private Time mTime;
 
 	void eventsChanged() {
 		final MonthView view = (MonthView) mSwitcher.getCurrentView();
@@ -255,6 +257,12 @@ public class MonthActivity extends HostActivity implements
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_multiple_history, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	protected void onNewIntent(Intent intent) {
 		final long timeMillis = Utils.timeFromIntentInMillis(intent);
 		if (timeMillis > 0) {
@@ -262,6 +270,19 @@ public class MonthActivity extends HostActivity implements
 			time.set(timeMillis);
 			goTo(time, false);
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_delete_all:
+			// TODO
+			break;
+		case R.id.menu_item_export_all:
+			// TODO
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

@@ -9,6 +9,21 @@ import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 
 public class DeviceUtil {
+	public static void copyFile(File src, File dst) throws IOException {
+		final FileChannel inChannel = new FileInputStream(src).getChannel();
+		final FileChannel outChannel = new FileOutputStream(dst).getChannel();
+		try {
+			inChannel.transferTo(0, inChannel.size(), outChannel);
+		} finally {
+			if (inChannel != null) {
+				inChannel.close();
+			}
+			if (outChannel != null) {
+				outChannel.close();
+			}
+		}
+	}
+
 	public static float getCpuClockSpeed() {
 		float cpuclock = 0;
 		try {
@@ -53,22 +68,5 @@ public class DeviceUtil {
 			// performance appraisal.
 		}
 		return hardwarenamestr;
-	}
-
-	public static void copyFile(File src, File dst) throws IOException
-	{
-	    FileChannel inChannel = new FileInputStream(src).getChannel();
-	    FileChannel outChannel = new FileOutputStream(dst).getChannel();
-	    try
-	    {
-	        inChannel.transferTo(0, inChannel.size(), outChannel);
-	    }
-	    finally
-	    {
-	        if (inChannel != null)
-	            inChannel.close();
-	        if (outChannel != null)
-	            outChannel.close();
-	    }
 	}
 }

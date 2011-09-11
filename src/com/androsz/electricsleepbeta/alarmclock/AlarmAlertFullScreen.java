@@ -48,12 +48,10 @@ public class AlarmAlertFullScreen extends Activity {
 
 	// These defaults must match the values in res/xml/settings.xml
 	private static final String DEFAULT_SNOOZE = "5";
-	private static final String DEFAULT_VOLUME_BEHAVIOR = "2";
+	private static final String DEFAULT_VOLUME_BEHAVIOR = "0";
 	protected static final String SCREEN_OFF = "screen_off";
 
 	protected Alarm mAlarm;
-	private int mVolumeBehavior;
-
 	// Receives the ALARM_KILLED action from the AlarmKlaxon,
 	// and also ALARM_SNOOZE_ACTION / ALARM_DISMISS_ACTION from other
 	// applications
@@ -74,6 +72,8 @@ public class AlarmAlertFullScreen extends Activity {
 			}
 		}
 	};
+
+	private int mVolumeBehavior;
 
 	// Dismiss the alarm.
 	private void dismiss(final boolean killed) {
@@ -136,12 +136,12 @@ public class AlarmAlertFullScreen extends Activity {
 	protected void onCreate(final Bundle icicle) {
 		super.onCreate(icicle);
 
-		try
-		{
-			this.setTheme(android.R.style.Theme_Holo_Dialog); //will only work for 3.0+ devices
-		}catch(Throwable whocares)
-		{
-			
+		try {
+			this.setTheme(R.style.Theme_Sherlock); // will only work
+																// for 3.0+
+																// devices
+		} catch (final Throwable whocares) {
+
 		}
 		mAlarm = getIntent().getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
 
@@ -158,10 +158,21 @@ public class AlarmAlertFullScreen extends Activity {
 				| WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 		// Turn on the screen unless we are being launched from the AlarmAlert
 		// subclass.
-		if (!getIntent().getBooleanExtra(SCREEN_OFF, false)) {
+		boolean screenOff = getIntent().getBooleanExtra(SCREEN_OFF, false);
+		if (!screenOff) {
+			try
+			{
+				//API 8+
 			win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 					| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-			/* | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON */);
+			 | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+			}
+			catch(Throwable whocares)
+			{
+				//API 7+
+				win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+						| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+			}
 		}
 
 		updateLayout();

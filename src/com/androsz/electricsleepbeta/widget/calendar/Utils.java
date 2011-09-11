@@ -37,22 +37,22 @@ import com.androsz.electricsleepbeta.R;
 
 public class Utils {
 	private static final int CLEAR_ALPHA_MASK = 0x00FFFFFF;
-	private static final int HIGH_ALPHA = 255 << 24;
-	private static final int MED_ALPHA = 180 << 24;
-	private static final int LOW_ALPHA = 150 << 24;
-
-	protected static final String OPEN_EMAIL_MARKER = " <";
 	protected static final String CLOSE_EMAIL_MARKER = ">";
-
 	/* The corner should be rounded on the top right and bottom right */
 	private static final float[] CORNERS = new float[] { 0, 0, 5, 5, 5, 5, 0, 0 };
-
 	// TODO: replace this with the correct i18n way to do this
 	public static final String englishNthDay[] = { "", "1st", "2nd", "3rd",
 			"4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th",
 			"13th", "14th", "15th", "16th", "17th", "18th", "19th", "20th",
 			"21st", "22nd", "23rd", "24th", "25th", "26th", "27th", "28th",
 			"29th", "30th", "31st" };
+
+	private static final int HIGH_ALPHA = 255 << 24;
+	private static final int LOW_ALPHA = 150 << 24;
+
+	private static final int MED_ALPHA = 180 << 24;
+
+	protected static final String OPEN_EMAIL_MARKER = " <";
 
 	public static final void applyAlphaAnimation(ViewFlipper v) {
 		final AlphaAnimation in = new AlphaAnimation(0.0f, 1.0f);
@@ -103,22 +103,26 @@ public class Utils {
 	 *         null, false otherwise
 	 */
 	public static boolean compareCursors(Cursor c1, Cursor c2) {
-		if (c1 == null || c2 == null)
+		if (c1 == null || c2 == null) {
 			return false;
+		}
 
 		final int numColumns = c1.getColumnCount();
-		if (numColumns != c2.getColumnCount())
+		if (numColumns != c2.getColumnCount()) {
 			return false;
+		}
 
-		if (c1.getCount() != c2.getCount())
+		if (c1.getCount() != c2.getCount()) {
 			return false;
+		}
 
 		c1.moveToPosition(-1);
 		c2.moveToPosition(-1);
 		while (c1.moveToNext() && c2.moveToNext()) {
 			for (int i = 0; i < numColumns; i++) {
-				if (!TextUtils.equals(c1.getString(i), c2.getString(i)))
+				if (!TextUtils.equals(c1.getString(i), c2.getString(i))) {
 					return false;
+				}
 			}
 		}
 
@@ -169,12 +173,13 @@ public class Utils {
 	 */
 	public static int getFirstDayOfWeek() {
 		final int startDay = Calendar.getInstance().getFirstDayOfWeek();
-		if (startDay == Calendar.SATURDAY)
+		if (startDay == Calendar.SATURDAY) {
 			return Time.SATURDAY;
-		else if (startDay == Calendar.MONDAY)
+		} else if (startDay == Calendar.MONDAY) {
 			return Time.MONDAY;
-		else
+		} else {
 			return Time.SUNDAY;
+		}
 	}
 
 	/**

@@ -19,8 +19,8 @@ package com.androsz.electricsleepbeta.achartengine.chart;
  * The chart point style enumerator.
  */
 public enum PointStyle {
-	X("x"), CIRCLE("circle"), TRIANGLE("triangle"), SQUARE("square"), DIAMOND(
-			"diamond"), POINT("point");
+	CIRCLE("circle"), DIAMOND("diamond"), POINT("point"), SQUARE("square"), TRIANGLE(
+			"triangle"), X("x");
 
 	/**
 	 * Returns the point shape index based on the given name.

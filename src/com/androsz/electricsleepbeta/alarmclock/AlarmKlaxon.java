@@ -35,7 +35,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.util.SharedWakeLock;
+import com.androsz.electricsleepbeta.util.WakeLockManager;
 
 /**
  * Manages alarms and vibe. Runs as a service so that it can continue to play if
@@ -46,18 +46,13 @@ public class AlarmKlaxon extends Service {
 	/** Play alarm up to 10 minutes before silencing */
 	private static final int ALARM_TIMEOUT_SECONDS = 10 * 60;
 
-	private static final long[] sVibratePattern = new long[] { 500, 500 };
-
-	private boolean mPlaying = false;
-	private Vibrator mVibrator;
-	private MediaPlayer mMediaPlayer;
-	private Alarm mCurrentAlarm;
-	private long mStartTime;
-	private TelephonyManager mTelephonyManager;
-	private int mInitialCallState;
+	// Volume suggested by media team for in-call alarms.
+	private static final float IN_CALL_VOLUME = 0.125f;
 
 	// Internal messages
 	private static final int KILLER = 1000;
+	private static final long[] sVibratePattern = new long[] { 500, 500 };
+	private Alarm mCurrentAlarm;
 	private final Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(final Message msg) {
@@ -72,7 +67,8 @@ public class AlarmKlaxon extends Service {
 			}
 		}
 	};
-
+	private int mInitialCallState;
+	private MediaPlayer mMediaPlayer;
 	private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
 		@Override
 		public void onCallStateChanged(final int state, final String ignored) {
@@ -88,8 +84,12 @@ public class AlarmKlaxon extends Service {
 		}
 	};
 
-	// Volume suggested by media team for in-call alarms.
-	private static final float IN_CALL_VOLUME = 0.125f;
+	private boolean mPlaying = false;
+	private long mStartTime;
+
+	private TelephonyManager mTelephonyManager;
+
+	private Vibrator mVibrator;
 
 	private void disableKiller() {
 		mHandler.removeMessages(KILLER);
@@ -119,7 +119,7 @@ public class AlarmKlaxon extends Service {
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		mTelephonyManager.listen(mPhoneStateListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
-		SharedWakeLock.acquire(this, PowerManager.PARTIAL_WAKE_LOCK
+		WakeLockManager.acquire(this, "klaxon", PowerManager.PARTIAL_WAKE_LOCK
 				| PowerManager.ACQUIRE_CAUSES_WAKEUP
 				| PowerManager.ON_AFTER_RELEASE);
 	}
@@ -129,7 +129,7 @@ public class AlarmKlaxon extends Service {
 		stop();
 		// Stop listening for incoming calls.
 		mTelephonyManager.listen(mPhoneStateListener, 0);
-		SharedWakeLock.release();
+		WakeLockManager.release("klaxon");
 	}
 
 	@Override
@@ -150,8 +150,9 @@ public class AlarmKlaxon extends Service {
 			return START_NOT_STICKY;
 		}
 
-		if (startId != 1)
+		if (startId != 1) {
 			return START_NOT_STICKY;
+		}
 
 		if (mCurrentAlarm != null) {
 			sendKillBroadcast(mCurrentAlarm);

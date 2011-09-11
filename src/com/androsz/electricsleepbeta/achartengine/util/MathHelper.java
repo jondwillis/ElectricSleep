@@ -24,13 +24,13 @@ import java.util.List;
  * Utility class for math operations.
  */
 public class MathHelper {
-	/** A value that is used a null value. */
-	public static final double NULL_VALUE = Double.MAX_VALUE;
 	/**
 	 * A number formatter to be used to make sure we have a maximum number of
 	 * fraction digits in the labels.
 	 */
 	private static final NumberFormat FORMAT = NumberFormat.getNumberInstance();
+	/** A value that is used a null value. */
+	public static final double NULL_VALUE = Double.MAX_VALUE;
 
 	/**
 	 * Computes a reasonable number of labels for a data range.
@@ -45,8 +45,9 @@ public class MathHelper {
 	 */
 	private static double[] computeLabels(final double start, final double end,
 			final int approxNumLabels) {
-		if (Math.abs(start - end) < 0.0000001f)
+		if (Math.abs(start - end) < 0.0000001f) {
 			return new double[] { start, start, 0 };
+		}
 		double s = start;
 		double e = end;
 		boolean switched = false;
@@ -64,8 +65,9 @@ public class MathHelper {
 		// Compute x starting point so it is a multiple of xStep.
 		final double xStart = xStep * Math.ceil(s / xStep);
 		final double xEnd = xStep * Math.floor(e / xStep);
-		if (switched)
+		if (switched) {
 			return new double[] { xEnd, xStart, -1.0 * xStep };
+		}
 		return new double[] { xStart, xEnd, xStep };
 	}
 
@@ -131,8 +133,9 @@ public class MathHelper {
 	 * @return an array with the minimum and maximum values
 	 */
 	public static double[] minmax(List<Double> values) {
-		if (values.size() == 0)
+		if (values.size() == 0) {
 			return new double[2];
+		}
 		double min = values.get(0);
 		double max = min;
 		final int length = values.size();

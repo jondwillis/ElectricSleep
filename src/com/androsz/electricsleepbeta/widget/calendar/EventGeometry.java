@@ -26,10 +26,10 @@ public class EventGeometry {
 	// This is the space from the grid line to the event rectangle.
 	private int mCellMargin = 0;
 
-	private float mMinuteHeight;
-
 	private float mHourGap;
+
 	private float mMinEventHeight;
+	private float mMinuteHeight;
 
 	// Computes the rectangle coordinates of the given event on the screen.
 	// Returns true if the rectangle is visible on the screen.
@@ -40,8 +40,9 @@ public class EventGeometry {
 		final int startDay = event.getStartJulianDay();
 		final int endDay = event.getEndJulianDay();
 
-		if (startDay > date || endDay < date)
+		if (startDay > date || endDay < date) {
 			return false;
+		}
 
 		long startTime = event.getStartTimeOfDay();
 		long endTime = event.getEndTimeOfDay();
@@ -96,8 +97,9 @@ public class EventGeometry {
 	boolean eventIntersectsSelection(SleepRecord event, Rect selection) {
 		if (event.left < selection.right && event.right >= selection.left
 				&& event.top < selection.bottom
-				&& event.bottom >= selection.top)
+				&& event.bottom >= selection.top) {
 			return true;
+		}
 		return false;
 	}
 
@@ -113,9 +115,10 @@ public class EventGeometry {
 		if (x >= left) {
 			if (x <= right) {
 				if (y >= top) {
-					if (y <= bottom)
+					if (y <= bottom) {
 						// x,y is inside the event rectangle
 						return 0f;
+					}
 					// x,y is below the event rectangle
 					return y - bottom;
 				}

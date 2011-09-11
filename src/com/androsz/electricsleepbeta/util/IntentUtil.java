@@ -26,7 +26,8 @@ public class IntentUtil {
 			final String action) {
 		final PackageManager packageManager = context.getPackageManager();
 		final Intent intent = new Intent(action);
-		final List<ResolveInfo> list = packageManager.queryBroadcastReceivers(intent, 0);
+		final List<ResolveInfo> list = packageManager.queryBroadcastReceivers(
+				intent, 0);
 		return list.size() > 0;
 	}
 }
