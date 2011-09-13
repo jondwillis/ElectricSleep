@@ -18,8 +18,9 @@ import android.support.v4.view.MenuItem;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepHistoryDatabase;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
 
 public class ReviewSleepActivity extends HostActivity implements
 		LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
@@ -28,10 +29,7 @@ public class ReviewSleepActivity extends HostActivity implements
 
 		@Override
 		protected Void doInBackground(final Void... params) {
-			final SleepHistoryDatabase shdb = new SleepHistoryDatabase(
-					ReviewSleepActivity.this);
-			shdb.deleteRow(Long.parseLong(uri.getLastPathSegment()));
-			shdb.close();
+			SleepSessions.deleteSession(ReviewSleepActivity.this, uri.getLastPathSegment());
 			return null;
 		}
 
@@ -114,7 +112,7 @@ public class ReviewSleepActivity extends HostActivity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		data.moveToFirst();
-		final SleepRecord sleepRecord = new SleepRecord(data);
+		final SleepSession sleepRecord = new SleepSession(data);
 
 		chartFragment.setSleepRecord(sleepRecord);
 		analysisFragment.setSleepRecord(sleepRecord);

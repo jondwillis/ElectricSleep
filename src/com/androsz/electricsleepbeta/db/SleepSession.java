@@ -19,58 +19,18 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.os.Build.VERSION;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
 import com.androsz.electricsleepbeta.util.PointD;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class SleepRecord {
-
-	public static final HashMap<String, String> COLUMN_MAP = buildColumnMap();
-
-	public static final String KEY_ALARM = "sleep_data_alarm";
-
-	// DATABASE_VERSION = 4
-	public static final String KEY_DURATION = "KEY_SLEEP_DATA_DURATION";
-	public static final String KEY_MIN = "sleep_data_min";
-	public static final String KEY_NOTE = "KEY_SLEEP_DATA_NOTE";
-	public static final String KEY_RATING = "sleep_data_rating";
-	public static final String KEY_SLEEP_DATA = "sleep_data";
-	public static final String KEY_SPIKES = "KEY_SLEEP_DATA_SPIKES";
-	public static final String KEY_TIME_FELL_ASLEEP = "KEY_SLEEP_DATA_TIME_FELL_ASLEEP";
-	// The columns we'll include in the dictionary table
-	// DATABASE_VERSION = 3
-	public static final String KEY_TITLE = SearchManager.SUGGEST_COLUMN_TEXT_1;
-
-	/**
-	 * Builds a map for all columns that may be requested, which will be given
-	 * to the SQLiteQueryBuilder. This is a good way to define aliases for
-	 * column names, but must include all columns, even if the value is the key.
-	 * This allows the ContentProvider to request columns w/o the need to know
-	 * real column names and create the alias itself.
-	 */
-	private static HashMap<String, String> buildColumnMap() {
-
-		final HashMap<String, String> map = new HashMap<String, String>();
-		map.put(KEY_TITLE, KEY_TITLE);
-		map.put(KEY_SLEEP_DATA, KEY_SLEEP_DATA);
-		map.put(KEY_MIN, KEY_MIN);
-		map.put(KEY_ALARM, KEY_ALARM);
-		map.put(KEY_RATING, KEY_RATING);
-		map.put(KEY_DURATION, KEY_DURATION);
-		map.put(KEY_SPIKES, KEY_SPIKES);
-		map.put(KEY_TIME_FELL_ASLEEP, KEY_TIME_FELL_ASLEEP);
-		map.put(KEY_NOTE, KEY_NOTE);
-
-		map.put(BaseColumns._ID, "rowid AS " + BaseColumns._ID);
-		map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS "
-				+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
-		map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS "
-				+ SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
-		return map;
-	}
+public class SleepSession {
 
 	public static Object byteArrayToObject(final byte[] bytes)
 			throws StreamCorruptedException, IOException,
@@ -94,7 +54,7 @@ public class SleepRecord {
 	 * @param eventsList
 	 *            the list of events, sorted into increasing time order
 	 */
-	static void computePositions(ArrayList<SleepRecord> eventsList) {
+	static void computePositions(ArrayList<SleepSession> eventsList) {
 		if (eventsList == null) {
 			return;
 		}
@@ -102,13 +62,13 @@ public class SleepRecord {
 		doComputePositions(eventsList);
 	}
 
-	private static void doComputePositions(ArrayList<SleepRecord> eventsList) {
-		final ArrayList<SleepRecord> activeList = new ArrayList<SleepRecord>();
-		final ArrayList<SleepRecord> groupList = new ArrayList<SleepRecord>();
+	private static void doComputePositions(ArrayList<SleepSession> eventsList) {
+		final ArrayList<SleepSession> activeList = new ArrayList<SleepSession>();
+		final ArrayList<SleepSession> groupList = new ArrayList<SleepSession>();
 
 		long colMask = 0;
 		int maxCols = 0;
-		for (final SleepRecord record : eventsList) {
+		for (final SleepSession record : eventsList) {
 
 			// long start = record.getStartTime();
 
@@ -125,7 +85,7 @@ public class SleepRecord {
 			// If the active list is empty, then reset the max columns, clear
 			// the column bit mask, and empty the groupList.
 			if (activeList.isEmpty()) {
-				for (final SleepRecord ev : groupList) {
+				for (final SleepSession ev : groupList) {
 					ev.setMaxColumns(maxCols);
 				}
 				maxCols = 0;
@@ -148,7 +108,7 @@ public class SleepRecord {
 				maxCols = len;
 			}
 		}
-		for (final SleepRecord ev : groupList) {
+		for (final SleepSession ev : groupList) {
 			ev.setMaxColumns(maxCols);
 		}
 	}
@@ -183,8 +143,8 @@ public class SleepRecord {
 	 * Loads <i>days</i> days worth of instances starting at <i>start</i>.
 	 */
 	public static void loadEvents(Context context,
-			ArrayList<SleepRecord> events, long start, int days, int requestId,
-			AtomicInteger sequenceNumber) {
+			ArrayList<SleepSession> events, long start, int days,
+			int requestId, AtomicInteger sequenceNumber) {
 
 		Cursor c = null;
 
@@ -194,6 +154,12 @@ public class SleepRecord {
 			int count;
 
 			local.set(start);
+
+			// expand start and days to include days shown from previous month
+			// and next month. can be slightly wasteful.
+			start -= 1000 * 60 * 60 * 24 * 7; // 7 days
+			days += 7;
+
 			Time.getJulianDay(start, local.gmtoff);
 			local.monthDay += days;
 			final long end = local.normalize(true /* ignore isDst */);
@@ -214,18 +180,17 @@ public class SleepRecord {
 			// required for correctness, it just adds a nice touch.
 
 			// String orderBy = "";//Instances.SORT_CALENDAR_VIEW;
-			final SleepHistoryDatabase shdb = new SleepHistoryDatabase(context);
+			// final SleepHistoryDatabase shdb = new
+			// SleepHistoryDatabase(context);
 			// TODO: hook this into sleep db
 
-			c = shdb.getSleepMatches(context.getString(R.string.to),
-					new String[] { BaseColumns._ID, SleepRecord.KEY_TITLE,
-							SleepRecord.KEY_ALARM, SleepRecord.KEY_DURATION,
-							SleepRecord.KEY_MIN, SleepRecord.KEY_NOTE,
-							SleepRecord.KEY_RATING, SleepRecord.KEY_SLEEP_DATA,
-							SleepRecord.KEY_SPIKES, SleepRecord.KEY_SLEEP_DATA,
-							SleepRecord.KEY_TIME_FELL_ASLEEP });
-
-			shdb.close();
+			//TODO limit it to certain dates
+			c = null; /*SleepSessions.getSleepMatches(context, context.getString(R.string.to),
+					new String[] { BaseColumns._ID, MainTable.KEY_TITLE,
+							MainTable.KEY_ALARM, MainTable.KEY_DURATION,
+							MainTable.KEY_MIN, MainTable.KEY_NOTE,
+							MainTable.KEY_RATING, MainTable.KEY_SPIKES,
+							MainTable.KEY_TIME_FELL_ASLEEP });*/
 
 			if (c == null) {
 				Log.e("Cal", "loadEvents() returned null cursor!");
@@ -246,7 +211,7 @@ public class SleepRecord {
 
 			context.getResources();
 			do {
-				final SleepRecord s = new SleepRecord(c);
+				final SleepSession s = new SleepSession(c);
 				final long startTime = s.getStartTime();
 				if (startTime >= start && startTime <= end) {
 					final List<PointD> justFirstAndLast = new ArrayList<PointD>();
@@ -305,39 +270,38 @@ public class SleepRecord {
 	public float top;
 
 	@SuppressWarnings("unchecked")
-	public SleepRecord(final Cursor cursor) {
+	public SleepSession(final Cursor cursor) {
 
-		title = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TITLE));
+		title = cursor.getString(cursor
+				.getColumnIndexOrThrow(MainTable.KEY_TITLE));
 		chartData = null;
 		try {
 			chartData = (List<PointD>) byteArrayToObject(cursor.getBlob(cursor
-					.getColumnIndexOrThrow(KEY_SLEEP_DATA)));
-		} catch (final StreamCorruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+					.getColumnIndexOrThrow(MainTable.KEY_SLEEP_DATA)));
+		} catch (Exception e) {
+
+			GoogleAnalyticsTracker.getInstance().trackEvent(
+					Integer.toString(VERSION.SDK_INT), Build.MODEL,
+					"sleepSessionInstatiation : " + e.getMessage(), 0);
 		}
 
-		min = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_MIN));
-		alarm = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_ALARM));
-		rating = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_RATING));
+		min = cursor.getDouble(cursor.getColumnIndexOrThrow(MainTable.KEY_MIN));
+		alarm = cursor.getDouble(cursor
+				.getColumnIndexOrThrow(MainTable.KEY_ALARM));
+		rating = cursor.getInt(cursor
+				.getColumnIndexOrThrow(MainTable.KEY_RATING));
 
-		duration = cursor.getLong(cursor.getColumnIndexOrThrow(KEY_DURATION));
-		spikes = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_SPIKES));
+		duration = cursor.getLong(cursor
+				.getColumnIndexOrThrow(MainTable.KEY_DURATION));
+		spikes = cursor.getInt(cursor
+				.getColumnIndexOrThrow(MainTable.KEY_SPIKES));
 		fellAsleep = cursor.getLong(cursor
-				.getColumnIndexOrThrow(KEY_TIME_FELL_ASLEEP));
-		note = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOTE));
+				.getColumnIndexOrThrow(MainTable.KEY_TIME_FELL_ASLEEP));
+		note = cursor.getString(cursor
+				.getColumnIndexOrThrow(MainTable.KEY_NOTE));
 	}
 
-	public SleepRecord(final String title, final List<PointD> chartData,
+	public SleepSession(final String title, final List<PointD> chartData,
 			final double min, final double alarm, final int rating,
 			final long duration, final int spikes, final long fellAsleep,
 			final String note) {
@@ -425,27 +389,6 @@ public class SleepRecord {
 
 	public long getTimeToFallAsleep() {
 		return this.fellAsleep - getStartTime();
-	}
-
-	public long insertIntoDb(final SQLiteDatabase db) throws IOException {
-		long insertResult = -1;
-		final ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_TITLE, title);
-
-		initialValues.put(KEY_SLEEP_DATA, objectToByteArray(chartData));
-
-		initialValues.put(KEY_MIN, min);
-		initialValues.put(KEY_ALARM, alarm);
-		initialValues.put(KEY_RATING, rating);
-		initialValues.put(KEY_DURATION, duration);
-		initialValues.put(KEY_SPIKES, spikes);
-		initialValues.put(KEY_TIME_FELL_ASLEEP, fellAsleep);
-		initialValues.put(KEY_NOTE, note);
-
-		insertResult = db.insert(SleepHistoryDatabase.FTS_VIRTUAL_TABLE, null,
-				initialValues);
-		db.close();
-		return insertResult;
 	}
 
 	public void setColumn(int column) {

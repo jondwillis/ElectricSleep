@@ -42,7 +42,7 @@ import android.widget.ViewSwitcher;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HostActivity;
-import com.androsz.electricsleepbeta.db.SleepContentProvider;
+import com.androsz.electricsleepbeta.db.SleepSessions;
 
 public class MonthActivity extends HostActivity implements
 		ViewSwitcher.ViewFactory, Navigator, AnimationListener {
@@ -324,6 +324,6 @@ public class MonthActivity extends HostActivity implements
 		registerReceiver(mIntentReceiver, filter);
 
 		mContentResolver.registerContentObserver(
-				SleepContentProvider.CONTENT_URI, true, mObserver);
+				SleepSessions.MainTable.CONTENT_URI, true, mObserver);
 	}
 }

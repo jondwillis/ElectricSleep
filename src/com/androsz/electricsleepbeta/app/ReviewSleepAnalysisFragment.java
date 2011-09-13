@@ -8,7 +8,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class ReviewSleepAnalysisFragment extends AnalyticFragment {
 
@@ -16,7 +16,7 @@ public class ReviewSleepAnalysisFragment extends AnalyticFragment {
 
 	TextView scoreTV, durationTV, spikesTV, fellAsleepTV, noteTV;
 
-	SleepRecord sleepRecord;
+	SleepSession sleepRecord;
 
 	@Override
 	public void onClick(View v) {
@@ -47,7 +47,7 @@ public class ReviewSleepAnalysisFragment extends AnalyticFragment {
 		return view;
 	}
 
-	public void setSleepRecord(SleepRecord sleepRecord) {
+	public void setSleepRecord(SleepSession sleepRecord) {
 		this.sleepRecord = sleepRecord;
 		if (scoreTV != null) {
 			scoreTV.setText(sleepRecord.getSleepScore() + "%");

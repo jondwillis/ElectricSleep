@@ -67,7 +67,7 @@ public class GoogleAnalyticsSessionManager {
 		activityCount = Math.max(activityCount - 1, 0);
 
 		if (activityCount == 0) {
-			GoogleAnalyticsTracker.getInstance().stop();
+			GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, context);
 		}
 	}
 
@@ -80,9 +80,9 @@ public class GoogleAnalyticsSessionManager {
 	public void incrementActivityCount() {
 		if (activityCount == 0) {
 			if (dispatchIntervalSecs == null) {
-				GoogleAnalyticsTracker.getInstance().start(apiKey, context);
+				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, context);
 			} else {
-				GoogleAnalyticsTracker.getInstance().start(apiKey,
+				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey,
 						dispatchIntervalSecs, context);
 			}
 		}

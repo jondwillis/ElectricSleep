@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS ANYTHING.</string>
+	<string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS
+		ANYTHING.</string>
 	<string name="legend_light_sleep_trigger">Light Sleep Trigger</string>
 	<string name="legend_movement">Movement</string>
 	<string name="warming_up">Warming up sensors, please wait.</string>
@@ -48,11 +49,9 @@
 	<string name="sleep_score">Sleep Score</string>
 	<string name="sleep_chart">Sleep Chart</string>
 	<string name="could_not_save_sleep">Could not save this sleep:</string>
-	<string name="sleep_too_brief_to_analyze">It was too brief to
-		analyze.</string>
-	<string name="note_title">Comment [optional] (dreams, disruptions,
-		caffeine,
-		etc.)</string>
+	<string name="sleep_too_brief_to_analyze">It was too brief to analyze.</string>
+	<string name="tags_title">Tags (optional)</string>
+	<string name="tags_hint">dreams, caffeine usage, exercise, etc."</string>
 	<string name="summary_pref_sensor_delay">Try changing this if you\'re having problems with
 		sleep movement collection.</string>
 	<string name="title_pref_sensor_delay">Sensor Delay</string>
@@ -114,7 +113,8 @@
 	<string name="delete_sleep_record">Sleep record will be deleted.</string>
 	<string name="about">About</string>
 	<string name="welcome_tutorial">Welcome Tutorial</string>
-	<string name="summary_pref_force_screen_off">Screen will be allowed to turn off during sleep. If
+	<string name="summary_pref_force_screen_off">Screen will be allowed to turn off during sleep.
+		If
 		you are having problems recording sleep throughout the night, enable
 		this.</string>
 	<string name="summary_pref_force_screen_on">Screen will be forced on and dimmed during sleep.
@@ -151,12 +151,14 @@
 	<string name="title_pref_calibration">Calibration Wizard</string>
 	<string name="pref_calibration">calibrationWizard</string>
 
-	<string name="summary_pref_alarms">Manage ElectricSleep\'s built-in alarms - these are
+	<string name="summary_pref_alarms">Manage ElectricSleep\'s built-in alarms - these
+		are
 		persistent even if Light Sleep Pre-Alarm is disabled.</string>
 	<string name="preset">Preset:</string>
 	<string name="summary_pref_use_alarm_off">ElectricSleep will not try to wake you up *before*
 		the next enabled alarm in sleep mode</string>
-	<string name="summary_pref_use_alarm_on">ElectricSleep is set to try to wake you up *before*
+	<string name="summary_pref_use_alarm_on">ElectricSleep is set to try to wake you up
+		*before*
 		the next
 		enabled alarm in sleep mode</string>
 	<string name="title_pref_use_alarm">Light Sleep Pre-Alarm</string>
@@ -279,7 +281,8 @@
 	<string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
 	<string name="notification_sleep_title">ElectricSleep is active</string>
 	<string name="notification_sleep_text">Select to interrupt or view progress</string>
-	<string name="dialog_wait_for_sleep_data_message">Sleep well! (this area will display a chart throughout the night)</string>
+	<string name="dialog_wait_for_sleep_data_message">Sleep well! (this area will display a chart
+		throughout the night)</string>
 	<string name="title_pref_alarm_trigger_sensitivity">Light Sleep Sensitivity</string>
 	<string name="summary_alarm_trigger_sensitivity">Level of movement that signifies light sleep will
 		trigger alarm
@@ -351,7 +354,8 @@
 
 
 	<string name="title_pref_alarm_window">Pre-Alarm Window</string>
-	<string name="summary_pref_alarm_window">The window of time before the next enabled alarm is
+	<string name="summary_pref_alarm_window">The window of time before the next enabled alarm
+		is
 		set to go
 		off during which ElectricSleep will try to wake you.</string>
 
@@ -698,7 +702,8 @@
 		<xliff:g id="more_count">%d</xliff:g>
 		more \u2026)
 	</string>
-	<string name="sleep_dim">Your device does not support turning its screen off
+	<string name="sleep_dim">Your device does not support turning its screen
+		off
 		during sleep. The screen must stay on but will be dimmed.</string>
 	<string name="sleep_plugged_in">You are not connected to a charger. It is highly
 		recommended to plug in, or elsewise enter airplane mode to conserve

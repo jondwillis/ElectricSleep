@@ -20,7 +20,7 @@ import com.androsz.electricsleepbeta.achartengine.renderer.XYMultipleSeriesRende
 import com.androsz.electricsleepbeta.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.util.MathUtils;
 
 public class SleepChart extends ChartView implements Parcelable {
@@ -193,7 +193,7 @@ public class SleepChart extends ChartView implements Parcelable {
 
 	public void sync(final Cursor cursor) throws StreamCorruptedException,
 			IllegalArgumentException, IOException, ClassNotFoundException {
-		sync(new SleepRecord(cursor));
+		sync(new SleepSession(cursor));
 	}
 
 	public void sync(final Double x, final Double y, final double alarm) {
@@ -207,7 +207,7 @@ public class SleepChart extends ChartView implements Parcelable {
 		repaint();
 	}
 
-	public void sync(final SleepRecord sleepRecord) {
+	public void sync(final SleepSession sleepRecord) {
 		xySeriesMovement.xyList = sleepRecord.chartData;
 		calibrationLevel = sleepRecord.alarm;
 

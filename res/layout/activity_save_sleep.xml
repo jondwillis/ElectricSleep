@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent" android:layout_width="match_parent">
 	<LinearLayout android:orientation="vertical" android:id="@+id/save_sleep_layout"
 		android:layout_height="match_parent" android:layout_width="match_parent"
 		android:layout_gravity="bottom|fill_vertical|fill_horizontal|fill">
@@ -14,12 +13,12 @@
 			android:layout_gravity="center_horizontal"></RatingBar>
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_below="@+id/save_sleep_rating_bar"
-			android:id="@+id/save_sleep_note_txt" android:text="@string/note_title"></TextView>
+			android:id="@+id/save_sleep_note_txt" android:text="@string/tags_title"></TextView>
 		<!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
 
 		<EditText android:layout_below="@+id/save_sleep_note_txt"
 			android:layout_width="match_parent" android:id="@+id/save_sleep_note_edit"
-			android:layout_height="wrap_content"></EditText>
+			android:layout_height="wrap_content" android:hint="@string/tags_hint"/>
 		<RelativeLayout android:layout_width="match_parent"
 			android:layout_gravity="bottom" android:layout_height="wrap_content">
 			<Button android:id="@+id/save_sleep_btn_save"

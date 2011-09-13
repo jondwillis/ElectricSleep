@@ -12,18 +12,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
-import com.androsz.electricsleepbeta.db.SleepContentProvider;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.util.MathUtils;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.widget.calendar.MonthActivity;
@@ -32,15 +34,19 @@ import com.androsz.electricsleepbeta.widget.calendar.MonthActivity;
  * Front-door {@link Activity} that displays high-level features the application
  * offers to users.
  */
-public class HomeActivity extends HostActivity {
+public class HomeActivity extends HostActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private class LoadLastSleepChartTask extends
+	/*private class LoadLastSleepChartTask extends
 			AsyncTask<String, Void, Cursor> {
 
 		@Override
 		protected Cursor doInBackground(String... params) {
-			return managedQuery(SleepContentProvider.CONTENT_URI, null, null,
-					new String[] { params[0] }, SleepRecord.KEY_TITLE);
+			// TODO: CursorLoader
+			return SleepSessions.getSleepMatches(HomeActivity.this, params[0],
+					new String[] { SleepSessions.MainTable.KEY_TITLE });// managedQuery(SleepSessions.MainTable.CONTENT_URI,
+																		// null,
+																		// null,
+			// new String[] { params[0] }, SleepSessions.MainTable.KEY_TITLE);
 		}
 
 		@Override
@@ -72,7 +78,8 @@ public class HomeActivity extends HostActivity {
 				} catch (final ClassNotFoundException e) {
 					e.printStackTrace();
 				}
-				sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 3);
+				sleepChart.setMinimumHeight(MathUtils
+						.getAbsoluteScreenHeightPx(HomeActivity.this) / 3);
 				lastSleepTitleText
 						.setText(getString(R.string.home_last_sleep_title_text));
 
@@ -84,7 +91,7 @@ public class HomeActivity extends HostActivity {
 				int count = 0;
 				do {
 					count++;
-					final SleepRecord sleepRecord = new SleepRecord(cursor);
+					final SleepSession sleepRecord = new SleepSession(cursor);
 					avgSleepScore += sleepRecord.getSleepScore();
 					avgDuration += sleepRecord.duration;
 					avgSpikes += sleepRecord.spikes;
@@ -98,10 +105,10 @@ public class HomeActivity extends HostActivity {
 				avgFellAsleep *= invCount;
 
 				avgScoreText.setText(avgSleepScore + "%");
-				avgDurationText.setText(SleepRecord.getTimespanText(
+				avgDurationText.setText(SleepSession.getTimespanText(
 						avgDuration, getResources()));
 				avgSpikesText.setText(avgSpikes + "");
-				avgFellAsleepText.setText(SleepRecord.getTimespanText(
+				avgFellAsleepText.setText(SleepSession.getTimespanText(
 						avgFellAsleep, getResources()));
 
 				reviewTitleText
@@ -116,9 +123,9 @@ public class HomeActivity extends HostActivity {
 			sleepChart = (SleepChart) findViewById(R.id.home_sleep_chart);
 		}
 
-	}
+	}*/
 
-	LoadLastSleepChartTask loadLastSleepChartTask;
+	//LoadLastSleepChartTask loadLastSleepChartTask;
 
 	private SleepChart sleepChart;
 
@@ -161,6 +168,10 @@ public class HomeActivity extends HostActivity {
 				return null;
 			}
 		}.execute();
+
+		sleepChart = (SleepChart) findViewById(R.id.home_sleep_chart);
+
+		getSupportLoaderManager().initLoader(0, null, this);
 	}
 
 	@Override
@@ -182,22 +193,103 @@ public class HomeActivity extends HostActivity {
 	protected void onPause() {
 		super.onPause();
 
-		if (loadLastSleepChartTask != null) {
-			loadLastSleepChartTask.cancel(true);
-		}
+		//if (loadLastSleepChartTask != null) {
+		//	loadLastSleepChartTask.cancel(true);
+		//}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (loadLastSleepChartTask != null) {
-			loadLastSleepChartTask.cancel(true);
-		}
-		loadLastSleepChartTask = new LoadLastSleepChartTask();
-		loadLastSleepChartTask.execute(getString(R.string.to));
+		//if (loadLastSleepChartTask != null) {
+		//	loadLastSleepChartTask.cancel(true);
+		//}
+		//loadLastSleepChartTask = new LoadLastSleepChartTask();
+		//loadLastSleepChartTask.execute(getString(R.string.to));
 	}
 
 	public void onSleepClick(final View v) throws Exception {
 		sendBroadcast(new Intent(StartSleepReceiver.START_SLEEP));
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return new CursorLoader(this,
+						SleepSessions.MainTable.CONTENT_URI,
+						SleepSessions.MainTable.DEFAULT_COLUMN_PROJECTION, null, null, null);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
+		final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
+		final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
+		final ViewGroup container = (ViewGroup) findViewById(R.id.home_stats_container);
+		if (cursor == null) {
+			container.setVisibility(View.GONE);
+			reviewTitleText
+					.setText(getString(R.string.home_review_title_text_empty));
+			lastSleepTitleText
+					.setText(getString(R.string.home_last_sleep_title_text_empty));
+		} else {
+
+			final TextView avgScoreText = (TextView) findViewById(R.id.value_score_text);
+			final TextView avgDurationText = (TextView) findViewById(R.id.value_duration_text);
+			final TextView avgSpikesText = (TextView) findViewById(R.id.value_spikes_text);
+			final TextView avgFellAsleepText = (TextView) findViewById(R.id.value_fell_asleep_text);
+			cursor.moveToLast();
+			try {
+				sleepChart.sync(cursor);
+			} catch (final StreamCorruptedException e) {
+				e.printStackTrace();
+			} catch (final IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			} catch (final ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			sleepChart.setMinimumHeight(MathUtils
+					.getAbsoluteScreenHeightPx(HomeActivity.this) / 3);
+			lastSleepTitleText
+					.setText(getString(R.string.home_last_sleep_title_text));
+
+			cursor.moveToFirst();
+			int avgSleepScore = 0;
+			long avgDuration = 0;
+			int avgSpikes = 0;
+			long avgFellAsleep = 0;
+			int count = 0;
+			do {
+				count++;
+				final SleepSession sleepRecord = new SleepSession(cursor);
+				avgSleepScore += sleepRecord.getSleepScore();
+				avgDuration += sleepRecord.duration;
+				avgSpikes += sleepRecord.spikes;
+				avgFellAsleep += sleepRecord.getTimeToFallAsleep();
+			} while (cursor.moveToNext());
+
+			final float invCount = 1.0f / count;
+			avgSleepScore *= invCount;
+			avgDuration *= invCount;
+			avgSpikes *= invCount;
+			avgFellAsleep *= invCount;
+
+			avgScoreText.setText(avgSleepScore + "%");
+			avgDurationText.setText(SleepSession.getTimespanText(
+					avgDuration, getResources()));
+			avgSpikesText.setText(avgSpikes + "");
+			avgFellAsleepText.setText(SleepSession.getTimespanText(
+					avgFellAsleep, getResources()));
+
+			reviewTitleText
+					.setText(getString(R.string.home_review_title_text));
+			container.setVisibility(View.VISIBLE);
+			sleepChart.setVisibility(View.VISIBLE);
+		}
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		
 	}
 }

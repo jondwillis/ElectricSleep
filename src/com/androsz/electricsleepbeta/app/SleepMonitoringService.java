@@ -25,10 +25,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
@@ -36,6 +37,7 @@ import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.util.PointD;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SleepMonitoringService extends Service implements
 		SensorEventListener {
@@ -64,9 +66,9 @@ public class SleepMonitoringService extends Service implements
 					fos.close();
 				}
 			} catch (final IOException e) {
-				Toast.makeText(SleepMonitoringService.this,
-						"Please report this: ", Toast.LENGTH_LONG);
-				e.printStackTrace();
+				GoogleAnalyticsTracker.getInstance().trackEvent(
+						Integer.toString(VERSION.SDK_INT), Build.MODEL,
+						"sleepMonitorCacheFailWrite : " + e.getMessage(), 0);
 			}
 
 			final Intent i = new Intent(SleepActivity.UPDATE_CHART);
@@ -249,9 +251,8 @@ public class SleepMonitoringService extends Service implements
 
 	private void obtainWakeLock() {
 		// if forcescreenon is on, hold a dim wakelock, otherwise, partial.
-		final int wakeLockType = forceScreenOn ? 
-				(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE | PowerManager.ACQUIRE_CAUSES_WAKEUP
-				)
+		final int wakeLockType = forceScreenOn ? (PowerManager.SCREEN_DIM_WAKE_LOCK
+				| PowerManager.ON_AFTER_RELEASE | PowerManager.ACQUIRE_CAUSES_WAKEUP)
 
 				: PowerManager.PARTIAL_WAKE_LOCK;
 
@@ -287,6 +288,7 @@ public class SleepMonitoringService extends Service implements
 
 	@Override
 	public void onDestroy() {
+
 		unregisterAccelerometerListener();
 
 		WakeLockManager.release("sleepMonitoring");
@@ -295,16 +297,16 @@ public class SleepMonitoringService extends Service implements
 
 		// tell monitoring activities that sleep has ended
 		sendBroadcast(new Intent(SLEEP_STOPPED));
-		toggleSilentMode(false);
-		toggleAirplaneMode(false);
 
 		stopForeground(true);
 		updateTimer.cancel();
-
+		
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
 			protected Void doInBackground(Void... params) {
+				toggleSilentMode(false);
+				toggleAirplaneMode(false);
 				final SharedPreferences.Editor ed = getSharedPreferences(
 						SERVICE_IS_RUNNING, Context.MODE_PRIVATE).edit();
 				ed.putBoolean(SERVICE_IS_RUNNING, false);
@@ -382,10 +384,15 @@ public class SleepMonitoringService extends Service implements
 
 			obtainWakeLock();
 
+			registerAccelerometerListener();
+
 			new AsyncTask<Void, Void, Void>() {
 
 				@Override
 				protected Void doInBackground(Void... params) {
+					toggleSilentMode(true);
+					toggleAirplaneMode(true);
+
 					if (!alreadyDeletedResidualFile) {
 						// TODO: doesn't happen more than once? right?
 						deleteFile(SleepMonitoringService.SLEEP_DATA);
@@ -396,14 +403,6 @@ public class SleepMonitoringService extends Service implements
 					ed.putBoolean(SERVICE_IS_RUNNING, true);
 					ed.commit();
 					return null;
-				}
-
-				@Override
-				protected void onPostExecute(Void result) {
-					registerAccelerometerListener();
-
-					toggleSilentMode(true);
-					toggleAirplaneMode(true);
 				}
 			}.execute();
 		}

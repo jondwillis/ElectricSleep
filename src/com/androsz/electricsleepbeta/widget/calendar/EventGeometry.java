@@ -18,7 +18,7 @@ package com.androsz.electricsleepbeta.widget.calendar;
 
 import android.graphics.Rect;
 
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class EventGeometry {
 	/* package */static final int MINUTES_PER_HOUR = 60;
@@ -34,7 +34,7 @@ public class EventGeometry {
 	// Computes the rectangle coordinates of the given event on the screen.
 	// Returns true if the rectangle is visible on the screen.
 	boolean computeEventRect(int date, int left, int top, int cellWidth,
-			SleepRecord event) {
+			SleepSession event) {
 
 		final float cellMinuteHeight = mMinuteHeight;
 		final int startDay = event.getStartJulianDay();
@@ -94,7 +94,7 @@ public class EventGeometry {
 	/**
 	 * Returns true if this event intersects the selection region.
 	 */
-	boolean eventIntersectsSelection(SleepRecord event, Rect selection) {
+	boolean eventIntersectsSelection(SleepSession event, Rect selection) {
 		if (event.left < selection.right && event.right >= selection.left
 				&& event.top < selection.bottom
 				&& event.bottom >= selection.top) {
@@ -106,7 +106,7 @@ public class EventGeometry {
 	/**
 	 * Computes the distance from the given point to the given event.
 	 */
-	float pointToEvent(float x, float y, SleepRecord event) {
+	float pointToEvent(float x, float y, SleepSession event) {
 		final float left = event.left;
 		final float right = event.right;
 		final float top = event.top;

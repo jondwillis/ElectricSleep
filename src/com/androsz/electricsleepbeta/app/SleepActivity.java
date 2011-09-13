@@ -158,39 +158,37 @@ public class SleepActivity extends HostActivity {
 							textSleepNoAlarm.setVisibility(View.VISIBLE);
 							divSleepNoAlarm.setVisibility(View.VISIBLE);
 						}
-						super.onPostExecute(result);
+						// dims the screen while in this activity and forceScreenOn is
+						// enabled
+						if (forceScreenOn) {
+							textSleepDim.setVisibility(View.VISIBLE);
+
+							// queue the dim screen task
+							if (dimScreenTask != null) {
+								dimScreenTask.cancel(true);
+							}
+							dimScreenTask = new DimScreenTask();
+							dimScreenTask.execute();
+
+						} else {
+							textSleepDim.setVisibility(View.GONE);
+						}
+
+						if (sleepChart.makesSenseToDisplay()) {
+							sleepChart.setVisibility(View.VISIBLE);
+							waitForSleepData.setVisibility(View.GONE);
+						} else {
+							showWaitForSeriesDataIfNeeded();
+						}
+						showOrHideWarnings();
 					}
 				}.execute();
 			} else {
 				sleepChart.xyMultipleSeriesRenderer.setChartTitle("");
 				textSleepNoAlarm.setVisibility(View.VISIBLE);
 				divSleepNoAlarm.setVisibility(View.VISIBLE);
+				showOrHideWarnings();
 			}
-
-			// dims the screen while in this activity and forceScreenOn is
-			// enabled
-			if (forceScreenOn) {
-				textSleepDim.setVisibility(View.VISIBLE);
-
-				// queue the dim screen task
-				if (dimScreenTask != null) {
-					dimScreenTask.cancel(true);
-				}
-				dimScreenTask = new DimScreenTask();
-				dimScreenTask.execute((Void[]) null);
-
-			} else {
-				textSleepDim.setVisibility(View.GONE);
-			}
-
-			if (sleepChart.makesSenseToDisplay()) {
-				sleepChart.setVisibility(View.VISIBLE);
-				waitForSleepData.setVisibility(View.GONE);
-			} else {
-				showWaitForSeriesDataIfNeeded();
-			}
-
-			showOrHideWarnings();
 		}
 	};
 

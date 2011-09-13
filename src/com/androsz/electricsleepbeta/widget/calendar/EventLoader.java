@@ -28,7 +28,7 @@ import android.os.Handler;
 import android.os.Process;
 import android.util.Log;
 
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class EventLoader {
 
@@ -144,14 +144,14 @@ public class EventLoader {
 	private static class LoadEventsRequest implements LoadRequest {
 
 		public Runnable cancelCallback;
-		public ArrayList<SleepRecord> events;
+		public ArrayList<SleepSession> events;
 		public int id;
 		public int numDays;
 		public long startMillis;
 		public Runnable successCallback;
 
 		public LoadEventsRequest(int id, long startMillis, int numDays,
-				ArrayList<SleepRecord> events, final Runnable successCallback,
+				ArrayList<SleepSession> events, final Runnable successCallback,
 				final Runnable cancelCallback) {
 			this.id = id;
 			this.startMillis = startMillis;
@@ -163,7 +163,7 @@ public class EventLoader {
 
 		@Override
 		public void processRequest(EventLoader eventLoader) {
-			SleepRecord.loadEvents(eventLoader.mContext, events, startMillis,
+			SleepSession.loadEvents(eventLoader.mContext, events, startMillis,
 					numDays, id, eventLoader.mSequenceNumber);
 
 			// Check if we are still the most recent request.
@@ -254,7 +254,7 @@ public class EventLoader {
 	 * events and posted via the uiCallback.
 	 */
 	void loadEventsInBackground(final int numDays,
-			final ArrayList<SleepRecord> events, long start,
+			final ArrayList<SleepSession> events, long start,
 			final Runnable successCallback, final Runnable cancelCallback) {
 
 		// Increment the sequence number for requests. We don't care if the

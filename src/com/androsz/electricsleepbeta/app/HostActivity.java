@@ -33,7 +33,7 @@ public abstract class HostActivity extends AnalyticActivity {
 		// PorterDuff.Mode.MULTIPLY);
 
 		final ColorMatrix cm = new ColorMatrix();
-		cm.setScale(3, 3, 3, 1); // make it closer to whiiiiiiite
+		cm.setScale(4, 4, 4, 1); // tint it closer to white (too much can cause transparent pixels to look too opaque)
 		COLOR_FILTER = new ColorMatrixColorFilter(cm);
 	}
 
@@ -59,27 +59,18 @@ public abstract class HostActivity extends AnalyticActivity {
 
 		bar.setDisplayShowHomeEnabled(true);
 		bar.setDisplayHomeAsUpEnabled(true);
-		/*
-		 * new AsyncTask<Void, Void, BitmapDrawable>() {
-		 * 
-		 * @Override protected void onPostExecute(BitmapDrawable result) {
-		 * 
-		 * }
-		 * 
-		 * @Override protected BitmapDrawable doInBackground(Void... params) {
-		 * return bitmapDrawable; } }.execute();
-		 */
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_host, menu);
-
 		for (int i = 0; i < menu.size(); i++) {
 			final MenuItem mi = menu.getItem(i);
 			final Drawable icon = mi.getIcon();
 			if (icon != null) {
-				icon.setColorFilter(COLOR_FILTER);
+				Drawable mutated = icon.mutate();
+				mutated.setColorFilter(COLOR_FILTER);
+				mi.setIcon(mutated);
 			}
 		}
 		return true;

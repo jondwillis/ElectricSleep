@@ -45,7 +45,7 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		Preference.OnPreferenceChangeListener {
 
 	// Used to post runnables asynchronously.
-	private static final Handler sHandler = new Handler();
+	// private static final Handler sHandler = new Handler();
 
 	/**
 	 * format "Alarm set for 2 days 7 hours and 53 minutes from now"
@@ -126,8 +126,20 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 							@Override
 							public void onClick(final DialogInterface d,
 									final int w) {
-								Alarms.deleteAlarm(SetAlarm.this, mId);
-								finish();
+								new AsyncTask<Void, Void, Void>() {
+
+									@Override
+									protected Void doInBackground(
+											Void... params) {
+										Alarms.deleteAlarm(SetAlarm.this, mId);
+										return null;
+									}
+
+									@Override
+									protected void onPostExecute(Void result) {
+										finish();
+									}
+								}.execute();
 							}
 						}).setNegativeButton(android.R.string.cancel, null)
 				.show();
@@ -149,7 +161,13 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		// initialized to false. When creating a new alarm, this value is
 		// assumed true until the user changes the time.
 		if (!mTimePickerCancelled) {
-			saveAlarm();
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					saveAlarm();
+				}
+			}).start();
 		}
 		finish();
 	}
@@ -242,8 +260,20 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		b.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(final View v) {
-				saveAlarm();
-				finish();
+				new AsyncTask<Void, Void, Void>() {
+
+					@Override
+					protected Void doInBackground(Void... params) {
+						saveAlarm();
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void result) {
+						finish();
+					}
+				}.execute();
+
 			}
 		});
 		final Button revert = (Button) findViewById(R.id.alarm_revert);
@@ -254,12 +284,23 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 				final int newId = mId;
 				updatePrefs(mOriginalAlarm);
 				// "Revert" on a newly created alarm should delete it.
-				if (mOriginalAlarm.id == -1) {
-					Alarms.deleteAlarm(SetAlarm.this, newId);
-				} else {
-					saveAlarm();
-				}
-				revert.setEnabled(false);
+				new AsyncTask<Void, Void, Void>() {
+					@Override
+					protected Void doInBackground(Void... params) {
+						if (mOriginalAlarm.id == -1) {
+							Alarms.deleteAlarm(SetAlarm.this, newId);
+						} else {
+							saveAlarm();
+						}
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void result) {
+						revert.setEnabled(false);
+					}
+				}.execute();
+
 			}
 		});
 		b = (Button) findViewById(R.id.alarm_delete);
@@ -286,16 +327,24 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 	public boolean onPreferenceChange(final Preference p, final Object newValue) {
 		// Asynchronously save the alarm since this method is called _before_
 		// the value of the preference has changed.
-		sHandler.post(new Runnable() {
+		new AsyncTask<Void, Void, Void>() {
+
 			@Override
-			public void run() {
+			protected void onPostExecute(Void result) {
+				final Button revert = (Button) findViewById(R.id.alarm_revert);
+				revert.setEnabled(true);
+			}
+
+			@Override
+			protected Void doInBackground(Void... params) {
 				// Editing any preference (except enable) enables the alarm.
 				if (p != mEnabledPref) {
 					mEnabledPref.setChecked(true);
 				}
-				saveAlarmAndEnableRevert();
+				saveAlarm();
+				return null;
 			}
-		});
+		}.execute();
 		return true;
 	}
 

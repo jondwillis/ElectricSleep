@@ -26,7 +26,11 @@ public abstract class AnalyticActivity extends FragmentActivity {
 
 		GoogleAnalyticsTracker.getInstance().setProductVersion(
 				getPackageName(), versionName);
-
+		
+		//I have no idea...
+		GoogleAnalyticsTracker.getInstance().setCustomVar(1, Integer.toString(VERSION.SDK_INT), Build.MODEL);
+		GoogleAnalyticsTracker.getInstance().setCustomVar(2, versionName, Build.MODEL+"-"+Integer.toString(VERSION.SDK_INT));
+		
 		GoogleAnalyticsSessionManager.getInstance(getApplication())
 				.incrementActivityCount();
 
@@ -36,7 +40,8 @@ public abstract class AnalyticActivity extends FragmentActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 
-		// Purge analytics so they don't hold references to this activity
+		// Purge analytics so they don't hold references to this
+		// activity
 		GoogleAnalyticsTracker.getInstance().dispatch();
 
 		// Need to do this for every activity that uses google analytics

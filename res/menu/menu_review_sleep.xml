@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:showAsAction="ifRoom|withText" android:id="@+id/menu_item_export_sleep_record" android:title="@string/export" android:icon="@android:drawable/ic_menu_upload"></item><item android:showAsAction="always|withText" android:title="@string/delete" android:icon="@android:drawable/ic_menu_delete" android:id="@+id/menu_item_delete_sleep_record"></item>
+    <item android:showAsAction="ifRoom|withText" android:id="@+id/menu_item_export_sleep_record" android:title="@string/export" android:icon="@android:drawable/ic_menu_share"></item><item android:showAsAction="always|withText" android:title="@string/delete" android:icon="@android:drawable/ic_menu_delete" android:id="@+id/menu_item_delete_sleep_record"></item>
     
     
 </menu>

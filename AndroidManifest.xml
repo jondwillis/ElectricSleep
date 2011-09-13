@@ -170,7 +170,7 @@
 		<service android:name=".app.CheckForScreenBugAccelerometerService"
 			android:icon="@drawable/icon" android:label="@string/app_name" />
 
-		<provider android:name=".db.SleepContentProvider"
+		<provider android:name=".db.SleepSessions$Provider"
 			android:authorities="com.androsz.electricsleepbeta.db.sleepcontentprovider" />
 
 		<provider android:name=".alarmclock.AlarmProvider"

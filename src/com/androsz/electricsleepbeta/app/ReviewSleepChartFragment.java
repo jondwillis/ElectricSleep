@@ -6,14 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class ReviewSleepChartFragment extends AnalyticFragment {
 
 	SleepChart sleepChart;
 
-	SleepRecord sleepRecord;
+	SleepSession sleepRecord;
 
 	@Override
 	public void onClick(View v) {
@@ -35,7 +35,7 @@ public class ReviewSleepChartFragment extends AnalyticFragment {
 		return view;
 	}
 
-	public void setSleepRecord(SleepRecord sleepRecord) {
+	public void setSleepRecord(SleepSession sleepRecord) {
 		this.sleepRecord = sleepRecord;
 		if (sleepChart != null) {
 			sleepChart.sync(sleepRecord);

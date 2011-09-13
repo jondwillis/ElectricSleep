@@ -22,9 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepContentProvider;
-import com.androsz.electricsleepbeta.db.SleepHistoryDatabase;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
 public class HistoryActivity extends HostActivity implements
@@ -34,10 +33,7 @@ public class HistoryActivity extends HostActivity implements
 
 		@Override
 		protected Void doInBackground(final Long... params) {
-			final SleepHistoryDatabase shdb = new SleepHistoryDatabase(
-					HistoryActivity.this);
-			shdb.deleteRow(params[0]);
-			shdb.close();
+			SleepSessions.deleteSession(HistoryActivity.this, params[0]);
 			return null;
 		}
 
@@ -66,12 +62,12 @@ public class HistoryActivity extends HostActivity implements
 		@Override
 		public void onItemClick(final AdapterView<?> parent, final View view,
 				final int position, final long id) {
-			// Build the Intent used to open WordActivity with a
-			// specific word Uri
+			
 			final Intent reviewSleepIntent = new Intent(HistoryActivity.this,
 					ReviewSleepActivity.class);
+			
 			final Uri data = Uri.withAppendedPath(
-					SleepContentProvider.CONTENT_URI, String.valueOf(id));
+					SleepSessions.MainTable.CONTENT_URI, String.valueOf(id));
 			reviewSleepIntent.setData(data);
 			startActivity(reviewSleepIntent);
 		}
@@ -145,9 +141,9 @@ public class HistoryActivity extends HostActivity implements
 
 		progress.setMessage(getString(R.string.querying_sleep_database));
 		progress.show();
-		return new CursorLoader(this, SleepContentProvider.CONTENT_URI, null,
+		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI, null,
 				null, new String[] { args.getString(SEARCH_FOR) },
-				SleepRecord.KEY_TITLE);
+				SleepSessions.MainTable.KEY_TITLE);
 	}
 
 	@Override

@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.SaveSleepReceiver;
-import com.androsz.electricsleepbeta.db.SleepContentProvider;
 
 public class SaveSleepActivity extends HostActivity implements
 		OnRatingBarChangeListener {
@@ -61,11 +60,8 @@ public class SaveSleepActivity extends HostActivity implements
 						}
 						return why;
 					}
-					final String rowId = intent
-							.getStringExtra(SaveSleepReceiver.EXTRA_ROW_ID);
-					if (rowId != null) {
-						final Uri uri = Uri.withAppendedPath(
-								SleepContentProvider.CONTENT_URI, rowId);
+					final Uri uri = Uri.parse(intent.getStringExtra(SaveSleepReceiver.EXTRA_URI));
+					if (uri != null) {
 						reviewSleepIntent.setData(uri);
 					}
 
@@ -119,7 +115,12 @@ public class SaveSleepActivity extends HostActivity implements
 										.cancel(getIntent()
 												.getExtras()
 												.getInt(SleepMonitoringService.EXTRA_ID));
-								deleteFile(SleepMonitoringService.SLEEP_DATA);
+								//new Thread(new Runnable(){
+
+									//@Override
+									//public void run() {
+										//deleteFile(SleepMonitoringService.SLEEP_DATA);
+									//}}){}.run();
 								finish();
 							}
 						})

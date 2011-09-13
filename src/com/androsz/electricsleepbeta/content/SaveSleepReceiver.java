@@ -11,13 +11,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
-import com.androsz.electricsleepbeta.db.SleepHistoryDatabase;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.util.PointD;
 
 public class SaveSleepReceiver extends BroadcastReceiver {
@@ -25,7 +26,7 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 	public static final String EXTRA_IO_EXCEPTION = "IOException";
 	public static final String EXTRA_NOTE = "note";
 	public static final String EXTRA_RATING = "rating";
-	public static final String EXTRA_ROW_ID = "rowId";
+	public static final String EXTRA_URI = "uri";
 	public static final String EXTRA_SUCCESS = "success";
 	public static final String SAVE_SLEEP_COMPLETED = "com.androsz.electricsleepbeta.SAVE_SLEEP_COMPLETED";
 
@@ -57,40 +58,35 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 				// RandomAccessFile raFile;
 				List<PointD> originalData = null;
 				try {
-
-					synchronized (SleepMonitoringService.sDataLock) {
-						final File dataFile = context
-								.getFileStreamPath(SleepMonitoringService.SLEEP_DATA);
-						// raFile = new RandomAccessFile(dataFile, "r");
-						fis = context
-								.openFileInput(SleepMonitoringService.SLEEP_DATA);
-						final long length = dataFile.length();
-						final int chunkSize = 16;
-						if (length % chunkSize != 0) {
-							context.sendBroadcast(new Intent(
-									SAVE_SLEEP_COMPLETED).putExtra(
-									EXTRA_IO_EXCEPTION, "corrupt file"));
-							return;
+					final File dataFile = context
+							.getFileStreamPath(SleepMonitoringService.SLEEP_DATA);
+					// raFile = new RandomAccessFile(dataFile, "r");
+					fis = context
+							.openFileInput(SleepMonitoringService.SLEEP_DATA);
+					final long length = dataFile.length();
+					final int chunkSize = 16;
+					if (length % chunkSize != 0) {
+						context.sendBroadcast(new Intent(SAVE_SLEEP_COMPLETED)
+								.putExtra(EXTRA_IO_EXCEPTION, "corrupt file"));
+						return;
+					}
+					originalData = new ArrayList<PointD>((int) (length
+							/ chunkSize / 2));
+					if (length >= chunkSize) {
+						final byte[] wholeFile = new byte[(int) length];
+						final byte[] buffer = new byte[8192];
+						int bytesRead = 0;
+						int dstPos = 0;
+						while ((bytesRead = fis.read(buffer)) != -1) {
+							System.arraycopy(buffer, 0, wholeFile, dstPos,
+									bytesRead);
+							dstPos += bytesRead;
 						}
-						originalData = new ArrayList<PointD>((int) (length
-								/ chunkSize / 2));
-						if (length >= chunkSize) {
-							final byte[] wholeFile = new byte[(int) length];
-							final byte[] buffer = new byte[8192];
-							int bytesRead = 0;
-							int dstPos = 0;
-							while ((bytesRead = fis.read(buffer)) != -1) {
-								System.arraycopy(buffer, 0, wholeFile, dstPos,
-										bytesRead);
-								dstPos += bytesRead;
-							}
-							fis.close();
-							final byte[] chunk = new byte[chunkSize];
-							for (int i = 0; i < wholeFile.length; i += chunkSize) {
-								System.arraycopy(wholeFile, i, chunk, 0,
-										chunkSize);
-								originalData.add(PointD.fromByteArray(chunk));
-							}
+						fis.close();
+						final byte[] chunk = new byte[chunkSize];
+						for (int i = 0; i < wholeFile.length; i += chunkSize) {
+							System.arraycopy(wholeFile, i, chunk, 0, chunkSize);
+							originalData.add(PointD.fromByteArray(chunk));
 						}
 					}
 				} catch (final FileNotFoundException e) {
@@ -117,14 +113,11 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 					return;
 				}
 
-				final SleepHistoryDatabase shdb = new SleepHistoryDatabase(
-						context);
-
 				final int numberOfDesiredGroupedPoints = SleepMonitoringService.MAX_POINTS_IN_A_GRAPH;
 				// numberOfDesiredGroupedPoints = numberOfPointsOriginal >
 				// numberOfDesiredGroupedPoints ? numberOfDesiredGroupedPoints
 				// : numberOfPointsOriginal;
-
+				Uri createdUri = null;
 				if (numberOfDesiredGroupedPoints <= numberOfPointsOriginal) {
 					final int pointsPerGroup = numberOfPointsOriginal
 							/ numberOfDesiredGroupedPoints + 1;
@@ -188,18 +181,13 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 							.get(lessDetailedData.size() - 1).x);
 					final long startTime = Math.round(lessDetailedData.get(0).x);
 
-					try {
-						shdb.addSleep(context, new SleepRecord(name,
-								lessDetailedData,
-								SettingsActivity.DEFAULT_MIN_SENSITIVITY,
-								alarm, rating, endTime - startTime,
-								numberOfSpikes, timeOfFirstSleep, note));
-					} catch (final IOException e) {
-						shdb.close();
-						context.sendBroadcast(new Intent(SAVE_SLEEP_COMPLETED)
-								.putExtra(EXTRA_IO_EXCEPTION, e.getMessage()));
-						return;
-					}
+					SleepSession session = new SleepSession(name,
+							lessDetailedData,
+							SettingsActivity.DEFAULT_MIN_SENSITIVITY, alarm,
+							rating, endTime - startTime, numberOfSpikes,
+							timeOfFirstSleep, note);
+
+					createdUri = SleepSessions.createSession(context, session);
 				} else {
 
 					final long endTime = Math.round(originalData
@@ -224,54 +212,18 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 							numberOfSpikes++;
 						}
 					}
-					try {
-						shdb.addSleep(context, new SleepRecord(name,
-								originalData,
-								SettingsActivity.DEFAULT_MIN_SENSITIVITY,
-								alarm, rating, endTime - startTime,
-								numberOfSpikes, timeOfFirstSleep, note));
-					} catch (final IOException e) {
-						shdb.close();
-						context.sendBroadcast(new Intent(SAVE_SLEEP_COMPLETED)
-								.putExtra(EXTRA_IO_EXCEPTION, e.getMessage()));
-						return;
-					}
+					SleepSession session = new SleepSession(name, originalData,
+							SettingsActivity.DEFAULT_MIN_SENSITIVITY, alarm,
+							rating, endTime - startTime, numberOfSpikes,
+							timeOfFirstSleep, note);
+
+					createdUri = SleepSessions.createSession(context, session);
 				}
-
-				final Cursor c = shdb.getSleepMatches(name, new String[] {
-						BaseColumns._ID, SleepRecord.KEY_TITLE });
-
-				if (c == null) {
-					/*
-					 * Toast.makeText( context,
-					 * "Could not find the recently saved sleep in the sleep database- report this!"
-					 * , Toast.LENGTH_LONG).show();
-					 */
-					shdb.close();
-					context.sendBroadcast(new Intent(SAVE_SLEEP_COMPLETED));
-					return;
-				} else if (!c.moveToFirst()) {
-					/*
-					 * Toast.makeText( context,
-					 * "Could not move to the recently saved sleep in the sleep database- report this!"
-					 * , Toast.LENGTH_LONG).show();
-					 */
-					shdb.close();
-					c.close();
-					context.sendBroadcast(new Intent(SAVE_SLEEP_COMPLETED));
-					return;
-				}
-				final long rowId = c.getLong(0);
-				c.close();
-
-				// context.startActivity(reviewSleepIntent);
-				shdb.close();
 
 				final Intent saveSleepCompletedIntent = new Intent(
 						SAVE_SLEEP_COMPLETED);
 				saveSleepCompletedIntent.putExtra(EXTRA_SUCCESS, true);
-				saveSleepCompletedIntent.putExtra(EXTRA_ROW_ID,
-						String.valueOf(rowId));
+				saveSleepCompletedIntent.putExtra(EXTRA_URI, createdUri.toString());
 				context.sendBroadcast(saveSleepCompletedIntent);
 			}
 		}).start();

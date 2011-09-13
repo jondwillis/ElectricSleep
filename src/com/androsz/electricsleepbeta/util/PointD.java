@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class PointD implements Serializable {
 	private static final long serialVersionUID = -7526147553632397385L;
-
+	public static int BYTE_LENGTH = 16;
 	public static PointD fromByteArray(final byte[] data) {
 		final byte[] temp = new byte[8];
 		double x;

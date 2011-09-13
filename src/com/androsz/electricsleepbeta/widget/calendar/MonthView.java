@@ -37,6 +37,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
 import android.text.format.DateFormat;
@@ -52,15 +53,17 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HistoryActivity;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
-import com.androsz.electricsleepbeta.db.SleepContentProvider;
-import com.androsz.electricsleepbeta.db.SleepHistoryDatabase;
-import com.androsz.electricsleepbeta.db.SleepRecord;
+import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.db.SleepSessions;
 
-public class MonthView extends View {
+public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	class DismissPopup implements Runnable {
 		@Override
@@ -135,7 +138,7 @@ public class MonthView extends View {
 	private final DismissPopup mDismissPopup = new DismissPopup();
 	private final EventGeometry mEventGeometry;
 	private final EventLoader mEventLoader;
-	private ArrayList<SleepRecord> mEvents = new ArrayList<SleepRecord>();
+	private ArrayList<SleepSession> mEvents = new ArrayList<SleepSession>();
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -476,7 +479,7 @@ public class MonthView extends View {
 	}
 
 	// Draw busybits for a single event
-	private RectF drawEventRect(Rect rect, SleepRecord event, Canvas canvas,
+	private RectF drawEventRect(Rect rect, SleepSession event, Canvas canvas,
 			Paint p) {
 
 		p.setColor(mBusybitsColor);
@@ -504,7 +507,7 @@ public class MonthView extends View {
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
-		final ArrayList<SleepRecord> events = mEvents;
+		final ArrayList<SleepSession> events = mEvents;
 		final int numEvents = events.size();
 		final EventGeometry geometry = mEventGeometry;
 
@@ -521,7 +524,7 @@ public class MonthView extends View {
 		}
 
 		for (int i = 0; i < numEvents; i++) {
-			final SleepRecord event = events.get(i);
+			final SleepSession event = events.get(i);
 			if (!geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH,
 					event)) {
 				continue;
@@ -1049,7 +1052,7 @@ public class MonthView extends View {
 		// Load the days with events in the background
 		mParentActivity.setProgressBarIndeterminateVisibility(true);
 
-		final ArrayList<SleepRecord> events = new ArrayList<SleepRecord>();
+		final ArrayList<SleepSession> events = new ArrayList<SleepSession>();
 		mEventLoader.loadEventsInBackground(EVENT_NUM_DAYS, events, millis,
 				new Runnable() {
 					@Override
@@ -1066,7 +1069,7 @@ public class MonthView extends View {
 
 						// Compute the new set of days with events
 						for (int i = 0; i < numEvents; i++) {
-							final SleepRecord event = events.get(i);
+							final SleepSession event = events.get(i);
 							int startDay = event.getStartJulianDay()
 									- mFirstJulianDay;
 							int endDay = event.getEndJulianDay()
@@ -1100,9 +1103,9 @@ public class MonthView extends View {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				final ArrayList<SleepRecord> applicableEvents = new ArrayList<SleepRecord>();
+				final ArrayList<SleepSession> applicableEvents = new ArrayList<SleepSession>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
-				for (final SleepRecord event : mEvents) {
+				for (final SleepSession event : mEvents) {
 					final long startTime = event.getStartTime() - millis;
 					final long endTime = event.getEndTime() - millis;
 					if ((endTime > 0)
@@ -1118,23 +1121,19 @@ public class MonthView extends View {
 				if (applicableEvents.size() == 1) {
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
-					final SleepHistoryDatabase shdb = new SleepHistoryDatabase(
-							getContext());
 					// TODO: hook this into sleep db
 
-					final Cursor c = shdb.getSleepMatches(
-							applicableEvents.get(0).title, new String[] {
-									BaseColumns._ID, SleepRecord.KEY_TITLE,
-									SleepRecord.KEY_ALARM,
-									SleepRecord.KEY_DURATION,
-									SleepRecord.KEY_MIN, SleepRecord.KEY_NOTE,
-									SleepRecord.KEY_RATING,
-									SleepRecord.KEY_SLEEP_DATA,
-									SleepRecord.KEY_SPIKES,
-									SleepRecord.KEY_SLEEP_DATA,
-									SleepRecord.KEY_TIME_FELL_ASLEEP });
+					final Cursor c = SleepSessions.getSleepMatches(
+							mParentActivity, applicableEvents.get(0).title, new String[] {
+									BaseColumns._ID, SleepSessions.MainTable.KEY_TITLE,
+									SleepSessions.MainTable.KEY_ALARM,
+									SleepSessions.MainTable.KEY_DURATION,
+									SleepSessions.MainTable.KEY_MIN, SleepSessions.MainTable.KEY_NOTE,
+									SleepSessions.MainTable.KEY_RATING,
+									//SleepSessions.MainTable.KEY_SLEEP_DATA,
+									SleepSessions.MainTable.KEY_SPIKES,
+									SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP });
 
-					shdb.close();
 
 					if (c == null) {
 						// we may have lost the cursor since the
@@ -1144,7 +1143,7 @@ public class MonthView extends View {
 						return null;
 					}
 					final Uri data = Uri.withAppendedPath(
-							SleepContentProvider.CONTENT_URI,
+							SleepSessions.MainTable.CONTENT_URI,
 							String.valueOf(c.getLong(0)));
 					c.close();
 					reviewSleepIntent.setData(data);
@@ -1195,7 +1194,7 @@ public class MonthView extends View {
 		}
 
 		getHandler().removeCallbacks(mDismissPopup);
-		final ArrayList<SleepRecord> events = mEvents;
+		final ArrayList<SleepSession> events = mEvents;
 		final int numEvents = events.size();
 		if (numEvents == 0) {
 			mPopup.dismiss();
@@ -1204,7 +1203,7 @@ public class MonthView extends View {
 
 		int eventIndex = 0;
 		for (int i = 0; i < numEvents; i++) {
-			final SleepRecord event = events.get(i);
+			final SleepSession event = events.get(i);
 
 			if (event.getStartJulianDay() > date
 					|| event.getEndJulianDay() < date) {
@@ -1342,5 +1341,32 @@ public class MonthView extends View {
 		}
 		mPopup.showAtLocation(this, Gravity.BOTTOM | Gravity.LEFT, 0, 0);
 		postDelayed(mDismissPopup, POPUP_DISMISS_DELAY);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return new CursorLoader(getContext(),
+						SleepSessions.MainTable.CONTENT_URI,
+						new String[] {
+								//BaseColumns._ID, SleepSessions.MainTable.KEY_TITLE,
+								//SleepSessions.MainTable.KEY_ALARM,
+								//SleepSessions.MainTable.KEY_DURATION,
+								//SleepSessions.MainTable.KEY_MIN, SleepSessions.MainTable.KEY_NOTE,
+								//SleepSessions.MainTable.KEY_RATING,
+								SleepSessions.MainTable.KEY_SLEEP_DATA,
+								//SleepSessions.MainTable.KEY_SPIKES,
+								/*SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP*/}, null, null, null);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// TODO Auto-generated method stub
+		
 	}
 }

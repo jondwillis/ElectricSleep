@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_item_export_all" android:showAsAction="ifRoom|withText" android:icon="@android:drawable/ic_menu_upload" android:title="@string/export_all"></item>
+    <item android:id="@+id/menu_item_export_all" android:showAsAction="ifRoom|withText" android:icon="@android:drawable/ic_menu_share" android:title="@string/export_all"></item>
     <item android:id="@+id/menu_item_delete_all" android:title="@string/delete_all" android:showAsAction="ifRoom|withText" android:icon="@android:drawable/ic_menu_delete"></item>
     
 </menu>
