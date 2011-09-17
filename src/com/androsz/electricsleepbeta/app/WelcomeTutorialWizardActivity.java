@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 
-public class WelcomeTutorialWizardActivity extends CustomTitlebarWizardActivity {
+public class WelcomeTutorialWizardActivity extends WizardActivity {
 
 	public static boolean enforceCalibrationBeforeStartingSleep(
 			final Activity context) {

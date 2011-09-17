@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
 public class HistoryActivity extends HostActivity implements
@@ -40,8 +41,8 @@ public class HistoryActivity extends HostActivity implements
 		@Override
 		protected void onPostExecute(final Void results) {
 			// mListView.removeAllViewsInLayout();
-			getSupportLoaderManager().restartLoader(0,
-					getLoaderArgs(getIntent(), false), HistoryActivity.this);
+			// getSupportLoaderManager().restartLoader(0,
+			// getLoaderArgs(getIntent(), false), HistoryActivity.this);
 			Toast.makeText(HistoryActivity.this,
 					getString(R.string.deleted_sleep_record),
 					Toast.LENGTH_SHORT).show();
@@ -62,10 +63,10 @@ public class HistoryActivity extends HostActivity implements
 		@Override
 		public void onItemClick(final AdapterView<?> parent, final View view,
 				final int position, final long id) {
-			
+
 			final Intent reviewSleepIntent = new Intent(HistoryActivity.this,
 					ReviewSleepActivity.class);
-			
+
 			final Uri data = Uri.withAppendedPath(
 					SleepSessions.MainTable.CONTENT_URI, String.valueOf(id));
 			reviewSleepIntent.setData(data);
@@ -141,9 +142,10 @@ public class HistoryActivity extends HostActivity implements
 
 		progress.setMessage(getString(R.string.querying_sleep_database));
 		progress.show();
-		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI, null,
-				null, new String[] { args.getString(SEARCH_FOR) },
-				SleepSessions.MainTable.KEY_TITLE);
+		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
+				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION,
+				SleepSessions.MainTable.KEY_TITLE + " MATCH ?",
+				new String[] { args.getString(SEARCH_FOR) + "*" }, null);
 	}
 
 	@Override

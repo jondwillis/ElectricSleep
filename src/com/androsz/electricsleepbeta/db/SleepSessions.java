@@ -3,6 +3,7 @@ package com.androsz.electricsleepbeta.db;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.androsz.electricsleepbeta.util.DBUtils;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -127,9 +128,11 @@ public class SleepSessions {
 		public static final String DEFAULT_SORT_ORDER = _ID
 				+ " COLLATE LOCALIZED ASC";
 
-		public static final String[] DEFAULT_COLUMN_PROJECTION = new String[] { _ID,
+		public static final String[] ALL_COLUMNS_PROJECTION = new String[] { _ID,
 				KEY_TITLE, KEY_ALARM, KEY_DURATION, KEY_MIN, KEY_NOTE,
 				KEY_RATING, KEY_SLEEP_DATA, KEY_SPIKES, KEY_TIME_FELL_ASLEEP };
+
+		public static final String KEY_ROW_ID = "rowid";
 	}
 
 	/**
@@ -172,11 +175,11 @@ public class SleepSessions {
 					MainTable.KEY_TIME_FELL_ASLEEP);
 			projectionMap.put(MainTable.KEY_NOTE, MainTable.KEY_NOTE);
 
-			projectionMap.put(BaseColumns._ID, "rowid AS " + BaseColumns._ID);
+			projectionMap.put(BaseColumns._ID, MainTable.KEY_ROW_ID + " AS " + BaseColumns._ID);
 			projectionMap.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
-					"rowid AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
+					MainTable.KEY_ROW_ID + " AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
 			projectionMap.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,
-					"rowid AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
+					MainTable.KEY_ROW_ID + " AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
 		}
 
 		/**
@@ -252,7 +255,7 @@ public class SleepSessions {
 				// If URI is for a particular row ID, delete is based on
 				// incoming
 				// data but modified to restrict to the given ID.
-				finalWhere = DatabaseUtils.concatenateWhere(MainTable._ID
+				finalWhere = DatabaseUtils.concatenateWhere(MainTable.KEY_ROW_ID
 						+ " = " + ContentUris.parseId(uri), selection);
 				count = db.delete(MainTable.TABLE_NAME, finalWhere,
 						selectionArgs);
@@ -433,19 +436,20 @@ public class SleepSessions {
 		final ContentResolver contentResolver = context.getContentResolver();
 
 		final int numRowsDeleted = contentResolver.delete(
-				MainTable.CONTENT_URI, MainTable._ID + "='"
-						+ rowId + "'", null);
+				Uri.withAppendedPath(MainTable.CONTENT_URI, Long.toString(rowId)), null, null);
 
 		return numRowsDeleted;
 	}
 
-	public static ArrayList<SleepSession> getSessionsFromCursor(
+	public static LinkedHashMap<Long, SleepSession> getSessionsFromCursor(
 			Context context, Cursor c) {
-		ArrayList<SleepSession> sessions = new ArrayList<SleepSession>();
+		LinkedHashMap<Long, SleepSession> sessions = new LinkedHashMap<Long, SleepSession>();
+		
 		if (c != null && c.moveToFirst()) {
 
 			do {
-				sessions.add(new SleepSession(c));
+				SleepSession session = new SleepSession(c);
+				sessions.put(session.getStartTime(), session);
 			} while (c.moveToNext());
 			c.close();
 		}
@@ -453,7 +457,7 @@ public class SleepSessions {
 		return sessions;
 	}
 
-	/*public static Cursor getSleepMatches(Context context, final String query,
+	public static Cursor getSleepMatches(Context context, final String query,
 			final String[] columns) {
 		final ContentResolver contentResolver = context.getContentResolver();
 		final String selection = MainTable.KEY_TITLE + " MATCH ?";
@@ -461,5 +465,5 @@ public class SleepSessions {
 
 		return contentResolver.query(MainTable.CONTENT_URI, columns,
 				selection, selectionArgs, null);
-	}*/
+	}
 }

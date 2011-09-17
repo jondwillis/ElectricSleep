@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.widget.ViewFlipperBugfix;
 
-public abstract class CustomTitlebarWizardActivity extends HostActivity {
+public abstract class WizardActivity extends HostActivity {
 
 	protected ViewFlipperBugfix viewFlipper;
 

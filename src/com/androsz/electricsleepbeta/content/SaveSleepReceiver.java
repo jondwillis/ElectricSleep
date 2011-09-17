@@ -33,14 +33,6 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 
-		new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-
-				return null;
-			}
-		}.execute();
-
 		new Thread(new Runnable() {
 
 			@Override

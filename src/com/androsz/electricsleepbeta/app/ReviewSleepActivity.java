@@ -29,7 +29,8 @@ public class ReviewSleepActivity extends HostActivity implements
 
 		@Override
 		protected Void doInBackground(final Void... params) {
-			SleepSessions.deleteSession(ReviewSleepActivity.this, uri.getLastPathSegment());
+			SleepSessions.deleteSession(ReviewSleepActivity.this,
+					uri.getLastPathSegment());
 			return null;
 		}
 
@@ -96,7 +97,9 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, uri, null, null, null, null);
+		return new CursorLoader(this, uri,
+				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
+				null);
 	}
 
 	@Override
@@ -111,7 +114,9 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		data.moveToFirst();
+		if (data != null && !data.isFirst()) {
+			data.moveToFirst();
+		}
 		final SleepSession sleepRecord = new SleepSession(data);
 
 		chartFragment.setSleepRecord(sleepRecord);

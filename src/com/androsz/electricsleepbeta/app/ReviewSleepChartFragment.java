@@ -9,7 +9,7 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
-public class ReviewSleepChartFragment extends AnalyticFragment {
+public class ReviewSleepChartFragment extends HostFragment {
 
 	SleepChart sleepChart;
 
@@ -22,11 +22,8 @@ public class ReviewSleepChartFragment extends AnalyticFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		final View view = inflater.inflate(
-				R.layout.fragment_review_sleep_chart, container, false);
-
-		view.setBackgroundResource(R.drawable.gradient_background_vert);
-
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+		
 		sleepChart = (SleepChart) view.findViewById(R.id.sleep_movement_chart);
 		if (sleepRecord != null) {
 			setSleepRecord(sleepRecord);
@@ -40,6 +37,11 @@ public class ReviewSleepChartFragment extends AnalyticFragment {
 		if (sleepChart != null) {
 			sleepChart.sync(sleepRecord);
 		}
+	}
+
+	@Override
+	protected int getContentAreaLayoutId() {
+		return R.layout.fragment_review_sleep_chart;
 	}
 
 }

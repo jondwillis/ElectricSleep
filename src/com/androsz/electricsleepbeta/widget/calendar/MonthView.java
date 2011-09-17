@@ -17,14 +17,15 @@
 package com.androsz.electricsleepbeta.widget.calendar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -37,47 +38,25 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.BaseColumns;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HistoryActivity;
+import com.androsz.electricsleepbeta.app.HistoryMonthActivity;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.db.SleepSessions;
 
-public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	class DismissPopup implements Runnable {
-		@Override
-		public void run() {
-			mPopup.dismiss();
-		}
-	}
+public class MonthView extends View {
 
 	private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
-	private static int DAY_NUMBER_OFFSET = 10;
-	private static int EVENT_DOT_LEFT_MARGIN = 7;
-	private static int EVENT_DOT_TOP_MARGIN = 5;
-	private static int EVENT_DOT_W_H = 10;
 	private static int EVENT_NUM_DAYS = 31;
 	private static int HORIZONTAL_FLING_THRESHOLD = 33;
 	private static float HOUR_GAP = 0f;
@@ -85,8 +64,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	private static int MONTH_DAY_GAP = 1;
 	private static int MONTH_DAY_TEXT_SIZE = 20;
 	private static float mScale = 0; // Used for supporting different screen
-	private static final int POPUP_DISMISS_DELAY = 3000;
-	private static final int POPUP_HEIGHT = 100;
+										// densities
 	/**
 	 * The selection modes are HIDDEN, PRESSED, SELECTED, and LONGPRESS.
 	 */
@@ -98,17 +76,11 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	private static final int SELECTION_SELECTED = 2;
 	private static int TEXT_TOP_MARGIN = 7;
 
-	private static int WEEK_BANNER_HEIGHT = 17;
-
 	// densities
 	private static int WEEK_GAP = 0;
-	private static int WEEK_TEXT_PADDING = 3;
-	private static int WEEK_TEXT_SIZE = 15;
 
 	// An array of which days have events for quick reference
-	private final boolean[] eventDay = new boolean[31];
-
-	private boolean mAnimating;
+	private final boolean[] eventDay = new boolean[EVENT_NUM_DAYS];
 
 	// For drawing to an off-screen Canvas
 	private Bitmap mBitmap;
@@ -135,10 +107,11 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	// width/height.
 	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(
 			4);
-	private final DismissPopup mDismissPopup = new DismissPopup();
+
 	private final EventGeometry mEventGeometry;
-	private final EventLoader mEventLoader;
-	private ArrayList<SleepSession> mEvents = new ArrayList<SleepSession>();
+	// private final EventLoader mEventLoader;
+	private LinkedHashMap<Long, SleepSession> mEvents = new LinkedHashMap<Long, SleepSession>(
+			0);
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -147,7 +120,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	private GestureDetector mGestureDetector;
 	private boolean mLaunchDayView;
 	private int mMonthDayNumberColor;
-	private int mMonthOtherMonthBannerColor;
 	// Cached colors
 	private int mMonthOtherMonthColor;
 	private int mMonthOtherMonthDayNumberColor;
@@ -157,17 +129,9 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 
 	private int mMonthTodayNumberColor;
 
-	private int mMonthWeekBannerColor;
-	private final Navigator mNavigator;
 	// This Time object is used to set the time for the other Month view.
 	private final Time mOtherViewCalendar = new Time();
-	private MonthActivity mParentActivity;
-
-	private PopupWindow mPopup;
-
-	private View mPopupView;
-
-	private int mPreviousPopupHeight;
+	private HistoryMonthActivity mParentActivity;
 
 	// Pre-allocate and reuse
 	private final Rect mRect = new Rect();
@@ -180,7 +144,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	private final Time mSavedTime = new Time(); // the time when we entered this
 												// view
 	private int mSelectionMode = SELECTION_HIDDEN;
-	private final boolean mShowToast = false;
 	// These booleans disable features that were taken out of the spec.
 	private final boolean mShowWeekNumbers = false;
 	private int mStartDay;
@@ -190,12 +153,10 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	private Time mToday;
 	private Drawable mTodayBackground;
 
-	// private int mMonthBgColor;
-
 	private Time mViewCalendar;
 
-	public MonthView(MonthActivity activity, Navigator navigator) {
-		super(activity);
+	public MonthView(HistoryMonthActivity historyMonthActivity) {
+		super(historyMonthActivity);
 		if (mScale == 0) {
 			mScale = getContext().getResources().getDisplayMetrics().density;
 			if (mScale != 1) {
@@ -204,37 +165,20 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 				HOUR_GAP *= mScale;
 
 				MONTH_DAY_TEXT_SIZE *= mScale;
-				WEEK_BANNER_HEIGHT *= mScale;
-				WEEK_TEXT_SIZE *= mScale;
-				WEEK_TEXT_PADDING *= mScale;
-				EVENT_DOT_TOP_MARGIN *= mScale;
-				EVENT_DOT_LEFT_MARGIN *= mScale;
-				EVENT_DOT_W_H *= mScale;
 				TEXT_TOP_MARGIN *= mScale;
 				HORIZONTAL_FLING_THRESHOLD *= mScale;
 				MIN_EVENT_HEIGHT *= mScale;
 				BUSY_BITS_WIDTH *= mScale;
 				BUSY_BITS_MARGIN *= mScale;
-				DAY_NUMBER_OFFSET *= mScale;
 			}
 		}
 
-		mEventLoader = activity.mEventLoader;
-		mNavigator = navigator;
+		// mEventLoader = activity.mEventLoader;
 		mEventGeometry = new EventGeometry();
 		mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
 		mEventGeometry.setHourGap(HOUR_GAP);
-		init(activity);
-	}
-
-	void animationFinished() {
-		mAnimating = false;
-		mRedrawScreen = true;
-		invalidate();
-	}
-
-	void animationStarted() {
-		mAnimating = true;
+		mParentActivity = historyMonthActivity;
+		init();
 	}
 
 	/**
@@ -243,24 +187,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 	 */
 	private void clearBitmapCache() {
 		recycleAndClearBitmapCache(mDayBitmapCache);
-	}
-
-	// This is called when the activity is paused so that the popup can
-	// be dismissed.
-	void dismissPopup() {
-		if (!mShowToast) {
-			return;
-		}
-
-		// Protect against null-pointer exceptions
-		if (mPopup != null) {
-			mPopup.dismiss();
-		}
-
-		final Handler handler = getHandler();
-		if (handler != null) {
-			handler.removeCallbacks(mDismissPopup);
-		}
 	}
 
 	private void doDraw(Canvas canvas) {
@@ -292,7 +218,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 			if (mShowWeekNumbers) {
 				weekNum += 1;
 				if (weekNum >= 53) {
-					final boolean inCurrentMonth = (day - mFirstJulianDay < 31);
+					final boolean inCurrentMonth = (day - mFirstJulianDay < EVENT_NUM_DAYS);
 					weekNum = getWeekOfYear(row + 1, 0, inCurrentMonth,
 							calendar);
 				}
@@ -386,9 +312,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 
 			// Places events for that day
 			drawEvents(day, canvas, r, p, false /* draw bb background */);
-			if (!mAnimating) {
-				updateEventDetails(day);
-			}
 		} else {
 			// Today gets a different background
 			if (isToday) {
@@ -401,45 +324,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 			}
 			// Places events for that day
 			drawEvents(day, canvas, r, p, !isToday /* draw bb background */);
-		}
-
-		// Draw week number
-		if (mShowWeekNumbers && column == 0) {
-			// Draw the banner
-			p.setStyle(Paint.Style.FILL);
-			p.setColor(mMonthWeekBannerColor);
-			if (isLandscape) {
-				final int bottom = r.bottom;
-				r.bottom = r.top + WEEK_BANNER_HEIGHT;
-				r.left++;
-				canvas.drawRect(r, p);
-				r.bottom = bottom;
-				r.left--;
-			} else {
-				final int top = r.top;
-				r.top = r.bottom - WEEK_BANNER_HEIGHT;
-				r.left++;
-				canvas.drawRect(r, p);
-				r.top = top;
-				r.left--;
-			}
-
-			// Draw the number
-			p.setColor(mMonthOtherMonthBannerColor);
-			p.setAntiAlias(true);
-			p.setTypeface(null);
-			p.setTextSize(WEEK_TEXT_SIZE);
-			p.setTextAlign(Paint.Align.LEFT);
-
-			final int textX = r.left + WEEK_TEXT_PADDING;
-			int textY;
-			if (isLandscape) {
-				textY = r.top + WEEK_BANNER_HEIGHT - WEEK_TEXT_PADDING;
-			} else {
-				textY = r.bottom - WEEK_TEXT_PADDING;
-			}
-
-			canvas.drawText(String.valueOf(weekNum), textX, textY, p);
 		}
 
 		// Draw the monthDay number
@@ -507,8 +391,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
-		final ArrayList<SleepSession> events = mEvents;
-		final int numEvents = events.size();
+		final Collection<SleepSession> events = mEvents.values();
 		final EventGeometry geometry = mEventGeometry;
 
 		if (drawBg) {
@@ -523,8 +406,8 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 			canvas.drawRect(rf, p);
 		}
 
-		for (int i = 0; i < numEvents; i++) {
-			final SleepSession event = events.get(i);
+		// for (int i = 0; i < numEvents; i++) {
+		for (SleepSession event : events) {
 			if (!geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH,
 					event)) {
 				continue;
@@ -565,12 +448,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 				.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN) / 24.0f);
 		mCellWidth = (width - (6 * MONTH_DAY_GAP)) / 7;
 		mBorder = (width - 6 * (mCellWidth + MONTH_DAY_GAP) - mCellWidth) / 2;
-
-		if (mShowToast) {
-			mPopup.dismiss();
-			mPopup.setWidth(width - 20);
-			mPopup.setHeight(POPUP_HEIGHT);
-		}
 
 		if (((mBitmap == null) || mBitmap.isRecycled()
 				|| (mBitmap.getHeight() != height) || (mBitmap.getWidth() != width))
@@ -629,7 +506,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		return mSelectionMode;
 	}
 
-	Time getTime() {
+	public Time getTime() {
 		return mViewCalendar;
 	}
 
@@ -666,10 +543,9 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		return calendar.get(Calendar.WEEK_OF_YEAR);
 	}
 
-	private void init(MonthActivity activity) {
+	private void init() {
 		setFocusable(true);
 		setClickable(true);
-		mParentActivity = activity;
 		mViewCalendar = new Time();
 		final long now = System.currentTimeMillis();
 		mViewCalendar.set(now);
@@ -684,7 +560,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		mToday = new Time();
 		mToday.set(System.currentTimeMillis());
 
-		mResources = activity.getResources();
+		mResources = mParentActivity.getResources();
 		mBoxSelected = mResources.getDrawable(R.drawable.month_view_selected);
 		mBoxPressed = mResources.getDrawable(R.drawable.month_view_pressed);
 		mBoxLongPressed = mResources
@@ -696,9 +572,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		// Cache color lookups
 		final Resources res = getResources();
 		mMonthOtherMonthColor = res.getColor(R.color.month_other_month);
-		mMonthWeekBannerColor = res.getColor(R.color.month_week_banner);
-		mMonthOtherMonthBannerColor = res
-				.getColor(R.color.month_other_month_banner);
 		mMonthOtherMonthDayNumberColor = res
 				.getColor(R.color.month_other_month_day_number);
 		mMonthDayNumberColor = res.getColor(R.color.month_day_number);
@@ -706,21 +579,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		mMonthSaturdayColor = res.getColor(R.color.month_saturday);
 		mMonthSundayColor = res.getColor(R.color.month_sunday);
 		mBusybitsColor = res.getColor(R.color.primary1);
-
-		if (mShowToast) {
-			LayoutInflater inflater;
-			inflater = (LayoutInflater) activity
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			mPopupView = inflater.inflate(R.layout.month_bubble, null);
-			mPopup = new PopupWindow(activity);
-			mPopup.setContentView(mPopupView);
-			final Resources.Theme dialogTheme = getResources().newTheme();
-			dialogTheme.applyStyle(android.R.style.Theme_Dialog, true);
-			final TypedArray ta = dialogTheme
-					.obtainStyledAttributes(new int[] { android.R.attr.windowBackground });
-			mPopup.setBackgroundDrawable(ta.getDrawable(0));
-			ta.recycle();
-		}
 
 		mGestureDetector = new GestureDetector(getContext(),
 				new GestureDetector.SimpleOnGestureListener() {
@@ -730,41 +588,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 						// unless the finger moves before lifting up (onFling or
 						// onScroll).
 						mLaunchDayView = true;
-						return true;
-					}
-
-					@Override
-					public boolean onFling(MotionEvent e1, MotionEvent e2,
-							float velocityX, float velocityY) {
-						// The user might do a slow "fling" after touching the
-						// screen
-						// and we don't want the long-press to pop up a context
-						// menu.
-						// Setting mLaunchDayView to false prevents the
-						// long-press.
-						mLaunchDayView = false;
-						mSelectionMode = SELECTION_HIDDEN;
-
-						final int distanceX = Math.abs((int) e2.getX()
-								- (int) e1.getX());
-						final int distanceY = Math.abs((int) e2.getY()
-								- (int) e1.getY());
-						if (distanceY < HORIZONTAL_FLING_THRESHOLD
-								|| distanceY < distanceX) {
-							return false;
-						}
-
-						// Switch to a different month
-						final Time time = mOtherViewCalendar;
-						time.set(mViewCalendar);
-						if (velocityY < 0) {
-							time.month += 1;
-						} else {
-							time.month -= 1;
-						}
-						time.normalize(true);
-						mParentActivity.goTo(time, true);
-
 						return true;
 					}
 
@@ -847,6 +670,15 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 				});
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (mGestureDetector.onTouchEvent(event)) {
+			return true;
+		}
+
+		return super.onTouchEvent(event);
+	}
+	
 	@Override
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
@@ -968,7 +800,8 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 
 		if (other != null) {
 			other.normalize(true /* ignore DST */);
-			mNavigator.goTo(other, true);
+			// TODO
+			// mNavigator.goTo(other, true);
 		} else if (redraw) {
 			mRedrawScreen = true;
 			invalidate();
@@ -1021,15 +854,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		clearBitmapCache();
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (mGestureDetector.onTouchEvent(event)) {
-			return true;
-		}
-
-		return super.onTouchEvent(event);
-	}
-
 	private void recycleAndClearBitmapCache(SparseArray<Bitmap> bitmapCache) {
 		final int size = bitmapCache.size();
 		for (int i = 0; i < size; i++) {
@@ -1039,65 +863,6 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 
 	}
 
-	void reloadEvents() {
-		// Get the date for the beginning of the month
-		final Time monthStart = mTempTime;
-		monthStart.set(mViewCalendar);
-		monthStart.monthDay = 1;
-		monthStart.hour = 0;
-		monthStart.minute = 0;
-		monthStart.second = 0;
-		final long millis = monthStart.normalize(true /* ignore isDst */);
-
-		// Load the days with events in the background
-		mParentActivity.setProgressBarIndeterminateVisibility(true);
-
-		final ArrayList<SleepSession> events = new ArrayList<SleepSession>();
-		mEventLoader.loadEventsInBackground(EVENT_NUM_DAYS, events, millis,
-				new Runnable() {
-					@Override
-					public void run() {
-						mEvents = events;
-						mRedrawScreen = true;
-						invalidate();
-						final int numEvents = events.size();
-
-						// Clear out event days
-						for (int i = 0; i < EVENT_NUM_DAYS; i++) {
-							eventDay[i] = false;
-						}
-
-						// Compute the new set of days with events
-						for (int i = 0; i < numEvents; i++) {
-							final SleepSession event = events.get(i);
-							int startDay = event.getStartJulianDay()
-									- mFirstJulianDay;
-							int endDay = event.getEndJulianDay()
-									- mFirstJulianDay + 1;
-							if (startDay < 31 || endDay >= 0) {
-								if (startDay < 0) {
-									startDay = 0;
-								}
-								if (startDay > 31) {
-									startDay = 31;
-								}
-								if (endDay < 0) {
-									endDay = 0;
-								}
-								if (endDay > 31) {
-									endDay = 31;
-								}
-								for (int j = startDay; j < endDay; j++) {
-									eventDay[j] = true;
-								}
-							}
-						}
-						mParentActivity
-								.setProgressBarIndeterminateVisibility(false);
-					}
-				}, null);
-	}
-
 	private void reviewSleepIfNecessary(final long millis) {
 		new AsyncTask<Void, Void, Void>() {
 
@@ -1105,7 +870,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 			protected Void doInBackground(Void... params) {
 				final ArrayList<SleepSession> applicableEvents = new ArrayList<SleepSession>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
-				for (final SleepSession event : mEvents) {
+				for (final SleepSession event : mEvents.values()) {
 					final long startTime = event.getStartTime() - millis;
 					final long endTime = event.getEndTime() - millis;
 					if ((endTime > 0)
@@ -1121,19 +886,26 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 				if (applicableEvents.size() == 1) {
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
+					final Cursor c = SleepSessions.getSleepMatches(
+							mParentActivity, applicableEvents.get(0).title,
+							new String[] { SleepSessions.MainTable._ID });
+					c.moveToFirst();
 					// TODO: hook this into sleep db
 
-					final Cursor c = SleepSessions.getSleepMatches(
-							mParentActivity, applicableEvents.get(0).title, new String[] {
-									BaseColumns._ID, SleepSessions.MainTable.KEY_TITLE,
-									SleepSessions.MainTable.KEY_ALARM,
-									SleepSessions.MainTable.KEY_DURATION,
-									SleepSessions.MainTable.KEY_MIN, SleepSessions.MainTable.KEY_NOTE,
-									SleepSessions.MainTable.KEY_RATING,
-									//SleepSessions.MainTable.KEY_SLEEP_DATA,
-									SleepSessions.MainTable.KEY_SPIKES,
-									SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP });
-
+					/*
+					 * final Cursor c = null; SleepSessions .getSleepMatches(
+					 * mParentActivity, applicableEvents.get(0).title, new
+					 * String[] { BaseColumns._ID,
+					 * SleepSessions.MainTable.KEY_TITLE,
+					 * SleepSessions.MainTable.KEY_ALARM,
+					 * SleepSessions.MainTable.KEY_DURATION,
+					 * SleepSessions.MainTable.KEY_MIN,
+					 * SleepSessions.MainTable.KEY_NOTE,
+					 * SleepSessions.MainTable.KEY_RATING, //
+					 * SleepSessions.MainTable.KEY_SLEEP_DATA ,
+					 * SleepSessions.MainTable.KEY_SPIKES, SleepSessions
+					 * .MainTable.KEY_TIME_FELL_ASLEEP });
+					 */
 
 					if (c == null) {
 						// we may have lost the cursor since the
@@ -1145,7 +917,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 					final Uri data = Uri.withAppendedPath(
 							SleepSessions.MainTable.CONTENT_URI,
 							String.valueOf(c.getLong(0)));
-					c.close();
+					// c.close();
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
 				} else if (applicableEvents.size() > 1) {
@@ -1166,7 +938,7 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		}.execute();
 	}
 
-	void setSelectedTime(Time time) {
+	public void setSelectedTime(Time time) {
 		// Save the selected time so that we can restore it later when we switch
 		// views.
 		mSavedTime.set(time);
@@ -1188,185 +960,49 @@ public class MonthView extends View implements LoaderManager.LoaderCallbacks<Cur
 		mSelectionMode = selectionMode;
 	}
 
-	private void updateEventDetails(int date) {
-		if (!mShowToast) {
-			return;
-		}
+	public void forceReloadEvents() {
 
-		getHandler().removeCallbacks(mDismissPopup);
-		final ArrayList<SleepSession> events = mEvents;
-		final int numEvents = events.size();
-		if (numEvents == 0) {
-			mPopup.dismiss();
-			return;
-		}
-
-		int eventIndex = 0;
-		for (int i = 0; i < numEvents; i++) {
-			final SleepSession event = events.get(i);
-
-			if (event.getStartJulianDay() > date
-					|| event.getEndJulianDay() < date) {
-				continue;
+		android.os.Process
+				.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
+		final Time monthStart = mTempTime;
+		monthStart.set(mViewCalendar);
+		monthStart.monthDay = 1;
+		monthStart.hour = 0;
+		monthStart.minute = 0;
+		monthStart.second = 0;
+		final long startOfMonthMillis = monthStart.normalize(true /*
+																 * ignore isDst
+																 */);
+		mEvents = mParentActivity.getSessionsInInterval(startOfMonthMillis,
+				EVENT_NUM_DAYS);
+		// Clear out event days
+		Arrays.fill(eventDay, false);
+		// Compute the new set of days with events
+		for (SleepSession session : mEvents.values()) {
+			int startDay = session.getStartJulianDay() - mFirstJulianDay;
+			int endDay = session.getEndJulianDay() - mFirstJulianDay + 1;
+			if (startDay < EVENT_NUM_DAYS || endDay >= 0) {
+				if (startDay < 0) {
+					startDay = 0;
+				}
+				if (startDay > EVENT_NUM_DAYS) {
+					startDay = EVENT_NUM_DAYS;
+				}
+				if (endDay < 0) {
+					endDay = 0;
+				}
+				if (endDay > EVENT_NUM_DAYS) {
+					endDay = EVENT_NUM_DAYS;
+				}
+				for (int j = startDay; j < endDay; j++) {
+					eventDay[j] = true;
+				}
 			}
-
-			// If we have all the event that we can display, then just count
-			// the extra ones.
-			if (eventIndex >= 4) {
-				eventIndex += 1;
-				continue;
-			}
-
-			int flags;
-			final boolean showEndTime = true;
-
-			flags = DateUtils.FORMAT_SHOW_TIME
-					| DateUtils.FORMAT_CAP_NOON_MIDNIGHT;
-			if (DateFormat.is24HourFormat(mParentActivity)) {
-				flags |= DateUtils.FORMAT_24HOUR;
-			}
-
-			String timeRange;
-			if (showEndTime) {
-				timeRange = DateUtils.formatDateRange(mParentActivity,
-						event.getStartTime(), event.getEndTime(), flags);
-			} else {
-				timeRange = DateUtils.formatDateRange(mParentActivity,
-						event.getStartTime(), event.getStartTime(), flags);
-			}
-
-			TextView timeView = null;
-			TextView titleView = null;
-			switch (eventIndex) {
-			case 0:
-				timeView = (TextView) mPopupView.findViewById(R.id.time0);
-				titleView = (TextView) mPopupView
-						.findViewById(R.id.event_title0);
-				break;
-			case 1:
-				timeView = (TextView) mPopupView.findViewById(R.id.time1);
-				titleView = (TextView) mPopupView
-						.findViewById(R.id.event_title1);
-				break;
-			case 2:
-				timeView = (TextView) mPopupView.findViewById(R.id.time2);
-				titleView = (TextView) mPopupView
-						.findViewById(R.id.event_title2);
-				break;
-			case 3:
-				timeView = (TextView) mPopupView.findViewById(R.id.time3);
-				titleView = (TextView) mPopupView
-						.findViewById(R.id.event_title3);
-				break;
-			}
-
-			timeView.setText(timeRange);
-			titleView.setText(event.title);
-			eventIndex += 1;
-		}
-		if (eventIndex == 0) {
-			// We didn't find any events for this day
-			mPopup.dismiss();
-			return;
 		}
 
-		// Hide the items that have no event information
-		View view;
-		switch (eventIndex) {
-		case 1:
-			view = mPopupView.findViewById(R.id.item_layout1);
-			view.setVisibility(View.GONE);
-			view = mPopupView.findViewById(R.id.item_layout2);
-			view.setVisibility(View.GONE);
-			view = mPopupView.findViewById(R.id.item_layout3);
-			view.setVisibility(View.GONE);
-			view = mPopupView.findViewById(R.id.plus_more);
-			view.setVisibility(View.GONE);
-			break;
-		case 2:
-			view = mPopupView.findViewById(R.id.item_layout1);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout2);
-			view.setVisibility(View.GONE);
-			view = mPopupView.findViewById(R.id.item_layout3);
-			view.setVisibility(View.GONE);
-			view = mPopupView.findViewById(R.id.plus_more);
-			view.setVisibility(View.GONE);
-			break;
-		case 3:
-			view = mPopupView.findViewById(R.id.item_layout1);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout2);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout3);
-			view.setVisibility(View.GONE);
-			view = mPopupView.findViewById(R.id.plus_more);
-			view.setVisibility(View.GONE);
-			break;
-		case 4:
-			view = mPopupView.findViewById(R.id.item_layout1);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout2);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout3);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.plus_more);
-			view.setVisibility(View.GONE);
-			break;
-		default:
-			view = mPopupView.findViewById(R.id.item_layout1);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout2);
-			view.setVisibility(View.VISIBLE);
-			view = mPopupView.findViewById(R.id.item_layout3);
-			view.setVisibility(View.VISIBLE);
-			final TextView tv = (TextView) mPopupView
-					.findViewById(R.id.plus_more);
-			tv.setVisibility(View.VISIBLE);
-			final String format = mResources.getString(R.string.plus_N_more);
-			final String plusMore = String.format(format, eventIndex - 4);
-			tv.setText(plusMore);
-			break;
-		}
+		mRedrawScreen = true;
 
-		if (eventIndex > 5) {
-			eventIndex = 5;
-		}
-		final int popupHeight = 20 * eventIndex + 15;
-		mPopup.setHeight(popupHeight);
-
-		if (mPreviousPopupHeight != popupHeight) {
-			mPreviousPopupHeight = popupHeight;
-			mPopup.dismiss();
-		}
-		mPopup.showAtLocation(this, Gravity.BOTTOM | Gravity.LEFT, 0, 0);
-		postDelayed(mDismissPopup, POPUP_DISMISS_DELAY);
+		postInvalidate();
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(getContext(),
-						SleepSessions.MainTable.CONTENT_URI,
-						new String[] {
-								//BaseColumns._ID, SleepSessions.MainTable.KEY_TITLE,
-								//SleepSessions.MainTable.KEY_ALARM,
-								//SleepSessions.MainTable.KEY_DURATION,
-								//SleepSessions.MainTable.KEY_MIN, SleepSessions.MainTable.KEY_NOTE,
-								//SleepSessions.MainTable.KEY_RATING,
-								SleepSessions.MainTable.KEY_SLEEP_DATA,
-								//SleepSessions.MainTable.KEY_SPIKES,
-								/*SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP*/}, null, null, null);
-	}
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
-		// TODO Auto-generated method stub
-		
-	}
 }

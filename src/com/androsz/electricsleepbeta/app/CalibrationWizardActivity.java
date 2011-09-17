@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
 
-public class CalibrationWizardActivity extends CustomTitlebarWizardActivity {
+public class CalibrationWizardActivity extends WizardActivity {
 
 	private class AlarmCalibrationTask extends AsyncTask<Void, Void, Void> {
 

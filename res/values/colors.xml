@@ -18,7 +18,7 @@
 	<color name="month_day_number">#ffCCCCCC</color>
 	<color name="month_saturday">#ffCCCCCC</color>
 	<color name="month_sunday">#ffCCCCCC</color>
-	<color name="month_today_number">#ffffffff</color>
+	<color name="month_today_number">#ffA4C639</color>
 	<color name="month_other_month">#66ffffff</color>
 	<color name="month_other_month_day_number">#ffB3B3B3</color>
 	<color name="month_other_month_banner">#80595959</color>

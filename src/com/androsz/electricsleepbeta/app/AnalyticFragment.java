@@ -7,14 +7,28 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class AnalyticFragment extends Fragment {
 
 	public abstract void onClick(View v);
+
+	protected abstract int getContentAreaLayoutId();
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		final View view = inflater.inflate(getContentAreaLayoutId(), container, false);
+
+		view.setBackgroundResource(R.drawable.gradient_background_vert);
+		return view;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

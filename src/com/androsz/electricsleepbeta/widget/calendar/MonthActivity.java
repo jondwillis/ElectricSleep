@@ -19,16 +19,22 @@ package com.androsz.electricsleepbeta.widget.calendar;
 //*import static android.provider.Calendar.EVENT_BEGIN_TIME;
 //*import dalvik.system.VMRuntime;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.format.DateUtils;
@@ -42,17 +48,18 @@ import android.widget.ViewSwitcher;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HostActivity;
+import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.util.PointD;
 
 public class MonthActivity extends HostActivity implements
-		ViewSwitcher.ViewFactory, Navigator, AnimationListener {
+		ViewSwitcher.ViewFactory, Navigator, LoaderManager.LoaderCallbacks<Cursor> {
 	private static final int DAY_OF_WEEK_KINDS[] = { Calendar.SUNDAY,
 			Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
 			Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY };
 	private static final int DAY_OF_WEEK_LABEL_IDS[] = { R.id.day0, R.id.day1,
 			R.id.day2, R.id.day3, R.id.day4, R.id.day5, R.id.day6 };
-	private ContentResolver mContentResolver;
-	EventLoader mEventLoader;
+
 	private Animation mInAnimationFuture;
 	private Animation mInAnimationPast;
 
@@ -70,19 +77,7 @@ public class MonthActivity extends HostActivity implements
 			}
 		}
 	};
-	// Create an observer so that we can update the views whenever a
-	// Calendar event changes.
-	private final ContentObserver mObserver = new ContentObserver(new Handler()) {
-		@Override
-		public boolean deliverSelfNotifications() {
-			return true;
-		}
 
-		@Override
-		public void onChange(boolean selfChange) {
-			eventsChanged();
-		}
-	};
 	private Animation mOutAnimationFuture;
 
 	private Animation mOutAnimationPast;
@@ -93,8 +88,14 @@ public class MonthActivity extends HostActivity implements
 	private Time mTime;
 
 	void eventsChanged() {
-		final MonthView view = (MonthView) mSwitcher.getCurrentView();
-		view.reloadEvents();
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				final MonthView view = (MonthView) mSwitcher.getCurrentView();
+				view.forceReloadEvents();
+			}
+		});
 	}
 
 	@Override
@@ -123,7 +124,6 @@ public class MonthActivity extends HostActivity implements
 		setTitle(Utils.formatMonthYear(this, time));
 
 		final MonthView current = (MonthView) mSwitcher.getCurrentView();
-		current.dismissPopup();
 
 		final Time currentTime = current.getTime();
 
@@ -142,12 +142,11 @@ public class MonthActivity extends HostActivity implements
 				mSwitcher.setOutAnimation(mOutAnimationFuture);
 			}
 		}
-
+		
 		final MonthView next = (MonthView) mSwitcher.getNextView();
 		next.setSelectionMode(current.getSelectionMode());
 		next.setSelectedTime(time);
-		next.reloadEvents();
-		next.animationStarted();
+		next.forceReloadEvents();
 		mSwitcher.showNext();
 		next.requestFocus();
 		mTime = time;
@@ -166,13 +165,13 @@ public class MonthActivity extends HostActivity implements
 
 		final MonthView view = (MonthView) mSwitcher.getCurrentView();
 		view.setSelectedTime(now);
-		view.reloadEvents();
+		view.forceReloadEvents();
 	}
 
 	/* ViewSwitcher.ViewFactory interface methods */
 	@Override
 	public View makeView() {
-		final MonthView mv = new MonthView(this, this);
+		final MonthView mv = null;
 		mv.setLayoutParams(new ViewSwitcher.LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
@@ -180,32 +179,13 @@ public class MonthActivity extends HostActivity implements
 		return mv;
 	}
 
-	// Notifies the MonthView when an animation has finished.
-	@Override
-	public void onAnimationEnd(Animation animation) {
-		final MonthView monthView = (MonthView) mSwitcher.getCurrentView();
-		monthView.animationFinished();
-	}
-
-	@Override
-	public void onAnimationRepeat(Animation animation) {
-	}
-
-	@Override
-	public void onAnimationStart(Animation animation) {
-	}
-
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
-		// Eliminate extra GCs during startup by setting the initial heap size
-		// to 4MB.
-		// TODO: We should restore the old heap size once the activity reaches
-		// the idle state
-		// VMRuntime.getRuntime().setMinimumHeapSize(INITIAL_HEAP_SIZE);
-
-		mContentResolver = getContentResolver();
+		sessionsObserver = new SessionsContentObserver();
+		getContentResolver().registerContentObserver(
+				SleepSessions.MainTable.CONTENT_URI, true, sessionsObserver);
+		getSupportLoaderManager().initLoader(0, null, this);
 
 		final long time = Utils.timeFromIntentInMillis(getIntent());
 
@@ -237,7 +217,7 @@ public class MonthActivity extends HostActivity implements
 
 		setTitle(Utils.formatMonthYear(this, mTime));
 
-		mEventLoader = new EventLoader(this);
+		// mEventLoader = new EventLoader(this);
 
 		mSwitcher = (ViewSwitcher) findViewById(R.id.switcher);
 		mSwitcher.setFactory(this);
@@ -251,9 +231,12 @@ public class MonthActivity extends HostActivity implements
 				R.anim.slide_up_in);
 		mOutAnimationFuture = AnimationUtils.loadAnimation(this,
 				R.anim.slide_up_out);
+	}
 
-		mInAnimationPast.setAnimationListener(this);
-		mInAnimationFuture.setAnimationListener(this);
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		getContentResolver().unregisterContentObserver(sessionsObserver);
 	}
 
 	@Override
@@ -285,37 +268,30 @@ public class MonthActivity extends HostActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
+	private SessionsContentObserver sessionsObserver;
+
+	private class SessionsContentObserver extends ContentObserver {
+
+		public SessionsContentObserver() {
+			super(new Handler());
+		}
+
+		public void onChange(boolean selfChange) {
+
+			getSupportLoaderManager().getLoader(0).forceLoad();
+			super.onChange(selfChange);
+		}
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if (isFinishing()) {
-			mEventLoader.stopBackgroundThread();
-		}
-		mContentResolver.unregisterContentObserver(mObserver);
 		unregisterReceiver(mIntentReceiver);
-
-		MonthView view = (MonthView) mSwitcher.getCurrentView();
-		view.dismissPopup();
-		view = (MonthView) mSwitcher.getNextView();
-		view.dismissPopup();
-		mEventLoader.stopBackgroundThread();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mEventLoader.startBackgroundThread();
-		eventsChanged();
-
-		// *SharedPreferences prefs =
-		// CalendarPreferenceActivity.getSharedPreferences(this);
-		// String str =
-		// prefs.getString(CalendarPreferenceActivity.KEY_DETAILED_VIEW,
-		// CalendarPreferenceActivity.DEFAULT_DETAILED_VIEW);
-		// view1.setDetailedView(str);
-		// view2.setDetailedView(str);
-
-		// Register for Intent broadcasts
 		final IntentFilter filter = new IntentFilter();
 
 		filter.addAction(Intent.ACTION_TIME_CHANGED);
@@ -323,7 +299,79 @@ public class MonthActivity extends HostActivity implements
 		filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
 		registerReceiver(mIntentReceiver, filter);
 
-		mContentResolver.registerContentObserver(
-				SleepSessions.MainTable.CONTENT_URI, true, mObserver);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
+				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
+				null);
+	}
+
+	// to avoid NPE's, initialize
+	LinkedHashMap<Long, SleepSession> mSessions = new LinkedHashMap<Long, SleepSession>(
+			0);
+
+	public LinkedHashMap<Long, SleepSession> getSessionsInInterval(
+			long startMillis, int days) {
+		synchronized (mSessions) {
+			LinkedHashMap<Long, SleepSession> sessions = new LinkedHashMap<Long, SleepSession>(
+					20);
+			final Time local = new Time();
+
+			local.set(startMillis);
+
+			// expand start and days to include days shown from previous month
+			// and next month. can be slightly wasteful.
+			// start -= 1000 * 60 * 60 * 24 * 7; // 7 days
+			// days += 7;
+
+			Time.getJulianDay(startMillis, local.gmtoff);
+			local.monthDay += days;
+			long endMillis = local.normalize(true);
+			// endMillis+=startMillis;
+
+			for (SleepSession s : mSessions.values()) {
+				final long startTime = s.getStartTime();
+				if (startTime >= startMillis && startTime <= endMillis) {
+					final List<PointD> justFirstAndLast = new ArrayList<PointD>();
+					justFirstAndLast.add(s.chartData.get(0));
+					justFirstAndLast
+							.add(s.chartData.get(s.chartData.size() - 1));
+					s.chartData = justFirstAndLast; // remove reference to the
+													// list, helps lessen memory
+													// usage
+					sessions.put(startTime, s);
+				}
+			}
+
+			//TODO
+			//SleepSession.computePositions(sessions.values());
+
+			return sessions;
+		}
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				android.os.Process
+						.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+				mSessions = SleepSessions.getSessionsFromCursor(
+						MonthActivity.this, data);
+				eventsChanged();
+				// TODO: notify MonthViews that mEvents have change in a
+				// ..better way?
+			}
+		}).start();
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// TODO Auto-generated method stub
+
 	}
 }

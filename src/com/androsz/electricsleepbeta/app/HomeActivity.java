@@ -186,7 +186,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	}
 
 	public void onHistoryClick(final View v) {
-		startActivity(new Intent(this, MonthActivity.class));
+		startActivity(new Intent(this, HistoryMonthActivity.class));
 	}
 
 	@Override
@@ -216,7 +216,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		return new CursorLoader(this,
 						SleepSessions.MainTable.CONTENT_URI,
-						SleepSessions.MainTable.DEFAULT_COLUMN_PROJECTION, null, null, null);
+						SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
 	}
 
 	@Override

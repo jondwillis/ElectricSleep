@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 
-public class ReviewSleepAnalysisFragment extends AnalyticFragment {
+public class ReviewSleepAnalysisFragment extends HostFragment {
 
 	RatingBar ratingRB;
 
@@ -25,12 +25,7 @@ public class ReviewSleepAnalysisFragment extends AnalyticFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		final View view = inflater.inflate(
-				R.layout.fragment_review_sleep_analysis, container, false);
-
-		view.setBackgroundResource(R.drawable.gradient_background_vert);
-
+		View view = super.onCreateView(inflater, container, savedInstanceState);
 		scoreTV = (TextView) view.findViewById(R.id.value_score_text);
 		durationTV = (TextView) view.findViewById(R.id.value_duration_text);
 		spikesTV = (TextView) view.findViewById(R.id.value_spikes_text);
@@ -58,5 +53,10 @@ public class ReviewSleepAnalysisFragment extends AnalyticFragment {
 
 			ratingRB.setRating(sleepRecord.rating);
 		}
+	}
+
+	@Override
+	protected int getContentAreaLayoutId() {
+		return R.layout.fragment_review_sleep_analysis;
 	}
 }

@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -54,7 +55,7 @@ public class SleepSession {
 	 * @param eventsList
 	 *            the list of events, sorted into increasing time order
 	 */
-	static void computePositions(ArrayList<SleepSession> eventsList) {
+	public static void computePositions(Collection<SleepSession> eventsList) {
 		if (eventsList == null) {
 			return;
 		}
@@ -62,9 +63,9 @@ public class SleepSession {
 		doComputePositions(eventsList);
 	}
 
-	private static void doComputePositions(ArrayList<SleepSession> eventsList) {
-		final ArrayList<SleepSession> activeList = new ArrayList<SleepSession>();
-		final ArrayList<SleepSession> groupList = new ArrayList<SleepSession>();
+	private static void doComputePositions(Collection<SleepSession> eventsList) {
+		final Collection<SleepSession> activeList = new ArrayList<SleepSession>();
+		final Collection<SleepSession> groupList = new ArrayList<SleepSession>();
 
 		long colMask = 0;
 		int maxCols = 0;
@@ -143,13 +144,9 @@ public class SleepSession {
 	 * Loads <i>days</i> days worth of instances starting at <i>start</i>.
 	 */
 	public static void loadEvents(Context context,
-			ArrayList<SleepSession> events, long start, int days,
-			int requestId, AtomicInteger sequenceNumber) {
-
-		Cursor c = null;
+			Collection<SleepSession> events, long start, int days) {
 
 		events.clear();
-		try {
 			final Time local = new Time();
 			int count;
 
@@ -157,12 +154,12 @@ public class SleepSession {
 
 			// expand start and days to include days shown from previous month
 			// and next month. can be slightly wasteful.
-			start -= 1000 * 60 * 60 * 24 * 7; // 7 days
-			days += 7;
+			//start -= 1000 * 60 * 60 * 24 * 7; // 7 days
+			//days += 7;
 
 			Time.getJulianDay(start, local.gmtoff);
 			local.monthDay += days;
-			final long end = local.normalize(true /* ignore isDst */);
+			final long end = local.normalize(true );
 
 			// Widen the time range that we query by one day on each end
 			// so that we can catch all-day events. All-day events are
@@ -184,34 +181,9 @@ public class SleepSession {
 			// SleepHistoryDatabase(context);
 			// TODO: hook this into sleep db
 
-			//TODO limit it to certain dates
-			c = null; /*SleepSessions.getSleepMatches(context, context.getString(R.string.to),
-					new String[] { BaseColumns._ID, MainTable.KEY_TITLE,
-							MainTable.KEY_ALARM, MainTable.KEY_DURATION,
-							MainTable.KEY_MIN, MainTable.KEY_NOTE,
-							MainTable.KEY_RATING, MainTable.KEY_SPIKES,
-							MainTable.KEY_TIME_FELL_ASLEEP });*/
-
-			if (c == null) {
-				Log.e("Cal", "loadEvents() returned null cursor!");
-				return;
-			}
-
-			// Check if we should return early because there are more recent
-			// load requests waiting.
-			if (requestId != sequenceNumber.get()) {
-				return;
-			}
-
-			count = c.getCount();
-
-			if (count == 0) {
-				return;
-			}
-
 			context.getResources();
-			do {
-				final SleepSession s = new SleepSession(c);
+			for(SleepSession s : events)
+			{
 				final long startTime = s.getStartTime();
 				if (startTime >= start && startTime <= end) {
 					final List<PointD> justFirstAndLast = new ArrayList<PointD>();
@@ -223,14 +195,9 @@ public class SleepSession {
 													// usage
 					events.add(s);
 				}
-			} while (c.moveToNext());
+			}
 
 			computePositions(events);
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
 	}
 
 	public static byte[] objectToByteArray(final Object obj) throws IOException {
