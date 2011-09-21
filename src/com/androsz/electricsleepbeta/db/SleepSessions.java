@@ -55,9 +55,9 @@ public class SleepSessions {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			//TODO
-			//db.execSQL("DROP TABLE IF EXISTS " + MainTable.TABLE_NAME);
-			//onCreate(db);
+			// TODO
+			// db.execSQL("DROP TABLE IF EXISTS " + MainTable.TABLE_NAME);
+			// onCreate(db);
 		}
 	}
 
@@ -268,15 +268,15 @@ public class SleepSessions {
 			// Constructs a new query builder and sets its table name
 			final SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(MainTable.TABLE_NAME);
+			qb.setProjectionMap(projectionMap);
+			
 			switch (uriMatcher.match(uri)) {
 			case TABLE:
 				// If the incoming URI is for main table.
-				qb.setProjectionMap(projectionMap);
 				break;
 
 			case ROW:
 				// The incoming URI is for a single row.
-				qb.setProjectionMap(projectionMap);
 				qb.appendWhere(BaseColumns._ID + "=?");
 				selectionArgs = DBUtils.appendSelectionArgs(selectionArgs,
 						new String[] { uri.getLastPathSegment() });
@@ -292,13 +292,7 @@ public class SleepSessions {
 
 			final SQLiteDatabase db = helper.getReadableDatabase();
 
-			final Cursor c = qb.query(db, projection, selection, selectionArgs, null /*
-																					 * no
-																					 * group
-																					 */, null /*
-																							 * no
-																							 * filter
-																							 */,
+			final Cursor c = qb.query(db, projection, selection, selectionArgs, null, null,
 					sortOrder);
 
 			c.setNotificationUri(getContext().getContentResolver(), uri);
@@ -322,9 +316,10 @@ public class SleepSessions {
 				// If URI is for a particular row ID, update is based on
 				// incoming
 				// data but modified to restrict to the given ID.
-				finalWhere = DatabaseUtils.concatenateWhere(
-						BaseColumns._ID + " = " + ContentUris.parseId(uri), selection);
-				count = db.update(MainTable.TABLE_NAME, values, finalWhere, selectionArgs);
+				// finalWhere = DatabaseUtils.concatenateWhere(
+				// BaseColumns._ID + " = " + ContentUris.parseId(uri),
+				// selection);
+				count = db.update(MainTable.TABLE_NAME, values, selection, selectionArgs);
 				break;
 
 			default:

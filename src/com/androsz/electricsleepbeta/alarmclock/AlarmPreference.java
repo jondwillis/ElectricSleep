@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.RingtonePreference;
 import android.util.AttributeSet;
+import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 
@@ -63,7 +64,9 @@ public class AlarmPreference extends RingtonePreference {
 			protected String doInBackground(Void... params) {
 				if (alert != null) {
 					final Ringtone r = RingtoneManager.getRingtone(getContext(), alert);
-					return r.getTitle(getContext());
+					if (r != null) {
+						return r.getTitle(getContext());
+					}
 				}
 				return null;
 			}

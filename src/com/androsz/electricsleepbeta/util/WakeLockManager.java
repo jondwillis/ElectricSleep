@@ -19,9 +19,6 @@ public class WakeLockManager {
 	}
 
 	public static void acquire(Context context, String id, int flags, int releaseAfterMs) {
-		if (locks == null) {
-
-		}
 		final PowerManager mgr = (PowerManager) context.getApplicationContext().getSystemService(
 				Context.POWER_SERVICE);
 
@@ -29,24 +26,28 @@ public class WakeLockManager {
 		final WakeLock newWakeLock = mgr.newWakeLock(flags, id.toString());
 
 		// if this wakelock doesn't already exist, continue
-		if (locks.put(id, newWakeLock) == null) {
-			// only one at a time? TODO
-			newWakeLock.setReferenceCounted(true);
+		locks.put(id, newWakeLock);
+		// only one at a time? TODO
+		newWakeLock.setReferenceCounted(false);
 
-			if (releaseAfterMs == 0) {
-				newWakeLock.acquire();
-			} else {
-				newWakeLock.acquire(releaseAfterMs);
-			}
+		if (releaseAfterMs == 0) {
+			newWakeLock.acquire();
+		} else {
+			newWakeLock.acquire(releaseAfterMs);
 		}
-		// TODO throw exception?
 	}
 
 	public static void release(String id) {
-		final WakeLock wakeLock = locks.remove(id);
+		final WakeLock wakeLock = locks.get(id);
 		// if there is was a wakelock, release it. (it has to be held)
-		if (wakeLock != null && wakeLock.isHeld()) {
-			wakeLock.release();
+		try {
+			if (wakeLock != null) {
+				wakeLock.release();
+			}
+		} catch (Throwable whocares) {
+			// android's wakelocks are buggy?
+		} finally {
+			locks.remove(id);
 		}
 	}
 }

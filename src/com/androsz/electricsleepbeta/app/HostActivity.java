@@ -1,6 +1,7 @@
 package com.androsz.electricsleepbeta.app;
 
 import android.content.Intent;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ColorMatrix;
@@ -66,7 +67,7 @@ public abstract class HostActivity extends AnalyticActivity {
 			final MenuItem mi = menu.getItem(i);
 			final Drawable icon = mi.getIcon();
 			if (icon != null) {
-				final Drawable mutated = icon.mutate();
+				final Drawable mutated = icon.getCurrent().mutate();
 				mutated.setColorFilter(COLOR_FILTER);
 				mi.setIcon(mutated);
 			}
@@ -77,7 +78,7 @@ public abstract class HostActivity extends AnalyticActivity {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
+		case com.actionbarsherlock.R.id.abs__home:
 			finish();
 			return (true);
 		case R.id.menu_item_tutorial:

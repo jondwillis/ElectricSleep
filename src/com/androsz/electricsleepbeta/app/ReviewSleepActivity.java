@@ -28,7 +28,8 @@ public class ReviewSleepActivity extends HostActivity implements
 
 		@Override
 		protected Void doInBackground(final Void... params) {
-			SleepSessions.deleteSession(ReviewSleepActivity.this, Long.parseLong(uri.getLastPathSegment()));
+			SleepSessions.deleteSession(ReviewSleepActivity.this,
+					Long.parseLong(uri.getLastPathSegment()));
 			return null;
 		}
 
@@ -112,13 +113,16 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data != null && !data.isFirst()) {
-			data.moveToFirst();
-		}
-		final SleepSession sleepRecord = new SleepSession(data);
+		if (data.moveToFirst()) {
+			final SleepSession sleepRecord = new SleepSession(data);
 
-		chartFragment.setSleepRecord(sleepRecord);
-		analysisFragment.setSleepRecord(sleepRecord);
+			chartFragment.setSleepRecord(sleepRecord);
+			analysisFragment.setSleepRecord(sleepRecord);
+		}
+		else
+		{
+			trackEvent("ReviewSleepActivity couldn't data.moveToFirst()", 0);
+		}
 	}
 
 	@Override
