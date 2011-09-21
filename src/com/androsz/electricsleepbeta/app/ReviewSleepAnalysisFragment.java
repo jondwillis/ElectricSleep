@@ -19,18 +19,21 @@ public class ReviewSleepAnalysisFragment extends HostFragment {
 	SleepSession sleepRecord;
 
 	@Override
+	protected int getContentAreaLayoutId() {
+		return R.layout.fragment_review_sleep_analysis;
+	}
+
+	@Override
 	public void onClick(View v) {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		scoreTV = (TextView) view.findViewById(R.id.value_score_text);
 		durationTV = (TextView) view.findViewById(R.id.value_duration_text);
 		spikesTV = (TextView) view.findViewById(R.id.value_spikes_text);
-		fellAsleepTV = (TextView) view
-				.findViewById(R.id.value_fell_asleep_text);
+		fellAsleepTV = (TextView) view.findViewById(R.id.value_fell_asleep_text);
 		noteTV = (TextView) view.findViewById(R.id.value_note_text);
 
 		ratingRB = (RatingBar) view.findViewById(R.id.value_rating_bar);
@@ -53,10 +56,5 @@ public class ReviewSleepAnalysisFragment extends HostFragment {
 
 			ratingRB.setRating(sleepRecord.rating);
 		}
-	}
-
-	@Override
-	protected int getContentAreaLayoutId() {
-		return R.layout.fragment_review_sleep_analysis;
 	}
 }

@@ -51,8 +51,7 @@ public class BubbleChart extends XYChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public BubbleChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public BubbleChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 	}
 
@@ -70,8 +69,7 @@ public class BubbleChart extends XYChart {
 	 * @param radius
 	 *            the bubble radius
 	 */
-	private void drawCircle(Canvas canvas, Paint paint, float x, float y,
-			float radius) {
+	private void drawCircle(Canvas canvas, Paint paint, float x, float y, float radius) {
 		canvas.drawCircle(x, y, radius, paint);
 	}
 
@@ -90,8 +88,8 @@ public class BubbleChart extends XYChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
 		paint.setStyle(Style.FILL);
 		drawCircle(canvas, paint, x + SHAPE_WIDTH, y, 3);
 	}
@@ -114,14 +112,12 @@ public class BubbleChart extends XYChart {
 	 */
 	@Override
 	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+			SimpleSeriesRenderer seriesRenderer, float yAxisValue, int seriesIndex) {
 		final XYSeriesRenderer renderer = (XYSeriesRenderer) seriesRenderer;
 		paint.setColor(renderer.getColor());
 		paint.setStyle(Style.FILL);
 		final int length = points.length;
-		final XYValueSeries series = (XYValueSeries) mDataset
-				.getSeriesAt(seriesIndex);
+		final XYValueSeries series = (XYValueSeries) mDataset.getSeriesAt(seriesIndex);
 		final double max = series.getMaxValue();
 
 		final double coef = MAX_BUBBLE_SIZE / max;

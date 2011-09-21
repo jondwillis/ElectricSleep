@@ -79,8 +79,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 	}
 
 	@Override
-	public void onActivityResult(final int requestCode, final int resultCode,
-			final Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 		if (resultCode == CalibrateForResultActivity.CALIBRATION_FAILED) {
 			if (currentTask != null) {
 				currentTask.cancel(true);
@@ -115,8 +114,8 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onFinishWizardActivity() throws IllegalStateException {
-		final SharedPreferences.Editor ed = getSharedPreferences(
-				SettingsActivity.PREFERENCES, 0).edit();
+		final SharedPreferences.Editor ed = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
+				.edit();
 		ed.putFloat(getString(R.string.pref_alarm_trigger_sensitivity),
 				(float) alarmTriggerCalibration);
 		ed.putBoolean(getString(R.string.pref_force_screen), screenBugPresent);
@@ -124,20 +123,17 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 		if (ed.commit()) {
 			final SharedPreferences.Editor ed2 = getSharedPreferences(
-					SettingsActivity.PREFERENCES_ENVIRONMENT,
-					Context.MODE_PRIVATE).edit();
-			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT, getResources()
-					.getInteger(R.integer.prefs_version));
+					SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
+			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
+					getResources().getInteger(R.integer.prefs_version));
 			ed2.commit();
 
-			trackEvent("alarm-level",
-					(int) Math.round(alarmTriggerCalibration * 100));
+			trackEvent("alarm-level", (int) Math.round(alarmTriggerCalibration * 100));
 			trackEvent("screen-bug", screenBugPresent ? 1 : 0);
 			finish();
 		} else {
 			trackEvent("calibration-fail", 0);
-			throw new IllegalStateException(
-					"Calibration failed to write settings...");
+			throw new IllegalStateException("Calibration failed to write settings...");
 		}
 	}
 
@@ -181,8 +177,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 			didActivity = true;
 			break;
 		case R.id.screenTest:
-			currentTask = new ScreenBugCalibrationTask().execute(null, null,
-					null);
+			currentTask = new ScreenBugCalibrationTask().execute(null, null, null);
 			didActivity = true;
 			break;
 		}

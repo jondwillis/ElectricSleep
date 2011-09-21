@@ -32,8 +32,8 @@ public class DefaultRenderer implements Serializable {
 	/** The default background color. */
 	public static final int BACKGROUND_COLOR = NO_COLOR;
 	/** A text font for regular text, like the chart labels. */
-	private static final Typeface REGULAR_TEXT_FONT = Typeface.create(
-			Typeface.SERIF, Typeface.NORMAL);
+	private static final Typeface REGULAR_TEXT_FONT = Typeface.create(Typeface.SERIF,
+			Typeface.NORMAL);
 	private static final long serialVersionUID = 2621775532648145174L;
 	/** The default color for text. */
 	public static final int TEXT_COLOR = Color.LTGRAY;

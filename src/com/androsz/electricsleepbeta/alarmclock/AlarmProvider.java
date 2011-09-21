@@ -40,11 +40,9 @@ public class AlarmProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(final SQLiteDatabase db) {
-			db.execSQL("CREATE TABLE alarms (" + "_id INTEGER PRIMARY KEY,"
-					+ "hour INTEGER, " + "minutes INTEGER, "
-					+ "daysofweek INTEGER, " + "alarmtime INTEGER, "
-					+ "enabled INTEGER, " + "vibrate INTEGER, "
-					+ "message TEXT, " + "alert TEXT, "
+			db.execSQL("CREATE TABLE alarms (" + "_id INTEGER PRIMARY KEY," + "hour INTEGER, "
+					+ "minutes INTEGER, " + "daysofweek INTEGER, " + "alarmtime INTEGER, "
+					+ "enabled INTEGER, " + "vibrate INTEGER, " + "message TEXT, " + "alert TEXT, "
 					+ "timeToIgnore INTEGER);");
 
 			// insert default alarms
@@ -59,12 +57,12 @@ public class AlarmProvider extends ContentProvider {
 		public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
 				final int currentVersion) {
 			if (Log.LOGV) {
-				Log.v("Upgrading alarms database from version " + oldVersion
-						+ " to " + currentVersion);
+				Log.v("Upgrading alarms database from version " + oldVersion + " to "
+						+ currentVersion);
 			}
 			if (oldVersion == 5 && currentVersion == 6) {
-				db.execSQL("ALTER TABLE alarms ADD COLUMN "
-						+ Alarm.Columns.TIME_TO_IGNORE + " INTEGER");
+				db.execSQL("ALTER TABLE alarms ADD COLUMN " + Alarm.Columns.TIME_TO_IGNORE
+						+ " INTEGER");
 			} else {
 				db.execSQL("DROP TABLE IF EXISTS alarms");
 				onCreate(db);
@@ -74,14 +72,11 @@ public class AlarmProvider extends ContentProvider {
 
 	private static final int ALARMS = 1;
 	private static final int ALARMS_ID = 2;
-	private static final UriMatcher sURLMatcher = new UriMatcher(
-			UriMatcher.NO_MATCH);
+	private static final UriMatcher sURLMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
-		sURLMatcher.addURI("com.androsz.electricsleepbeta.alarmclock", "alarm",
-				ALARMS);
-		sURLMatcher.addURI("com.androsz.electricsleepbeta.alarmclock",
-				"alarm/#", ALARMS_ID);
+		sURLMatcher.addURI("com.androsz.electricsleepbeta.alarmclock", "alarm", ALARMS);
+		sURLMatcher.addURI("com.androsz.electricsleepbeta.alarmclock", "alarm/#", ALARMS_ID);
 	}
 
 	private SQLiteOpenHelper mOpenHelper;
@@ -145,8 +140,7 @@ public class AlarmProvider extends ContentProvider {
 			Log.v("Added alarm rowId = " + rowId);
 		}
 
-		final Uri newUrl = ContentUris.withAppendedId(
-				Alarm.Columns.CONTENT_URI, rowId);
+		final Uri newUrl = ContentUris.withAppendedId(Alarm.Columns.CONTENT_URI, rowId);
 		getContext().getContentResolver().notifyChange(newUrl, null);
 		return newUrl;
 	}
@@ -158,9 +152,8 @@ public class AlarmProvider extends ContentProvider {
 	}
 
 	@Override
-	public Cursor query(final Uri url, final String[] projectionIn,
-			final String selection, final String[] selectionArgs,
-			final String sort) {
+	public Cursor query(final Uri url, final String[] projectionIn, final String selection,
+			final String[] selectionArgs, final String sort) {
 		final SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
 		// Generate the body of the query
@@ -179,8 +172,7 @@ public class AlarmProvider extends ContentProvider {
 		}
 
 		final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-		final Cursor ret = qb.query(db, projectionIn, selection, selectionArgs,
-				null, null, sort);
+		final Cursor ret = qb.query(db, projectionIn, selection, selectionArgs, null, null, sort);
 
 		if (ret == null) {
 			if (Log.LOGV) {
@@ -194,8 +186,8 @@ public class AlarmProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(final Uri url, final ContentValues values,
-			final String where, final String[] whereArgs) {
+	public int update(final Uri url, final ContentValues values, final String where,
+			final String[] whereArgs) {
 		int count;
 		long rowId = 0;
 		final int match = sURLMatcher.match(url);

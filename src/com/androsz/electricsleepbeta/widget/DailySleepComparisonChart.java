@@ -16,8 +16,7 @@ import com.androsz.electricsleepbeta.achartengine.renderer.XYMultipleSeriesRende
 import com.androsz.electricsleepbeta.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleepbeta.util.PointD;
 
-public class DailySleepComparisonChart extends ChartView implements
-		Serializable {
+public class DailySleepComparisonChart extends ChartView implements Serializable {
 
 	private static final long serialVersionUID = -5692853786456847694L;
 
@@ -33,8 +32,7 @@ public class DailySleepComparisonChart extends ChartView implements
 		super(context);
 	}
 
-	public DailySleepComparisonChart(final Context context,
-			final AttributeSet as) {
+	public DailySleepComparisonChart(final Context context, final AttributeSet as) {
 		super(context, as);
 	}
 
@@ -45,8 +43,8 @@ public class DailySleepComparisonChart extends ChartView implements
 			xySeriesMovement = new XYSeries("sleep score");
 			xySeriesMovementRenderer = new XYSeriesRenderer();
 			xySeriesMovementRenderer.setFillBelowLine(true);
-			xySeriesMovementRenderer.setFillBelowLineColor(getResources()
-					.getColor(R.color.primary1_transparent));
+			xySeriesMovementRenderer.setFillBelowLineColor(getResources().getColor(
+					R.color.primary1_transparent));
 			xySeriesMovementRenderer.setColor(Color.TRANSPARENT);
 
 			// add series to the dataset
@@ -55,8 +53,7 @@ public class DailySleepComparisonChart extends ChartView implements
 
 			// set up the dataset renderer
 			xyMultipleSeriesRenderer = new XYMultipleSeriesRenderer();
-			xyMultipleSeriesRenderer
-					.addSeriesRenderer(xySeriesMovementRenderer);
+			xyMultipleSeriesRenderer.addSeriesRenderer(xySeriesMovementRenderer);
 
 			// xyMultipleSeriesRenderer.setShowLegend(false);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(17);
@@ -68,10 +65,8 @@ public class DailySleepComparisonChart extends ChartView implements
 			// R.string.movement_level_during_sleep));
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setShowLegend(false);
-			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(
-					R.color.text));
-			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer
-					.getAxesColor());
+			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(R.color.text));
+			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
 			timeChart.setDateFormat("M/d");
@@ -87,8 +82,7 @@ public class DailySleepComparisonChart extends ChartView implements
 	public void redraw(final double min, final double alarm) {
 		if (makesSenseToDisplay()) {
 			final double firstX = xySeriesMovement.xyList.get(0).x;
-			final double lastX = xySeriesMovement.xyList
-					.get(xySeriesMovement.xyList.size() - 1).x;
+			final double lastX = xySeriesMovement.xyList.get(xySeriesMovement.xyList.size() - 1).x;
 			xyMultipleSeriesRenderer.setXAxisMin(firstX);
 			xyMultipleSeriesRenderer.setXAxisMax(lastX);
 
@@ -98,8 +92,7 @@ public class DailySleepComparisonChart extends ChartView implements
 		}
 	}
 
-	public void sync(final Double x, final Double y, final double min,
-			final double alarm) {
+	public void sync(final Double x, final Double y, final double min, final double alarm) {
 		xySeriesMovement.xyList.add(new PointD(x, y));
 		xyMultipleSeriesRenderer.setXLabels(xySeriesMovement.xyList.size() + 1);
 		redraw(min, alarm);

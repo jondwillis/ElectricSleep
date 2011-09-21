@@ -132,16 +132,13 @@ public final class Alarm implements Parcelable {
 		public static final String VIBRATE = "vibrate";
 		// Used when filtering enabled alarms.
 		public static final String WHERE_ENABLED = ENABLED + "=1";
-		
-		static final String[] ALARM_QUERY_COLUMNS = { _ID, HOUR, MINUTES,
-			DAYS_OF_WEEK, ALARM_TIME, ENABLED, VIBRATE, MESSAGE, ALERT,
-			TIME_TO_IGNORE };
+
+		static final String[] ALARM_QUERY_COLUMNS = { _ID, HOUR, MINUTES, DAYS_OF_WEEK, ALARM_TIME,
+				ENABLED, VIBRATE, MESSAGE, ALERT, TIME_TO_IGNORE };
 		/**
 		 * The default sort order for this table
 		 */
-		public static final String DEFAULT_SORT_ORDER = HOUR + ", " + MINUTES 
-				+ " ASC";
-
+		public static final String DEFAULT_SORT_ORDER = HOUR + ", " + MINUTES + " ASC";
 
 	}
 
@@ -152,9 +149,9 @@ public final class Alarm implements Parcelable {
 	 */
 	static final class DaysOfWeek {
 
-		private static int[] DAY_MAP = new int[] { Calendar.MONDAY,
-				Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY,
-				Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY, };
+		private static int[] DAY_MAP = new int[] { Calendar.MONDAY, Calendar.TUESDAY,
+				Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY,
+				Calendar.SUNDAY, };
 
 		// Bitmask of all repeating days
 		private int mDays;
@@ -225,8 +222,7 @@ public final class Alarm implements Parcelable {
 
 			// no days
 			if (mDays == 0) {
-				return showNever ? context.getText(R.string.never).toString()
-						: "";
+				return showNever ? context.getText(R.string.never).toString() : "";
 			}
 
 			// every day
@@ -245,8 +241,7 @@ public final class Alarm implements Parcelable {
 
 			// short or long form?
 			final DateFormatSymbols dfs = new DateFormatSymbols();
-			final String[] dayList = dayCount > 1 ? dfs.getShortWeekdays()
-					: dfs.getWeekdays();
+			final String[] dayList = dayCount > 1 ? dfs.getShortWeekdays() : dfs.getWeekdays();
 
 			// selected days
 			for (int i = 0; i < 7; i++) {
@@ -337,8 +332,7 @@ public final class Alarm implements Parcelable {
 			// If the database alert is null or it failed to parse, use the
 			// default alert.
 			if (alert == null) {
-				alert = RingtoneManager
-						.getDefaultUri(RingtoneManager.TYPE_ALARM);
+				alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 			}
 		}
 	}

@@ -26,6 +26,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -64,8 +65,7 @@ public class AlarmAlertFullScreen extends Activity {
 			} else if (action.equals(Alarms.ALARM_DISMISS_ACTION)) {
 				dismiss(false);
 			} else if (action.equals(Alarms.ALARM_KILLED)) {
-				final Alarm alarm = intent
-						.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
+				final Alarm alarm = intent.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
 				if (alarm != null && mAlarm.id == alarm.id) {
 					dismiss(true);
 				}
@@ -138,17 +138,16 @@ public class AlarmAlertFullScreen extends Activity {
 
 		try {
 			this.setTheme(R.style.Theme_Sherlock); // will only work
-																// for 3.0+
-																// devices
+													// for 3.0+
+													// devices
 		} catch (final Throwable whocares) {
 
 		}
 		mAlarm = getIntent().getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
 
 		// Get the volume/camera button behavior setting
-		final String vol = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
-				.getString(SettingsActivity.KEY_VOLUME_BEHAVIOR,
-						DEFAULT_VOLUME_BEHAVIOR);
+		final String vol = getSharedPreferences(SettingsActivity.PREFERENCES, 0).getString(
+				SettingsActivity.KEY_VOLUME_BEHAVIOR, DEFAULT_VOLUME_BEHAVIOR);
 		mVolumeBehavior = Integer.parseInt(vol);
 
 		requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
@@ -158,18 +157,15 @@ public class AlarmAlertFullScreen extends Activity {
 				| WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 		// Turn on the screen unless we are being launched from the AlarmAlert
 		// subclass.
-		boolean screenOff = getIntent().getBooleanExtra(SCREEN_OFF, false);
+		final boolean screenOff = getIntent().getBooleanExtra(SCREEN_OFF, false);
 		if (!screenOff) {
-			try
-			{
-				//API 8+
-			win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-					| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-			 | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-			}
-			catch(Throwable whocares)
-			{
-				//API 7+
+			try {
+				// API 8+
+				win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+						| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+						| WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+			} catch (final Throwable whocares) {
+				// API 7+
 				win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 						| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 			}
@@ -234,51 +230,58 @@ public class AlarmAlertFullScreen extends Activity {
 			dismiss(false);
 			return;
 		}
-		final String snooze = getSharedPreferences(
-				SettingsActivity.PREFERENCES, 0).getString(
-				SettingsActivity.KEY_ALARM_SNOOZE, DEFAULT_SNOOZE);
-		final int snoozeMinutes = Integer.parseInt(snooze);
+		new AsyncTask<Void, Void, Integer>() {
 
-		final long snoozeTime = System.currentTimeMillis() + 1000 * 60
-				* snoozeMinutes;
-		Alarms.saveSnoozeAlert(AlarmAlertFullScreen.this, mAlarm.id, snoozeTime);
+			final Calendar c = Calendar.getInstance();
 
-		// Get the display time for the snooze and update the notification.
-		final Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(snoozeTime);
+			@Override
+			protected Integer doInBackground(Void... params) {
+				final String snooze = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
+						.getString(SettingsActivity.KEY_ALARM_SNOOZE, DEFAULT_SNOOZE);
+				final int snoozeMinutes = Integer.parseInt(snooze);
 
-		// Append (snoozed) to the label.
-		String label = mAlarm.getLabelOrDefault(this);
-		label = getString(R.string.alarm_notify_snooze_label, label);
+				final long snoozeTime = System.currentTimeMillis() + 1000 * 60 * snoozeMinutes;
+				Alarms.saveSnoozeAlert(AlarmAlertFullScreen.this, mAlarm.id, snoozeTime);
+				// Get the display time for the snooze and update the
+				// notification.
+				c.setTimeInMillis(snoozeTime);
+				return snoozeMinutes;
+			}
 
-		// Notify the user that the alarm has been snoozed.
-		final Intent cancelSnooze = new Intent(this, AlarmReceiver.class);
-		cancelSnooze.setAction(Alarms.CANCEL_SNOOZE);
-		cancelSnooze.putExtra(Alarms.ALARM_ID, mAlarm.id);
-		final PendingIntent broadcast = PendingIntent.getBroadcast(this,
-				mAlarm.id, cancelSnooze, 0);
-		final NotificationManager nm = getNotificationManager();
-		final Notification n = new Notification(R.drawable.stat_notify_alarm,
-				label, 0);
-		n.setLatestEventInfo(
-				this,
-				label,
-				getString(R.string.alarm_notify_snooze_text,
-						Alarms.formatTime(this, c)), broadcast);
-		n.flags |= Notification.FLAG_AUTO_CANCEL
-				| Notification.FLAG_ONGOING_EVENT;
-		nm.notify(mAlarm.id, n);
+			@Override
+			protected void onPostExecute(Integer snoozeMinutes) {
 
-		final String displayTime = getString(R.string.alarm_alert_snooze_set,
-				snoozeMinutes);
-		// Intentionally log the snooze time for debugging.
-		Log.v(displayTime);
+				// Append (snoozed) to the label.
+				String label = mAlarm.getLabelOrDefault(AlarmAlertFullScreen.this);
+				label = getString(R.string.alarm_notify_snooze_label, label);
 
-		// Display the snooze minutes in a toast.
-		Toast.makeText(AlarmAlertFullScreen.this, displayTime,
-				Toast.LENGTH_LONG).show();
-		stopService(new Intent(Alarms.ALARM_ALERT_ACTION));
-		finish();
+				// Notify the user that the alarm has been snoozed.
+				final Intent cancelSnooze = new Intent(AlarmAlertFullScreen.this,
+						AlarmReceiver.class);
+				cancelSnooze.setAction(Alarms.CANCEL_SNOOZE);
+				cancelSnooze.putExtra(Alarms.ALARM_ID, mAlarm.id);
+				final PendingIntent broadcast = PendingIntent.getBroadcast(
+						AlarmAlertFullScreen.this, mAlarm.id, cancelSnooze, 0);
+				final NotificationManager nm = getNotificationManager();
+				final Notification n = new Notification(R.drawable.stat_notify_alarm, label, 0);
+				n.setLatestEventInfo(
+						AlarmAlertFullScreen.this,
+						label,
+						getString(R.string.alarm_notify_snooze_text,
+								Alarms.formatTime(AlarmAlertFullScreen.this, c)), broadcast);
+				n.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONGOING_EVENT;
+				nm.notify(mAlarm.id, n);
+
+				final String displayTime = getString(R.string.alarm_alert_snooze_set, snoozeMinutes);
+				// Intentionally log the snooze time for debugging.
+				Log.v(displayTime);
+
+				// Display the snooze minutes in a toast.
+				Toast.makeText(AlarmAlertFullScreen.this, displayTime, Toast.LENGTH_LONG).show();
+				stopService(new Intent(Alarms.ALARM_ALERT_ACTION));
+				finish();
+			}
+		}.execute();
 	}
 
 	private void updateLayout() {
@@ -299,13 +302,12 @@ public class AlarmAlertFullScreen extends Activity {
 		});
 
 		/* dismiss button: close notification */
-		findViewById(R.id.dismiss).setOnClickListener(
-				new Button.OnClickListener() {
-					@Override
-					public void onClick(final View v) {
-						dismiss(false);
-					}
-				});
+		findViewById(R.id.dismiss).setOnClickListener(new Button.OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				dismiss(false);
+			}
+		});
 
 		/* Set the title from the passed in alarm */
 		setTitle();

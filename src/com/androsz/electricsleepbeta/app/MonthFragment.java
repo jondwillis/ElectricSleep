@@ -21,15 +21,13 @@ public class MonthFragment extends Fragment {
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 			mv.setSelectedTime(time);
-		} catch (ClassCastException cce) {
-			throw new ClassCastException(
-					"A MonthView can only be held by a HistoryMonthActivity");
+		} catch (final ClassCastException cce) {
+			throw new ClassCastException("A MonthView can only be held by a HistoryMonthActivity");
 		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		return mv;
 	}

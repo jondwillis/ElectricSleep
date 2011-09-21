@@ -44,8 +44,8 @@ public class RangeBarChart extends BarChart {
 	 * @param type
 	 *            the range bar chart type
 	 */
-	public RangeBarChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer, Type type) {
+	public RangeBarChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer,
+			Type type) {
 		super(dataset, renderer, type);
 	}
 
@@ -64,22 +64,19 @@ public class RangeBarChart extends BarChart {
 	 *            the index of the series currently being drawn
 	 */
 	@Override
-	protected void drawChartValuesText(Canvas canvas, XYSeries series,
-			Paint paint, float[] points, int seriesIndex) {
+	protected void drawChartValuesText(Canvas canvas, XYSeries series, Paint paint, float[] points,
+			int seriesIndex) {
 		final int seriesNr = mDataset.getSeriesCount();
 		final float halfDiffX = getHalfDiffX(points, points.length, seriesNr);
 		for (int k = 0; k < points.length; k += 4) {
 			float x = points[k];
 			if (mType == Type.DEFAULT) {
-				x += seriesIndex * 2 * halfDiffX - (seriesNr - 1.5f)
-						* halfDiffX;
+				x += seriesIndex * 2 * halfDiffX - (seriesNr - 1.5f) * halfDiffX;
 			}
 			// draw the maximum value
-			drawText(canvas, getLabel(series.getY(k / 2 + 1)), x,
-					points[k + 3] - 3f, paint, 0);
+			drawText(canvas, getLabel(series.getY(k / 2 + 1)), x, points[k + 3] - 3f, paint, 0);
 			// draw the minimum value
-			drawText(canvas, getLabel(series.getY(k / 2)), x,
-					points[k + 1] + 7.5f, paint, 0);
+			drawText(canvas, getLabel(series.getY(k / 2)), x, points[k + 1] + 7.5f, paint, 0);
 		}
 	}
 
@@ -101,8 +98,7 @@ public class RangeBarChart extends BarChart {
 	 */
 	@Override
 	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+			SimpleSeriesRenderer seriesRenderer, float yAxisValue, int seriesIndex) {
 		final int seriesNr = mDataset.getSeriesCount();
 		final int length = points.length;
 		paint.setColor(seriesRenderer.getColor());
@@ -115,13 +111,10 @@ public class RangeBarChart extends BarChart {
 			final float xMax = points[i + 2];
 			final float yMax = points[i + 3];
 			if (mType == Type.STACKED) {
-				canvas.drawRect(xMin - halfDiffX, yMax, xMax + halfDiffX, yMin,
-						paint);
+				canvas.drawRect(xMin - halfDiffX, yMax, xMax + halfDiffX, yMin, paint);
 			} else {
-				final float startX = xMin - seriesNr * halfDiffX + seriesIndex
-						* 2 * halfDiffX;
-				canvas.drawRect(startX, yMax, startX + 2 * halfDiffX, yMin,
-						paint);
+				final float startX = xMin - seriesNr * halfDiffX + seriesIndex * 2 * halfDiffX;
+				canvas.drawRect(startX, yMax, startX + 2 * halfDiffX, yMin, paint);
 			}
 		}
 	}

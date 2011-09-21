@@ -33,7 +33,8 @@ public abstract class HostActivity extends AnalyticActivity {
 		// PorterDuff.Mode.MULTIPLY);
 
 		final ColorMatrix cm = new ColorMatrix();
-		cm.setScale(4, 4, 4, 1); // tint it closer to white (too much can cause transparent pixels to look too opaque)
+		cm.setScale(4, 4, 4, 1); // tint it closer to white (too much can cause
+									// transparent pixels to look too opaque)
 		COLOR_FILTER = new ColorMatrixColorFilter(cm);
 	}
 
@@ -44,16 +45,13 @@ public abstract class HostActivity extends AnalyticActivity {
 		super.onCreate(savedInstanceState);
 
 		// setContentView();
-		final View root = getLayoutInflater().inflate(getContentAreaLayoutId(),
-				null, false);
+		final View root = getLayoutInflater().inflate(getContentAreaLayoutId(), null, false);
 		root.setBackgroundResource(R.drawable.gradient_background_vert);
 		setContentView(root);
 
-		final Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-				R.drawable.actionbar_bg);
+		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
 		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-		bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT,
-				Shader.TileMode.REPEAT);
+		bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
 		final ActionBar bar = getSupportActionBar();
 		bar.setBackgroundDrawable(bitmapDrawable);
 
@@ -68,7 +66,7 @@ public abstract class HostActivity extends AnalyticActivity {
 			final MenuItem mi = menu.getItem(i);
 			final Drawable icon = mi.getIcon();
 			if (icon != null) {
-				Drawable mutated = icon.mutate();
+				final Drawable mutated = icon.mutate();
 				mutated.setColorFilter(COLOR_FILTER);
 				mi.setIcon(mutated);
 			}
@@ -90,18 +88,15 @@ public abstract class HostActivity extends AnalyticActivity {
 			break;
 		case R.id.menu_item_donate:
 			trackPageView("donate");
-			final Uri marketUri = Uri
-					.parse("market://details?id=com.androsz.electricsleepdonate");
-			final Intent marketIntent = new Intent(Intent.ACTION_VIEW,
-					marketUri);
+			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
+			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
 			startActivity(marketIntent);
 			break;
 		case R.id.menu_item_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			break;
 		case R.id.menu_item_report:
-			startActivity(new Intent(
-					"android.intent.action.VIEW",
+			startActivity(new Intent("android.intent.action.VIEW",
 					Uri.parse("http://code.google.com/p/electricsleep/issues/entry")));
 			break;
 		}

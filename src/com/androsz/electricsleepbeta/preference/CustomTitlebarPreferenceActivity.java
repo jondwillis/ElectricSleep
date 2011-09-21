@@ -11,8 +11,7 @@ import android.widget.ListView;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HomeActivity;
 
-public abstract class CustomTitlebarPreferenceActivity extends
-		PreferenceActivity {
+public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivity {
 
 	protected abstract int getContentAreaLayoutId();
 
@@ -45,11 +44,9 @@ public abstract class CustomTitlebarPreferenceActivity extends
 		setTheme(R.style.Theme_Sherlock);
 		final ListView lvw = getListView();
 		lvw.setCacheColorHint(0);
-		lvw.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.gradient_background_vert));
+		lvw.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_background_vert));
 		if (getPreferencesName() != null) {
-			getPreferenceManager().setSharedPreferencesName(
-					getPreferencesName());
+			getPreferenceManager().setSharedPreferencesName(getPreferencesName());
 		}
 		addPreferencesFromResource(getContentAreaLayoutId());
 		// getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,

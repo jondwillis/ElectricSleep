@@ -85,9 +85,7 @@ public class DigitalClock extends LinearLayout {
 	private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			if (mLive
-					&& intent.getAction()
-							.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
+			if (mLive && intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
 				mCalendar = Calendar.getInstance();
 			}
 			// Post a runnable to avoid blocking the broadcast.
@@ -136,8 +134,8 @@ public class DigitalClock extends LinearLayout {
 
 		/* monitor 12/24-hour display preference */
 		mFormatChangeObserver = new FormatChangeObserver();
-		getContext().getContentResolver().registerContentObserver(
-				Settings.System.CONTENT_URI, true, mFormatChangeObserver);
+		getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI,
+				true, mFormatChangeObserver);
 
 		updateTime();
 	}
@@ -154,8 +152,7 @@ public class DigitalClock extends LinearLayout {
 		if (mLive) {
 			getContext().unregisterReceiver(mIntentReceiver);
 		}
-		getContext().getContentResolver().unregisterContentObserver(
-				mFormatChangeObserver);
+		getContext().getContentResolver().unregisterContentObserver(mFormatChangeObserver);
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -41,8 +40,7 @@ import com.androsz.electricsleepbeta.preference.CustomTitlebarPreferenceActivity
  * Manages each alarm
  */
 public class SetAlarm extends CustomTitlebarPreferenceActivity implements
-		TimePickerDialog.OnTimeSetListener,
-		Preference.OnPreferenceChangeListener {
+		TimePickerDialog.OnTimeSetListener, Preference.OnPreferenceChangeListener {
 
 	// Used to post runnables asynchronously.
 	// private static final Handler sHandler = new Handler();
@@ -57,27 +55,22 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		final long days = hours / 24;
 		hours = hours % 24;
 
-		final String daySeq = days == 0 ? "" : days == 1 ? context
-				.getString(R.string.day) : context.getString(R.string.days,
-				Long.toString(days));
+		final String daySeq = days == 0 ? "" : days == 1 ? context.getString(R.string.day)
+				: context.getString(R.string.days, Long.toString(days));
 
-		final String minSeq = minutes == 0 ? "" : minutes == 1 ? context
-				.getString(R.string.minute) : context.getString(
-				R.string.minutes, Long.toString(minutes));
+		final String minSeq = minutes == 0 ? "" : minutes == 1 ? context.getString(R.string.minute)
+				: context.getString(R.string.minutes, Long.toString(minutes));
 
-		final String hourSeq = hours == 0 ? "" : hours == 1 ? context
-				.getString(R.string.hour) : context.getString(R.string.hours,
-				Long.toString(hours));
+		final String hourSeq = hours == 0 ? "" : hours == 1 ? context.getString(R.string.hour)
+				: context.getString(R.string.hours, Long.toString(hours));
 
 		final boolean dispDays = days > 0;
 		final boolean dispHour = hours > 0;
 		final boolean dispMinute = minutes > 0;
 
-		final int index = (dispDays ? 1 : 0) | (dispHour ? 2 : 0)
-				| (dispMinute ? 4 : 0);
+		final int index = (dispDays ? 1 : 0) | (dispHour ? 2 : 0) | (dispMinute ? 4 : 0);
 
-		final String[] formats = context.getResources().getStringArray(
-				R.array.alarm_set);
+		final String[] formats = context.getResources().getStringArray(R.array.alarm_set);
 		return String.format(formats[index], daySeq, hourSeq, minSeq);
 	}
 
@@ -85,18 +78,14 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 	 * Display a toast that tells the user how long until the alarm goes off.
 	 * This helps prevent "am/pm" mistakes.
 	 */
-	static void popAlarmSetToast(final Context context, final int hour,
-			final int minute, final Alarm.DaysOfWeek daysOfWeek) {
-		popAlarmSetToast(context,
-				Alarms.calculateAlarm(hour, minute, daysOfWeek)
-						.getTimeInMillis());
+	static void popAlarmSetToast(final Context context, final int hour, final int minute,
+			final Alarm.DaysOfWeek daysOfWeek) {
+		popAlarmSetToast(context, Alarms.calculateAlarm(hour, minute, daysOfWeek).getTimeInMillis());
 	}
 
-	private static void popAlarmSetToast(final Context context,
-			final long timeInMillis) {
+	private static void popAlarmSetToast(final Context context, final long timeInMillis) {
 		final String toastText = formatToast(context, timeInMillis);
-		final Toast toast = Toast.makeText(context, toastText,
-				Toast.LENGTH_LONG);
+		final Toast toast = Toast.makeText(context, toastText, Toast.LENGTH_LONG);
 		ToastMaster.setToast(toast);
 		toast.show();
 	}
@@ -118,31 +107,26 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 	private CheckBoxPreference mVibratePref;
 
 	private void deleteAlarm() {
-		new AlertDialog.Builder(this)
-				.setTitle(getString(R.string.delete_alarm))
+		new AlertDialog.Builder(this).setTitle(getString(R.string.delete_alarm))
 				.setMessage(getString(R.string.delete_alarm_confirm))
-				.setPositiveButton(android.R.string.ok,
-						new DialogInterface.OnClickListener() {
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface d, final int w) {
+						new AsyncTask<Void, Void, Void>() {
+
 							@Override
-							public void onClick(final DialogInterface d,
-									final int w) {
-								new AsyncTask<Void, Void, Void>() {
-
-									@Override
-									protected Void doInBackground(
-											Void... params) {
-										Alarms.deleteAlarm(SetAlarm.this, mId);
-										return null;
-									}
-
-									@Override
-									protected void onPostExecute(Void result) {
-										finish();
-									}
-								}.execute();
+							protected Void doInBackground(Void... params) {
+								Alarms.deleteAlarm(SetAlarm.this, mId);
+								return null;
 							}
-						}).setNegativeButton(android.R.string.cancel, null)
-				.show();
+
+							@Override
+							protected void onPostExecute(Void result) {
+								finish();
+							}
+						}.execute();
+					}
+				}).setNegativeButton(android.R.string.cancel, null).show();
 	}
 
 	@Override
@@ -189,8 +173,7 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		mLabel = (EditTextPreference) findPreference("label");
 		mLabel.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
-			public boolean onPreferenceChange(final Preference p,
-					final Object newValue) {
+			public boolean onPreferenceChange(final Preference p, final Object newValue) {
 				final String val = (String) newValue;
 				// Set the summary based on the new label.
 				p.setSummary(val);
@@ -202,19 +185,16 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 			}
 		});
 		mEnabledPref = (CheckBoxPreference) findPreference("enabled");
-		mEnabledPref
-				.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-					@Override
-					public boolean onPreferenceChange(final Preference p,
-							final Object newValue) {
-						// Pop a toast when enabling alarms.
-						if (!mEnabledPref.isChecked()) {
-							popAlarmSetToast(SetAlarm.this, mHour, mMinutes,
-									mRepeatPref.getDaysOfWeek());
-						}
-						return SetAlarm.this.onPreferenceChange(p, newValue);
-					}
-				});
+		mEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(final Preference p, final Object newValue) {
+				// Pop a toast when enabling alarms.
+				if (!mEnabledPref.isChecked()) {
+					popAlarmSetToast(SetAlarm.this, mHour, mMinutes, mRepeatPref.getDaysOfWeek());
+				}
+				return SetAlarm.this.onPreferenceChange(p, newValue);
+			}
+		});
 		mTimePref = findPreference("time");
 		mAlarmPref = (AlarmPreference) findPreference("alarm");
 		mAlarmPref.setOnPreferenceChangeListener(this);
@@ -250,10 +230,8 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		// their own.
 		getListView().setItemsCanFocus(true);
 		getListView().setCacheColorHint(0);
-		getListView()
-				.setBackgroundDrawable(
-						getResources().getDrawable(
-								R.drawable.gradient_background_vert));
+		getListView().setBackgroundDrawable(
+				getResources().getDrawable(R.drawable.gradient_background_vert));
 
 		// Attach actions to each button.
 		Button b = (Button) findViewById(R.id.alarm_save);
@@ -330,12 +308,6 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
-			protected void onPostExecute(Void result) {
-				final Button revert = (Button) findViewById(R.id.alarm_revert);
-				revert.setEnabled(true);
-			}
-
-			@Override
 			protected Void doInBackground(Void... params) {
 				// Editing any preference (except enable) enables the alarm.
 				if (p != mEnabledPref) {
@@ -344,13 +316,19 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 				saveAlarm();
 				return null;
 			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				final Button revert = (Button) findViewById(R.id.alarm_revert);
+				revert.setEnabled(true);
+			}
 		}.execute();
 		return true;
 	}
 
 	@Override
-	public boolean onPreferenceTreeClick(
-			final PreferenceScreen preferenceScreen, final Preference preference) {
+	public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen,
+			final Preference preference) {
 		if (preference == mTimePref) {
 			showTimePicker();
 		}
@@ -359,8 +337,7 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 	}
 
 	@Override
-	public void onTimeSet(final TimePicker view, final int hourOfDay,
-			final int minute) {
+	public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
 		// onTimeSet is called when the user clicks "Set"
 		mTimePickerCancelled = false;
 		mHour = hourOfDay;
@@ -419,8 +396,7 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 	}
 
 	private void showTimePicker() {
-		new TimePickerDialog(this, this, mHour, mMinutes,
-				DateFormat.is24HourFormat(this)).show();
+		new TimePickerDialog(this, this, mHour, mMinutes, DateFormat.is24HourFormat(this)).show();
 	}
 
 	private void updatePrefs(final Alarm alarm) {
@@ -441,7 +417,6 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		if (Log.LOGV) {
 			Log.v("updateTime " + mId);
 		}
-		mTimePref.setSummary(Alarms.formatTime(this, mHour, mMinutes,
-				mRepeatPref.getDaysOfWeek()));
+		mTimePref.setSummary(Alarms.formatTime(this, mHour, mMinutes, mRepeatPref.getDaysOfWeek()));
 	}
 }

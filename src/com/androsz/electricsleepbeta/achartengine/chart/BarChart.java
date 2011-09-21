@@ -55,8 +55,7 @@ public class BarChart extends XYChart {
 	 * @param type
 	 *            the bar chart type
 	 */
-	public BarChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer, Type type) {
+	public BarChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, Type type) {
 		super(dataset, renderer);
 		mType = type;
 	}
@@ -76,18 +75,16 @@ public class BarChart extends XYChart {
 	 *            the index of the series currently being drawn
 	 */
 	@Override
-	protected void drawChartValuesText(Canvas canvas, XYSeries series,
-			Paint paint, float[] points, int seriesIndex) {
+	protected void drawChartValuesText(Canvas canvas, XYSeries series, Paint paint, float[] points,
+			int seriesIndex) {
 		final int seriesNr = mDataset.getSeriesCount();
 		final float halfDiffX = getHalfDiffX(points, points.length, seriesNr);
 		for (int k = 0; k < points.length; k += 2) {
 			float x = points[k];
 			if (mType == Type.DEFAULT) {
-				x += seriesIndex * 2 * halfDiffX - (seriesNr - 1.5f)
-						* halfDiffX;
+				x += seriesIndex * 2 * halfDiffX - (seriesNr - 1.5f) * halfDiffX;
 			}
-			drawText(canvas, getLabel(series.getY(k / 2)), x,
-					points[k + 1] - 3.5f, paint, 0);
+			drawText(canvas, getLabel(series.getY(k / 2)), x, points[k + 1] - 3.5f, paint, 0);
 		}
 	}
 
@@ -106,11 +103,10 @@ public class BarChart extends XYChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
 		final float halfShapeWidth = SHAPE_WIDTH / 2;
-		canvas.drawRect(x, y - halfShapeWidth, x + SHAPE_WIDTH, y
-				+ halfShapeWidth, paint);
+		canvas.drawRect(x, y - halfShapeWidth, x + SHAPE_WIDTH, y + halfShapeWidth, paint);
 	}
 
 	/**
@@ -131,8 +127,7 @@ public class BarChart extends XYChart {
 	 */
 	@Override
 	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+			SimpleSeriesRenderer seriesRenderer, float yAxisValue, int seriesIndex) {
 		final int seriesNr = mDataset.getSeriesCount();
 		final int length = points.length;
 		paint.setColor(seriesRenderer.getColor());
@@ -142,13 +137,10 @@ public class BarChart extends XYChart {
 			final float x = points[i];
 			final float y = points[i + 1];
 			if (mType == Type.STACKED) {
-				canvas.drawRect(x - halfDiffX, y, x + halfDiffX, yAxisValue,
-						paint);
+				canvas.drawRect(x - halfDiffX, y, x + halfDiffX, yAxisValue, paint);
 			} else {
-				final float startX = x - seriesNr * halfDiffX + seriesIndex * 2
-						* halfDiffX;
-				canvas.drawRect(startX, y, startX + 2 * halfDiffX, yAxisValue,
-						paint);
+				final float startX = x - seriesNr * halfDiffX + seriesIndex * 2 * halfDiffX;
+				canvas.drawRect(startX, y, startX + 2 * halfDiffX, yAxisValue, paint);
 			}
 		}
 	}
@@ -193,8 +185,7 @@ public class BarChart extends XYChart {
 		if (mType != Type.STACKED) {
 			halfDiffX /= seriesNr;
 		}
-		return (float) (halfDiffX / (getCoeficient() * (1 + mRenderer
-				.getBarsSpacing())));
+		return (float) (halfDiffX / (getCoeficient() * (1 + mRenderer.getBarsSpacing())));
 	}
 
 	/**

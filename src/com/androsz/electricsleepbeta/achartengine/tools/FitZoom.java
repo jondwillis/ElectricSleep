@@ -44,11 +44,9 @@ public class FitZoom extends AbstractTool {
 			double[] range = null;
 			final int length = series.length;
 			if (length > 0) {
-				range = new double[] {
-						series[0].getMinX(),
-						series[0].getMaxX(),
-						Math.min(mChart.getDefaultMinimum(),
-								series[0].getMinY()), series[0].getMaxY() };
+				range = new double[] { series[0].getMinX(), series[0].getMaxX(),
+						Math.min(mChart.getDefaultMinimum(), series[0].getMinY()),
+						series[0].getMaxY() };
 				for (int i = 1; i < length; i++) {
 					range[0] = Math.min(range[0], series[i].getMinX());
 					range[1] = Math.max(range[1], series[i].getMaxX());
@@ -57,9 +55,8 @@ public class FitZoom extends AbstractTool {
 				}
 				final double marginX = Math.abs(range[1] - range[0]) / 40;
 				final double marginY = Math.abs(range[3] - range[2]) / 40;
-				mRenderer.setRange(new double[] { range[0] - marginX,
-						range[1] + marginX, range[2] - marginY,
-						range[3] + marginY });
+				mRenderer.setRange(new double[] { range[0] - marginX, range[1] + marginX,
+						range[2] - marginY, range[3] + marginY });
 			}
 		}
 	}

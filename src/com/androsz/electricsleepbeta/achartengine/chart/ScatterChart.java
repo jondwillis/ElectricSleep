@@ -45,8 +45,7 @@ public class ScatterChart extends XYChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public ScatterChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public ScatterChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 	}
 
@@ -80,8 +79,7 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawDiamond(Canvas canvas, Paint paint, float[] path, float x,
-			float y) {
+	private void drawDiamond(Canvas canvas, Paint paint, float[] path, float x, float y) {
 		path[0] = x;
 		path[1] = y - SIZE;
 		path[2] = x - SIZE;
@@ -108,8 +106,8 @@ public class ScatterChart extends XYChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
 		if (((XYSeriesRenderer) renderer).isFillPoints()) {
 			paint.setStyle(Style.FILL);
 		} else {
@@ -155,8 +153,7 @@ public class ScatterChart extends XYChart {
 	 */
 	@Override
 	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+			SimpleSeriesRenderer seriesRenderer, float yAxisValue, int seriesIndex) {
 		final XYSeriesRenderer renderer = (XYSeriesRenderer) seriesRenderer;
 		paint.setColor(renderer.getColor());
 		if (renderer.isFillPoints()) {
@@ -229,8 +226,7 @@ public class ScatterChart extends XYChart {
 	 * @param y
 	 *            the y value of the point the shape should be drawn at
 	 */
-	private void drawTriangle(Canvas canvas, Paint paint, float[] path,
-			float x, float y) {
+	private void drawTriangle(Canvas canvas, Paint paint, float[] path, float x, float y) {
 		path[0] = x;
 		path[1] = y - SIZE - SIZE / 2;
 		path[2] = x - SIZE;

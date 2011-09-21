@@ -17,15 +17,12 @@ import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 
 public class SeekBarPreference extends DialogPreference {
 
-	private static java.text.NumberFormat nf = java.text.NumberFormat
-			.getInstance();
+	private static java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
 	static {
 		nf.setGroupingUsed(false);
 		nf.setMinimumFractionDigits(0);
-		nf.setMaximumFractionDigits(("" + (int) Math.pow(
-				DecimalSeekBar.PRECISION, 0.5)).length());
-		nf.setMinimumFractionDigits(("" + (int) Math.pow(
-				DecimalSeekBar.PRECISION, 0.5)).length());
+		nf.setMaximumFractionDigits(("" + (int) Math.pow(DecimalSeekBar.PRECISION, 0.5)).length());
+		nf.setMinimumFractionDigits(("" + (int) Math.pow(DecimalSeekBar.PRECISION, 0.5)).length());
 	}
 	private final Context context;
 
@@ -54,15 +51,14 @@ public class SeekBarPreference extends DialogPreference {
 	protected void onPrepareDialogBuilder(final Builder builder) {
 
 		final LinearLayout layout = new LinearLayout(context);
-		layout.setLayoutParams(new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		layout.setOrientation(LinearLayout.VERTICAL);
 		layout.setMinimumWidth(400);
 		layout.setPadding(20, 20, 20, 20);
 
 		textView = new TextView(context);
-		textView.setLayoutParams(new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.WRAP_CONTENT,
+		textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));
 
 		syncTextViewText(getPersistedFloat(0));
@@ -71,16 +67,15 @@ public class SeekBarPreference extends DialogPreference {
 
 		seekBar = new DecimalSeekBar(context);
 		seekBar.setMax(Math.round(SettingsActivity.MAX_ALARM_SENSITIVITY));
-		seekBar.setLayoutParams(new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
+		seekBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));
 
 		seekBar.setProgress(getPersistedFloat(0));
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
-			public void onProgressChanged(final SeekBar seekBar,
-					final int progress, final boolean fromUser) {
+			public void onProgressChanged(final SeekBar seekBar, final int progress,
+					final boolean fromUser) {
 				syncTextViewText(progress / DecimalSeekBar.PRECISION);
 			}
 
@@ -101,10 +96,8 @@ public class SeekBarPreference extends DialogPreference {
 	}
 
 	@Override
-	protected void onSetInitialValue(final boolean restoreValue,
-			final Object defaultValue) {
-		final float temp = restoreValue ? getPersistedFloat(0)
-				: (Float) defaultValue;
+	protected void onSetInitialValue(final boolean restoreValue, final Object defaultValue) {
+		final float temp = restoreValue ? getPersistedFloat(0) : (Float) defaultValue;
 		if (!restoreValue) {
 			persistFloat(temp);
 		}

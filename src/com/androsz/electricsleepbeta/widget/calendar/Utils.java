@@ -41,10 +41,9 @@ public class Utils {
 	/* The corner should be rounded on the top right and bottom right */
 	private static final float[] CORNERS = new float[] { 0, 0, 5, 5, 5, 5, 0, 0 };
 	// TODO: replace this with the correct i18n way to do this
-	public static final String englishNthDay[] = { "", "1st", "2nd", "3rd",
-			"4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th",
-			"13th", "14th", "15th", "16th", "17th", "18th", "19th", "20th",
-			"21st", "22nd", "23rd", "24th", "25th", "26th", "27th", "28th",
+	public static final String englishNthDay[] = { "", "1st", "2nd", "3rd", "4th", "5th", "6th",
+			"7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th", "17th",
+			"18th", "19th", "20th", "21st", "22nd", "23rd", "24th", "25th", "26th", "27th", "28th",
 			"29th", "30th", "31st" };
 
 	private static final int HIGH_ALPHA = 255 << 24;
@@ -82,16 +81,15 @@ public class Utils {
 	 * @param nameIndex
 	 *            The column of the query that contains the display name
 	 */
-	public static void checkForDuplicateNames(
-			Map<String, Boolean> isDuplicateName, Cursor cursor, int nameIndex) {
+	public static void checkForDuplicateNames(Map<String, Boolean> isDuplicateName, Cursor cursor,
+			int nameIndex) {
 		isDuplicateName.clear();
 		cursor.moveToPosition(-1);
 		while (cursor.moveToNext()) {
 			final String displayName = cursor.getString(nameIndex);
 			// Set it to true if we've seen this name before, false otherwise
 			if (displayName != null) {
-				isDuplicateName.put(displayName,
-						isDuplicateName.containsKey(displayName));
+				isDuplicateName.put(displayName, isDuplicateName.containsKey(displayName));
 			}
 		}
 	}
@@ -138,8 +136,7 @@ public class Utils {
 	 * @return the string containing the weekday and the date
 	 */
 	public static String formatMonthYear(Context context, Time time) {
-		return time.format(context.getResources()
-				.getString(R.string.month_year));
+		return time.format(context.getResources().getString(R.string.month_year));
 	}
 
 	public static String formatNth(int nth) {
@@ -160,8 +157,8 @@ public class Utils {
 		final int middleColor = color | MED_ALPHA;
 		final int endColor = color | LOW_ALPHA;
 		final int[] colors = new int[] { startColor, middleColor, endColor };
-		final GradientDrawable d = new GradientDrawable(
-				GradientDrawable.Orientation.LEFT_RIGHT, colors);
+		final GradientDrawable d = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+				colors);
 		d.setCornerRadii(CORNERS);
 		return d;
 	}
@@ -240,8 +237,7 @@ public class Utils {
 		final Intent intent = new Intent(Intent.ACTION_VIEW);
 
 		intent.setClass(context, cls);
-		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		context.startActivity(intent);
 	}
@@ -267,9 +263,8 @@ public class Utils {
 				try {
 					millis = Long.valueOf(data.getLastPathSegment());
 				} catch (final NumberFormatException e) {
-					Log.i("Calendar",
-							"timeFromIntentInMillis: Data existed but no valid time "
-									+ "found. Using current time.");
+					Log.i("Calendar", "timeFromIntentInMillis: Data existed but no valid time "
+							+ "found. Using current time.");
 				}
 			}
 		}

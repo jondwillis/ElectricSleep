@@ -34,16 +34,13 @@ public abstract class WizardActivity extends HostActivity {
 		setupNavigationButtons();
 	}
 
-	protected abstract void onFinishWizardActivity()
-			throws IllegalStateException;
+	protected abstract void onFinishWizardActivity() throws IllegalStateException;
 
 	public void onLeftButtonClick(final View v) {
 
 		if (viewFlipper.getDisplayedChild() != 0) {
-			viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.slide_left_in));
-			viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-					R.anim.slide_left_out));
+			viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_left_in));
+			viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_left_out));
 			viewFlipper.showPrevious();
 			setupNavigationButtons();
 		} else {
@@ -64,10 +61,8 @@ public abstract class WizardActivity extends HostActivity {
 	}
 
 	public void onRightButtonClick(final View v) {
-		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,
-				R.anim.slide_right_in));
-		viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-				R.anim.slide_right_out));
+		viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_right_in));
+		viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_right_out));
 
 		final int lastChildIndex = viewFlipper.getChildCount() - 1;
 		final int displayedChildIndex = viewFlipper.getDisplayedChild();

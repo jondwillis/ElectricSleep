@@ -45,8 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	private final static int STALE_WINDOW = 60 * 30;
 
 	private NotificationManager getNotificationManager(final Context context) {
-		return (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
+		return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 
 	@Override
@@ -54,14 +53,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 		if (Alarms.ALARM_KILLED.equals(intent.getAction())) {
 			// The alarm has been killed, update the notification
 			updateNotification(context,
-					(Alarm) intent
-							.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA),
+					(Alarm) intent.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA),
 					intent.getIntExtra(Alarms.ALARM_KILLED_TIMEOUT, -1));
 			return;
 		} else if (Alarms.CANCEL_SNOOZE.equals(intent.getAction())) {
-			context.sendBroadcast(new Intent(
-					Alarms.ALARM_SNOOZE_CANCELED_BY_USER_ACTION));
+			context.sendBroadcast(new Intent(Alarms.ALARM_SNOOZE_CANCELED_BY_USER_ACTION));
 			Alarms.saveSnoozeAlert(context, -1, -1);
+			Log.v(Alarms.CANCEL_SNOOZE);
 			return;
 		}
 
@@ -100,12 +98,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// Maintain a cpu wake lock until the AlarmAlert and AlarmKlaxon can
 		// pick it up.
 		WakeLockManager.acquire(context, "klaxon", PowerManager.PARTIAL_WAKE_LOCK
-				| PowerManager.ACQUIRE_CAUSES_WAKEUP
-				| PowerManager.ON_AFTER_RELEASE);
+				| PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE);
 
 		/* Close dialogs and window shade */
-		final Intent closeDialogs = new Intent(
-				Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+		final Intent closeDialogs = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
 		context.sendBroadcast(closeDialogs);
 
 		// Decide which activity to start based on the state of the keyguard.
@@ -123,8 +119,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		 */
 		final Intent alarmAlert = new Intent(context, c);
 		alarmAlert.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
-		alarmAlert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				| Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+		alarmAlert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 		context.startActivity(alarmAlert);
 
 		// Disable the snooze alert if this alarm is the snooze.
@@ -149,18 +144,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// launched from a user action.
 		final Intent notify = new Intent(context, AlarmAlert.class);
 		notify.putExtra(Alarms.ALARM_INTENT_EXTRA, alarm);
-		final PendingIntent pendingNotify = PendingIntent.getActivity(context,
-				alarm.id, notify, 0);
+		final PendingIntent pendingNotify = PendingIntent.getActivity(context, alarm.id, notify, 0);
 
 		// Use the alarm's label or the default label as the ticker text and
 		// main text of the notification.
 		final String label = alarm.getLabelOrDefault(context);
-		final Notification n = new Notification(R.drawable.stat_notify_alarm,
-				label, alarm.time);
-		n.setLatestEventInfo(context, label,
-				context.getString(R.string.alarm_notify_text), pendingNotify);
-		n.flags |= Notification.FLAG_SHOW_LIGHTS
-				| Notification.FLAG_ONGOING_EVENT;
+		final Notification n = new Notification(R.drawable.stat_notify_alarm, label, alarm.time);
+		n.setLatestEventInfo(context, label, context.getString(R.string.alarm_notify_text),
+				pendingNotify);
+		n.flags |= Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_ONGOING_EVENT;
 		n.defaults |= Notification.DEFAULT_LIGHTS;
 
 		// Send the notification using the alarm id to easily identify the
@@ -169,8 +161,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		nm.notify(alarm.id, n);
 	}
 
-	private void updateNotification(final Context context, final Alarm alarm,
-			final int timeout) {
+	private void updateNotification(final Context context, final Alarm alarm, final int timeout) {
 		final NotificationManager nm = getNotificationManager(context);
 
 		// If the alarm is null, just cancel the notification.
@@ -184,19 +175,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// Launch SetAlarm when clicked.
 		final Intent viewAlarm = new Intent(context, SetAlarm.class);
 		viewAlarm.putExtra(Alarms.ALARM_ID, alarm.id);
-		final PendingIntent intent = PendingIntent.getActivity(context,
-				alarm.id, viewAlarm, 0);
+		final PendingIntent intent = PendingIntent.getActivity(context, alarm.id, viewAlarm, 0);
 
 		// Update the notification to indicate that the alert has been
 		// silenced.
 		final String label = alarm.getLabelOrDefault(context);
-		final Notification n = new Notification(R.drawable.stat_notify_alarm,
-				label, alarm.time);
-		n.setLatestEventInfo(
-				context,
-				label,
-				context.getString(R.string.alarm_alert_alert_silenced, timeout),
-				intent);
+		final Notification n = new Notification(R.drawable.stat_notify_alarm, label, alarm.time);
+		n.setLatestEventInfo(context, label,
+				context.getString(R.string.alarm_alert_alert_silenced, timeout), intent);
 		n.flags |= Notification.FLAG_AUTO_CANCEL;
 		// We have to cancel the original notification since it is in the
 		// ongoing section and we want the "killed" notification to be a plain

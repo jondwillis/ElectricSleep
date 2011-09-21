@@ -47,8 +47,7 @@ public class TimeChart extends LineChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public TimeChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public TimeChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 	}
 
@@ -75,23 +74,20 @@ public class TimeChart extends LineChart {
 	 *            the minimum value on the X axis in the chart
 	 */
 	@Override
-	protected void drawXLabels(List<Double> xLabels,
-			Double[] xTextLabelLocations, Canvas canvas, Paint paint, int left,
-			int top, int bottom, double xPixelsPerUnit, double minX) {
+	protected void drawXLabels(List<Double> xLabels, Double[] xTextLabelLocations, Canvas canvas,
+			Paint paint, int left, int top, int bottom, double xPixelsPerUnit, double minX) {
 		final int length = xLabels.size();
 		final boolean showLabels = mRenderer.isShowLabels();
 		final boolean showGrid = mRenderer.isShowGrid();
-		final DateFormat format = getDateFormat(xLabels.get(0),
-				xLabels.get(length - 1));
+		final DateFormat format = getDateFormat(xLabels.get(0), xLabels.get(length - 1));
 		for (int i = 0; i < length; i++) {
 			final long label = Math.round(xLabels.get(i));
-			final float xLabel = (float) (left + xPixelsPerUnit
-					* (label - minX));
+			final float xLabel = (float) (left + xPixelsPerUnit * (label - minX));
 			if (showLabels) {
 				paint.setColor(mRenderer.getLabelsColor());
 				canvas.drawLine(xLabel, bottom, xLabel, bottom + 4, paint);
-				drawText(canvas, format.format(new Date(label)), xLabel,
-						bottom + 12, paint, mRenderer.getXLabelsAngle());
+				drawText(canvas, format.format(new Date(label)), xLabel, bottom + 12, paint,
+						mRenderer.getXLabelsAngle());
 			}
 			if (showGrid) {
 				paint.setColor(GRID_COLOR);
@@ -132,8 +128,7 @@ public class TimeChart extends LineChart {
 		DateFormat format = DateFormat.getDateInstance(DateFormat.MEDIUM);
 		final double diff = end - start;
 		if (diff > DAY && diff < 5 * DAY) {
-			format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-					DateFormat.SHORT);
+			format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 		} else if (diff < DAY) {
 			format = DateFormat.getTimeInstance(DateFormat.MEDIUM);
 		}

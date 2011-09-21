@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.preference.CustomTitlebarPreferenceActivity;
 
-public class SettingsActivity extends CustomTitlebarPreferenceActivity
-		implements Preference.OnPreferenceChangeListener {
+public class SettingsActivity extends CustomTitlebarPreferenceActivity implements
+		Preference.OnPreferenceChangeListener {
 
 	private static final int ALARM_STREAM_TYPE_BIT = 1 << AudioManager.STREAM_ALARM;
 	public static double DEFAULT_ALARM_SENSITIVITY = 0.33;
@@ -32,7 +32,7 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 	public static double MAX_ALARM_SENSITIVITY = 1;
 	// name of the preferences file that holds ElectricSleep's main preferences
 	// this is actually what android uses as default..
-	public static String PREFERENCES = "com.androsz.electricsleep_preferences";
+	public static String PREFERENCES = "com.androsz.electricsleepbeta_preferences";
 	// name of the preferences file that holds environmental preferences
 	// example: show the user a donate message once
 	public static final String PREFERENCES_ENVIRONMENT = "prefsVersion";
@@ -51,8 +51,8 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		findPreference(getText(R.string.pref_calibration))
-				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+		findPreference(getText(R.string.pref_calibration)).setOnPreferenceClickListener(
+				new OnPreferenceClickListener() {
 
 					@Override
 					public boolean onPreferenceClick(final Preference preference) {
@@ -65,8 +65,7 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 		final SharedPreferences serviceIsRunningPrefs = getSharedPreferences(
 				SleepMonitoringService.SERVICE_IS_RUNNING, Context.MODE_PRIVATE);
 		if (serviceIsRunningPrefs.getBoolean("serviceIsRunning", false)) {
-			Toast.makeText(this, R.string.changes_made_to_these_settings,
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.changes_made_to_these_settings, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -78,8 +77,8 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 
 			@Override
 			public void run() {
-				final SharedPreferences.Editor ed = getSharedPreferences(
-						PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
+				final SharedPreferences.Editor ed = getSharedPreferences(PREFERENCES_ENVIRONMENT,
+						Context.MODE_PRIVATE).edit();
 				ed.putInt(PREFERENCES_ENVIRONMENT,
 						getResources().getInteger(R.integer.prefs_version));
 				ed.commit();
@@ -89,8 +88,7 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 	}
 
 	@Override
-	public boolean onPreferenceChange(final Preference pref,
-			final Object newValue) {
+	public boolean onPreferenceChange(final Preference pref, final Object newValue) {
 		final ListPreference listPref = (ListPreference) pref;
 		final int idx = listPref.findIndexOfValue((String) newValue);
 		listPref.setSummary(listPref.getEntries()[idx]);
@@ -98,12 +96,11 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 	}
 
 	@Override
-	public boolean onPreferenceTreeClick(
-			final PreferenceScreen preferenceScreen, final Preference preference) {
+	public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen,
+			final Preference preference) {
 		if (KEY_ALARM_IN_SILENT_MODE.equals(preference.getKey())) {
 			final CheckBoxPreference pref = (CheckBoxPreference) preference;
-			int ringerModeStreamTypes = Settings.System.getInt(
-					getContentResolver(),
+			int ringerModeStreamTypes = Settings.System.getInt(getContentResolver(),
 					Settings.System.MODE_RINGER_STREAMS_AFFECTED, 0);
 
 			if (pref.isChecked()) {
@@ -113,8 +110,7 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 			}
 
 			Settings.System.putInt(getContentResolver(),
-					Settings.System.MODE_RINGER_STREAMS_AFFECTED,
-					ringerModeStreamTypes);
+					Settings.System.MODE_RINGER_STREAMS_AFFECTED, ringerModeStreamTypes);
 
 			return true;
 		}
@@ -130,11 +126,9 @@ public class SettingsActivity extends CustomTitlebarPreferenceActivity
 
 	private void refresh() {
 		final CheckBoxPreference alarmInSilentModePref = (CheckBoxPreference) findPreference(KEY_ALARM_IN_SILENT_MODE);
-		final int silentModeStreams = Settings.System.getInt(
-				getContentResolver(),
+		final int silentModeStreams = Settings.System.getInt(getContentResolver(),
 				Settings.System.MODE_RINGER_STREAMS_AFFECTED, 0);
-		alarmInSilentModePref
-				.setChecked((silentModeStreams & ALARM_STREAM_TYPE_BIT) == 0);
+		alarmInSilentModePref.setChecked((silentModeStreams & ALARM_STREAM_TYPE_BIT) == 0);
 
 		final ListPreference snooze = (ListPreference) findPreference(KEY_ALARM_SNOOZE);
 		snooze.setSummary(snooze.getEntry());

@@ -18,34 +18,32 @@ public class WakeLockManager {
 		acquire(context, id, flags, 0);
 	}
 
-	public static void acquire(Context context, String id, int flags,
-			int releaseAfterMs) {
+	public static void acquire(Context context, String id, int flags, int releaseAfterMs) {
 		if (locks == null) {
-			
+
 		}
-		PowerManager mgr = (PowerManager) context.getApplicationContext()
-				.getSystemService(Context.POWER_SERVICE);
+		final PowerManager mgr = (PowerManager) context.getApplicationContext().getSystemService(
+				Context.POWER_SERVICE);
 
 		// create the new wakelock and put it into the map
-		WakeLock newWakeLock = mgr.newWakeLock(flags, id.toString());
-		
+		final WakeLock newWakeLock = mgr.newWakeLock(flags, id.toString());
 
-		//if this wakelock doesn't already exist, continue
+		// if this wakelock doesn't already exist, continue
 		if (locks.put(id, newWakeLock) == null) {
 			// only one at a time? TODO
 			newWakeLock.setReferenceCounted(true);
-			
+
 			if (releaseAfterMs == 0) {
 				newWakeLock.acquire();
 			} else {
 				newWakeLock.acquire(releaseAfterMs);
 			}
 		}
-		//TODO throw exception?
+		// TODO throw exception?
 	}
 
 	public static void release(String id) {
-		WakeLock wakeLock = locks.remove(id);
+		final WakeLock wakeLock = locks.remove(id);
 		// if there is was a wakelock, release it. (it has to be held)
 		if (wakeLock != null && wakeLock.isHeld()) {
 			wakeLock.release();

@@ -6,18 +6,15 @@ import android.widget.SeekBar;
 
 public class DecimalSeekBar extends SeekBar {
 
-	private static java.text.NumberFormat nf = java.text.NumberFormat
-			.getInstance();
+	private static java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
 
 	public final static float PRECISION = 100f;
 
 	static {
 		nf.setGroupingUsed(false);
 		nf.setMinimumFractionDigits(0);
-		nf.setMaximumFractionDigits(("" + (int) Math.pow(PRECISION, 0.5))
-				.length());
-		nf.setMinimumFractionDigits(("" + (int) Math.pow(PRECISION, 0.5))
-				.length());
+		nf.setMaximumFractionDigits(("" + (int) Math.pow(PRECISION, 0.5)).length());
+		nf.setMinimumFractionDigits(("" + (int) Math.pow(PRECISION, 0.5)).length());
 	}
 
 	public DecimalSeekBar(final Context context) {

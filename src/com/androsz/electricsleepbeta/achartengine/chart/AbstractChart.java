@@ -55,8 +55,7 @@ public abstract class AbstractChart implements Serializable {
 	 * @param paint
 	 *            the paint
 	 */
-	public abstract void draw(Canvas canvas, int x, int y, int width,
-			int height, Paint paint);
+	public abstract void draw(Canvas canvas, int x, int y, int width, int height, Paint paint);
 
 	/**
 	 * Draws the chart background.
@@ -80,9 +79,8 @@ public abstract class AbstractChart implements Serializable {
 	 * @param color
 	 *            the color to be used
 	 */
-	protected void drawBackground(DefaultRenderer renderer, Canvas canvas,
-			int x, int y, int width, int height, Paint paint, boolean newColor,
-			int color) {
+	protected void drawBackground(DefaultRenderer renderer, Canvas canvas, int x, int y, int width,
+			int height, Paint paint, boolean newColor, int color) {
 		if (renderer.isApplyBackgroundColor() || newColor) {
 			if (newColor) {
 				paint.setColor(Color.TRANSPARENT);
@@ -118,17 +116,15 @@ public abstract class AbstractChart implements Serializable {
 	 * @param paint
 	 *            the paint to be used for drawing
 	 */
-	protected void drawLegend(Canvas canvas, DefaultRenderer renderer,
-			String[] titles, int left, int right, int y, int width, int height,
-			int legendSize, Paint paint) {
+	protected void drawLegend(Canvas canvas, DefaultRenderer renderer, String[] titles, int left,
+			int right, int y, int width, int height, int legendSize, Paint paint) {
 		if (renderer.isShowLegend()) {
 			float currentX = left;
 			float currentY = y + height - legendSize + 32;
 			final float lineSize = getLegendShapeWidth();
 			paint.setTextAlign(Align.LEFT);
 			paint.setTextSize(renderer.getLegendTextSize());
-			final int sLength = Math.min(titles.length,
-					renderer.getSeriesRendererCount());
+			final int sLength = Math.min(titles.length, renderer.getSeriesRendererCount());
 			for (int i = 0; i < sLength; i++) {
 				String text = titles[i];
 				if (titles.length == renderer.getSeriesRendererCount()) {
@@ -155,14 +151,11 @@ public abstract class AbstractChart implements Serializable {
 					if (isVertical(renderer)) {
 						maxWidth = width - currentX - lineSize - 10;
 					}
-					final int nr = paint
-							.breakText(text, true, maxWidth, widths);
+					final int nr = paint.breakText(text, true, maxWidth, widths);
 					text = text.substring(0, nr) + "...";
 				}
-				drawLegendShape(canvas, renderer.getSeriesRendererAt(i),
-						currentX, currentY, paint);
-				canvas.drawText(text, currentX + lineSize + 5, currentY + 5,
-						paint);
+				drawLegendShape(canvas, renderer.getSeriesRendererAt(i), currentX, currentY, paint);
+				canvas.drawText(text, currentX + lineSize + 5, currentY + 5, paint);
 				currentX += extraSize;
 			}
 		}
@@ -182,8 +175,8 @@ public abstract class AbstractChart implements Serializable {
 	 * @param paint
 	 *            the paint to be used for drawing
 	 */
-	public abstract void drawLegendShape(Canvas canvas,
-			SimpleSeriesRenderer renderer, float x, float y, Paint paint);
+	public abstract void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x,
+			float y, Paint paint);
 
 	/**
 	 * The graphical representation of a path.
@@ -197,8 +190,7 @@ public abstract class AbstractChart implements Serializable {
 	 * @param circular
 	 *            if the path ends with the start point
 	 */
-	protected void drawPath(Canvas canvas, float[] points, Paint paint,
-			boolean circular) {
+	protected void drawPath(Canvas canvas, float[] points, Paint paint, boolean circular) {
 		final Path path = new Path();
 		path.moveTo(points[0], points[1]);
 		for (int i = 2; i < points.length; i += 2) {
@@ -210,8 +202,7 @@ public abstract class AbstractChart implements Serializable {
 		canvas.drawPath(path, paint);
 	}
 
-	private boolean getExceed(float currentWidth, DefaultRenderer renderer,
-			int right, int width) {
+	private boolean getExceed(float currentWidth, DefaultRenderer renderer, int right, int width) {
 		boolean exceed = currentWidth > right;
 		if (isVertical(renderer)) {
 			exceed = currentWidth > width;

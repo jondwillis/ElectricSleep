@@ -20,9 +20,8 @@ public class AboutActivity extends HostActivity {
 
 		try {
 			((TextView) findViewById(R.id.about_version_text))
-					.setText(getPackageManager()
-							.getPackageInfo(this.getPackageName(),
-									PackageManager.GET_META_DATA).versionName);
+					.setText(getPackageManager().getPackageInfo(this.getPackageName(),
+							PackageManager.GET_META_DATA).versionName);
 		} catch (final NameNotFoundException e) {
 			e.printStackTrace();
 		}

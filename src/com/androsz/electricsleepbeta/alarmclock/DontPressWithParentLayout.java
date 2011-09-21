@@ -28,8 +28,7 @@ import android.widget.LinearLayout;
  */
 public class DontPressWithParentLayout extends LinearLayout {
 
-	public DontPressWithParentLayout(final Context context,
-			final AttributeSet attrs) {
+	public DontPressWithParentLayout(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 	}
 

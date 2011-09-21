@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.db.SleepSessions;
-import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
 
 public class ReviewSleepActivity extends HostActivity implements
 		LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
@@ -29,15 +28,13 @@ public class ReviewSleepActivity extends HostActivity implements
 
 		@Override
 		protected Void doInBackground(final Void... params) {
-			SleepSessions.deleteSession(ReviewSleepActivity.this,
-					uri.getLastPathSegment());
+			SleepSessions.deleteSession(ReviewSleepActivity.this, Long.parseLong(uri.getLastPathSegment()));
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(final Void results) {
-			Toast.makeText(ReviewSleepActivity.this,
-					getString(R.string.deleted_sleep_record),
+			Toast.makeText(ReviewSleepActivity.this, getString(R.string.deleted_sleep_record),
 					Toast.LENGTH_SHORT).show();
 
 			if (progress != null && progress.isShowing()) {
@@ -48,6 +45,7 @@ public class ReviewSleepActivity extends HostActivity implements
 
 		@Override
 		protected void onPreExecute() {
+			getSupportLoaderManager().destroyLoader(0);
 			progress.setMessage(getString(R.string.deleting_sleep));
 			progress.show();
 		}
@@ -76,8 +74,7 @@ public class ReviewSleepActivity extends HostActivity implements
 		analysisFragment = new ReviewSleepAnalysisFragment();
 
 		final ActionBar bar = getSupportActionBar();
-		bar.addTab(bar.newTab().setText(R.string.sleep_chart)
-				.setTabListener(this));
+		bar.addTab(bar.newTab().setText(R.string.sleep_chart).setTabListener(this));
 		bar.addTab(bar.newTab().setText(R.string.analysis).setTabListener(this));
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -97,9 +94,8 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, uri,
-				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
-				null);
+		return new CursorLoader(this, uri, SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null,
+				null, null);
 	}
 
 	@Override
@@ -110,6 +106,8 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+		loader.stopLoading();
+		finish();
 	}
 
 	@Override
@@ -127,25 +125,19 @@ public class ReviewSleepActivity extends HostActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_item_delete_sleep_record:
-			final AlertDialog.Builder dialog = new AlertDialog.Builder(
-					ReviewSleepActivity.this)
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(ReviewSleepActivity.this)
 					.setMessage(getString(R.string.delete_sleep_record))
 					.setPositiveButton(getString(R.string.ok),
 							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(
-										final DialogInterface dialog,
-										final int id) {
-									new DeleteSleepTask().execute(null, null,
-											null);
+								public void onClick(final DialogInterface dialog, final int id) {
+									new DeleteSleepTask().execute(null, null, null);
 								}
 							})
 					.setNegativeButton(getString(R.string.cancel),
 							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(
-										final DialogInterface dialog,
-										final int id) {
+								public void onClick(final DialogInterface dialog, final int id) {
 									dialog.cancel();
 								}
 							});

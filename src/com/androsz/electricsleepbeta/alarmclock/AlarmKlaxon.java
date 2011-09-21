@@ -76,8 +76,7 @@ public class AlarmKlaxon extends Service {
 			// we register onCallStateChanged, we get the initial in-call state
 			// which kills the alarm. Check against the initial call state so
 			// we don't kill the alarm during a call.
-			if (state != TelephonyManager.CALL_STATE_IDLE
-					&& state != mInitialCallState) {
+			if (state != TelephonyManager.CALL_STATE_IDLE && state != mInitialCallState) {
 				sendKillBroadcast(mCurrentAlarm);
 				stopSelf();
 			}
@@ -117,11 +116,9 @@ public class AlarmKlaxon extends Service {
 		mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		// Listen for incoming calls to kill the alarm.
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		mTelephonyManager.listen(mPhoneStateListener,
-				PhoneStateListener.LISTEN_CALL_STATE);
+		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 		WakeLockManager.acquire(this, "klaxon", PowerManager.PARTIAL_WAKE_LOCK
-				| PowerManager.ACQUIRE_CAUSES_WAKEUP
-				| PowerManager.ON_AFTER_RELEASE);
+				| PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE);
 	}
 
 	@Override
@@ -133,16 +130,14 @@ public class AlarmKlaxon extends Service {
 	}
 
 	@Override
-	public int onStartCommand(final Intent intent, final int flags,
-			final int startId) {
+	public int onStartCommand(final Intent intent, final int flags, final int startId) {
 		// No intent, tell the system not to restart us.
 		if (intent == null) {
 			stopSelf();
 			return START_NOT_STICKY;
 		}
 
-		final Alarm alarm = intent
-				.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
+		final Alarm alarm = intent.getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
 
 		if (alarm == null) {
 			Log.v("AlarmKlaxon failed to parse the alarm from the intent");
@@ -180,8 +175,7 @@ public class AlarmKlaxon extends Service {
 			// Fall back on the default alarm if the database does not have an
 			// alarm stored.
 			if (alert == null) {
-				alert = RingtoneManager
-						.getDefaultUri(RingtoneManager.TYPE_ALARM);
+				alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 				if (Log.LOGV) {
 					Log.v("Using default alarm: " + alert.toString());
 				}
@@ -192,8 +186,7 @@ public class AlarmKlaxon extends Service {
 			mMediaPlayer = new MediaPlayer();
 			mMediaPlayer.setOnErrorListener(new OnErrorListener() {
 				@Override
-				public boolean onError(final MediaPlayer mp, final int what,
-						final int extra) {
+				public boolean onError(final MediaPlayer mp, final int what, final int extra) {
 					Log.e("Error occurred while playing audio.");
 					mp.stop();
 					mp.release();
@@ -208,8 +201,7 @@ public class AlarmKlaxon extends Service {
 				if (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 					Log.v("Using the in-call alarm");
 					mMediaPlayer.setVolume(IN_CALL_VOLUME, IN_CALL_VOLUME);
-					setDataSourceFromResource(getResources(), mMediaPlayer,
-							R.raw.fallbackring);
+					setDataSourceFromResource(getResources(), mMediaPlayer, R.raw.fallbackring);
 				} else {
 					mMediaPlayer.setDataSource(this, alert);
 				}
@@ -221,8 +213,7 @@ public class AlarmKlaxon extends Service {
 				try {
 					// Must reset the media player to clear the error state.
 					mMediaPlayer.reset();
-					setDataSourceFromResource(getResources(), mMediaPlayer,
-							R.raw.fallbackring);
+					setDataSourceFromResource(getResources(), mMediaPlayer, R.raw.fallbackring);
 					startAlarm(mMediaPlayer);
 				} catch (final Exception ex2) {
 					// At this point we just don't play anything.
@@ -252,20 +243,18 @@ public class AlarmKlaxon extends Service {
 		sendBroadcast(alarmKilled);
 	}
 
-	private void setDataSourceFromResource(final Resources resources,
-			final MediaPlayer player, final int res) throws java.io.IOException {
+	private void setDataSourceFromResource(final Resources resources, final MediaPlayer player,
+			final int res) throws java.io.IOException {
 		final AssetFileDescriptor afd = resources.openRawResourceFd(res);
 		if (afd != null) {
-			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(),
-					afd.getLength());
+			player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			afd.close();
 		}
 	}
 
 	// Do the common stuff when starting the alarm.
-	private void startAlarm(final MediaPlayer player)
-			throws java.io.IOException, IllegalArgumentException,
-			IllegalStateException {
+	private void startAlarm(final MediaPlayer player) throws java.io.IOException,
+			IllegalArgumentException, IllegalStateException {
 		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		// do not play alarms if stream volume is 0
 		// (typically because ringer mode is silent).

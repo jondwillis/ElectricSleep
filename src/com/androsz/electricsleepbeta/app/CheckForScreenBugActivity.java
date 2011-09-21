@@ -47,15 +47,14 @@ public class CheckForScreenBugActivity extends CalibrateForResultActivity {
 	public void onResume() {
 		super.onResume();
 
-		final Intent i = new Intent(this,
-				CheckForScreenBugAccelerometerService.class);
+		final Intent i = new Intent(this, CheckForScreenBugAccelerometerService.class);
 
 		// this replaces the need for broadcast receivers.
 		// the service updates BUG_PRESENT_INTENT, THEN our activity is alerted.
 		if (BUG_PRESENT_INTENT != null) {
 			stopService(i);
-			CheckForScreenBugActivity.this.setResult(CALIBRATION_SUCCEEDED,
-					new Intent(BUG_PRESENT_INTENT));
+			CheckForScreenBugActivity.this.setResult(CALIBRATION_SUCCEEDED, new Intent(
+					BUG_PRESENT_INTENT));
 			BUG_PRESENT_INTENT = null;
 			finish();
 		} else {

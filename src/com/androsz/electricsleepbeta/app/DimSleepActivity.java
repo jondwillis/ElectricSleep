@@ -31,10 +31,8 @@ public class DimSleepActivity extends AnalyticActivity {
 		if (Build.VERSION.SDK_INT < 8) {
 			// hack for pre-froyo to set buttonBrightness off
 			try {
-				final Field buttonBrightness = winParams.getClass().getField(
-						"buttonBrightness");
-				buttonBrightness.set(winParams,
-						WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF);
+				final Field buttonBrightness = winParams.getClass().getField("buttonBrightness");
+				buttonBrightness.set(winParams, WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF);
 			} catch (final Exception e) {
 				this.trackEvent("buttonBrightnessFail", 1);
 			}
@@ -54,8 +52,7 @@ public class DimSleepActivity extends AnalyticActivity {
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 
 		blackness.setBackgroundColor(Color.BLACK);
-		Toast.makeText(this,
-				"Your screen is in dim mode. To exit, press the back button.",
+		Toast.makeText(this, "Your screen is in dim mode. To exit, press the back button.",
 				Toast.LENGTH_LONG).show();
 		setContentView(blackness);
 	}

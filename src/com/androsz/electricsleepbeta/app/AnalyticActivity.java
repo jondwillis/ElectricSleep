@@ -18,21 +18,20 @@ public abstract class AnalyticActivity extends FragmentActivity {
 
 		String versionName = "?";
 		try {
-			versionName = getPackageManager().getPackageInfo(getPackageName(),
-					0).versionName;
+			versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
 		} catch (final NameNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		GoogleAnalyticsTracker.getInstance().setProductVersion(
-				getPackageName(), versionName);
-		
-		//I have no idea...
-		GoogleAnalyticsTracker.getInstance().setCustomVar(1, Integer.toString(VERSION.SDK_INT), Build.MODEL);
-		GoogleAnalyticsTracker.getInstance().setCustomVar(2, versionName, Build.MODEL+"-"+Integer.toString(VERSION.SDK_INT));
-		
-		GoogleAnalyticsSessionManager.getInstance(getApplication())
-				.incrementActivityCount();
+		GoogleAnalyticsTracker.getInstance().setProductVersion(getPackageName(), versionName);
+
+		// I have no idea...
+		GoogleAnalyticsTracker.getInstance().setCustomVar(1, Integer.toString(VERSION.SDK_INT),
+				Build.MODEL);
+		GoogleAnalyticsTracker.getInstance().setCustomVar(2, versionName,
+				Build.MODEL + "-" + Integer.toString(VERSION.SDK_INT));
+
+		GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
 
 	}
 
@@ -62,8 +61,7 @@ public abstract class AnalyticActivity extends FragmentActivity {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
-							Integer.toString(VERSION.SDK_INT), Build.MODEL,
-							label, value);
+							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
 				} catch (final Throwable whocares) {
 				}
 				return null;

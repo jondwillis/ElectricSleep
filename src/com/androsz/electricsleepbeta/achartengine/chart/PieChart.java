@@ -70,8 +70,7 @@ public class PieChart extends AbstractChart {
 	 *            paint
 	 */
 	@Override
-	public void draw(Canvas canvas, int x, int y, int width, int height,
-			Paint paint) {
+	public void draw(Canvas canvas, int x, int y, int width, int height, Paint paint) {
 		paint.setAntiAlias(mRenderer.isAntialiasing());
 		paint.setStyle(Style.FILL);
 		paint.setTextSize(mRenderer.getLabelsTextSize());
@@ -94,15 +93,14 @@ public class PieChart extends AbstractChart {
 			titles[i] = mDataset.getCategory(i);
 		}
 		float currentAngle = 0;
-		final int mRadius = Math.min(Math.abs(right - left),
-				Math.abs(bottom - top));
+		final int mRadius = Math.min(Math.abs(right - left), Math.abs(bottom - top));
 		final int radius = (int) (mRadius * 0.35);
 		final int centerX = (left + right) / 2;
 		final int centerY = (bottom + top) / 2;
 		final float shortRadius = radius * 0.9f;
 		final float longRadius = radius * 1.1f;
-		final RectF oval = new RectF(centerX - radius, centerY - radius,
-				centerX + radius, centerY + radius);
+		final RectF oval = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY
+				+ radius);
 		for (int i = 0; i < sLength; i++) {
 			paint.setColor(mRenderer.getSeriesRendererAt(i).getColor());
 			final float value = (float) mDataset.getValue(i);
@@ -110,18 +108,13 @@ public class PieChart extends AbstractChart {
 			canvas.drawArc(oval, currentAngle, angle, true, paint);
 			if (mRenderer.isShowLabels()) {
 				paint.setColor(mRenderer.getLabelsColor());
-				final double rAngle = Math
-						.toRadians(90 - (currentAngle + angle / 2));
+				final double rAngle = Math.toRadians(90 - (currentAngle + angle / 2));
 				final double sinValue = Math.sin(rAngle);
 				final double cosValue = Math.cos(rAngle);
-				final int x1 = Math.round(centerX
-						+ (float) (shortRadius * sinValue));
-				final int y1 = Math.round(centerY
-						+ (float) (shortRadius * cosValue));
-				final int x2 = Math.round(centerX
-						+ (float) (longRadius * sinValue));
-				final int y2 = Math.round(centerY
-						+ (float) (longRadius * cosValue));
+				final int x1 = Math.round(centerX + (float) (shortRadius * sinValue));
+				final int y1 = Math.round(centerY + (float) (shortRadius * cosValue));
+				final int x2 = Math.round(centerX + (float) (longRadius * sinValue));
+				final int y2 = Math.round(centerY + (float) (longRadius * cosValue));
 				canvas.drawLine(x1, y1, x2, y2, paint);
 				int extra = 10;
 				paint.setTextAlign(Align.LEFT);
@@ -130,13 +123,11 @@ public class PieChart extends AbstractChart {
 					paint.setTextAlign(Align.RIGHT);
 				}
 				canvas.drawLine(x2, y2, x2 + extra, y2, paint);
-				canvas.drawText(mDataset.getCategory(i), x2 + extra, y2 + 5,
-						paint);
+				canvas.drawText(mDataset.getCategory(i), x2 + extra, y2 + 5, paint);
 			}
 			currentAngle += angle;
 		}
-		drawLegend(canvas, mRenderer, titles, left, right, y, width, height,
-				legendSize, paint);
+		drawLegend(canvas, mRenderer, titles, left, right, y, width, height, legendSize, paint);
 	}
 
 	/**
@@ -154,10 +145,9 @@ public class PieChart extends AbstractChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
-		canvas.drawRect(x, y - SHAPE_WIDTH / 2, x + SHAPE_WIDTH, y
-				+ SHAPE_WIDTH / 2, paint);
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
+		canvas.drawRect(x, y - SHAPE_WIDTH / 2, x + SHAPE_WIDTH, y + SHAPE_WIDTH / 2, paint);
 	}
 
 	/**

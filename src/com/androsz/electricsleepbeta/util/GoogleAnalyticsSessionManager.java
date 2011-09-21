@@ -20,12 +20,10 @@ public class GoogleAnalyticsSessionManager {
 	/**
 	 * Get or create an instance of GoogleAnalyticsSessionManager
 	 */
-	public static GoogleAnalyticsSessionManager getInstance(
-			Application application) {
+	public static GoogleAnalyticsSessionManager getInstance(Application application) {
 		if (INSTANCE == null) {
 			INSTANCE = new GoogleAnalyticsSessionManager(
-					application.getString(R.string.analytics_ua_number),
-					application);
+					application.getString(R.string.analytics_ua_number), application);
 		}
 		return INSTANCE;
 	}
@@ -50,8 +48,8 @@ public class GoogleAnalyticsSessionManager {
 	 * NOTE: you should use your Application context, not your Activity context,
 	 * in order to avoid memory leaks.
 	 */
-	protected GoogleAnalyticsSessionManager(String apiKey,
-			int dispatchIntervalSecs, Application context) {
+	protected GoogleAnalyticsSessionManager(String apiKey, int dispatchIntervalSecs,
+			Application context) {
 		this.apiKey = apiKey;
 		this.dispatchIntervalSecs = dispatchIntervalSecs;
 		this.context = context;
@@ -82,8 +80,8 @@ public class GoogleAnalyticsSessionManager {
 			if (dispatchIntervalSecs == null) {
 				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, context);
 			} else {
-				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey,
-						dispatchIntervalSecs, context);
+				GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, dispatchIntervalSecs,
+						context);
 			}
 		}
 		++activityCount;

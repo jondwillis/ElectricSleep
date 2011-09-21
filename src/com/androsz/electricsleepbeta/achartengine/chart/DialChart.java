@@ -74,8 +74,7 @@ public class DialChart extends AbstractChart {
 	 *            the paint
 	 */
 	@Override
-	public void draw(Canvas canvas, int x, int y, int width, int height,
-			Paint paint) {
+	public void draw(Canvas canvas, int x, int y, int width, int height, Paint paint) {
 		paint.setAntiAlias(mRenderer.isAntialiasing());
 		paint.setStyle(Style.FILL);
 		paint.setTextSize(mRenderer.getLabelsTextSize());
@@ -97,8 +96,7 @@ public class DialChart extends AbstractChart {
 			total += mDataset.getValue(i);
 			titles[i] = mDataset.getCategory(i);
 		}
-		final int mRadius = Math.min(Math.abs(right - left),
-				Math.abs(bottom - top));
+		final int mRadius = Math.min(Math.abs(right - left), Math.abs(bottom - top));
 		final int radius = (int) (mRadius * 0.35);
 		final int centerX = (left + right) / 2;
 		final int centerY = (bottom + top) / 2;
@@ -134,23 +132,21 @@ public class DialChart extends AbstractChart {
 		if (majorTicks == MathHelper.NULL_VALUE) {
 			majorTicks = (max - min) / 10;
 		}
-		drawTicks(canvas, min, max, angleMin, angleMax, centerX, centerY,
-				longRadius, radius, minorTicks, paint, false);
-		drawTicks(canvas, min, max, angleMin, angleMax, centerX, centerY,
-				longRadius, shortRadius, majorTicks, paint, true);
+		drawTicks(canvas, min, max, angleMin, angleMax, centerX, centerY, longRadius, radius,
+				minorTicks, paint, false);
+		drawTicks(canvas, min, max, angleMin, angleMax, centerX, centerY, longRadius, shortRadius,
+				majorTicks, paint, true);
 
 		final int count = mRenderer.getSeriesRendererCount();
 		for (int i = 0; i < count; i++) {
-			final double angle = getAngleForValue(mDataset.getValue(i),
-					angleMin, angleMax, min, max);
+			final double angle = getAngleForValue(mDataset.getValue(i), angleMin, angleMax, min,
+					max);
 			paint.setColor(mRenderer.getSeriesRendererAt(i).getColor());
 			final boolean type = mRenderer.getVisualTypeForIndex(i) == Type.ARROW;
-			drawNeedle(canvas, angle, centerX, centerY, shortRadius, type,
-					paint);
+			drawNeedle(canvas, angle, centerX, centerY, shortRadius, type, paint);
 		}
 
-		drawLegend(canvas, mRenderer, titles, left, right, y, width, height,
-				legendSize, paint);
+		drawLegend(canvas, mRenderer, titles, left, right, y, width, height, legendSize, paint);
 	}
 
 	/**
@@ -168,10 +164,9 @@ public class DialChart extends AbstractChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
-		canvas.drawRect(x, y - SHAPE_WIDTH / 2, x + SHAPE_WIDTH, y
-				+ SHAPE_WIDTH / 2, paint);
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
+		canvas.drawRect(x, y - SHAPE_WIDTH / 2, x + SHAPE_WIDTH, y + SHAPE_WIDTH / 2, paint);
 	}
 
 	/**
@@ -193,35 +188,30 @@ public class DialChart extends AbstractChart {
 	 *            the paint settings
 	 * @return the angle
 	 */
-	private void drawNeedle(Canvas canvas, double angle, int centerX,
-			int centerY, double radius, boolean arrow, Paint paint) {
+	private void drawNeedle(Canvas canvas, double angle, int centerX, int centerY, double radius,
+			boolean arrow, Paint paint) {
 		final double diff = Math.toRadians(90);
-		final int needleSinValue = (int) (NEEDLE_RADIUS * Math
-				.sin(angle - diff));
-		final int needleCosValue = (int) (NEEDLE_RADIUS * Math
-				.cos(angle - diff));
+		final int needleSinValue = (int) (NEEDLE_RADIUS * Math.sin(angle - diff));
+		final int needleCosValue = (int) (NEEDLE_RADIUS * Math.cos(angle - diff));
 		final int needleX = (int) (radius * Math.sin(angle));
 		final int needleY = (int) (radius * Math.cos(angle));
 		final int needleCenterX = centerX + needleX;
 		final int needleCenterY = centerY + needleY;
 		float[] points;
 		if (arrow) {
-			final int arrowBaseX = centerX
-					+ (int) (radius * 0.85 * Math.sin(angle));
-			final int arrowBaseY = centerY
-					+ (int) (radius * 0.85 * Math.cos(angle));
-			points = new float[] { arrowBaseX - needleSinValue,
-					arrowBaseY - needleCosValue, needleCenterX, needleCenterY,
-					arrowBaseX + needleSinValue, arrowBaseY + needleCosValue };
+			final int arrowBaseX = centerX + (int) (radius * 0.85 * Math.sin(angle));
+			final int arrowBaseY = centerY + (int) (radius * 0.85 * Math.cos(angle));
+			points = new float[] { arrowBaseX - needleSinValue, arrowBaseY - needleCosValue,
+					needleCenterX, needleCenterY, arrowBaseX + needleSinValue,
+					arrowBaseY + needleCosValue };
 			final float width = paint.getStrokeWidth();
 			paint.setStrokeWidth(5);
-			canvas.drawLine(centerX, centerY, needleCenterX, needleCenterY,
-					paint);
+			canvas.drawLine(centerX, centerY, needleCenterX, needleCenterY, paint);
 			paint.setStrokeWidth(width);
 		} else {
-			points = new float[] { centerX - needleSinValue,
-					centerY - needleCosValue, needleCenterX, needleCenterY,
-					centerX + needleSinValue, centerY + needleCosValue };
+			points = new float[] { centerX - needleSinValue, centerY - needleCosValue,
+					needleCenterX, needleCenterY, centerX + needleSinValue,
+					centerY + needleCosValue };
 		}
 		drawPath(canvas, points, paint, true);
 	}
@@ -255,23 +245,17 @@ public class DialChart extends AbstractChart {
 	 *            paint the labels
 	 * @return the angle
 	 */
-	private void drawTicks(Canvas canvas, double min, double max,
-			double minAngle, double maxAngle, int centerX, int centerY,
-			double longRadius, double shortRadius, double ticks, Paint paint,
-			boolean labels) {
+	private void drawTicks(Canvas canvas, double min, double max, double minAngle, double maxAngle,
+			int centerX, int centerY, double longRadius, double shortRadius, double ticks,
+			Paint paint, boolean labels) {
 		for (double i = min; i <= max; i += ticks) {
-			final double angle = getAngleForValue(i, minAngle, maxAngle, min,
-					max);
+			final double angle = getAngleForValue(i, minAngle, maxAngle, min, max);
 			final double sinValue = Math.sin(angle);
 			final double cosValue = Math.cos(angle);
-			final int x1 = Math.round(centerX
-					+ (float) (shortRadius * sinValue));
-			final int y1 = Math.round(centerY
-					+ (float) (shortRadius * cosValue));
-			final int x2 = Math
-					.round(centerX + (float) (longRadius * sinValue));
-			final int y2 = Math
-					.round(centerY + (float) (longRadius * cosValue));
+			final int x1 = Math.round(centerX + (float) (shortRadius * sinValue));
+			final int y1 = Math.round(centerY + (float) (shortRadius * cosValue));
+			final int x2 = Math.round(centerX + (float) (longRadius * sinValue));
+			final int y2 = Math.round(centerY + (float) (longRadius * cosValue));
 			canvas.drawLine(x1, y1, x2, y2, paint);
 			if (labels) {
 				paint.setTextAlign(Align.LEFT);
@@ -302,8 +286,8 @@ public class DialChart extends AbstractChart {
 	 *            the maximum chart value
 	 * @return the angle
 	 */
-	private double getAngleForValue(double value, double minAngle,
-			double maxAngle, double min, double max) {
+	private double getAngleForValue(double value, double minAngle, double maxAngle, double min,
+			double max) {
 		final double angleDiff = maxAngle - minAngle;
 		final double diff = max - min;
 		return Math.toRadians(minAngle + (value - min) * angleDiff / diff);

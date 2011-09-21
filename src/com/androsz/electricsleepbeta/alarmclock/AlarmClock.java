@@ -50,8 +50,8 @@ import com.androsz.electricsleepbeta.app.SettingsActivity;
 /**
  * AlarmClock application.
  */
-public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
-		implements OnItemClickListener {
+public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity implements
+		OnItemClickListener {
 
 	private class AlarmTimeAdapter extends CursorAdapter {
 		public AlarmTimeAdapter(final Context context, final Cursor cursor) {
@@ -59,22 +59,19 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 		}
 
 		@Override
-		public void bindView(final View view, final Context context,
-				final Cursor cursor) {
+		public void bindView(final View view, final Context context, final Cursor cursor) {
 			final Alarm alarm = new Alarm(cursor);
 
 			final View indicator = view.findViewById(R.id.indicator);
 			indicator.setBackgroundColor(android.R.color.transparent);
 
 			// Set the initial resource for the bar image.
-			final ImageView barOnOff = (ImageView) indicator
-					.findViewById(R.id.bar_onoff);
+			final ImageView barOnOff = (ImageView) indicator.findViewById(R.id.bar_onoff);
 			barOnOff.setImageResource(alarm.enabled ? R.drawable.ic_indicator_on
 					: R.drawable.ic_indicator_off);
 
 			// Set the initial state of the clock "checkbox"
-			final CheckBox clockOnOff = (CheckBox) indicator
-					.findViewById(R.id.clock_onoff);
+			final CheckBox clockOnOff = (CheckBox) indicator.findViewById(R.id.clock_onoff);
 			clockOnOff.setChecked(alarm.enabled);
 
 			// Clicking outside the "checkbox" should also change the state.
@@ -82,13 +79,11 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 				@Override
 				public void onClick(final View v) {
 					clockOnOff.toggle();
-					updateIndicatorAndAlarm(clockOnOff.isChecked(), barOnOff,
-							alarm);
+					updateIndicatorAndAlarm(clockOnOff.isChecked(), barOnOff, alarm);
 				}
 			});
 
-			final DigitalClock digitalClock = (DigitalClock) view
-					.findViewById(R.id.digitalClock);
+			final DigitalClock digitalClock = (DigitalClock) view.findViewById(R.id.digitalClock);
 
 			// set the alarm text
 			final Calendar c = Calendar.getInstance();
@@ -98,10 +93,8 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 			digitalClock.setTypeface(Typeface.DEFAULT);
 
 			// Set the repeat text or leave it blank if it does not repeat.
-			final TextView daysOfWeekView = (TextView) digitalClock
-					.findViewById(R.id.daysOfWeek);
-			final String daysOfWeekStr = alarm.daysOfWeek.toString(
-					AlarmClock.this, false);
+			final TextView daysOfWeekView = (TextView) digitalClock.findViewById(R.id.daysOfWeek);
+			final String daysOfWeekStr = alarm.daysOfWeek.toString(AlarmClock.this, false);
 			if (daysOfWeekStr != null && daysOfWeekStr.length() != 0) {
 				daysOfWeekView.setText(daysOfWeekStr);
 				daysOfWeekView.setVisibility(View.VISIBLE);
@@ -120,13 +113,10 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 		}
 
 		@Override
-		public View newView(final Context context, final Cursor cursor,
-				final ViewGroup parent) {
-			final View ret = mFactory.inflate(R.layout.alarm_time, parent,
-					false);
+		public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
+			final View ret = mFactory.inflate(R.layout.alarm_time, parent, false);
 
-			final DigitalClock digitalClock = (DigitalClock) ret
-					.findViewById(R.id.digitalClock);
+			final DigitalClock digitalClock = (DigitalClock) ret.findViewById(R.id.digitalClock);
 			digitalClock.setLive(false);
 			return ret;
 		}
@@ -155,34 +145,27 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 
 	@Override
 	public boolean onContextItemSelected(final MenuItem item) {
-		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-				.getMenuInfo();
+		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		final int id = (int) info.id;
 		switch (item.getItemId()) {
 		case R.id.delete_alarm:
 			// Confirm that the alarm will be deleted.
-			new AlertDialog.Builder(this)
-					.setTitle(getString(R.string.delete_alarm))
+			new AlertDialog.Builder(this).setTitle(getString(R.string.delete_alarm))
 					.setMessage(getString(R.string.delete_alarm_confirm))
-					.setPositiveButton(android.R.string.ok,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(final DialogInterface d,
-										final int w) {
-									Alarms.deleteAlarm(AlarmClock.this, id);
-								}
-							}).setNegativeButton(android.R.string.cancel, null)
-					.show();
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(final DialogInterface d, final int w) {
+							Alarms.deleteAlarm(AlarmClock.this, id);
+						}
+					}).setNegativeButton(android.R.string.cancel, null).show();
 			return true;
 
 		case R.id.enable_alarm:
-			final Cursor c = (Cursor) mAlarmsList.getAdapter().getItem(
-					info.position);
+			final Cursor c = (Cursor) mAlarmsList.getAdapter().getItem(info.position);
 			final Alarm alarm = new Alarm(c);
 			Alarms.enableAlarm(this, alarm.id, !alarm.enabled);
 			if (!alarm.enabled) {
-				SetAlarm.popAlarmSetToast(this, alarm.hour, alarm.minutes,
-						alarm.daysOfWeek);
+				SetAlarm.popAlarmSetToast(this, alarm.hour, alarm.minutes, alarm.daysOfWeek);
 			}
 			return true;
 
@@ -230,16 +213,15 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 			final ContextMenuInfo menuInfo) {
 		// Inflate the menu from xml.
 		// super.getMenuInflater().inflate(R.menu.context_menu, (Menu)menu);
-		menu.add(android.view.Menu.NONE, R.id.enable_alarm,
-				android.view.Menu.NONE, R.string.enable_alarm);
-		menu.add(android.view.Menu.NONE, R.id.edit_alarm,
-				android.view.Menu.NONE, R.string.menu_edit_alarm);
-		menu.add(android.view.Menu.NONE, R.id.delete_alarm,
-				android.view.Menu.NONE, R.string.delete_alarm);
+		menu.add(android.view.Menu.NONE, R.id.enable_alarm, android.view.Menu.NONE,
+				R.string.enable_alarm);
+		menu.add(android.view.Menu.NONE, R.id.edit_alarm, android.view.Menu.NONE,
+				R.string.menu_edit_alarm);
+		menu.add(android.view.Menu.NONE, R.id.delete_alarm, android.view.Menu.NONE,
+				R.string.delete_alarm);
 		// Use the current item to create a custom view for the header.
 		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-		final Cursor c = (Cursor) mAlarmsList.getAdapter().getItem(
-				info.position);
+		final Cursor c = (Cursor) mAlarmsList.getAdapter().getItem(info.position);
 		final Alarm alarm = new Alarm(c);
 
 		// Construct the Calendar to compute the time.
@@ -277,8 +259,7 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 	}
 
 	@Override
-	public void onItemClick(final AdapterView parent, final View v,
-			final int pos, final long id) {
+	public void onItemClick(final AdapterView parent, final View v, final int pos, final long id) {
 		final Intent intent = new Intent(this, SetAlarm.class);
 		intent.putExtra(Alarms.ALARM_ID, (int) id);
 		startActivity(intent);
@@ -294,14 +275,12 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void updateIndicatorAndAlarm(final boolean enabled,
-			final ImageView bar, final Alarm alarm) {
-		bar.setImageResource(enabled ? R.drawable.ic_indicator_on
-				: R.drawable.ic_indicator_off);
+	private void updateIndicatorAndAlarm(final boolean enabled, final ImageView bar,
+			final Alarm alarm) {
+		bar.setImageResource(enabled ? R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);
 		Alarms.enableAlarm(this, alarm.id, enabled);
 		if (enabled) {
-			SetAlarm.popAlarmSetToast(this, alarm.hour, alarm.minutes,
-					alarm.daysOfWeek);
+			SetAlarm.popAlarmSetToast(this, alarm.hour, alarm.minutes, alarm.daysOfWeek);
 		}
 	}
 

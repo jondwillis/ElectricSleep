@@ -19,14 +19,9 @@ package com.androsz.electricsleepbeta.widget.calendar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Locale;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,7 +31,6 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.SparseArray;
@@ -47,11 +41,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.HistoryActivity;
 import com.androsz.electricsleepbeta.app.HistoryMonthActivity;
-import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
-import com.androsz.electricsleepbeta.db.SleepSession;
-import com.androsz.electricsleepbeta.db.SleepSessions;
 
 public class MonthView extends View {
 
@@ -105,13 +95,9 @@ public class MonthView extends View {
 	// drawables for day backgrounds.
 	// mDayBitmapCache is indexed by a unique integer constructed from the
 	// width/height.
-	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(
-			4);
+	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(4);
 
-	private final EventGeometry mEventGeometry;
-	// private final EventLoader mEventLoader;
-	private LinkedHashMap<Long, SleepSession> mEvents = new LinkedHashMap<Long, SleepSession>(
-			0);
+	private ArrayList<Long[]> mSessions = new ArrayList<Long[]>(0);
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -131,7 +117,7 @@ public class MonthView extends View {
 
 	// This Time object is used to set the time for the other Month view.
 	private final Time mOtherViewCalendar = new Time();
-	private HistoryMonthActivity mParentActivity;
+	private final HistoryMonthActivity mParentActivity;
 
 	// Pre-allocate and reuse
 	private final Rect mRect = new Rect();
@@ -173,10 +159,6 @@ public class MonthView extends View {
 			}
 		}
 
-		// mEventLoader = activity.mEventLoader;
-		mEventGeometry = new EventGeometry();
-		mEventGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-		mEventGeometry.setHourGap(HOUR_GAP);
 		mParentActivity = historyMonthActivity;
 		init();
 	}
@@ -219,8 +201,7 @@ public class MonthView extends View {
 				weekNum += 1;
 				if (weekNum >= 53) {
 					final boolean inCurrentMonth = (day - mFirstJulianDay < EVENT_NUM_DAYS);
-					weekNum = getWeekOfYear(row + 1, 0, inCurrentMonth,
-							calendar);
+					weekNum = getWeekOfYear(row + 1, 0, inCurrentMonth, calendar);
 				}
 			}
 		}
@@ -248,8 +229,8 @@ public class MonthView extends View {
 	 * @param isLandscape
 	 *            Is the current orientation landscape.
 	 */
-	private void drawBox(int day, int weekNum, int row, int column,
-			Canvas canvas, Paint p, Rect r, boolean isLandscape) {
+	private void drawBox(int day, int weekNum, int row, int column, Canvas canvas, Paint p, Rect r,
+			boolean isLandscape) {
 
 		// Only draw the selection if we are in the press state or if we have
 		// moved the cursor with key input.
@@ -258,8 +239,7 @@ public class MonthView extends View {
 			drawSelection = mCursor.isSelected(row, column);
 		}
 
-		final boolean withinCurrentMonth = mCursor.isWithinCurrentMonth(row,
-				column);
+		final boolean withinCurrentMonth = mCursor.isWithinCurrentMonth(row, column);
 		boolean isToday = false;
 		final int dayOfBox = mCursor.getDayAt(row, column);
 		if (dayOfBox == mToday.monthDay && mCursor.getYear() == mToday.year
@@ -353,18 +333,15 @@ public class MonthView extends View {
 		 */
 		p.setTextAlign(Paint.Align.CENTER);
 		// center of text
-		final int textX = r.left
-				+ (r.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH - r.left) / 2;
+		final int textX = r.left + (r.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH - r.left) / 2;
 		final int textY = (int) (r.top + p.getTextSize() + TEXT_TOP_MARGIN); // bottom
 		// of
 		// text
-		canvas.drawText(String.valueOf(mCursor.getDayAt(row, column)), textX,
-				textY, p);
+		canvas.drawText(String.valueOf(mCursor.getDayAt(row, column)), textX, textY, p);
 	}
 
 	// Draw busybits for a single event
-	private RectF drawEventRect(Rect rect, SleepSession event, Canvas canvas,
-			Paint p) {
+	private RectF drawEventRect(Rect rect, SessionGeometry session, Canvas canvas, Paint p) {
 
 		p.setColor(mBusybitsColor);
 
@@ -372,9 +349,9 @@ public class MonthView extends View {
 		final int bottom = rect.bottom - BUSY_BITS_MARGIN;
 
 		final RectF rf = mRectF;
-		rf.top = event.top;
+		rf.top = session.top;
 		// Make sure we don't go below the bottom of the bb bar
-		rf.bottom = Math.min(event.bottom, bottom);
+		rf.bottom = Math.min(session.bottom, bottom);
 		rf.left = left;
 		rf.right = left + BUSY_BITS_WIDTH;
 
@@ -384,15 +361,11 @@ public class MonthView extends View {
 	}
 
 	// /Create and draw the event busybits for this day
-	private void drawEvents(int date, Canvas canvas, Rect rect, Paint p,
-			boolean drawBg) {
+	private void drawEvents(int date, Canvas canvas, Rect rect, Paint p, boolean drawBg) {
 		// The top of the busybits section lines up with the top of the day
 		// number
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
-
-		final Collection<SleepSession> events = mEvents.values();
-		final EventGeometry geometry = mEventGeometry;
 
 		if (drawBg) {
 			final RectF rf = mRectF;
@@ -406,13 +379,18 @@ public class MonthView extends View {
 			canvas.drawRect(rf, p);
 		}
 
-		// for (int i = 0; i < numEvents; i++) {
-		for (SleepSession event : events) {
-			if (!geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH,
-					event)) {
+		// SessionGeometry allGeometry = new SessionGeometry(new
+		// Long[]{0L,0L,0L,0L});
+		// allGeometry.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 -
+		// TEXT_TOP_MARGIN) / 24.0f);
+		// allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+		// allGeometry.setHourGap(HOUR_GAP);
+		for (final Long[] session : mSessions) {
+			final SessionGeometry geometry = new SessionGeometry(session);
+			if (!geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH, geometry)) {
 				continue;
 			}
-			drawEventRect(rect, event, canvas, p);
+			drawEventRect(rect, geometry, canvas, p);
 		}
 
 	}
@@ -444,19 +422,19 @@ public class MonthView extends View {
 
 	private void drawingCalc(int width, int height) {
 		mCellHeight = (height - (6 * WEEK_GAP)) / 6;
-		mEventGeometry
-				.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN) / 24.0f);
+		// TODO
+		// mEventGeometry
+		// .setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN)
+		// / 24.0f);
 		mCellWidth = (width - (6 * MONTH_DAY_GAP)) / 7;
 		mBorder = (width - 6 * (mCellWidth + MONTH_DAY_GAP) - mCellWidth) / 2;
 
-		if (((mBitmap == null) || mBitmap.isRecycled()
-				|| (mBitmap.getHeight() != height) || (mBitmap.getWidth() != width))
-				&& (width > 0) && (height > 0)) {
+		if (((mBitmap == null) || mBitmap.isRecycled() || (mBitmap.getHeight() != height) || (mBitmap
+				.getWidth() != width)) && (width > 0) && (height > 0)) {
 			if (mBitmap != null) {
 				mBitmap.recycle();
 			}
-			mBitmap = Bitmap.createBitmap(width, height,
-					Bitmap.Config.ARGB_8888);
+			mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 			mCanvas = new Canvas(mBitmap);
 		}
 
@@ -464,6 +442,55 @@ public class MonthView extends View {
 		mBitmapRect.bottom = height;
 		mBitmapRect.left = 0;
 		mBitmapRect.right = width;
+	}
+
+	public void forceReloadEvents() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
+				final Time monthStart = mTempTime;
+				monthStart.set(mViewCalendar);
+				monthStart.monthDay = 1;
+				monthStart.hour = 0;
+				monthStart.minute = 0;
+				monthStart.second = 0;
+				final long startOfMonthMillis = monthStart.normalize(true /*
+																		 * ignore
+																		 * isDst
+																		 */);
+				mSessions = mParentActivity.getSessionsInInterval(startOfMonthMillis,
+						EVENT_NUM_DAYS);
+				// Clear out event days
+				Arrays.fill(eventDay, false);
+				// Compute the new set of days with events
+				for (final Long[] session : mSessions) {
+					long startDay = session[2] - mFirstJulianDay;
+					long endDay = session[3] - mFirstJulianDay + 1;
+					if (startDay < EVENT_NUM_DAYS || endDay >= 0) {
+						if (startDay < 0) {
+							startDay = 0;
+						}
+						if (startDay > EVENT_NUM_DAYS) {
+							startDay = EVENT_NUM_DAYS;
+						}
+						if (endDay < 0) {
+							endDay = 0;
+						}
+						if (endDay > EVENT_NUM_DAYS) {
+							endDay = EVENT_NUM_DAYS;
+						}
+						for (int j = (int) startDay; j < endDay; j++) {
+							eventDay[j] = true;
+						}
+					}
+				}
+
+				mRedrawScreen = true;
+
+				postInvalidate();
+			}
+		}).start();
 	}
 
 	private long getSelectedMillisFor(int x, int y) {
@@ -510,8 +537,7 @@ public class MonthView extends View {
 		return mViewCalendar;
 	}
 
-	private int getWeekOfYear(int row, int column,
-			boolean isWithinCurrentMonth, Calendar calendar) {
+	private int getWeekOfYear(int row, int column, boolean isWithinCurrentMonth, Calendar calendar) {
 		calendar.set(Calendar.DAY_OF_MONTH, mCursor.getDayAt(row, column));
 		if (isWithinCurrentMonth) {
 			calendar.set(Calendar.MONTH, mCursor.getMonth());
@@ -563,17 +589,14 @@ public class MonthView extends View {
 		mResources = mParentActivity.getResources();
 		mBoxSelected = mResources.getDrawable(R.drawable.month_view_selected);
 		mBoxPressed = mResources.getDrawable(R.drawable.month_view_pressed);
-		mBoxLongPressed = mResources
-				.getDrawable(R.drawable.month_view_longpress);
+		mBoxLongPressed = mResources.getDrawable(R.drawable.month_view_longpress);
 
-		mTodayBackground = mResources
-				.getDrawable(R.drawable.month_view_today_background);
+		mTodayBackground = mResources.getDrawable(R.drawable.month_view_today_background);
 
 		// Cache color lookups
 		final Resources res = getResources();
 		mMonthOtherMonthColor = res.getColor(R.color.month_other_month);
-		mMonthOtherMonthDayNumberColor = res
-				.getColor(R.color.month_other_month_day_number);
+		mMonthOtherMonthDayNumberColor = res.getColor(R.color.month_other_month_day_number);
 		mMonthDayNumberColor = res.getColor(R.color.month_day_number);
 		mMonthTodayNumberColor = res.getColor(R.color.month_today_number);
 		mMonthSaturdayColor = res.getColor(R.color.month_saturday);
@@ -608,8 +631,8 @@ public class MonthView extends View {
 					}
 
 					@Override
-					public boolean onScroll(MotionEvent e1, MotionEvent e2,
-							float distanceX, float distanceY) {
+					public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+							float distanceY) {
 						// If the user moves his finger after touching, then do
 						// not
 						// launch the Day view when he lifts his finger. Also,
@@ -671,15 +694,6 @@ public class MonthView extends View {
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (mGestureDetector.onTouchEvent(event)) {
-			return true;
-		}
-
-		return super.onTouchEvent(event);
-	}
-	
-	@Override
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
 		// No need to hang onto the bitmaps...
@@ -715,10 +729,8 @@ public class MonthView extends View {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (mSelectionMode == SELECTION_HIDDEN) {
-			if (keyCode == KeyEvent.KEYCODE_ENTER
-					|| keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
-					|| keyCode == KeyEvent.KEYCODE_DPAD_LEFT
-					|| keyCode == KeyEvent.KEYCODE_DPAD_UP
+			if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
+					|| keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_UP
 					|| keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 				// Display the selection box but don't move or select it
 				// on this key press.
@@ -854,6 +866,15 @@ public class MonthView extends View {
 		clearBitmapCache();
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (mGestureDetector.onTouchEvent(event)) {
+			return true;
+		}
+
+		return super.onTouchEvent(event);
+	}
+
 	private void recycleAndClearBitmapCache(SparseArray<Bitmap> bitmapCache) {
 		final int size = bitmapCache.size();
 		for (int i = 0; i < size; i++) {
@@ -868,71 +889,60 @@ public class MonthView extends View {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				final ArrayList<SleepSession> applicableEvents = new ArrayList<SleepSession>();
+				final ArrayList<Long[]> applicableEvents = new ArrayList<Long[]>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
-				for (final SleepSession event : mEvents.values()) {
-					final long startTime = event.getStartTime() - millis;
-					final long endTime = event.getEndTime() - millis;
+				for (final Long[] session : mSessions) {
+					final long startTime = session[0] - millis;
+					final long endTime = session[1] - millis;
 					if ((endTime > 0)
 							&& ((startTime <= ONE_DAY_IN_MS && startTime > 0) || startTime < 0)) {
 
-						applicableEvents.add(event);
+						applicableEvents.add(session);
 					}
 				}
 
 				// if we have more than one applicable entry, then
 				// open the history activity and show all entries
 				// for the selected date
-				if (applicableEvents.size() == 1) {
-					final Intent reviewSleepIntent = new Intent(getContext(),
-							ReviewSleepActivity.class);
-					final Cursor c = SleepSessions.getSleepMatches(
-							mParentActivity, applicableEvents.get(0).title,
-							new String[] { SleepSessions.MainTable._ID });
-					c.moveToFirst();
-					// TODO: hook this into sleep db
-
-					/*
-					 * final Cursor c = null; SleepSessions .getSleepMatches(
-					 * mParentActivity, applicableEvents.get(0).title, new
-					 * String[] { BaseColumns._ID,
-					 * SleepSessions.MainTable.KEY_TITLE,
-					 * SleepSessions.MainTable.KEY_ALARM,
-					 * SleepSessions.MainTable.KEY_DURATION,
-					 * SleepSessions.MainTable.KEY_MIN,
-					 * SleepSessions.MainTable.KEY_NOTE,
-					 * SleepSessions.MainTable.KEY_RATING, //
-					 * SleepSessions.MainTable.KEY_SLEEP_DATA ,
-					 * SleepSessions.MainTable.KEY_SPIKES, SleepSessions
-					 * .MainTable.KEY_TIME_FELL_ASLEEP });
-					 */
-
-					if (c == null) {
-						// we may have lost the cursor since the
-						// applicableEvents were
-						// loaded.
-						// do nothing
-						return null;
-					}
-					final Uri data = Uri.withAppendedPath(
-							SleepSessions.MainTable.CONTENT_URI,
-							String.valueOf(c.getLong(0)));
-					// c.close();
-					reviewSleepIntent.setData(data);
-					getContext().startActivity(reviewSleepIntent);
-				} else if (applicableEvents.size() > 1) {
-					final java.text.DateFormat sdf = java.text.DateFormat
-							.getDateInstance(java.text.DateFormat.SHORT,
-									Locale.getDefault());
-					final Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(millis);
-					final String formattedMDY = sdf
-							.format((calendar.getTime()));
-					getContext().startActivity(
-							new Intent(getContext(), HistoryActivity.class)
-									.putExtra(HistoryActivity.SEARCH_FOR,
-											formattedMDY));
-				}
+				/*
+				 * if (applicableEvents.size() == 1) { final Intent
+				 * reviewSleepIntent = new Intent(getContext(),
+				 * ReviewSleepActivity.class); final Cursor c =
+				 * SleepSessions.getSleepMatches( mParentActivity,
+				 * applicableEvents.get(0).title, new String[] {
+				 * SleepSessions.MainTable._ID }); c.moveToFirst(); // TODO:
+				 * hook this into sleep db
+				 * 
+				 * /* final Cursor c = null; SleepSessions .getSleepMatches(
+				 * mParentActivity, applicableEvents.get(0).title, new String[]
+				 * { BaseColumns._ID, SleepSessions.MainTable.KEY_TITLE,
+				 * SleepSessions.MainTable.KEY_ALARM,
+				 * SleepSessions.MainTable.KEY_DURATION,
+				 * SleepSessions.MainTable.KEY_MIN,
+				 * SleepSessions.MainTable.KEY_NOTE,
+				 * SleepSessions.MainTable.KEY_RATING, //
+				 * SleepSessions.MainTable.KEY_SLEEP_DATA ,
+				 * SleepSessions.MainTable.KEY_SPIKES, SleepSessions
+				 * .MainTable.KEY_TIME_FELL_ASLEEP });
+				 * 
+				 * 
+				 * if (c == null) { // we may have lost the cursor since the //
+				 * applicableEvents were // loaded. // do nothing return null; }
+				 * final Uri data = Uri.withAppendedPath(
+				 * SleepSessions.MainTable.CONTENT_URI,
+				 * String.valueOf(c.getLong(0))); // c.close();
+				 * reviewSleepIntent.setData(data);
+				 * getContext().startActivity(reviewSleepIntent); } else if
+				 * (applicableEvents.size() > 1) { final java.text.DateFormat
+				 * sdf = java.text.DateFormat
+				 * .getDateInstance(java.text.DateFormat.SHORT,
+				 * Locale.getDefault()); final Calendar calendar =
+				 * Calendar.getInstance(); calendar.setTimeInMillis(millis);
+				 * final String formattedMDY = sdf
+				 * .format((calendar.getTime())); getContext().startActivity(
+				 * new Intent(getContext(), HistoryActivity.class)
+				 * .putExtra(HistoryActivity.SEARCH_FOR, formattedMDY)); }
+				 */
 				return null;
 			}
 		}.execute();
@@ -960,49 +970,8 @@ public class MonthView extends View {
 		mSelectionMode = selectionMode;
 	}
 
-	public void forceReloadEvents() {
-
-		android.os.Process
-				.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
-		final Time monthStart = mTempTime;
-		monthStart.set(mViewCalendar);
-		monthStart.monthDay = 1;
-		monthStart.hour = 0;
-		monthStart.minute = 0;
-		monthStart.second = 0;
-		final long startOfMonthMillis = monthStart.normalize(true /*
-																 * ignore isDst
-																 */);
-		mEvents = mParentActivity.getSessionsInInterval(startOfMonthMillis,
-				EVENT_NUM_DAYS);
-		// Clear out event days
-		Arrays.fill(eventDay, false);
-		// Compute the new set of days with events
-		for (SleepSession session : mEvents.values()) {
-			int startDay = session.getStartJulianDay() - mFirstJulianDay;
-			int endDay = session.getEndJulianDay() - mFirstJulianDay + 1;
-			if (startDay < EVENT_NUM_DAYS || endDay >= 0) {
-				if (startDay < 0) {
-					startDay = 0;
-				}
-				if (startDay > EVENT_NUM_DAYS) {
-					startDay = EVENT_NUM_DAYS;
-				}
-				if (endDay < 0) {
-					endDay = 0;
-				}
-				if (endDay > EVENT_NUM_DAYS) {
-					endDay = EVENT_NUM_DAYS;
-				}
-				for (int j = startDay; j < endDay; j++) {
-					eventDay[j] = true;
-				}
-			}
-		}
-
-		mRedrawScreen = true;
-
-		postInvalidate();
+	@Override
+	public String toString() {
+		return Utils.formatMonthYear(getContext(), mViewCalendar);
 	}
-
 }

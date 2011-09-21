@@ -66,8 +66,8 @@ public class RepeatPreference extends ListPreference {
 		builder.setMultiChoiceItems(entries, mDaysOfWeek.getBooleanArray(),
 				new DialogInterface.OnMultiChoiceClickListener() {
 					@Override
-					public void onClick(final DialogInterface dialog,
-							final int which, final boolean isChecked) {
+					public void onClick(final DialogInterface dialog, final int which,
+							final boolean isChecked) {
 						mNewDaysOfWeek.set(which, isChecked);
 					}
 				});

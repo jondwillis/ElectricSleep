@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
@@ -24,22 +23,19 @@ public class IntentUtil {
 	 * @return True if an Intent with the specified action can be sent and
 	 *         responded to, false otherwise.
 	 */
-	public static boolean doesIntentHaveReceivers(final Context context,
-			final String action) {
+	public static boolean doesIntentHaveReceivers(final Context context, final String action) {
 		final PackageManager packageManager = context.getPackageManager();
 		final Intent intent = new Intent(action);
-		final List<ResolveInfo> list = packageManager.queryBroadcastReceivers(
-				intent, 0);
+		final List<ResolveInfo> list = packageManager.queryBroadcastReceivers(intent, 0);
 		return list.size() > 0;
 	}
 
-	public static boolean isApplicationInstalled(final Context context,
-			final String packageName) {
+	public static boolean isApplicationInstalled(final Context context, final String packageName) {
 		final PackageManager packageManager = context.getPackageManager();
 		try {
 			packageManager.getApplicationInfo(packageName, 0);
 			return true;
-		} catch (NameNotFoundException whocares) {
+		} catch (final NameNotFoundException whocares) {
 			return false;
 		}
 	}

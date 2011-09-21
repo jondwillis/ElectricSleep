@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class PointD implements Serializable {
 	private static final long serialVersionUID = -7526147553632397385L;
 	public static int BYTE_LENGTH = 16;
+
 	public static PointD fromByteArray(final byte[] data) {
 		final byte[] temp = new byte[8];
 		double x;
@@ -22,11 +23,9 @@ public class PointD implements Serializable {
 	}
 
 	private static byte[] toByte(final long data) {
-		return new byte[] { (byte) (data >> 56 & 0xff),
-				(byte) (data >> 48 & 0xff), (byte) (data >> 40 & 0xff),
-				(byte) (data >> 32 & 0xff), (byte) (data >> 24 & 0xff),
-				(byte) (data >> 16 & 0xff), (byte) (data >> 8 & 0xff),
-				(byte) (data >> 0 & 0xff), };
+		return new byte[] { (byte) (data >> 56 & 0xff), (byte) (data >> 48 & 0xff),
+				(byte) (data >> 40 & 0xff), (byte) (data >> 32 & 0xff), (byte) (data >> 24 & 0xff),
+				(byte) (data >> 16 & 0xff), (byte) (data >> 8 & 0xff), (byte) (data >> 0 & 0xff), };
 	}
 
 	public static byte[] toByteArray(final PointD point) {

@@ -16,36 +16,142 @@
 
 package com.androsz.electricsleepbeta.widget.calendar;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import android.graphics.Rect;
 
-import com.androsz.electricsleepbeta.db.SleepSession;
-
-public class EventGeometry {
+public class SessionGeometry {
 	/* package */static final int MINUTES_PER_HOUR = 60;
 	/* package */static final int MINUTES_PER_DAY = MINUTES_PER_HOUR * 24;
+
+	/**
+	 * Computes a position for each event. Each event is displayed as a
+	 * non-overlapping rectangle. For normal events, these rectangles are
+	 * displayed in separate columns in the week view and day view. For all-day
+	 * events, these rectangles are displayed in separate rows along the top. In
+	 * both cases, each event is assigned two numbers: N, and Max, that specify
+	 * that this event is the Nth event of Max number of events that are
+	 * displayed in a group. The width and position of each rectangle depend on
+	 * the maximum number of rectangles that occur at the same time.
+	 * 
+	 * @param eventsList
+	 *            the list of events, sorted into increasing time order
+	 */
+	public static void computePositions(Collection<SessionGeometry> eventsList) {
+		if (eventsList == null) {
+			return;
+		}
+
+		doComputePositions(eventsList);
+	}
+
+	private static void doComputePositions(Collection<SessionGeometry> eventsList) {
+		final Collection<SessionGeometry> activeList = new ArrayList<SessionGeometry>();
+		final Collection<SessionGeometry> groupList = new ArrayList<SessionGeometry>();
+
+		long colMask = 0;
+		int maxCols = 0;
+		for (final SessionGeometry record : eventsList) {
+
+			// long start = record.getStartTime();
+
+			// Remove the inactive events. An event on the active list
+			// becomes inactive when its end time is less than or equal to
+			// the current event's start time.
+			/*
+			 * Iterator<SleepRecord> iter = activeList.iterator(); while
+			 * (iter.hasNext()) { SleepRecord active = iter.next(); if
+			 * (active.getEndTime() <= start) { colMask &= ~(1L <<
+			 * active.getColumn()); iter.remove(); } }
+			 */
+
+			// If the active list is empty, then reset the max columns, clear
+			// the column bit mask, and empty the groupList.
+			if (activeList.isEmpty()) {
+				for (final SessionGeometry ev : groupList) {
+					ev.setMaxColumns(maxCols);
+				}
+				maxCols = 0;
+				colMask = 0;
+				groupList.clear();
+			}
+
+			// Find the first empty column. Empty columns are represented by
+			// zero bits in the column mask "colMask".
+			int col = findFirstZeroBit(colMask);
+			if (col == 64) {
+				col = 63;
+			}
+			colMask |= (1L << col);
+			record.setColumn(col);
+			activeList.add(record);
+			groupList.add(record);
+			final int len = activeList.size();
+			if (maxCols < len) {
+				maxCols = len;
+			}
+		}
+		for (final SessionGeometry ev : groupList) {
+			ev.setMaxColumns(maxCols);
+		}
+	}
+
+	public static int findFirstZeroBit(long val) {
+		for (int ii = 0; ii < 64; ++ii) {
+			if ((val & (1L << ii)) == 0) {
+				return ii;
+			}
+		}
+		return 64;
+	}
+
 	// This is the space from the grid line to the event rectangle.
 	private int mCellMargin = 0;
 
 	private float mHourGap;
-
 	private float mMinEventHeight;
+
 	private float mMinuteHeight;
+	private int mColumn;
+	private int mMaxColumns;
+	// The coordinates of the event rectangle drawn on the screen.
+	public float left;
+
+	public float right;
+	public float top;
+
+	public float bottom;
+	Long startDay;
+
+	Long endDay;
+
+	long startTime;
+
+	long endTime;
+
+	public SessionGeometry(Long[] sessionBounds) {
+		startTime = sessionBounds[0];
+		endTime = sessionBounds[1];
+
+		startDay = sessionBounds[2];
+		endDay = sessionBounds[3];
+	}
 
 	// Computes the rectangle coordinates of the given event on the screen.
 	// Returns true if the rectangle is visible on the screen.
-	boolean computeEventRect(int date, int left, int top, int cellWidth,
-			SleepSession event) {
+	boolean computeEventRect(int date, int left, int top, int cellWidth, SessionGeometry event) {
 
 		final float cellMinuteHeight = mMinuteHeight;
-		final int startDay = event.getStartJulianDay();
-		final int endDay = event.getEndJulianDay();
+		final Long startDay = event.startDay;
+		final Long endDay = event.endDay;
 
 		if (startDay > date || endDay < date) {
 			return false;
 		}
 
-		long startTime = event.getStartTimeOfDay();
-		long endTime = event.getEndTimeOfDay();
+		long startTime = event.startTime;
+		long endTime = event.endTime;
 
 		// If the event started on a previous day, then show it starting
 		// at the beginning of this day.
@@ -84,8 +190,7 @@ public class EventGeometry {
 			event.bottom = event.top + mMinEventHeight;
 		}
 
-		final float colWidth = (float) (cellWidth - 2 * mCellMargin)
-				/ (float) maxCols;
+		final float colWidth = (float) (cellWidth - 2 * mCellMargin) / (float) maxCols;
 		event.left = left + mCellMargin + col * colWidth;
 		event.right = event.left + colWidth;
 		return true;
@@ -94,19 +199,26 @@ public class EventGeometry {
 	/**
 	 * Returns true if this event intersects the selection region.
 	 */
-	boolean eventIntersectsSelection(SleepSession event, Rect selection) {
+	boolean eventIntersectsSelection(SessionGeometry event, Rect selection) {
 		if (event.left < selection.right && event.right >= selection.left
-				&& event.top < selection.bottom
-				&& event.bottom >= selection.top) {
+				&& event.top < selection.bottom && event.bottom >= selection.top) {
 			return true;
 		}
 		return false;
 	}
 
+	public int getColumn() {
+		return mColumn;
+	}
+
+	public int getMaxColumns() {
+		return mMaxColumns;
+	}
+
 	/**
 	 * Computes the distance from the given point to the given event.
 	 */
-	float pointToEvent(float x, float y, SleepSession event) {
+	float pointToEvent(float x, float y, SessionGeometry event) {
 		final float left = event.left;
 		final float right = event.right;
 		final float top = event.top;
@@ -161,6 +273,10 @@ public class EventGeometry {
 		mCellMargin = cellMargin;
 	}
 
+	public void setColumn(int column) {
+		mColumn = column;
+	}
+
 	void setHourGap(float gap) {
 		mHourGap = gap;
 	}
@@ -169,7 +285,12 @@ public class EventGeometry {
 		mMinuteHeight = height / 60.0f;
 	}
 
+	public void setMaxColumns(int maxColumns) {
+		mMaxColumns = maxColumns;
+	}
+
 	void setMinEventHeight(float height) {
 		mMinEventHeight = height;
 	}
+
 }

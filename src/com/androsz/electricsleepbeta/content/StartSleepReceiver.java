@@ -27,27 +27,23 @@ public class StartSleepReceiver extends BroadcastReceiver {
 	public final static String EXTRA_USE_ALARM = "useAlarm";
 	public final static String START_SLEEP = "com.androsz.electricsleepbeta.START_SLEEP";
 
-	public static void enforceCalibrationBeforeStartingSleep(
-			final Context context, final Intent service, final Intent activity) {
+	public static void enforceCalibrationBeforeStartingSleep(final Context context,
+			final Intent service, final Intent activity) {
 		final SharedPreferences userPrefs = context.getSharedPreferences(
 				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
-		final int prefsVersion = userPrefs.getInt(
-				SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
+		final int prefsVersion = userPrefs.getInt(SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
 		String message = "";
 		if (prefsVersion == 0) {
 			message = context.getString(R.string.message_not_calibrated);
-		} else if (prefsVersion != context.getResources().getInteger(
-				R.integer.prefs_version)) {
+		} else if (prefsVersion != context.getResources().getInteger(R.integer.prefs_version)) {
 			message = context.getString(R.string.message_prefs_not_compatible);
-			context.getSharedPreferences(SettingsActivity.PREFERENCES, 0)
-					.edit().clear().commit();
-			PreferenceManager.setDefaultValues(context,
-					SettingsActivity.PREFERENCES, 0, R.xml.settings, true);
+			context.getSharedPreferences(SettingsActivity.PREFERENCES, 0).edit().clear().commit();
+			PreferenceManager.setDefaultValues(context, SettingsActivity.PREFERENCES, 0,
+					R.xml.settings, true);
 		}
 
 		if (message.length() > 0) {
-			message += context
-					.getString(R.string.message_recommend_calibration);
+			message += context.getString(R.string.message_recommend_calibration);
 			Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 		} else if (service != null && activity != null) {
 			context.startService(service);
@@ -63,12 +59,10 @@ public class StartSleepReceiver extends BroadcastReceiver {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				final SharedPreferences userPrefs = context
-						.getSharedPreferences(SettingsActivity.PREFERENCES, 0);
-				final double alarmTriggerSensitivity = userPrefs
-						.getFloat(
-								context.getString(R.string.pref_alarm_trigger_sensitivity),
-								-1);
+				final SharedPreferences userPrefs = context.getSharedPreferences(
+						SettingsActivity.PREFERENCES, 0);
+				final double alarmTriggerSensitivity = userPrefs.getFloat(
+						context.getString(R.string.pref_alarm_trigger_sensitivity), -1);
 				final int sensorDelay = Integer.parseInt(userPrefs.getString(
 						context.getString(R.string.pref_sensor_delay), ""
 								+ SensorManager.SENSOR_DELAY_NORMAL));
@@ -83,8 +77,7 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				final boolean forceScreenOn = userPrefs.getBoolean(
 						context.getString(R.string.pref_force_screen), false);
 
-				serviceIntent = new Intent(context,
-						SleepMonitoringService.class);
+				serviceIntent = new Intent(context, SleepMonitoringService.class);
 				serviceIntent.putExtra(EXTRA_ALARM, alarmTriggerSensitivity);
 				serviceIntent.putExtra(EXTRA_SENSOR_DELAY, sensorDelay);
 				serviceIntent.putExtra(EXTRA_USE_ALARM, useAlarm);
@@ -98,9 +91,8 @@ public class StartSleepReceiver extends BroadcastReceiver {
 
 			@Override
 			protected void onPostExecute(Void result) {
-				enforceCalibrationBeforeStartingSleep(context, serviceIntent,
-						new Intent(context, SleepActivity.class)
-								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+				enforceCalibrationBeforeStartingSleep(context, serviceIntent, new Intent(context,
+						SleepActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 			}
 
 		}.execute();

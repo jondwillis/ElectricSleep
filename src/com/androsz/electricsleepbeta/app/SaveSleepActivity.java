@@ -21,8 +21,7 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.SaveSleepReceiver;
 
-public class SaveSleepActivity extends HostActivity implements
-		OnRatingBarChangeListener {
+public class SaveSleepActivity extends HostActivity implements OnRatingBarChangeListener {
 
 	public static final String SAVE_SLEEP = "com.androsz.electricsleepbeta.SAVE_SLEEP";
 
@@ -45,12 +44,9 @@ public class SaveSleepActivity extends HostActivity implements
 					// snoozing
 					// disabling repeated alarms)
 					Alarms.setNextAlert(context);
-					final Intent reviewSleepIntent = new Intent(context,
-							ReviewSleepActivity.class);
-					if (!intent.getBooleanExtra(
-							SaveSleepReceiver.EXTRA_SUCCESS, false)) {
-						String why = getString(R.string.could_not_save_sleep)
-								+ " ";
+					final Intent reviewSleepIntent = new Intent(context, ReviewSleepActivity.class);
+					if (!intent.getBooleanExtra(SaveSleepReceiver.EXTRA_SUCCESS, false)) {
+						String why = getString(R.string.could_not_save_sleep) + " ";
 						final String ioException = intent
 								.getStringExtra(SaveSleepReceiver.EXTRA_IO_EXCEPTION);
 						if (ioException != null) {
@@ -74,8 +70,7 @@ public class SaveSleepActivity extends HostActivity implements
 
 				@Override
 				protected void onPostExecute(String result) {
-					if(result != null)
-					{
+					if (result != null) {
 						trackEvent(result, 0);
 						Toast.makeText(context, result, Toast.LENGTH_LONG).show();
 					}
@@ -96,8 +91,7 @@ public class SaveSleepActivity extends HostActivity implements
 	// @SuppressWarnings("unchecked")
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		((RatingBar) findViewById(R.id.save_sleep_rating_bar))
-				.setOnRatingBarChangeListener(this);
+		((RatingBar) findViewById(R.id.save_sleep_rating_bar)).setOnRatingBarChangeListener(this);
 		noteEdit = (EditText) findViewById(R.id.save_sleep_note_edit);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 	}
@@ -105,30 +99,25 @@ public class SaveSleepActivity extends HostActivity implements
 	public void onDiscardClick(final View v) {
 		final AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 				.setMessage(getString(R.string.delete_sleep_record))
-				.setPositiveButton(getString(R.string.ok),
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(final DialogInterface dialog,
-									final int id) {
-								final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-								notificationManager
-										.cancel(getIntent()
-												.getExtras()
-												.getInt(SleepMonitoringService.EXTRA_ID));
-								//new Thread(new Runnable(){
+				.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog, final int id) {
+						final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+						notificationManager.cancel(getIntent().getExtras().getInt(
+								SleepMonitoringService.EXTRA_ID));
+						// new Thread(new Runnable(){
 
-									//@Override
-									//public void run() {
-										//deleteFile(SleepMonitoringService.SLEEP_DATA);
-									//}}){}.run();
-								finish();
-							}
-						})
+						// @Override
+						// public void run() {
+						// deleteFile(SleepMonitoringService.SLEEP_DATA);
+						// }}){}.run();
+						finish();
+					}
+				})
 				.setNegativeButton(getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(final DialogInterface dialog,
-									final int id) {
+							public void onClick(final DialogInterface dialog, final int id) {
 								dialog.cancel();
 							}
 						});
@@ -165,14 +154,12 @@ public class SaveSleepActivity extends HostActivity implements
 	public void onSaveClick(final View v) {
 
 		if (Float.isNaN(rating)) {
-			Toast.makeText(this, R.string.error_not_rated, Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, R.string.error_not_rated, Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		final Intent saveIntent = new Intent(SaveSleepActivity.SAVE_SLEEP);
-		saveIntent.putExtra(SaveSleepReceiver.EXTRA_NOTE, noteEdit.getText()
-				.toString());
+		saveIntent.putExtra(SaveSleepReceiver.EXTRA_NOTE, noteEdit.getText().toString());
 		saveIntent.putExtra(SaveSleepReceiver.EXTRA_RATING, (int) rating);
 		saveIntent.putExtras(getIntent().getExtras()); // add the sleep history
 														// data
@@ -183,8 +170,7 @@ public class SaveSleepActivity extends HostActivity implements
 		progress.show();
 		sendBroadcast(saveIntent);
 		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancel(getIntent().getExtras().getInt(
-				SleepMonitoringService.EXTRA_ID));
+		notificationManager.cancel(getIntent().getExtras().getInt(SleepMonitoringService.EXTRA_ID));
 	}
 
 	@Override

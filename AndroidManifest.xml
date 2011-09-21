@@ -111,7 +111,7 @@
 			android:launchMode="singleInstance" android:taskAffinity=""
 			android:configChanges="orientation|keyboardHidden|keyboard|navigation" />
 
-		<activity android:name=".app.HistoryMonthActivity" />
+		<activity android:name=".app.HistoryMonthActivity" android:label="@string/title_history"/>
 
 		<receiver android:name=".alarmclock.AlarmReceiver">
 			<intent-filter>

@@ -62,8 +62,7 @@ public class RangeCategorySeries extends CategorySeries {
 	 * @param maxValue
 	 *            the new maximum value
 	 */
-	public synchronized void add(String category, double minValue,
-			double maxValue) {
+	public synchronized void add(String category, double minValue, double maxValue) {
 		super.add(category, minValue);
 		mMaxValues.add(maxValue);
 	}

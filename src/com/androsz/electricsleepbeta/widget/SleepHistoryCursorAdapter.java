@@ -23,8 +23,7 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 	}
 
 	@Override
-	public void bindView(final View view, final Context context,
-			final Cursor cursor) {
+	public void bindView(final View view, final Context context, final Cursor cursor) {
 
 		final ReviewSleepChart sleepChart = (ReviewSleepChart) view
 				.findViewById(R.id.sleep_history_list_item_sleepchartview);
@@ -48,8 +47,7 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 	}
 
 	@Override
-	public View newView(final Context context, final Cursor cursor,
-			final ViewGroup parent) {
+	public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
 		final LayoutInflater li = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.parent = parent;

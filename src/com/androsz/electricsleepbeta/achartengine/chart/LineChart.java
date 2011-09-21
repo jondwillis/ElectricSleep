@@ -45,8 +45,7 @@ public class LineChart extends XYChart {
 	 * @param renderer
 	 *            the multiple series renderer
 	 */
-	public LineChart(XYMultipleSeriesDataset dataset,
-			XYMultipleSeriesRenderer renderer) {
+	public LineChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer) {
 		super(dataset, renderer);
 		pointsChart = new ScatterChart(dataset, renderer);
 	}
@@ -66,8 +65,8 @@ public class LineChart extends XYChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
 		canvas.drawLine(x, y, x + SHAPE_WIDTH, y, paint);
 		if (isRenderPoints(renderer)) {
 			pointsChart.drawLegendShape(canvas, renderer, x + 5, y, paint);
@@ -92,8 +91,7 @@ public class LineChart extends XYChart {
 	 */
 	@Override
 	public void drawSeries(Canvas canvas, Paint paint, float[] points,
-			SimpleSeriesRenderer seriesRenderer, float yAxisValue,
-			int seriesIndex) {
+			SimpleSeriesRenderer seriesRenderer, float yAxisValue, int seriesIndex) {
 		final int length = points.length;
 		final XYSeriesRenderer renderer = (XYSeriesRenderer) seriesRenderer;
 		final float lineWidth = paint.getStrokeWidth();

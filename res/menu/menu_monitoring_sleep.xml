@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/stop" android:id="@+id/menu_item_stop_sleep" android:icon="@drawable/ic_title_stop_default" android:showAsAction="always|withText"></item>
-    <item android:title="@string/alarm_list_title" android:id="@+id/menu_item_alarms" android:icon="@drawable/ic_title_alarm" android:showAsAction="always|withText"></item>
+    <item android:title="@string/stop" android:id="@+id/menu_item_stop_sleep" android:showAsAction="always|withText" android:icon="@drawable/ic_menu_stop"></item>
+    <item android:title="@string/alarm_list_title" android:id="@+id/menu_item_alarms" android:showAsAction="always|withText" android:icon="@drawable/ic_menu_alarm"></item>
     
 </menu>

@@ -176,8 +176,8 @@ public class XYSeries implements Serializable {
 	 */
 	public synchronized void remove(final int index) {
 		final PointD removedPoint = xyList.remove(index);
-		if (removedPoint.x == mMinX || removedPoint.x == mMaxX
-				|| removedPoint.y == mMinY || removedPoint.y == mMaxY) {
+		if (removedPoint.x == mMinX || removedPoint.x == mMaxX || removedPoint.y == mMinY
+				|| removedPoint.y == mMaxY) {
 			initRange();
 		}
 	}

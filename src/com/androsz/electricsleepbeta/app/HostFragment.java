@@ -5,10 +5,10 @@ import android.view.View;
 public abstract class HostFragment extends AnalyticFragment {
 
 	@Override
-	public void onClick(View v) {
-	}
+	protected abstract int getContentAreaLayoutId();
 
 	@Override
-	protected abstract int getContentAreaLayoutId();
+	public void onClick(View v) {
+	}
 
 }

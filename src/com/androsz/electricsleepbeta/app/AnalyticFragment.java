@@ -17,18 +17,9 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class AnalyticFragment extends Fragment {
 
-	public abstract void onClick(View v);
-
 	protected abstract int getContentAreaLayoutId();
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		final View view = inflater.inflate(getContentAreaLayoutId(), container, false);
-
-		view.setBackgroundResource(R.drawable.gradient_background_vert);
-		return view;
-	}
+	public abstract void onClick(View v);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,18 +27,24 @@ public abstract class AnalyticFragment extends Fragment {
 		String versionName = "?";
 		final Activity a = getActivity();
 		try {
-			versionName = a.getPackageManager().getPackageInfo(
-					a.getPackageName(), 0).versionName;
+			versionName = a.getPackageManager().getPackageInfo(a.getPackageName(), 0).versionName;
 		} catch (final NameNotFoundException e) {
 			e.printStackTrace();
 		}
 
-		GoogleAnalyticsTracker.getInstance().setProductVersion(
-				a.getPackageName(), versionName);
+		GoogleAnalyticsTracker.getInstance().setProductVersion(a.getPackageName(), versionName);
 
 		// Need to do this for every activity that uses google analytics
-		GoogleAnalyticsSessionManager.getInstance(
-				getActivity().getApplication()).incrementActivityCount();
+		GoogleAnalyticsSessionManager.getInstance(getActivity().getApplication())
+				.incrementActivityCount();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View view = inflater.inflate(getContentAreaLayoutId(), container, false);
+
+		view.setBackgroundResource(R.drawable.gradient_background_vert);
+		return view;
 	}
 
 	@Override
@@ -75,8 +72,7 @@ public abstract class AnalyticFragment extends Fragment {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
-							Integer.toString(VERSION.SDK_INT), Build.MODEL,
-							label, value);
+							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
 				} catch (final Throwable whocares) {
 				}
 				return null;

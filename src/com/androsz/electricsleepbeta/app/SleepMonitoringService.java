@@ -39,16 +39,15 @@ import com.androsz.electricsleepbeta.util.PointD;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class SleepMonitoringService extends Service implements
-		SensorEventListener {
+public class SleepMonitoringService extends Service implements SensorEventListener {
 	private final class UpdateTimerTask extends TimerTask {
 		@Override
 		public void run() {
 			final long currentTime = System.currentTimeMillis();
 
 			final double x = currentTime;
-			final double y = java.lang.Math.min(
-					SettingsActivity.MAX_ALARM_SENSITIVITY, maxNetForce);
+			final double y = java.lang.Math
+					.min(SettingsActivity.MAX_ALARM_SENSITIVITY, maxNetForce);
 
 			final PointD sleepPoint = new PointD(x, y);
 			if (sleepData.size() >= MAX_POINTS_IN_A_GRAPH) {
@@ -60,15 +59,13 @@ public class SleepMonitoringService extends Service implements
 			// append the two doubles in sleepPoint to file
 			try {
 				synchronized (sDataLock) {
-					final FileOutputStream fos = openFileOutput(SLEEP_DATA,
-							Context.MODE_APPEND);
+					final FileOutputStream fos = openFileOutput(SLEEP_DATA, Context.MODE_APPEND);
 					fos.write(PointD.toByteArray(sleepPoint));
 					fos.close();
 				}
 			} catch (final IOException e) {
-				GoogleAnalyticsTracker.getInstance().trackEvent(
-						Integer.toString(VERSION.SDK_INT), Build.MODEL,
-						"sleepMonitorCacheFailWrite : " + e.getMessage(), 0);
+				GoogleAnalyticsTracker.getInstance().trackEvent(Integer.toString(VERSION.SDK_INT),
+						Build.MODEL, "sleepMonitorCacheFailWrite : " + e.getMessage(), 0);
 			}
 
 			final Intent i = new Intent(SleepActivity.UPDATE_CHART);
@@ -128,21 +125,26 @@ public class SleepMonitoringService extends Service implements
 			if (action.equals(POKE_SYNC_CHART)) {
 				final Intent i = new Intent(SleepActivity.SYNC_CHART);
 				i.putExtra(SLEEP_DATA, sleepData);
-				i.putExtra(StartSleepReceiver.EXTRA_ALARM,
-						alarmTriggerSensitivity);
+				i.putExtra(StartSleepReceiver.EXTRA_ALARM, alarmTriggerSensitivity);
 				i.putExtra(EXTRA_ALARM_WINDOW, alarmWindow);
 				i.putExtra(StartSleepReceiver.EXTRA_USE_ALARM, useAlarm);
-				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON,
-						forceScreenOn);
-				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON,
-						forceScreenOn);
+				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
+				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
 				sendBroadcast(i);
 			} else if (action.equals(STOP_AND_SAVE_SLEEP)) {
 				final Intent saveIntent = addExtrasToSaveSleepIntent(new Intent(
 						SleepMonitoringService.this, SaveSleepActivity.class));
 				startActivity(saveIntent);
+				sendBroadcast(new Intent(Alarms.CANCEL_SNOOZE));
 				stopSelf();
 			} else {
+				try {
+					final Alarm alarm = Alarms.calculateNextAlert(context);
+					Alarms.setTimeToIgnore(context, alarm, alarm.time);
+					Alarms.setNextAlert(context);
+				} catch (final NullPointerException npe) {
+					// there are no enabled alarms
+				}
 				createSaveSleepNotification();
 				stopSelf();
 			}
@@ -168,24 +170,22 @@ public class SleepMonitoringService extends Service implements
 	int waitForSensorsToWarmUp = 0;
 
 	private Intent addExtrasToSaveSleepIntent(final Intent saveIntent) {
-		saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				| Intent.FLAG_ACTIVITY_CLEAR_TOP
+		saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
 		saveIntent.putExtra(EXTRA_ID, hashCode());
-		saveIntent.putExtra(StartSleepReceiver.EXTRA_ALARM,
-				alarmTriggerSensitivity);
+		saveIntent.putExtra(StartSleepReceiver.EXTRA_ALARM, alarmTriggerSensitivity);
 
 		// send start/end time as well
-		final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-				DateFormat.SHORT, Locale.getDefault());
-		DateFormat sdf2 = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-				DateFormat.SHORT, Locale.getDefault());
+		final DateFormat sdf = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT,
+				Locale.getDefault());
+		DateFormat sdf2 = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT,
+				Locale.getDefault());
 		final Date now = new Date();
 		if (dateStarted.getDate() == now.getDate()) {
 			sdf2 = DateFormat.getTimeInstance(DateFormat.SHORT);
 		}
-		saveIntent.putExtra(EXTRA_NAME, sdf.format(dateStarted) + " "
-				+ getText(R.string.to) + " " + sdf2.format(now));
+		saveIntent.putExtra(EXTRA_NAME, sdf.format(dateStarted) + " " + getText(R.string.to) + " "
+				+ sdf2.format(now));
 		return saveIntent;
 	}
 
@@ -196,21 +196,19 @@ public class SleepMonitoringService extends Service implements
 		final CharSequence tickerText = getText(R.string.notification_save_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
-		final Notification notification = new Notification(icon, tickerText,
-				when);
+		final Notification notification = new Notification(icon, tickerText, when);
 
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 
 		final Context context = getApplicationContext();
 		final CharSequence contentTitle = getText(R.string.notification_save_sleep_title);
 		final CharSequence contentText = getText(R.string.notification_save_sleep_text);
-		final Intent notificationIntent = addExtrasToSaveSleepIntent(new Intent(
-				this, SaveSleepActivity.class));
-		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
+		final Intent notificationIntent = addExtrasToSaveSleepIntent(new Intent(this,
+				SaveSleepActivity.class));
+		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+				0);
 
-		notification.setLatestEventInfo(context, contentTitle, contentText,
-				contentIntent);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		notificationManager.notify(hashCode(), notification);
 		startActivity(notificationIntent);
@@ -221,8 +219,7 @@ public class SleepMonitoringService extends Service implements
 		final CharSequence tickerText = getText(R.string.notification_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
-		final Notification notification = new Notification(icon, tickerText,
-				when);
+		final Notification notification = new Notification(icon, tickerText, when);
 
 		notification.flags = Notification.FLAG_ONGOING_EVENT;
 
@@ -237,14 +234,13 @@ public class SleepMonitoringService extends Service implements
 		} else {
 			notificationIntent = new Intent();
 		}
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-				| Intent.FLAG_ACTIVITY_NEW_TASK);
+		notificationIntent
+				.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
+		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+				0);
 
-		notification.setLatestEventInfo(this, contentTitle, contentText,
-				contentIntent);
+		notification.setLatestEventInfo(this, contentTitle, contentText, contentIntent);
 
 		return notification;
 	}
@@ -254,7 +250,7 @@ public class SleepMonitoringService extends Service implements
 		final int wakeLockType = forceScreenOn ? (PowerManager.SCREEN_DIM_WAKE_LOCK
 				| PowerManager.ON_AFTER_RELEASE | PowerManager.ACQUIRE_CAUSES_WAKEUP)
 
-				: PowerManager.PARTIAL_WAKE_LOCK;
+		: PowerManager.PARTIAL_WAKE_LOCK;
 
 		WakeLockManager.acquire(this, "sleepMonitoring", wakeLockType);
 	}
@@ -273,8 +269,7 @@ public class SleepMonitoringService extends Service implements
 	public void onCreate() {
 		super.onCreate();
 
-		final IntentFilter filter = new IntentFilter(
-				Alarms.ALARM_DISMISSED_BY_USER_ACTION);
+		final IntentFilter filter = new IntentFilter(Alarms.ALARM_DISMISSED_BY_USER_ACTION);
 		filter.addAction(Alarms.ALARM_SNOOZE_CANCELED_BY_USER_ACTION);
 		filter.addAction(STOP_AND_SAVE_SLEEP);
 		filter.addAction(POKE_SYNC_CHART);
@@ -300,15 +295,15 @@ public class SleepMonitoringService extends Service implements
 
 		stopForeground(true);
 		updateTimer.cancel();
-		
+
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
 			protected Void doInBackground(Void... params) {
 				toggleSilentMode(false);
 				toggleAirplaneMode(false);
-				final SharedPreferences.Editor ed = getSharedPreferences(
-						SERVICE_IS_RUNNING, Context.MODE_PRIVATE).edit();
+				final SharedPreferences.Editor ed = getSharedPreferences(SERVICE_IS_RUNNING,
+						Context.MODE_PRIVATE).edit();
 				ed.putBoolean(SERVICE_IS_RUNNING, false);
 				ed.commit();
 				return null;
@@ -323,8 +318,8 @@ public class SleepMonitoringService extends Service implements
 		if (waitForSensorsToWarmUp < 5) {
 			if (waitForSensorsToWarmUp == 4) {
 				waitForSensorsToWarmUp++;
-				updateTimer.scheduleAtFixedRate(new UpdateTimerTask(),
-						updateInterval, updateInterval);
+				updateTimer.scheduleAtFixedRate(new UpdateTimerTask(), updateInterval,
+						updateInterval);
 
 				gravity[0] = event.values[0];
 				gravity[1] = event.values[1];
@@ -342,43 +337,33 @@ public class SleepMonitoringService extends Service implements
 		final double curY = event.values[1] - gravity[1];
 		final double curZ = event.values[2] - gravity[2];
 
-		final double mAccelCurrent = Math.sqrt(curX * curX + curY * curY + curZ
-				* curZ);
+		final double mAccelCurrent = Math.sqrt(curX * curX + curY * curY + curZ * curZ);
 
 		final double absAccel = Math.abs(mAccelCurrent);
 		maxNetForce = absAccel > maxNetForce ? absAccel : maxNetForce;
 	}
 
 	@Override
-	public int onStartCommand(final Intent intent, final int flags,
-			final int startId) {
+	public int onStartCommand(final Intent intent, final int flags, final int startId) {
 		if (intent != null && startId == 1) {
-			testModeRate = intent
-					.getIntExtra("testModeRate", Integer.MIN_VALUE);
+			testModeRate = intent.getIntExtra("testModeRate", Integer.MIN_VALUE);
 
-			updateInterval = testModeRate == Integer.MIN_VALUE ? intent
-					.getIntExtra("interval", INTERVAL) : testModeRate;
+			updateInterval = testModeRate == Integer.MIN_VALUE ? intent.getIntExtra("interval",
+					INTERVAL) : testModeRate;
 
-			sensorDelay = intent.getIntExtra(
-					StartSleepReceiver.EXTRA_SENSOR_DELAY,
+			sensorDelay = intent.getIntExtra(StartSleepReceiver.EXTRA_SENSOR_DELAY,
 					SensorManager.SENSOR_DELAY_FASTEST);
 
-			alarmTriggerSensitivity = intent.getDoubleExtra(
-					StartSleepReceiver.EXTRA_ALARM,
+			alarmTriggerSensitivity = intent.getDoubleExtra(StartSleepReceiver.EXTRA_ALARM,
 					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
-			useAlarm = intent.getBooleanExtra(
-					StartSleepReceiver.EXTRA_USE_ALARM, false);
-			alarmWindow = intent.getIntExtra(
-					StartSleepReceiver.EXTRA_ALARM_WINDOW, 0);
+			useAlarm = intent.getBooleanExtra(StartSleepReceiver.EXTRA_USE_ALARM, false);
+			alarmWindow = intent.getIntExtra(StartSleepReceiver.EXTRA_ALARM_WINDOW, 0);
 
-			airplaneMode = intent.getBooleanExtra(
-					StartSleepReceiver.EXTRA_AIRPLANE_MODE, false);
-			silentMode = intent.getBooleanExtra(
-					StartSleepReceiver.EXTRA_SILENT_MODE, false);
+			airplaneMode = intent.getBooleanExtra(StartSleepReceiver.EXTRA_AIRPLANE_MODE, false);
+			silentMode = intent.getBooleanExtra(StartSleepReceiver.EXTRA_SILENT_MODE, false);
 
-			forceScreenOn = intent.getBooleanExtra(
-					StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, false);
+			forceScreenOn = intent.getBooleanExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, false);
 
 			startForeground(NOTIFICATION_ID, createServiceNotification());
 
@@ -398,8 +383,8 @@ public class SleepMonitoringService extends Service implements
 						deleteFile(SleepMonitoringService.SLEEP_DATA);
 						alreadyDeletedResidualFile = true;
 					}
-					final SharedPreferences.Editor ed = getSharedPreferences(
-							SERVICE_IS_RUNNING, Context.MODE_PRIVATE).edit();
+					final SharedPreferences.Editor ed = getSharedPreferences(SERVICE_IS_RUNNING,
+							Context.MODE_PRIVATE).edit();
 					ed.putBoolean(SERVICE_IS_RUNNING, true);
 					ed.commit();
 					return null;
@@ -413,16 +398,14 @@ public class SleepMonitoringService extends Service implements
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
 		sensorManager.registerListener(this,
-				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-				sensorDelay);
+				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), sensorDelay);
 	}
 
 	private void toggleAirplaneMode(final boolean enabling) {
 		if (airplaneMode) {
-			Settings.System.putInt(getContentResolver(),
-					Settings.System.AIRPLANE_MODE_ON, enabling ? 1 : 0);
-			final Intent intent = new Intent(
-					Intent.ACTION_AIRPLANE_MODE_CHANGED);
+			Settings.System.putInt(getContentResolver(), Settings.System.AIRPLANE_MODE_ON,
+					enabling ? 1 : 0);
+			final Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
 			intent.putExtra("state", enabling);
 			sendBroadcast(intent);
 		}
@@ -458,8 +441,7 @@ public class SleepMonitoringService extends Service implements
 					if (id != alarm.id) {
 						// add 1 second delay to make it less likely that we
 						// skip the alarm
-						Alarms.enableAlert(this, alarm,
-								System.currentTimeMillis() + 1000);
+						Alarms.enableAlert(this, alarm, System.currentTimeMillis() + 1000);
 					}
 				}
 			}

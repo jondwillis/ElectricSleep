@@ -55,8 +55,7 @@ public class DoughnutChart extends AbstractChart {
 	 * @param renderer
 	 *            the series renderer
 	 */
-	public DoughnutChart(MultipleCategorySeries dataset,
-			DefaultRenderer renderer) {
+	public DoughnutChart(MultipleCategorySeries dataset, DefaultRenderer renderer) {
 		mDataset = dataset;
 		mRenderer = renderer;
 	}
@@ -78,8 +77,7 @@ public class DoughnutChart extends AbstractChart {
 	 *            the paint
 	 */
 	@Override
-	public void draw(Canvas canvas, int x, int y, int width, int height,
-			Paint paint) {
+	public void draw(Canvas canvas, int x, int y, int width, int height, Paint paint) {
 		paint.setAntiAlias(mRenderer.isAntialiasing());
 		paint.setStyle(Style.FILL);
 		paint.setTextSize(mRenderer.getLabelsTextSize());
@@ -96,8 +94,7 @@ public class DoughnutChart extends AbstractChart {
 		mStep = SHAPE_WIDTH * 3 / 4;
 
 		final int cLength = mDataset.getCategoriesCount();
-		final int mRadius = Math.min(Math.abs(right - left),
-				Math.abs(bottom - top));
+		final int mRadius = Math.min(Math.abs(right - left), Math.abs(bottom - top));
 		final double rCoef = 0.35;
 		final double decCoef = 0.2 / cLength;
 		int radius = (int) (mRadius * rCoef);
@@ -115,8 +112,8 @@ public class DoughnutChart extends AbstractChart {
 				titles[i] = mDataset.getTitles(category)[i];
 			}
 			float currentAngle = 0;
-			RectF oval = new RectF(centerX - radius, centerY - radius, centerX
-					+ radius, centerY + radius);
+			RectF oval = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY
+					+ radius);
 			for (int i = 0; i < sLength; i++) {
 				paint.setColor(mRenderer.getSeriesRendererAt(i).getColor());
 				final float value = (float) mDataset.getValues(category)[i];
@@ -124,18 +121,13 @@ public class DoughnutChart extends AbstractChart {
 				canvas.drawArc(oval, currentAngle, angle, true, paint);
 				if (mRenderer.isShowLabels()) {
 					paint.setColor(mRenderer.getLabelsColor());
-					final double rAngle = Math
-							.toRadians(90 - (currentAngle + angle / 2));
+					final double rAngle = Math.toRadians(90 - (currentAngle + angle / 2));
 					final double sinValue = Math.sin(rAngle);
 					final double cosValue = Math.cos(rAngle);
-					final int x1 = Math.round(centerX
-							+ (float) (shortRadius * sinValue));
-					final int y1 = Math.round(centerY
-							+ (float) (shortRadius * cosValue));
-					final int x2 = Math.round(centerX
-							+ (float) (longRadius * sinValue));
-					final int y2 = Math.round(centerY
-							+ (float) (longRadius * cosValue));
+					final int x1 = Math.round(centerX + (float) (shortRadius * sinValue));
+					final int y1 = Math.round(centerY + (float) (shortRadius * cosValue));
+					final int x2 = Math.round(centerX + (float) (longRadius * sinValue));
+					final int y2 = Math.round(centerY + (float) (longRadius * cosValue));
 					canvas.drawLine(x1, y1, x2, y2, paint);
 					int extra = 10;
 					paint.setTextAlign(Align.LEFT);
@@ -144,8 +136,7 @@ public class DoughnutChart extends AbstractChart {
 						paint.setTextAlign(Align.RIGHT);
 					}
 					canvas.drawLine(x2, y2, x2 + extra, y2, paint);
-					canvas.drawText(mDataset.getTitles(category)[i],
-							x2 + extra, y2 + 5, paint);
+					canvas.drawText(mDataset.getTitles(category)[i], x2 + extra, y2 + 5, paint);
 				}
 				currentAngle += angle;
 			}
@@ -157,14 +148,12 @@ public class DoughnutChart extends AbstractChart {
 				paint.setColor(Color.WHITE);
 			}
 			paint.setStyle(Style.FILL);
-			oval = new RectF(centerX - radius, centerY - radius, centerX
-					+ radius, centerY + radius);
+			oval = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
 			canvas.drawArc(oval, 0, 360, true, paint);
 			radius -= 1;
 			categories[category] = mDataset.getCategory(category);
 		}
-		drawLegend(canvas, mRenderer, categories, left, right, y, width,
-				height, legendSize, paint);
+		drawLegend(canvas, mRenderer, categories, left, right, y, width, height, legendSize, paint);
 	}
 
 	/**
@@ -182,8 +171,8 @@ public class DoughnutChart extends AbstractChart {
 	 *            the paint to be used for drawing
 	 */
 	@Override
-	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer,
-			float x, float y, Paint paint) {
+	public void drawLegendShape(Canvas canvas, SimpleSeriesRenderer renderer, float x, float y,
+			Paint paint) {
 		mStep--;
 		canvas.drawCircle(x + SHAPE_WIDTH - mStep, y, mStep, paint);
 	}

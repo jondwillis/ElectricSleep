@@ -62,8 +62,7 @@ public class AlarmPreference extends RingtonePreference {
 			@Override
 			protected String doInBackground(Void... params) {
 				if (alert != null) {
-					final Ringtone r = RingtoneManager.getRingtone(
-							getContext(), alert);
+					final Ringtone r = RingtoneManager.getRingtone(getContext(), alert);
 					return r.getTitle(getContext());
 				}
 				return null;

@@ -51,8 +51,7 @@ public class SleepActivity extends HostActivity {
 		protected void onPreExecute() {
 			// notify the user that we've received that they need a dimmed
 			// screen
-			Toast.makeText(SleepActivity.this, R.string.screen_will_dim,
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(SleepActivity.this, R.string.screen_will_dim, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -67,8 +66,7 @@ public class SleepActivity extends HostActivity {
 	private final BroadcastReceiver batteryChangedReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			final boolean pluggedIn = intent.getIntExtra(
-					BatteryManager.EXTRA_PLUGGED, 0) > 0;
+			final boolean pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) > 0;
 			final int visibility = (pluggedIn ? View.GONE : View.VISIBLE);
 
 			textSleepPluggedIn.setVisibility(visibility);
@@ -99,14 +97,13 @@ public class SleepActivity extends HostActivity {
 					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
 
 			final double alarmTriggerSensitivity = intent.getDoubleExtra(
-					StartSleepReceiver.EXTRA_ALARM,
-					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+					StartSleepReceiver.EXTRA_ALARM, SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 			sleepChart.setCalibrationLevel(alarmTriggerSensitivity);
 			sleepChart.reconfigure();
 			sleepChart.repaint();
 
-			final boolean useAlarm = intent.getBooleanExtra(
-					StartSleepReceiver.EXTRA_USE_ALARM, false);
+			final boolean useAlarm = intent.getBooleanExtra(StartSleepReceiver.EXTRA_USE_ALARM,
+					false);
 			final boolean forceScreenOn = intent.getBooleanExtra(
 					StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, false);
 
@@ -119,22 +116,16 @@ public class SleepActivity extends HostActivity {
 						final Alarm alarm = Alarms.calculateNextAlert(context);
 						try {
 							if (alarm != null) {
-								final Calendar alarmTime = Calendar
-										.getInstance();
+								final Calendar alarmTime = Calendar.getInstance();
 								alarmTime.setTimeInMillis(alarm.time);
 
-								java.text.DateFormat df = DateFormat
-										.getDateFormat(context);
+								java.text.DateFormat df = DateFormat.getDateFormat(context);
 								df = DateFormat.getTimeFormat(context);
-								final String dateTime = df.format(alarmTime
-										.getTime());
+								final String dateTime = df.format(alarmTime.getTime());
 								final int alarmWindow = intent.getIntExtra(
-										StartSleepReceiver.EXTRA_ALARM_WINDOW,
-										30);
-								alarmTime
-										.add(Calendar.MINUTE, -1 * alarmWindow);
-								final String dateTimePre = df.format(alarmTime
-										.getTime());
+										StartSleepReceiver.EXTRA_ALARM_WINDOW, 30);
+								alarmTime.add(Calendar.MINUTE, -1 * alarmWindow);
+								final String dateTimePre = df.format(alarmTime.getTime());
 								result = new String[] { dateTimePre, dateTime };
 							}
 						} catch (final Exception e) {
@@ -146,19 +137,17 @@ public class SleepActivity extends HostActivity {
 					@Override
 					protected void onPostExecute(String[] result) {
 						if (result != null) {
-							sleepChart.xyMultipleSeriesRenderer
-									.setChartTitle(context.getString(
-											R.string.you_will_be_awoken_before,
-											result[0], result[1]));
+							sleepChart.xyMultipleSeriesRenderer.setChartTitle(context.getString(
+									R.string.you_will_be_awoken_before, result[0], result[1]));
 							textSleepNoAlarm.setVisibility(View.GONE);
 							divSleepNoAlarm.setVisibility(View.GONE);
 						} else {
-							sleepChart.xyMultipleSeriesRenderer
-									.setChartTitle("");
+							sleepChart.xyMultipleSeriesRenderer.setChartTitle("");
 							textSleepNoAlarm.setVisibility(View.VISIBLE);
 							divSleepNoAlarm.setVisibility(View.VISIBLE);
 						}
-						// dims the screen while in this activity and forceScreenOn is
+						// dims the screen while in this activity and
+						// forceScreenOn is
 						// enabled
 						if (forceScreenOn) {
 							textSleepDim.setVisibility(View.VISIBLE);
@@ -201,11 +190,9 @@ public class SleepActivity extends HostActivity {
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			sleepChart.sync(intent.getDoubleExtra(
-					SleepMonitoringService.EXTRA_X, 0), intent.getDoubleExtra(
-					SleepMonitoringService.EXTRA_Y, 0), intent.getDoubleExtra(
-					StartSleepReceiver.EXTRA_ALARM,
-					SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
+			sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0), intent
+					.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0), intent.getDoubleExtra(
+					StartSleepReceiver.EXTRA_ALARM, SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
 
 			if (sleepChart.makesSenseToDisplay()) {
 				sleepChart.setVisibility(View.VISIBLE);
@@ -289,8 +276,7 @@ public class SleepActivity extends HostActivity {
 
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
-		registerReceiver(batteryChangedReceiver, new IntentFilter(
-				Intent.ACTION_BATTERY_CHANGED));
+		registerReceiver(batteryChangedReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
 
 		super.onResume();
@@ -307,13 +293,11 @@ public class SleepActivity extends HostActivity {
 		final ScrollView landscapeWarnings = (ScrollView) findViewById(R.id.sleep_landscape_warnings);
 		// make sure we're in landscape. portrait doesn't have this problem.
 		if (landscapeWarnings != null) {
-			int visibility = textSleepPluggedIn.getVisibility()
-					+ textSleepDim.getVisibility()
+			int visibility = textSleepPluggedIn.getVisibility() + textSleepDim.getVisibility()
 					+ textSleepNoAlarm.getVisibility();
 
 			// if all are gone...
-			visibility = (visibility == (View.GONE * 3)) ? View.GONE
-					: View.VISIBLE;
+			visibility = (visibility == (View.GONE * 3)) ? View.GONE : View.VISIBLE;
 			landscapeWarnings.setVisibility(visibility);
 		}
 	}

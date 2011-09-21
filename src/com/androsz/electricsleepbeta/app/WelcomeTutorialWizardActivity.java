@@ -16,33 +16,27 @@ import com.androsz.electricsleepbeta.R;
 
 public class WelcomeTutorialWizardActivity extends WizardActivity {
 
-	public static boolean enforceCalibrationBeforeStartingSleep(
-			final Activity context) {
+	public static boolean enforceCalibrationBeforeStartingSleep(final Activity context) {
 
 		final SharedPreferences userPrefs = context.getSharedPreferences(
 				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
-		final int prefsVersion = userPrefs.getInt(
-				SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
+		final int prefsVersion = userPrefs.getInt(SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
 		String message = "";
 		if (prefsVersion == 0) {
 			message = context.getString(R.string.message_not_calibrated);
-		} else if (prefsVersion != context.getResources().getInteger(
-				R.integer.prefs_version)) {
+		} else if (prefsVersion != context.getResources().getInteger(R.integer.prefs_version)) {
 			message = context.getString(R.string.message_prefs_not_compatible);
 		}
 
 		if (message.length() > 0) {
-			message += context
-					.getString(R.string.message_recommend_calibration);
+			message += context.getString(R.string.message_recommend_calibration);
 			final AlertDialog.Builder dialog = new AlertDialog.Builder(context)
 					.setMessage(message)
 					.setCancelable(false)
 					.setPositiveButton(context.getString(R.string.calibrate),
 							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(
-										final DialogInterface dialog,
-										final int id) {
+								public void onClick(final DialogInterface dialog, final int id) {
 									context.startActivity(new Intent(context,
 											CalibrationWizardActivity.class));
 									context.finish();
@@ -51,9 +45,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 					.setNeutralButton(context.getString(R.string.manual),
 							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(
-										final DialogInterface dialog,
-										final int id) {
+								public void onClick(final DialogInterface dialog, final int id) {
 									context.startActivity(new Intent(context,
 											SettingsActivity.class));
 									context.finish();
@@ -62,9 +54,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 					.setNegativeButton(context.getString(R.string.cancel),
 							new DialogInterface.OnClickListener() {
 								@Override
-								public void onClick(
-										final DialogInterface dialog,
-										final int id) {
+								public void onClick(final DialogInterface dialog, final int id) {
 									dialog.cancel();
 								}
 							});

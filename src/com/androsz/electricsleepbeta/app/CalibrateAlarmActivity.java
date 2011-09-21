@@ -45,18 +45,16 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 			 * CalibrateAlarmActivity.this .setResult( CALIBRATION_SUCCEEDED,
 			 * new Intent().putExtra("y", sleepChart.getCalibrationLevel()));
 			 */
-			CalibrateAlarmActivity.this.findViewById(
-					R.id.calibration_sleep_chart).setVisibility(View.VISIBLE);
-			CalibrateAlarmActivity.this.findViewById(
-					R.id.calibration_level_seekbar).setVisibility(View.VISIBLE);
-			CalibrateAlarmActivity.this.findViewById(R.id.warming_up_text)
-					.setVisibility(View.GONE);
+			CalibrateAlarmActivity.this.findViewById(R.id.calibration_sleep_chart).setVisibility(
+					View.VISIBLE);
+			CalibrateAlarmActivity.this.findViewById(R.id.calibration_level_seekbar).setVisibility(
+					View.VISIBLE);
+			CalibrateAlarmActivity.this.findViewById(R.id.warming_up_text).setVisibility(View.GONE);
 			if (sleepChart != null) {
 				final DecimalSeekBar seekBar = (DecimalSeekBar) findViewById(R.id.calibration_level_seekbar);
 				seekBar.setProgress((float) sleepChart.getCalibrationLevel());
-				sleepChart.sync(intent.getDoubleExtra(
-						SleepMonitoringService.EXTRA_X, 0), intent
-						.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+				sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
+						intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
 						sleepChart.getCalibrationLevel());
 			}
 		}
@@ -79,11 +77,10 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
-			public void onProgressChanged(final SeekBar seekBar,
-					final int progress, final boolean fromUser) {
+			public void onProgressChanged(final SeekBar seekBar, final int progress,
+					final boolean fromUser) {
 				if (fromUser) {
-					sleepChart.setCalibrationLevel(progress
-							/ DecimalSeekBar.PRECISION);
+					sleepChart.setCalibrationLevel(progress / DecimalSeekBar.PRECISION);
 				}
 			}
 
@@ -96,14 +93,14 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 			}
 		});
 
-		sleepChart
-				.setCalibrationLevel(SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+		sleepChart.setCalibrationLevel(SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 	public void onDoneClick(final View v) {
-		CalibrateAlarmActivity.this.setResult(CALIBRATION_SUCCEEDED,
+		CalibrateAlarmActivity.this.setResult(
+				CALIBRATION_SUCCEEDED,
 				new Intent().putExtra(SleepMonitoringService.EXTRA_Y,
 						sleepChart.getCalibrationLevel()));
 		finish();
@@ -131,10 +128,8 @@ public class CalibrateAlarmActivity extends CalibrateForResultActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		registerReceiver(updateChartReceiver, new IntentFilter(
-				SleepActivity.UPDATE_CHART));
-		registerReceiver(syncChartReceiver, new IntentFilter(
-				SleepActivity.SYNC_CHART));
+		registerReceiver(updateChartReceiver, new IntentFilter(SleepActivity.UPDATE_CHART));
+		registerReceiver(syncChartReceiver, new IntentFilter(SleepActivity.SYNC_CHART));
 		sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
 	}
 

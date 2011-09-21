@@ -51,8 +51,7 @@ public class DayOfMonthCursor extends MonthDisplayHelper {
 	 *            {@link java.util.Calendar} constants such as
 	 *            {@link java.util.Calendar#SUNDAY}.
 	 */
-	public DayOfMonthCursor(int year, int month, int dayOfMonth,
-			int weekStartDay) {
+	public DayOfMonthCursor(int year, int month, int dayOfMonth, int weekStartDay) {
 		super(year, month, weekStartDay);
 		mRow = getRowOf(dayOfMonth);
 		mColumn = getColumnOf(dayOfMonth);
