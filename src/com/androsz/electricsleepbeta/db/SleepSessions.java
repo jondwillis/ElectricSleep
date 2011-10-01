@@ -31,6 +31,9 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  */
 public class SleepSessions {
 
+	/**
+	 * Helper that receives callbacks for database creation, upgrade, etc.
+	 */
 	private final static class Helper extends SQLiteOpenHelper {
 
 		private static final String DB_NAME = "sleephistory";
@@ -172,7 +175,6 @@ public class SleepSessions {
 		@Override
 		public int delete(Uri uri, String selection, String[] selectionArgs) {
 			final SQLiteDatabase db = helper.getWritableDatabase();
-			String finalWhere;
 
 			int count;
 
@@ -192,8 +194,9 @@ public class SleepSessions {
 				// If URI is for a particular row ID, delete is based on
 				// incoming
 				// data but modified to restrict to the given ID.
-				finalWhere = DatabaseUtils.concatenateWhere(MainTable.KEY_ROW_ID + " = "
-						+ ContentUris.parseId(uri), selection);
+
+				String finalWhere = DatabaseUtils.concatenateWhere(MainTable.KEY_ROW_ID + " = "
+						+ uri.getLastPathSegment(), selection);
 				count = db.delete(MainTable.TABLE_NAME, finalWhere, selectionArgs);
 				break;
 
@@ -269,7 +272,7 @@ public class SleepSessions {
 			final SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(MainTable.TABLE_NAME);
 			qb.setProjectionMap(projectionMap);
-			
+
 			switch (uriMatcher.match(uri)) {
 			case TABLE:
 				// If the incoming URI is for main table.
@@ -277,9 +280,12 @@ public class SleepSessions {
 
 			case ROW:
 				// The incoming URI is for a single row.
-				qb.appendWhere(BaseColumns._ID + "=?");
-				selectionArgs = DBUtils.appendSelectionArgs(selectionArgs,
-						new String[] { uri.getLastPathSegment() });
+				String finalWhere = MainTable.KEY_ROW_ID + " = " +uri.getLastPathSegment();
+				//count = db.delete(MainTable.TABLE_NAME, finalWhere, selectionArgs);
+				qb.appendWhere(finalWhere);
+				//qb.appendWhere(MainTable.KEY_ROW_ID + "=?");
+				//selectionArgs = DBUtils.appendSelectionArgs(selectionArgs,
+				//		new String[] { uri.getLastPathSegment() });
 				break;
 
 			default:
@@ -360,9 +366,7 @@ public class SleepSessions {
 
 		return uri;
 	}
-
-	// Begin high-level functions for clients to use
-
+	
 	public static int deleteSession(final Context context, CharSequence sessionTitle) {
 		final ContentResolver contentResolver = context.getContentResolver();
 
