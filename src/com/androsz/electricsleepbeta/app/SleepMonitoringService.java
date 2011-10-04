@@ -136,14 +136,30 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 						SleepMonitoringService.this, SaveSleepActivity.class));
 				startActivity(saveIntent);
 				sendBroadcast(new Intent(Alarms.CANCEL_SNOOZE));
-				stopSelf();
-			} else {
+				final long now = System.currentTimeMillis();
 				try {
 					final Alarm alarm = Alarms.calculateNextAlert(context);
-					Alarms.setTimeToIgnore(context, alarm, alarm.time);
-					Alarms.setNextAlert(context);
+					if (now > alarm.time + 60*alarmWindow * 1000) {
+						Alarms.setTimeToIgnore(context, alarm, alarm.time);
+						Alarms.setNextAlert(context);
+					}
 				} catch (final NullPointerException npe) {
 					// there are no enabled alarms
+				}
+				stopSelf();
+			} else {
+				if(action.equals(Alarms.CANCEL_SNOOZE))
+				{
+					final long now = System.currentTimeMillis();
+					try {
+						final Alarm alarm = Alarms.getAlarm(context.getContentResolver(), intent.getIntExtra(Alarms.ALARM_ID, -1));
+						if (now > alarm.time + 60*alarmWindow * 1000) {
+							Alarms.setTimeToIgnore(context, alarm, alarm.time);
+							Alarms.setNextAlert(context);
+						}
+					} catch (final NullPointerException npe) {
+						// there are no enabled alarms
+					}
 				}
 				createSaveSleepNotification();
 				stopSelf();
@@ -151,6 +167,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		}
 	};
 
+	
 	// private double averageForce = 0;
 
 	// private int numberOfSamples = 0;
@@ -436,9 +453,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 					final SharedPreferences alarmPrefs = getSharedPreferences(
 							SettingsActivity.PREFERENCES, 0);
 					final int id = alarmPrefs.getInt(Alarms.PREF_SNOOZE_ID, -1);
-					// if not already snoozing off the same alarm, trigger the
+					// if not already snoozing off ANY alarm, trigger the
 					// alarm
-					if (id != alarm.id) {
+					if (id == -1) {
 						// add 1 second delay to make it less likely that we
 						// skip the alarm
 						Alarms.enableAlert(this, alarm, System.currentTimeMillis() + 1000);
