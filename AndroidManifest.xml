@@ -7,7 +7,7 @@
 		android:largeScreens="true" android:xlargeScreens="true"
 		android:anyDensity="true" />
 
-	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="13" />
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14" />
 
 	<uses-feature android:name="android.hardware.sensor.accelerometer"
 		android:required="true" />
@@ -58,7 +58,7 @@
 			android:label="@string/title_calibrate" />
 
 		<activity
-			android:name="com.androsz.electricsleepbeta.app.WelcomeTutorialWizardActivity"
+			android:name=".app.WelcomeTutorialWizardActivity"
 			android:label="@string/welcome_tutorial" />
 
 		<activity android:name=".app.HelloWizardActivity"

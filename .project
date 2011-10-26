@@ -25,22 +25,10 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>com.stateofflow.eclipse.metrics.MetricsBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>com.stateofflow.eclipse.metrics.MetricsNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>actionbarsherlock_src</name>
-			<type>2</type>
-			<locationURI>_android_actionbarsherlock_50aa4b0a/src</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
