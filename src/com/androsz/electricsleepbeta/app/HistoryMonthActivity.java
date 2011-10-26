@@ -18,8 +18,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.TitlePageIndicator;
-import android.support.v4.view.TitleProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
@@ -32,6 +30,8 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.widget.calendar.MonthView;
 import com.androsz.electricsleepbeta.widget.calendar.Utils;
+import com.viewpagerindicator.TitlePageIndicator;
+import com.viewpagerindicator.TitleProvider;
 
 public class HistoryMonthActivity extends HostActivity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
