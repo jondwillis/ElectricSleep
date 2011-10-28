@@ -1,7 +1,6 @@
 package com.androsz.electricsleepbeta.app;
 
 import android.content.Intent;
-import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ColorMatrix;

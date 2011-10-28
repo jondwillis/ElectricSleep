@@ -6,6 +6,8 @@ import android.content.Context;
 import com.androsz.electricsleepbeta.R;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
+// Attribution to Michael Burton. 
+// http://stackoverflow.com/questions/3216692/
 public class GoogleAnalyticsSessionManager {
 	protected static GoogleAnalyticsSessionManager INSTANCE;
 

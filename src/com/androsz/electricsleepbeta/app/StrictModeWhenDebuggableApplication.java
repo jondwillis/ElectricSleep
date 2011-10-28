@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.os.StrictMode;
 
+/**
+ * @author Jon
+ *
+ */
 public class StrictModeWhenDebuggableApplication extends Application {
 
 	@Override

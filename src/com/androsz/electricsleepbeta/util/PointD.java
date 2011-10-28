@@ -18,6 +18,9 @@ public class PointD implements Serializable {
 		return new PointD(x, y);
 	}
 
+	// Conversions derivivative of:
+	// http://www.daniweb.com/software-development/java/code/216874
+	
 	private static byte[] toByte(final double data) {
 		return toByte(Double.doubleToRawLongBits(data));
 	}
@@ -39,7 +42,7 @@ public class PointD implements Serializable {
 		if (data == null || data.length != 8) {
 			return 0x0;
 		}
-		// ---------- simple:
+		
 		return Double.longBitsToDouble(toLong(data));
 	}
 
@@ -47,7 +50,7 @@ public class PointD implements Serializable {
 		if (data == null || data.length != 8) {
 			return 0x0;
 		}
-		// ----------
+		
 		return (long) (0xff & data[0]) << 56 | (long) (0xff & data[1]) << 48
 				| (long) (0xff & data[2]) << 40 | (long) (0xff & data[3]) << 32
 				| (long) (0xff & data[4]) << 24 | (long) (0xff & data[5]) << 16

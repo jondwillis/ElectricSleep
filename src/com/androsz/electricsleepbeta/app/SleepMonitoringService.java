@@ -167,11 +167,6 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		}
 	};
 
-	
-	// private double averageForce = 0;
-
-	// private int numberOfSamples = 0;
-
 	private boolean silentMode = false;
 
 	private final ArrayList<PointD> sleepData = new ArrayList<PointD>();

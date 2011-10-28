@@ -16,8 +16,8 @@ public class ViewFlipperBugfix extends ViewFlipper {
 		// TODO Auto-generated constructor stub
 	}
 
-	// hack to prevent a crash on android 2.1 and 2.2 -
-	// http://daniel-codes.blogspot.com/2010/05/viewflipper-receiver-not-registered.html
+	// hack to prevent a crash on android 2.1 - 2.3.x
+	// http://code.google.com/p/android/issues/detail?id=6191#c8
 	@Override
 	public void onDetachedFromWindow() {
 		try {
