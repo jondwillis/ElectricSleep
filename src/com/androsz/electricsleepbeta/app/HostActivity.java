@@ -1,5 +1,6 @@
 package com.androsz.electricsleepbeta.app;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 
@@ -77,7 +79,7 @@ public abstract class HostActivity extends AnalyticActivity {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-		case com.actionbarsherlock.R.id.abs__home:
+		case android.R.id.home:// com.actionbarsherlock.R.id.abs__home:
 			finish();
 			return (true);
 		case R.id.menu_item_tutorial:
@@ -90,7 +92,11 @@ public abstract class HostActivity extends AnalyticActivity {
 			trackPageView("donate");
 			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
 			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+			try
+			{
 			startActivity(marketIntent);
+			}
+			catch(ActivityNotFoundException anfe){Toast.makeText(this, R.string.failed_to_open_market, Toast.LENGTH_LONG).show();}
 			break;
 		case R.id.menu_item_settings:
 			startActivity(new Intent(this, SettingsActivity.class));

@@ -58,7 +58,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 			// append the two doubles in sleepPoint to file
 			try {
-				synchronized (sDataLock) {
+				synchronized (DATA_LOCK) {
 					final FileOutputStream fos = openFileOutput(SLEEP_DATA, Context.MODE_APPEND);
 					fos.write(PointD.toByteArray(sleepPoint));
 					fos.close();
@@ -91,7 +91,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	private static final int NOTIFICATION_ID = 0x1337a;
 	public static final String POKE_SYNC_CHART = "com.androsz.electricsleepbeta.POKE_SYNC_CHART";
 	// Object for intrinsic lock
-	public static final Object[] sDataLock = new Object[0];
+	public static final Object[] DATA_LOCK = new Object[0];
 
 	public static final String SERVICE_IS_RUNNING = "serviceIsRunning";
 

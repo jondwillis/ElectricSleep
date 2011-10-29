@@ -721,4 +721,5 @@
 	<string name="export">Export</string>
 	<string name="export_all">Export All</string>
 	<string name="delete_all">Delete All</string>
+	<string name="failed_to_open_market">Failed to open market. Your Android Market may not be up to date.</string>
 </resources>
