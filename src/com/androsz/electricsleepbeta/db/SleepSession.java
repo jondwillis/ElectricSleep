@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.achartengine.model.PointD;
+
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
@@ -18,7 +20,6 @@ import android.text.format.Time;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
-import com.androsz.electricsleepbeta.util.PointD;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SleepSession {

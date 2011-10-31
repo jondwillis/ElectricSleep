@@ -3,6 +3,8 @@ package com.androsz.electricsleepbeta.app;
 import java.util.Calendar;
 import java.util.List;
 
+import org.achartengine.model.PointD;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +26,6 @@ import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
-import com.androsz.electricsleepbeta.util.PointD;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class SleepActivity extends HostActivity {
@@ -93,8 +94,8 @@ public class SleepActivity extends HostActivity {
 			// sleepChart = (SleepChart)
 			// findViewById(R.id.sleep_movement_chart);
 			// inlined for efficiency
-			sleepChart.xySeriesMovement.xyList = (List<PointD>) intent
-					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
+			sleepChart.xySeriesMovement.setXY((List<PointD>) intent
+					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA));
 
 			final double alarmTriggerSensitivity = intent.getDoubleExtra(
 					StartSleepReceiver.EXTRA_ALARM, SettingsActivity.DEFAULT_ALARM_SENSITIVITY);

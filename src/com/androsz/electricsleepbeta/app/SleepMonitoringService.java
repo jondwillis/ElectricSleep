@@ -10,6 +10,8 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.achartengine.model.PointD;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,7 +37,6 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
-import com.androsz.electricsleepbeta.util.PointD;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 

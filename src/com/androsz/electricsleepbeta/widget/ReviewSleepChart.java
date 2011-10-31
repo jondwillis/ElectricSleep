@@ -1,10 +1,10 @@
 package com.androsz.electricsleepbeta.widget;
 
+import org.achartengine.chart.AbstractChart;
+import org.achartengine.chart.TimeChart;
+
 import android.content.Context;
 import android.util.AttributeSet;
-
-import com.androsz.electricsleepbeta.achartengine.chart.AbstractChart;
-import com.androsz.electricsleepbeta.achartengine.chart.TimeChart;
 
 public class ReviewSleepChart extends SleepChart {
 

@@ -3,6 +3,14 @@ package com.androsz.electricsleepbeta.widget;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 
+import org.achartengine.GraphicalView;
+import org.achartengine.chart.AbstractChart;
+import org.achartengine.chart.TimeChart;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.model.XYSeries;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYSeriesRenderer;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Canvas;
@@ -11,19 +19,12 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.achartengine.ChartView;
-import com.androsz.electricsleepbeta.achartengine.chart.AbstractChart;
-import com.androsz.electricsleepbeta.achartengine.chart.TimeChart;
-import com.androsz.electricsleepbeta.achartengine.model.XYMultipleSeriesDataset;
-import com.androsz.electricsleepbeta.achartengine.model.XYSeries;
-import com.androsz.electricsleepbeta.achartengine.renderer.XYMultipleSeriesRenderer;
-import com.androsz.electricsleepbeta.achartengine.renderer.XYSeriesRenderer;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.util.MathUtils;
 
-public class SleepChart extends ChartView implements Parcelable {
+public class SleepChart extends GraphicalView implements Parcelable {
 
 	protected double calibrationLevel;// =
 										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
@@ -40,13 +41,13 @@ public class SleepChart extends ChartView implements Parcelable {
 	public XYSeries xySeriesMovement;
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
-
+	
 	public SleepChart(final Context context) {
 		super(context);
 	}
 
-	public SleepChart(final Context context, final AttributeSet as) {
-		super(context, as);
+	public SleepChart(final Context context, final AttributeSet attrs) {
+		super(context, attrs);
 	}
 
 	public SleepChart(final Context context, Parcel in) {
@@ -64,22 +65,23 @@ public class SleepChart extends ChartView implements Parcelable {
 	@Override
 	protected AbstractChart buildChart() {
 		if (xySeriesMovement == null) {
+			Context context = getContext();
 			// set up sleep movement series/renderer
-			xySeriesMovement = new XYSeries(getContext().getString(R.string.legend_movement));
+			xySeriesMovement = new XYSeries(context.getString(R.string.legend_movement));
 			xySeriesMovementRenderer = new XYSeriesRenderer();
 			xySeriesMovementRenderer.setFillBelowLine(true);
-			xySeriesMovementRenderer.setFillBelowLineColor(getResources().getColor(
+			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
 					R.color.primary1_transparent));
-			xySeriesMovementRenderer.setColor(getResources().getColor(R.color.primary1));
+			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary1));
 
 			// set up calibration line series/renderer
-			xySeriesCalibration = new XYSeries(getContext().getString(
+			xySeriesCalibration = new XYSeries(context.getString(
 					R.string.legend_light_sleep_trigger));
 			xySeriesCalibrationRenderer = new XYSeriesRenderer();
 			xySeriesCalibrationRenderer.setFillBelowLine(true);
-			xySeriesCalibrationRenderer.setFillBelowLineColor(getResources().getColor(
+			xySeriesCalibrationRenderer.setFillBelowLineColor(context.getResources().getColor(
 					R.color.background_transparent_lighten));
-			xySeriesCalibrationRenderer.setColor(getResources().getColor(R.color.white));
+			xySeriesCalibrationRenderer.setColor(context.getResources().getColor(R.color.white));
 
 			// add series to the dataset
 			xyMultipleSeriesDataset = new XYMultipleSeriesDataset();
@@ -93,19 +95,19 @@ public class SleepChart extends ChartView implements Parcelable {
 
 			xyMultipleSeriesRenderer.setPanEnabled(false, false);
 			xyMultipleSeriesRenderer.setZoomEnabled(false, false);
-			final float textSize = MathUtils.calculatePxFromSp(getContext(), 14);
+			final float textSize = MathUtils.calculatePxFromSp(context, 14);
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
 			xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils.calculatePxFromDp(
-					getContext(), 30) + textSize));
+					context, 30) + textSize));
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
 			xyMultipleSeriesRenderer.setXLabels(6);
 			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setShowGrid(true);
-			xyMultipleSeriesRenderer.setAxesColor(getResources().getColor(R.color.text));
+			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
 			xyMultipleSeriesRenderer.setApplyBackgroundColor(false);
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
@@ -129,30 +131,10 @@ public class SleepChart extends ChartView implements Parcelable {
 		return xySeriesMovement.getItemCount() > 1;
 	}
 
-	@Override
-	protected void onDraw(final Canvas canvas) {
-		super.onDraw(canvas);
-		/*
-		 * if (rating < 6 && rating > 0) { final Drawable dStarOn =
-		 * getResources().getDrawable( R.drawable.rate_star_small_on); final
-		 * Drawable dStarOff = getResources().getDrawable(
-		 * R.drawable.rate_star_small_off); final int width =
-		 * dStarOn.getMinimumWidth(); final int height =
-		 * dStarOn.getMinimumHeight(); final int numOffStars = 5 - rating; final
-		 * int centerThemDangStarz = (canvas.getWidth() - width * 5) / 2; for
-		 * (int i = 0; i < rating; i++) { dStarOn.setBounds(width * i +
-		 * centerThemDangStarz, height, width * i + width + centerThemDangStarz,
-		 * height * 2); dStarOn.draw(canvas); } for (int i = 0; i < numOffStars;
-		 * i++) { dStarOff.setBounds(width * (i + rating) + centerThemDangStarz,
-		 * height, width * (i + rating) + width + centerThemDangStarz, height *
-		 * 2); dStarOff.draw(canvas); } }
-		 */
-	}
-
 	public void reconfigure() {
 		if (makesSenseToDisplay()) {
-			final double firstX = xySeriesMovement.xyList.get(0).x;
-			final double lastX = xySeriesMovement.xyList.get(xySeriesMovement.getItemCount() - 1).x;
+			final double firstX = xySeriesMovement.getX(0);
+			final double lastX = xySeriesMovement.getX(xySeriesMovement.getItemCount() - 1);
 
 			if (makesSenseToDisplay()) {
 				// reconfigure the calibration line..
@@ -185,7 +167,7 @@ public class SleepChart extends ChartView implements Parcelable {
 	}
 
 	public void sync(final Double x, final Double y, final double alarm) {
-		if (xySeriesMovement.xyList.size() >= SleepMonitoringService.MAX_POINTS_IN_A_GRAPH) {
+		if (xySeriesMovement.getItemCount() >= SleepMonitoringService.MAX_POINTS_IN_A_GRAPH) {
 			xySeriesMovement.add(x, y);
 			xySeriesMovement.remove(0);
 		} else {
@@ -196,7 +178,7 @@ public class SleepChart extends ChartView implements Parcelable {
 	}
 
 	public void sync(final SleepSession sleepRecord) {
-		xySeriesMovement.xyList = sleepRecord.chartData;
+		xySeriesMovement.setXY(sleepRecord.chartData);
 		calibrationLevel = sleepRecord.alarm;
 
 		rating = sleepRecord.rating;
@@ -218,5 +200,4 @@ public class SleepChart extends ChartView implements Parcelable {
 		dest.writeInt(rating);
 
 	}
-
 }

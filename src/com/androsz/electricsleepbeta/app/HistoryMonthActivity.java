@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -75,8 +76,12 @@ public class HistoryMonthActivity extends HostActivity implements
 		public Object instantiateItem(View container, int position) {
 			this.container = (ViewPager) container;
 			final Time time = new Time();
-			time.set(System.currentTimeMillis());
-			time.month += (position - 1); // add the offset from the center time
+			time.setToNow();
+
+			// set to first day in month. this prevents errors when the current
+			// month (TODAY) has more days than the neighbor month.
+			time.set(1, time.month, time.year);
+			time.month += (position-1); // add the offset from the center time
 			time.normalize(true);
 
 			return addMonthViewAt(position, time);
