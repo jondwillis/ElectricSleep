@@ -24,10 +24,10 @@
 	<com.androsz.electricsleepbeta.widget.BlockableAdView android:id="@+id/adView"
 		android:layout_height="wrap_content" ads:adUnitId="a14e64057e1e23e"
 		ads:adSize="BANNER" ads:loadAdOnCreate="true" android:layout_gravity="center"
-		android:layout_width="wrap_content" />
+		android:layout_width="wrap_content" android:animateLayoutChanges="true" />
 	<ScrollView android:id="@+id/home_stats_container"
 		android:layout_width="match_parent" android:visibility="gone"
-		android:layout_height="match_parent" android:padding="5dp">
+		android:layout_height="match_parent" android:padding="5dp" android:animateLayoutChanges="true">
 		<RelativeLayout android:layout_height="wrap_content"
 			android:layout_width="match_parent">
 			<TextView android:layout_height="wrap_content"
@@ -93,11 +93,11 @@
 				android:text="@string/home_review_title_text_empty"
 				android:textAppearance="@style/TextHeader" android:id="@+id/home_last_sleep_title_text"
 				android:layout_width="match_parent"></TextView>
-			<com.androsz.electricsleepbeta.widget.SleepChart
+			<com.androsz.electricsleepbeta.widget.SleepChart android:focusable="false"
 				android:id="@+id/home_sleep_chart" android:layout_below="@+id/home_last_sleep_title_text"
 				android:visibility="gone" android:layout_width="match_parent"
 				android:layout_height="match_parent" android:layout_marginTop="5dip"
-				android:layout_marginRight="4dip" android:layout_marginLeft="-4dip" />
+				android:layout_marginRight="4dip" android:layout_marginLeft="-4dip"  android:animateLayoutChanges="true" />
 		</RelativeLayout>
 	</ScrollView>
 </LinearLayout>
