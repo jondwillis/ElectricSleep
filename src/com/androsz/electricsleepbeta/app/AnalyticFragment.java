@@ -2,6 +2,7 @@ package com.androsz.electricsleepbeta.app;
 
 import android.app.Activity;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -43,7 +44,8 @@ public abstract class AnalyticFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(getContentAreaLayoutId(), container, false);
 
-		view.setBackgroundResource(R.drawable.gradient_background_vert);
+		view.setBackgroundColor(Color.BLACK);
+		//view.setBackgroundResource(R.drawable.gradient_background_vert);
 		return view;
 	}
 

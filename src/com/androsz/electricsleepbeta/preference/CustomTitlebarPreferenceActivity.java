@@ -1,12 +1,14 @@
 package com.androsz.electricsleepbeta.preference;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HomeActivity;
@@ -44,7 +46,8 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 			this.getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		// final ListView lvw = getListView();
+		final ListView lvw = getListView();
+		lvw.setBackgroundColor(Color.BLACK);
 		// lvw.setCacheColorHint(0);
 		// lvw.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_background_vert));
 		if (getPreferencesName() != null) {

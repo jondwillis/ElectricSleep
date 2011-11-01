@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Shader;
@@ -46,9 +47,8 @@ public abstract class HostActivity extends AnalyticActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// setContentView();
 		final View root = getLayoutInflater().inflate(getContentAreaLayoutId(), null, false);
-		root.setBackgroundResource(R.drawable.gradient_background_vert);
+		root.setBackgroundColor(Color.BLACK);
 		setContentView(root);
 
 		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);

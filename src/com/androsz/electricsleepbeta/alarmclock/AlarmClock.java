@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -292,8 +293,9 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 		mAlarmsList.setVerticalScrollBarEnabled(true);
 		mAlarmsList.setOnItemClickListener(this);
 		mAlarmsList.setOnCreateContextMenuListener(this);
-		mAlarmsList.setCacheColorHint(0);
-		mAlarmsList.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.gradient_background_vert));
+		mAlarmsList.setBackgroundColor(Color.BLACK);
+		//mAlarmsList.setCacheColorHint(0);
+		//mAlarmsList.setBackgroundDrawable(getResources().getDrawable(
+		//		R.drawable.gradient_background_vert));
 	}
 }

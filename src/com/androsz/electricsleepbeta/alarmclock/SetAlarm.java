@@ -21,6 +21,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -229,9 +230,10 @@ public class SetAlarm extends CustomTitlebarPreferenceActivity implements
 		// We have to do this to get the save/cancel buttons to highlight on
 		// their own.
 		getListView().setItemsCanFocus(true);
-		getListView().setCacheColorHint(0);
-		getListView().setBackgroundDrawable(
-				getResources().getDrawable(R.drawable.gradient_background_vert));
+		getListView().setBackgroundColor(Color.BLACK);
+		//getListView().setCacheColorHint(0);
+		//getListView().setBackgroundDrawable(
+		//		getResources().getDrawable(R.drawable.gradient_background_vert));
 
 		// Attach actions to each button.
 		Button b = (Button) findViewById(R.id.alarm_save);
