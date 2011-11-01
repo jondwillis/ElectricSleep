@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -83,12 +84,23 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 		}
 	}
 
+	//Prevents options from showing up if required
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		if (required) {
 			return false;
 		} else {
 			return super.onCreateOptionsMenu(menu);
+		}
+	}
+	
+	//Prevents Home button from triggering if required
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item) {
+		if (required && item.getItemId() == android.R.id.home) {
+			return false;
+		} else {
+			return super.onOptionsItemSelected(item);
 		}
 	}
 

@@ -28,7 +28,7 @@ public class DimSleepActivity extends AnalyticActivity {
 		winParams.screenBrightness = 0.01f;
 
 		// NOTE: this doesn't work on some devices (Motorola Droid, X, 2.. etc)
-		if (Build.VERSION.SDK_INT < 8) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
 			// hack for pre-froyo to set buttonBrightness off
 			try {
 				final Field buttonBrightness = winParams.getClass().getField("buttonBrightness");

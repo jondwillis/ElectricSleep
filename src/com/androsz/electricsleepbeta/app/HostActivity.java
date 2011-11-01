@@ -79,7 +79,7 @@ public abstract class HostActivity extends AnalyticActivity {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:// com.actionbarsherlock.R.id.abs__home:
+		case android.R.id.home:
 			finish();
 			return (true);
 		case R.id.menu_item_tutorial:

@@ -1,12 +1,12 @@
 package com.androsz.electricsleepbeta.preference;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HomeActivity;
@@ -38,13 +38,15 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 
-		// getWindow().setFormat(PixelFormat.RGBA_8888);
-		// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		super.onCreate(savedInstanceState);
 		setTheme(R.style.Theme_Sherlock);
-		final ListView lvw = getListView();
-		lvw.setCacheColorHint(0);
-		lvw.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_background_vert));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			this.getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+
+		// final ListView lvw = getListView();
+		// lvw.setCacheColorHint(0);
+		// lvw.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_background_vert));
 		if (getPreferencesName() != null) {
 			getPreferenceManager().setSharedPreferencesName(getPreferencesName());
 		}
@@ -66,7 +68,7 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 		super.onDestroy();
 	}
 
-	public void onHomeClick(final View v) {
+	public void onClick(final View v) {
 		final Intent intent = new Intent(v.getContext(), HomeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
@@ -74,41 +76,12 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		/*
-		 * switch (item.getItemId()) { case R.id.menuItemDonate: final Uri
-		 * marketUri = Uri
-		 * .parse("market://details?id=com.androsz.electricsleepdonate"); final
-		 * Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-		 * startActivity(marketIntent); return true; case R.id.menuItemSettings:
-		 * startActivity(new Intent(this, SettingsActivity.class)); return true;
-		 * default: return false; }
-		 */
+
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return (true);
+		}
 		return false;
-	}
-
-	public void setHomeButtonAsLogo() {
-		/*
-		 * final ImageButton btnHome = (ImageButton)
-		 * findViewById(R.id.title_home_button);
-		 * btnHome.setImageResource(R.drawable.icon);
-		 */
-	}
-
-	public void showTitleButton1(final int drawableResourceId) {
-		/*
-		 * final ImageButton btn1 = (ImageButton)
-		 * findViewById(R.id.title_button_1); btn1.setVisibility(View.VISIBLE);
-		 * btn1.setImageResource(drawableResourceId);
-		 * findViewById(R.id.title_sep_1).setVisibility(View.VISIBLE);
-		 */
-	}
-
-	public void showTitleButton2(final int drawableResourceId) {
-		/*
-		 * final ImageButton btn2 = (ImageButton)
-		 * findViewById(R.id.title_button_2); btn2.setVisibility(View.VISIBLE);
-		 * btn2.setImageResource(drawableResourceId);
-		 * findViewById(R.id.title_sep_2).setVisibility(View.VISIBLE);
-		 */
 	}
 }
