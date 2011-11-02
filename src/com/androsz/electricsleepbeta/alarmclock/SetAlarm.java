@@ -35,12 +35,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.preference.CustomTitlebarPreferenceActivity;
+import com.androsz.electricsleepbeta.preference.HostPreferenceActivity;
 
 /**
  * Manages each alarm
  */
-public class SetAlarm extends CustomTitlebarPreferenceActivity implements
+public class SetAlarm extends HostPreferenceActivity implements
 		TimePickerDialog.OnTimeSetListener, Preference.OnPreferenceChangeListener {
 
 	// Used to post runnables asynchronously.

@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HomeActivity;
 
-public abstract class CustomTitlebarPreferenceActivity extends SherlockPreferenceActivity {
+public abstract class HostPreferenceActivity extends SherlockPreferenceActivity {
 
 	protected abstract int getContentAreaLayoutId();
 

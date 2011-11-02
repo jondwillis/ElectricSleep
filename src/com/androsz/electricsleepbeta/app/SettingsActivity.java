@@ -14,9 +14,9 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.preference.CustomTitlebarPreferenceActivity;
+import com.androsz.electricsleepbeta.preference.HostPreferenceActivity;
 
-public class SettingsActivity extends CustomTitlebarPreferenceActivity implements
+public class SettingsActivity extends HostPreferenceActivity implements
 		Preference.OnPreferenceChangeListener {
 
 	private static final int ALARM_STREAM_TYPE_BIT = 1 << AudioManager.STREAM_ALARM;
