@@ -62,7 +62,7 @@ public abstract class AnalyticActivity extends FragmentActivity {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
 							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
-				} catch (final Throwable whocares) {
+				} catch (final Exception whocares) {
 				}
 				return null;
 			}
@@ -76,7 +76,7 @@ public abstract class AnalyticActivity extends FragmentActivity {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
-				} catch (final Throwable whocares) {
+				} catch (final Exception whocares) {
 				}
 				return null;
 			}

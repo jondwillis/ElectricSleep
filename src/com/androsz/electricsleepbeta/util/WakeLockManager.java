@@ -44,7 +44,7 @@ public class WakeLockManager {
 			if (wakeLock != null) {
 				wakeLock.release();
 			}
-		} catch (Throwable whocares) {
+		} catch (Exception whocares) {
 			// android's wakelocks are buggy?
 		} finally {
 			locks.remove(id);

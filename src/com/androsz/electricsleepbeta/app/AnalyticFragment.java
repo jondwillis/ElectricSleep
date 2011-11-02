@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -75,7 +74,7 @@ public abstract class AnalyticFragment extends Fragment {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
 							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
-				} catch (final Throwable whocares) {
+				} catch (final Exception whocares) {
 				}
 				return null;
 			}
@@ -89,7 +88,7 @@ public abstract class AnalyticFragment extends Fragment {
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
-				} catch (final Throwable whocares) {
+				} catch (final Exception whocares) {
 				}
 				return null;
 			}

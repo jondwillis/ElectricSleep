@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.HostActivity;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 
 /**
@@ -45,7 +47,7 @@ import com.androsz.electricsleepbeta.app.SettingsActivity;
  * activity is the full screen version which shows over the lock screen with the
  * wallpaper as the background.
  */
-public class AlarmAlertFullScreen extends Activity {
+public class AlarmAlertFullScreen extends HostActivity {
 
 	// These defaults must match the values in res/xml/settings.xml
 	private static final String DEFAULT_SNOOZE = "5";
@@ -136,13 +138,8 @@ public class AlarmAlertFullScreen extends Activity {
 	protected void onCreate(final Bundle icicle) {
 		super.onCreate(icicle);
 
-		try {
-			this.setTheme(R.style.Theme_Sherlock); // will only work
-													// for 3.0+
-													// devices
-		} catch (final Throwable whocares) {
+		setTheme(R.style.Theme_Sherlock);
 
-		}
 		mAlarm = getIntent().getParcelableExtra(Alarms.ALARM_INTENT_EXTRA);
 
 		// Get the volume/camera button behavior setting
@@ -159,13 +156,13 @@ public class AlarmAlertFullScreen extends Activity {
 		// subclass.
 		final boolean screenOff = getIntent().getBooleanExtra(SCREEN_OFF, false);
 		if (!screenOff) {
-			try {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
 				// API 8+
 				win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 						| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
 						| WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-			} catch (final Throwable whocares) {
-				// API 7+
+			} else {
+				// API 7 or less
 				win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 						| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 			}
