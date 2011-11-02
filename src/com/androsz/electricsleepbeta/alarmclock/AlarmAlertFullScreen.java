@@ -47,7 +47,7 @@ import com.androsz.electricsleepbeta.app.SettingsActivity;
  * activity is the full screen version which shows over the lock screen with the
  * wallpaper as the background.
  */
-public class AlarmAlertFullScreen extends HostActivity {
+public class AlarmAlertFullScreen extends Activity {
 
 	// These defaults must match the values in res/xml/settings.xml
 	private static final String DEFAULT_SNOOZE = "5";
