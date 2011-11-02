@@ -57,7 +57,6 @@ public abstract class HostActivity extends AnalyticActivity {
 		final ActionBar bar = getSupportActionBar();
 		bar.setBackgroundDrawable(bitmapDrawable);
 
-		bar.setDisplayShowHomeEnabled(true);
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 

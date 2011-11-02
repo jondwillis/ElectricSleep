@@ -69,6 +69,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			// set up sleep movement series/renderer
 			xySeriesMovement = new XYSeries(context.getString(R.string.legend_movement));
 			xySeriesMovementRenderer = new XYSeriesRenderer();
+			
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
 					R.color.primary1_transparent));
@@ -110,6 +111,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
 			xyMultipleSeriesRenderer.setApplyBackgroundColor(false);
+			xyMultipleSeriesRenderer.setInScroll(true);
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
 			timeChart.setDateFormat("h:mm a");

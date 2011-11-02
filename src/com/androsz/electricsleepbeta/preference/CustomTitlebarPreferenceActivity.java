@@ -1,19 +1,22 @@
 package com.androsz.electricsleepbeta.preference;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.ActionBar;
+import android.support.v4.app.SherlockPreferenceActivity;
+import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HomeActivity;
 
-public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivity {
+public abstract class CustomTitlebarPreferenceActivity extends SherlockPreferenceActivity {
 
 	protected abstract int getContentAreaLayoutId();
 
@@ -21,24 +24,24 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
-		setTheme(R.style.Theme_Sherlock);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			this.getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
 
 		final ListView lvw = getListView();
 		lvw.setBackgroundColor(Color.BLACK);
-		// lvw.setCacheColorHint(0);
-		// lvw.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_background_vert));
+
 		if (getPreferencesName() != null) {
 			getPreferenceManager().setSharedPreferencesName(getPreferencesName());
 		}
+
 		addPreferencesFromResource(getContentAreaLayoutId());
-		// getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-		// R.layout.titlebar);
-		// ((TextView) findViewById(R.id.title_text)).setText(getTitle());
+
+		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
+		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+		bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+		final ActionBar bar = getSupportActionBar();
+		bar.setBackgroundDrawable(bitmapDrawable);
+
+		bar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	public void onClick(final View v) {
@@ -55,6 +58,6 @@ public abstract class CustomTitlebarPreferenceActivity extends PreferenceActivit
 			finish();
 			return (true);
 		}
-		return false;
+		return super.onOptionsItemSelected(item);
 	}
 }
