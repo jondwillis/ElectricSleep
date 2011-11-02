@@ -455,10 +455,7 @@ public class MonthView extends View {
 				monthStart.hour = 0;
 				monthStart.minute = 0;
 				monthStart.second = 0;
-				final long startOfMonthMillis = monthStart.normalize(true /*
-																		 * ignore
-																		 * isDst
-																		 */);
+				final long startOfMonthMillis = monthStart.normalize(true);
 				mSessions = mParentActivity.getSessionsInInterval(startOfMonthMillis,
 						EVENT_NUM_DAYS);
 				// Clear out event days

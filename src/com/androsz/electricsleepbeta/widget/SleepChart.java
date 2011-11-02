@@ -13,7 +13,6 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Canvas;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -41,7 +40,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 	public XYSeries xySeriesMovement;
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
-	
+
 	public SleepChart(final Context context) {
 		super(context);
 	}
@@ -69,15 +68,15 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			// set up sleep movement series/renderer
 			xySeriesMovement = new XYSeries(context.getString(R.string.legend_movement));
 			xySeriesMovementRenderer = new XYSeriesRenderer();
-			
+
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
 					R.color.primary1_transparent));
 			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary1));
 
 			// set up calibration line series/renderer
-			xySeriesCalibration = new XYSeries(context.getString(
-					R.string.legend_light_sleep_trigger));
+			xySeriesCalibration = new XYSeries(
+					context.getString(R.string.legend_light_sleep_trigger));
 			xySeriesCalibrationRenderer = new XYSeriesRenderer();
 			xySeriesCalibrationRenderer.setFillBelowLine(true);
 			xySeriesCalibrationRenderer.setFillBelowLineColor(context.getResources().getColor(
@@ -100,8 +99,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils.calculatePxFromDp(
-					context, 30) + textSize));
+			xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
+					.calculatePxFromDp(context, 30) + textSize));
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
