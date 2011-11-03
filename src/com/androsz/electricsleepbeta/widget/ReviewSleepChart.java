@@ -20,6 +20,7 @@ public class ReviewSleepChart extends SleepChart {
 	protected AbstractChart buildChart() {
 		final TimeChart chart = (TimeChart) super.buildChart();
 		chart.setDateFormat("h");
+		chart.getRenderer().setXLabels(6);
 		return chart;
 	}
 }

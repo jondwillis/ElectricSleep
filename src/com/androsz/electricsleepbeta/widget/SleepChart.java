@@ -104,7 +104,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
-			xyMultipleSeriesRenderer.setXLabels(6);
+			xyMultipleSeriesRenderer.setXLabels(4);
 			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));

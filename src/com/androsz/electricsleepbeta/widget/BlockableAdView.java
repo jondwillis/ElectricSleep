@@ -33,5 +33,4 @@ public class BlockableAdView extends AdView {
 			super.loadAd(adRequest);
 		}
 	}
-
 }

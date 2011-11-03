@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -54,10 +55,18 @@ public abstract class HostActivity extends AnalyticActivity {
 		root.setBackgroundColor(Color.BLACK);
 		setContentView(root);
 
+		// Create a bitmap
 		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
 		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-		bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+
+		// Limit the height of the drawable to prevent the ActionBar
+		// From skinning tabs and other attached items below it.
+		Rect originalBounds = bitmapDrawable.getBounds();
+		bitmapDrawable.setBounds(originalBounds.left, originalBounds.top, originalBounds.right, 1);
+
+		bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);//, Shader.TileMode.REPEAT);
 		final ActionBar bar = getSupportActionBar();
+		bar.getHeight();
 		bar.setBackgroundDrawable(bitmapDrawable);
 
 		bar.setDisplayHomeAsUpEnabled(true);
@@ -74,9 +83,10 @@ public abstract class HostActivity extends AnalyticActivity {
 				Field showAsActionField = MenuItemImpl.class.getDeclaredField("mShowAsAction");
 				showAsActionField.setAccessible(true);
 				int showAsAction = showAsActionField.getInt(mi);
-				
-				//Only change the color if it is actually on the ActionBar.
-				//Changing ones that aren't in the AB sometimes make them hard to see.
+
+				// Only change the color if it is actually on the ActionBar.
+				// Changing ones that aren't in the AB sometimes make them hard
+				// to see.
 				if ((showAsAction != MenuItem.SHOW_AS_ACTION_NEVER)) {
 					final Drawable icon = mi.getIcon();
 					if (icon != null) {
