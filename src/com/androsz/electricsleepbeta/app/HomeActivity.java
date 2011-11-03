@@ -147,14 +147,16 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
 	}
 
-	@Override
+	/*
+	 * Used for overriding default HostActivity behavior..
+	 * @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		final boolean result = super.onCreateOptionsMenu(menu);
 		menu.findItem(R.id.menu_item_donate).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		menu.findItem(R.id.menu_item_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		return result;
-	}
+	}*/
 
 	public void onHistoryClick(final View v) {
 		startActivity(new Intent(this, HistoryMonthActivity.class));

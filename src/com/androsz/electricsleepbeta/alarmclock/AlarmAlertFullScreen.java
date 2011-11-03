@@ -39,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.HostActivity;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 
 /**

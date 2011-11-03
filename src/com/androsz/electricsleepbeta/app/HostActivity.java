@@ -1,5 +1,7 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.lang.reflect.Field;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +20,7 @@ import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.actionbarsherlock.internal.view.menu.MenuItemImpl;
 import com.androsz.electricsleepbeta.R;
 
 public abstract class HostActivity extends AnalyticActivity {
@@ -65,11 +68,29 @@ public abstract class HostActivity extends AnalyticActivity {
 		getMenuInflater().inflate(R.menu.menu_host, menu);
 		for (int i = 0; i < menu.size(); i++) {
 			final MenuItem mi = menu.getItem(i);
-			final Drawable icon = mi.getIcon();
-			if (icon != null) {
-				final Drawable mutated = icon.getCurrent().mutate();
-				mutated.setColorFilter(COLOR_FILTER);
-				mi.setIcon(mutated);
+			try {
+				// Do nasty reflection to access ShowAsAction...
+				// TODO just use my own icons...
+				Field showAsActionField = MenuItemImpl.class.getDeclaredField("mShowAsAction");
+				showAsActionField.setAccessible(true);
+				int showAsAction = showAsActionField.getInt(mi);
+				
+				//Only change the color if it is actually on the ActionBar.
+				//Changing ones that aren't in the AB sometimes make them hard to see.
+				if ((showAsAction != MenuItem.SHOW_AS_ACTION_NEVER)) {
+					final Drawable icon = mi.getIcon();
+					if (icon != null) {
+						final Drawable mutated = icon.getCurrent().mutate();
+						mutated.setColorFilter(COLOR_FILTER);
+						mi.setIcon(mutated);
+					}
+				}
+			} catch (NoSuchFieldException nsfe) {
+				trackEvent("mShowAsAction reflection error", 1);
+			} catch (IllegalArgumentException e) {
+				trackEvent("mShowAsAction reflection error", 2);
+			} catch (IllegalAccessException e) {
+				trackEvent("mShowAsAction reflection error", 3);
 			}
 		}
 		return true;
@@ -91,11 +112,11 @@ public abstract class HostActivity extends AnalyticActivity {
 			trackPageView("donate");
 			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
 			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-			try
-			{
-			startActivity(marketIntent);
+			try {
+				startActivity(marketIntent);
+			} catch (ActivityNotFoundException anfe) {
+				Toast.makeText(this, R.string.failed_to_open_market, Toast.LENGTH_LONG).show();
 			}
-			catch(ActivityNotFoundException anfe){Toast.makeText(this, R.string.failed_to_open_market, Toast.LENGTH_LONG).show();}
 			break;
 		case R.id.menu_item_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
