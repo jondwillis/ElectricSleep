@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -55,18 +54,12 @@ public abstract class HostActivity extends AnalyticActivity {
 		root.setBackgroundColor(Color.BLACK);
 		setContentView(root);
 
-		// Create a bitmap
+		// Fetch the tile bitmap from resources
 		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
 		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-
-		// Limit the height of the drawable to prevent the ActionBar
-		// From skinning tabs and other attached items below it.
-		Rect originalBounds = bitmapDrawable.getBounds();
-		bitmapDrawable.setBounds(originalBounds.left, originalBounds.top, originalBounds.right, 1);
-
-		bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);//, Shader.TileMode.REPEAT);
+		bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);
+		bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
 		final ActionBar bar = getSupportActionBar();
-		bar.getHeight();
 		bar.setBackgroundDrawable(bitmapDrawable);
 
 		bar.setDisplayHomeAsUpEnabled(true);
