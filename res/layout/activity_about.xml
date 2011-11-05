@@ -1,76 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent">
-		<TextView android:layout_width="wrap_content"
-			android:layout_weight="1" android:layout_gravity="left|center_vertical"
-			android:layout_height="wrap_content" style="@style/TextHeader"
-			android:text="@string/app_name"></TextView>
-	</TableRow>
-	<TableRow android:gravity="right" android:layout_height="wrap_content"
-		android:layout_width="match_parent">
-		<TextView android:layout_width="match_parent"
-			android:autoLink="email" android:layout_gravity="right"
-			android:gravity="right" android:layout_height="wrap_content"
-			android:id="@+id/about_version_text"></TextView>
-	</TableRow>
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent">
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-			android:text="@string/project_lead"></TextView>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	</TableRow>
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:gravity="right">
+        <TextView
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:text="@string/app_name" >
+        </TextView>
+    </TableRow>
 
-		<TextView android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-			android:gravity="right" android:layout_gravity="right"
-			android:layout_width="match_parent" android:autoLink="email"
-			android:text="jondwillis@gmail.com"></TextView>
-	</TableRow>
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent">
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-			android:text="@string/developers"></TextView>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right" >
 
-	</TableRow>
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:gravity="right">
+        <TextView
+            android:id="@+id/about_version_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:autoLink="email"
+            android:gravity="right" >
+        </TextView>
+    </TableRow>
 
-		<TextView android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-			android:gravity="right" android:layout_gravity="right"
-			android:layout_width="match_parent" android:autoLink="email"
-			android:text="jondwillis@gmail.com"></TextView>
-	</TableRow>
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent">
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-			android:text="@string/gfx_designers"></TextView>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	</TableRow>
-	<TableRow android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:gravity="right">
+        <TextView
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:text="@string/project_lead" >
+        </TextView>
+    </TableRow>
 
-		<TextView android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-			android:gravity="right" android:layout_gravity="right"
-			android:layout_width="match_parent" android:autoLink="email"
-			android:text="wickershamsa@vcu.edu"></TextView>
-	</TableRow>
-	<TextView android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-		android:layout_width="match_parent" android:autoLink="email"
-		android:layout_gravity="bottom|right" android:gravity="bottom|right"
-		android:text="\n\nTo join the project send an email to:\n jondwillis@gmail.com"></TextView>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right" >
 
+        <TextView
+            style="@style/TextHeaderTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:autoLink="email"
+            android:gravity="right"
+            android:text="jondwillis@gmail.com" >
+        </TextView>
+    </TableRow>
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
+        <TextView
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:text="@string/developers" >
+        </TextView>
+    </TableRow>
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right" >
+
+        <TextView
+            style="@style/TextHeaderTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:autoLink="email"
+            android:gravity="right"
+            android:text="jondwillis@gmail.com" >
+        </TextView>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:text="@string/gfx_designers" >
+        </TextView>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right" >
+
+        <TextView
+            style="@style/TextHeaderTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:autoLink="email"
+            android:gravity="right"
+            android:text="wickershamsa@vcu.edu" >
+        </TextView>
+    </TableRow>
+
+    <TextView
+        style="@style/TextHeaderTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:autoLink="email"
+        android:gravity="bottom|right"
+        android:text="\n\nTo join the project send an email to:\n jondwillis@gmail.com" >
+    </TextView>
 
 </TableLayout>

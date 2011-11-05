@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:icon="@android:drawable/ic_menu_help"
-		android:title="@string/welcome_tutorial" android:id="@+id/menu_item_tutorial"></item>
-	<item android:icon="@android:drawable/ic_menu_info_details"
-		android:title="@string/about" android:id="@+id/menu_item_about"></item>
-	<item android:title="@string/donate"
-		android:icon="@android:drawable/ic_menu_myplaces" android:id="@+id/menu_item_donate"></item>
-	<item android:title="@string/title_report"
-		android:icon="@android:drawable/ic_menu_send" android:id="@+id/menu_item_report"></item>
-	<item android:title="@string/title_settings" android:icon="@android:drawable/ic_menu_preferences" android:id="@+id/menu_item_settings"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_item_tutorial"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="@string/welcome_tutorial"></item>
+
+    <item
+        android:id="@+id/menu_item_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/about"></item>
+
+    <item
+        android:id="@+id/menu_item_donate"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/donate"></item>
+
+    <item
+        android:id="@+id/menu_item_report"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="@string/title_report"></item>
+
+    <item
+        android:id="@+id/menu_item_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/title_settings"></item>
+
 </menu>

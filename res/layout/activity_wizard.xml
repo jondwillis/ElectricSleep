@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent" android:layout_width="match_parent"
-	android:orientation="vertical" android:layout_margin="0dip">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dip"
+    android:orientation="vertical" >
 
-	<ViewStub android:id="@+id/wizardViewFlipperStub"
-		android:layout_weight="1" android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:layout_margin="8dip" />
-	<LinearLayout android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:layout_gravity="bottom|center_horizontal"
-		android:background="@color/primary1_transparent" android:orientation="horizontal">
-		<Button android:layout_height="wrap_content" android:id="@+id/leftButton"
-			android:onClick="onLeftButtonClick" android:drawableLeft="@drawable/arrow_left"
-			android:layout_marginTop="4dip"
-			android:layout_weight="1" android:layout_width="160dip"></Button>
-		<LinearLayout android:id="@+id/linearLayout1" android:layout_height="match_parent" android:orientation="vertical" android:layout_width="wrap_content" android:layout_weight="5"></LinearLayout>
-		<Button android:layout_height="wrap_content" android:onClick="onRightButtonClick"
-			android:id="@+id/rightButton" android:drawableRight="@drawable/arrow_right"
-			android:layout_alignParentRight="true" android:layout_marginTop="4dip"
-			android:layout_weight="1" android:layout_width="160dip"></Button></LinearLayout>
+    <ViewStub
+        android:id="@+id/wizardViewFlipperStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dip"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@color/primary1_transparent"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/leftButton"
+            android:layout_width="160dip"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/arrow_left"
+            android:onClick="onLeftButtonClick" >
+        </Button>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/rightButton"
+            android:layout_width="160dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="4dip"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/arrow_right"
+            android:onClick="onRightButtonClick" >
+        </Button>
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,37 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent" android:layout_width="match_parent">
-	<LinearLayout android:orientation="vertical" android:id="@+id/save_sleep_layout"
-		android:layout_height="match_parent" android:layout_width="match_parent"
-		android:layout_gravity="bottom|fill_vertical|fill_horizontal|fill">
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/save_sleep_rating_txt"
-			android:text="@string/rate_title" android:layout_alignParentTop="true"></TextView>
-		<RatingBar android:layout_height="wrap_content"
-			android:id="@+id/save_sleep_rating_bar" android:numStars="5"
-			android:stepSize="1" android:layout_width="wrap_content"
-			android:layout_gravity="center_horizontal"></RatingBar>
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_below="@+id/save_sleep_rating_bar"
-			android:id="@+id/save_sleep_note_txt" android:text="@string/tags_title"></TextView>
-		<!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-		<EditText android:layout_below="@+id/save_sleep_note_txt"
-			android:layout_width="match_parent" android:id="@+id/save_sleep_note_edit"
-			android:layout_height="wrap_content" android:hint="@string/tags_hint"/>
-		<RelativeLayout android:layout_width="match_parent"
-			android:layout_gravity="bottom" android:layout_height="wrap_content">
-			<Button android:id="@+id/save_sleep_btn_save"
-				android:layout_height="wrap_content" android:drawableLeft="@android:drawable/ic_menu_save"
-				android:text="@string/save" android:onClick="onSaveClick"
-				android:layout_width="wrap_content"
-				android:layout_alignParentBottom="true"
-				android:layout_alignParentLeft="true"></Button>
-			<Button android:id="@+id/save_sleep_btn_discard"
-				android:layout_height="wrap_content" android:drawableLeft="@android:drawable/ic_menu_delete"
-				android:text="@string/discard" android:onClick="onDiscardClick"
-				android:layout_width="wrap_content" android:layout_alignParentRight="true"
-				android:layout_alignParentBottom="true"></Button>
-		</RelativeLayout>
-	</LinearLayout>
+    <LinearLayout
+        android:id="@+id/save_sleep_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|fill_vertical|fill_horizontal|fill"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/save_sleep_rating_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="@string/rate_title" >
+        </TextView>
+
+        <RatingBar
+            android:id="@+id/save_sleep_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:numStars="5"
+            android:stepSize="1" >
+        </RatingBar>
+
+        <TextView
+            android:id="@+id/save_sleep_note_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/save_sleep_rating_bar"
+            android:text="@string/tags_title" >
+        </TextView>
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+
+        <EditText
+            android:id="@+id/save_sleep_note_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/save_sleep_note_txt"
+            android:hint="@string/tags_hint" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" >
+
+            <Button
+                android:id="@+id/save_sleep_btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@android:drawable/ic_menu_save"
+                android:onClick="onSaveClick"
+                android:text="@string/save" >
+            </Button>
+
+            <Button
+                android:id="@+id/save_sleep_btn_discard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@android:drawable/ic_menu_delete"
+                android:onClick="onDiscardClick"
+                android:text="@string/discard" >
+            </Button>
+        </RelativeLayout>
+    </LinearLayout>
+
 </ScrollView>

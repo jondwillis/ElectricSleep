@@ -1,66 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/title_pref_alarms">
-		<CheckBoxPreference android:summaryOn="@string/summary_pref_use_alarm_on"
-			android:summaryOff="@string/summary_pref_use_alarm_off" android:key="@string/pref_use_alarm"
-			android:title="@string/title_pref_use_alarm"
-			android:disableDependentsState="false" android:defaultValue="true"></CheckBoxPreference>
-		<ListPreference android:entries="@array/array_prefs_alarm_window_friendly"
-			android:entryValues="@array/array_prefs_alarm_window_values"
-			android:title="@string/title_pref_alarm_window" android:summary="@string/summary_pref_alarm_window"
-			android:key="@string/pref_alarm_window" android:defaultValue="30"
-			android:dependency="@string/pref_use_alarm"></ListPreference>
-		<CheckBoxPreference android:key="alarm_in_silent_mode"
-			android:title="@string/alarm_in_silent_mode_title" android:summary="@string/alarm_in_silent_mode_summary" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-		<VolumePreference android:dialogTitle="@string/alarm_volume_title"
-			android:streamType="alarm" android:summary="@string/alarm_volume_summary"
-			android:persistent="true" android:title="@string/alarm_volume_title" />
+    <PreferenceCategory android:title="@string/title_pref_alarms" >
 
-		<ListPreference android:key="snooze_duration"
-			android:title="@string/snooze_duration_title" android:entries="@array/snooze_duration_entries"
-			android:entryValues="@array/snooze_duration_values"
-			android:dialogTitle="@string/snooze_duration_title"
-			android:defaultValue="5" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:disableDependentsState="false"
+            android:key="@string/pref_use_alarm"
+            android:summaryOff="@string/summary_pref_use_alarm_off"
+            android:summaryOn="@string/summary_pref_use_alarm_on"
+            android:title="@string/title_pref_use_alarm" >
+        </CheckBoxPreference>
 
-		<ListPreference android:key="volume_button_setting"
-			android:title="@string/volume_button_setting_title"
-			android:dialogTitle="@string/volume_button_dialog_title"
-			android:entries="@array/volume_button_setting_entries"
-			android:entryValues="@array/volume_button_setting_values"
-			android:summary="@string/volume_button_setting_summary"
-			android:defaultValue="0" />
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/title_calibrate">
-		<Preference android:key="@string/pref_calibration"
-			android:title="@string/title_pref_calibration" android:summary="@string/summary_pref_calibration"></Preference>
-		<com.androsz.electricsleepbeta.preference.SeekBarPreference
-			android:summary="@string/summary_alarm_trigger_sensitivity"
-			android:enabled="true" android:title="@string/title_pref_alarm_trigger_sensitivity"
-			android:key="@string/pref_alarm_trigger_sensitivity"
-			android:defaultValue="0.33" />
+        <ListPreference
+            android:defaultValue="30"
+            android:dependency="@string/pref_use_alarm"
+            android:entries="@array/array_prefs_alarm_window_friendly"
+            android:entryValues="@array/array_prefs_alarm_window_values"
+            android:key="@string/pref_alarm_window"
+            android:summary="@string/summary_pref_alarm_window"
+            android:title="@string/title_pref_alarm_window" >
+        </ListPreference>
 
-		<ListPreference android:key="@string/pref_sensor_delay"
-			android:title="@string/title_pref_sensor_delay" android:defaultValue="2"
-			android:summary="@string/summary_pref_sensor_delay" android:entries="@array/array_prefs_sensor_delay_friendly"
-			android:entryValues="@array/array_prefs_sensor_delay_values"></ListPreference>
-		<CheckBoxPreference android:summaryOff="@string/summary_pref_force_screen_off"
-			android:key="@string/pref_force_screen" android:summaryOn="@string/summary_pref_force_screen_on"
-			android:title="@string/title_pref_force_screen" />
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/title_sleep_switches">
-		<CheckBoxPreference android:key="@string/pref_airplane_mode"
-			android:title="@string/title_pref_airplane_mode" android:summaryOff="@string/summary_pref_airplane_mode_off"
-			android:summaryOn="@string/summary_pref_airplane_mode_on" />
+        <CheckBoxPreference
+            android:key="alarm_in_silent_mode"
+            android:summary="@string/alarm_in_silent_mode_summary"
+            android:title="@string/alarm_in_silent_mode_title" />
 
-		<CheckBoxPreference android:summaryOff="@string/summary_pref_silent_mode_off"
-			android:summaryOn="@string/summary_pref_silent_mode_on" android:key="@string/pref_silent_mode"
-			android:title="@string/title_pref_silent_mode"></CheckBoxPreference>
-	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/title_misc">
-		<CheckBoxPreference android:key="@string/pref_analytics"
-			android:summaryOn="@string/summary_pref_analytics_on"
-			android:defaultValue="true" android:title="@string/title_pref_analytics"
-			android:summaryOff="@string/summary_pref_analytics_off"></CheckBoxPreference>
-	</PreferenceCategory>
+        <VolumePreference
+            android:dialogTitle="@string/alarm_volume_title"
+            android:persistent="true"
+            android:streamType="alarm"
+            android:summary="@string/alarm_volume_summary"
+            android:title="@string/alarm_volume_title" />
+
+        <ListPreference
+            android:defaultValue="5"
+            android:dialogTitle="@string/snooze_duration_title"
+            android:entries="@array/snooze_duration_entries"
+            android:entryValues="@array/snooze_duration_values"
+            android:key="snooze_duration"
+            android:title="@string/snooze_duration_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/volume_button_dialog_title"
+            android:entries="@array/volume_button_setting_entries"
+            android:entryValues="@array/volume_button_setting_values"
+            android:key="volume_button_setting"
+            android:summary="@string/volume_button_setting_summary"
+            android:title="@string/volume_button_setting_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_calibrate" >
+
+        <Preference
+            android:key="@string/pref_calibration"
+            android:summary="@string/summary_pref_calibration"
+            android:title="@string/title_pref_calibration" >
+        </Preference>
+
+        <com.androsz.electricsleepbeta.preference.SeekBarPreference
+            android:defaultValue="0.33"
+            android:enabled="true"
+            android:key="@string/pref_alarm_trigger_sensitivity"
+            android:summary="@string/summary_alarm_trigger_sensitivity"
+            android:title="@string/title_pref_alarm_trigger_sensitivity" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/array_prefs_sensor_delay_friendly"
+            android:entryValues="@array/array_prefs_sensor_delay_values"
+            android:key="@string/pref_sensor_delay"
+            android:summary="@string/summary_pref_sensor_delay"
+            android:title="@string/title_pref_sensor_delay" >
+        </ListPreference>
+
+        <CheckBoxPreference
+            android:key="@string/pref_force_screen"
+            android:summaryOff="@string/summary_pref_force_screen_off"
+            android:summaryOn="@string/summary_pref_force_screen_on"
+            android:title="@string/title_pref_force_screen" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_sleep_switches" >
+
+        <CheckBoxPreference
+            android:key="@string/pref_airplane_mode"
+            android:summaryOff="@string/summary_pref_airplane_mode_off"
+            android:summaryOn="@string/summary_pref_airplane_mode_on"
+            android:title="@string/title_pref_airplane_mode" />
+
+        <CheckBoxPreference
+            android:key="@string/pref_silent_mode"
+            android:summaryOff="@string/summary_pref_silent_mode_off"
+            android:summaryOn="@string/summary_pref_silent_mode_on"
+            android:title="@string/title_pref_silent_mode" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_misc" >
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_analytics"
+            android:summaryOff="@string/summary_pref_analytics_off"
+            android:summaryOn="@string/summary_pref_analytics_on"
+            android:title="@string/title_pref_analytics" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
 </PreferenceScreen>

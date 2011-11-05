@@ -1,29 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	<com.viewpagerindicator.TitlePageIndicator
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.viewpagerindicator.TitlePageIndicator
         android:id="@+id/indicator"
-        android:padding="10dip"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        />
-	<LinearLayout android:id="@+id/day_names"
-		android:orientation="horizontal" android:background="@color/daynames_background"
-		android:layout_width="match_parent" android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dip" />
 
-		<TextView android:id="@+id/day0" style="@style/MonthView_DayLabel" />
-		<TextView android:id="@+id/day1" style="@style/MonthView_DayLabel" />
-		<TextView android:id="@+id/day2" style="@style/MonthView_DayLabel" />
-		<TextView android:id="@+id/day3" style="@style/MonthView_DayLabel" />
-		<TextView android:id="@+id/day4" style="@style/MonthView_DayLabel" />
-		<TextView android:id="@+id/day5" style="@style/MonthView_DayLabel" />
-		<TextView android:id="@+id/day6" style="@style/MonthView_DayLabel" />
-	</LinearLayout>
+    <LinearLayout
+        android:id="@+id/day_names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/daynames_background"
+        android:orientation="horizontal" >
 
-	<View android:layout_width="match_parent" android:layout_height="1dip"
-		android:background="@android:drawable/divider_horizontal_dark" />
-	<android.support.v4.view.ViewPager
-		android:layout_width="match_parent" android:layout_height="match_parent"
-		android:id="@+id/monthpager" />
+        <TextView
+            android:id="@+id/day0"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day1"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day2"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day3"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day4"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day5"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day6"
+            style="@style/MonthView_DayLabel" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@android:drawable/divider_horizontal_dark" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/monthpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

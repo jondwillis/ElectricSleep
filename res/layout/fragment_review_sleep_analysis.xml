@@ -1,71 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	<LinearLayout android:layout_height="match_parent"
-		android:layout_width="match_parent" android:orientation="vertical">
-		<RatingBar android:layout_height="wrap_content"
-			android:numStars="5" android:stepSize="1" android:layout_width="wrap_content"
-			android:layout_gravity="center_horizontal" android:isIndicator="true"
-			android:id="@+id/value_rating_bar" />
-		<TableLayout android:layout_height="match_parent"
-			android:layout_width="match_parent">
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_score_text" android:text="@string/sleep_score"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_gravity="right|center_vertical"
-					android:text="x" style="@style/HomeButton" android:textSize="40dip"
-					android:id="@+id/value_score_text"></TextView>
-			</TableRow>
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_duration_text" android:text="@string/duration"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:id="@+id/value_duration_text"
-					android:text="x"></TextView>
-			</TableRow>
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_spikes_text" android:text="@string/spikes"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:id="@+id/value_spikes_text"
-					android:text="x"></TextView>
-			</TableRow>
-			<TableRow android:layout_height="wrap_content"
-				android:layout_width="match_parent">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_fell_asleep_text" android:text="@string/fell_asleep"></TextView>
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-					android:layout_gravity="right|center_vertical" android:id="@+id/value_fell_asleep_text"
-					android:text="x"></TextView>
-			</TableRow>
-			<TableRow android:layout_width="match_parent"
-				android:layout_height="wrap_content">
-				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:layout_weight="1"
-					style="@style/TextHeader" android:layout_gravity="left|center_vertical"
-					android:id="@+id/header_note_text" android:text="@string/note"></TextView>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-			</TableRow>
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" style="@style/TextHeaderTwo"
-				android:id="@+id/value_note_text" android:text="x"
-				android:layout_gravity="right" android:gravity="left"></TextView>
-		</TableLayout>
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RatingBar
+            android:id="@+id/value_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="1" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/header_score_text"
+                    style="@style/TextHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/sleep_score" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/value_score_text"
+                    style="@style/HomeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="x"
+                    android:textSize="40dip" >
+                </TextView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/header_duration_text"
+                    style="@style/TextHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/duration" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/value_duration_text"
+                    style="@style/TextHeaderTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="x" >
+                </TextView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/header_spikes_text"
+                    style="@style/TextHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/spikes" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/value_spikes_text"
+                    style="@style/TextHeaderTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="x" >
+                </TextView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/header_fell_asleep_text"
+                    style="@style/TextHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/fell_asleep" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/value_fell_asleep_text"
+                    style="@style/TextHeaderTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="x" >
+                </TextView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/header_note_text"
+                    style="@style/TextHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/note" >
+                </TextView>
+            </TableRow>
+
+            <TextView
+                android:id="@+id/value_note_text"
+                style="@style/TextHeaderTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="left"
+                android:text="x" >
+            </TextView>
+        </TableLayout>
+    </LinearLayout>
+
 </ScrollView>
