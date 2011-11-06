@@ -7,14 +7,9 @@
         android:title="@string/welcome_tutorial"></item>
 
     <item
-        android:id="@+id/menu_item_about"
-        android:icon="@android:drawable/ic_menu_info_details"
-        android:title="@string/about"></item>
-
-    <item
-        android:id="@+id/menu_item_donate"
+        android:id="@+id/menu_item_calibrate"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/donate"></item>
+        android:title="@string/calibrate"></item>
 
     <item
         android:id="@+id/menu_item_report"

@@ -1,5 +1,8 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.util.List;
+
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +11,9 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity.Header;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -16,8 +21,7 @@ import android.widget.Toast;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.preference.HostPreferenceActivity;
 
-public class SettingsActivity extends HostPreferenceActivity implements
-		Preference.OnPreferenceChangeListener {
+public class SettingsActivity extends HostPreferenceActivity {
 
 	private static final int ALARM_STREAM_TYPE_BIT = 1 << AudioManager.STREAM_ALARM;
 	public static double DEFAULT_ALARM_SENSITIVITY = 0.33;
@@ -39,35 +43,141 @@ public class SettingsActivity extends HostPreferenceActivity implements
 
 	@Override
 	protected int getContentAreaLayoutId() {
-		return R.xml.settings;
+		return NO_CONTENT;
 	}
 
 	@Override
 	protected String getPreferencesName() {
 		return PREFERENCES;
 	}
+	
+	/**
+	 * This fragment shows the preferences for the first header.
+	 */
+	public static class AlarmsPreferenceFragment extends PreferenceFragment implements
+	Preference.OnPreferenceChangeListener {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+
+			// Load the preferences from an XML resource
+			addPreferencesFromResource(R.xml.settings_fragment_alarms);
+			refresh(this.getActivity());
+		}
+		
+
+		private void refresh(Context c) {
+			final CheckBoxPreference alarmInSilentModePref = (CheckBoxPreference) findPreference(KEY_ALARM_IN_SILENT_MODE);
+			final int silentModeStreams = Settings.System.getInt(c.getContentResolver(),
+					Settings.System.MODE_RINGER_STREAMS_AFFECTED, 0);
+			alarmInSilentModePref.setChecked((silentModeStreams & ALARM_STREAM_TYPE_BIT) == 0);
+
+			final ListPreference snooze = (ListPreference) findPreference(KEY_ALARM_SNOOZE);
+			snooze.setSummary(snooze.getEntry());
+			snooze.setOnPreferenceChangeListener(this);
+		}
+		
+		@Override
+		public boolean onPreferenceChange(final Preference pref, final Object newValue) {
+			final ListPreference listPref = (ListPreference) pref;
+			final int idx = listPref.findIndexOfValue((String) newValue);
+			listPref.setSummary(listPref.getEntries()[idx]);
+			return true;
+		}
+
+		@Override
+		public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen,
+				final Preference preference) {
+			if (KEY_ALARM_IN_SILENT_MODE.equals(preference.getKey())) {
+				final CheckBoxPreference pref = (CheckBoxPreference) preference;
+				int ringerModeStreamTypes = Settings.System.getInt(preferenceScreen.getContext().getContentResolver(),
+						Settings.System.MODE_RINGER_STREAMS_AFFECTED, 0);
+
+				if (pref.isChecked()) {
+					ringerModeStreamTypes &= ~ALARM_STREAM_TYPE_BIT;
+				} else {
+					ringerModeStreamTypes |= ALARM_STREAM_TYPE_BIT;
+				}
+
+				Settings.System.putInt(preferenceScreen.getContext().getContentResolver(),
+						Settings.System.MODE_RINGER_STREAMS_AFFECTED, ringerModeStreamTypes);
+
+				return true;
+			}
+
+			return super.onPreferenceTreeClick(preferenceScreen, preference);
+		}
+	}
+
+	/**
+	 * This fragment shows the preferences for the first header.
+	 */
+	public static class SensorsPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+
+			// Load the preferences from an XML resource
+			addPreferencesFromResource(R.xml.settings_fragment_sensors);
+			
+			findPreference(getText(R.string.pref_calibration)).setOnPreferenceClickListener(
+					new OnPreferenceClickListener() {
+
+						@Override
+						public boolean onPreferenceClick(final Preference preference) {
+							startActivity(new Intent(getActivity(),
+									CalibrationWizardActivity.class));
+							return true;
+						}
+					});
+		}
+	}
+
+	/**
+	 * This fragment shows the preferences for the first header.
+	 */
+	public static class SleepPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+
+			// Load the preferences from an XML resource
+			addPreferencesFromResource(R.xml.settings_fragment_sleep);
+		}
+	}
+
+	/**
+	 * This fragment shows the preferences for the first header.
+	 */
+	public static class MiscPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+
+			// Load the preferences from an XML resource
+			addPreferencesFromResource(R.xml.settings_fragment_misc);
+		}
+	}
+
+	/**
+	 * Populate the activity with the top-level headers.
+	 */
+	@Override
+	public void onBuildHeaders(List<Header> target) {
+		loadHeadersFromResource(R.xml.settings_headers, target);
+	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		findPreference(getText(R.string.pref_calibration)).setOnPreferenceClickListener(
-				new OnPreferenceClickListener() {
-
-					@Override
-					public boolean onPreferenceClick(final Preference preference) {
-						startActivity(new Intent(SettingsActivity.this,
-								CalibrationWizardActivity.class));
-						return true;
-					}
-				});
-
+		
 		final SharedPreferences serviceIsRunningPrefs = getSharedPreferences(
 				SleepMonitoringService.SERVICE_IS_RUNNING, Context.MODE_PRIVATE);
 		if (serviceIsRunningPrefs.getBoolean("serviceIsRunning", false)) {
 			Toast.makeText(this, R.string.changes_made_to_these_settings, Toast.LENGTH_LONG).show();
 		}
 	}
+	
 
 	@Override
 	protected void onDestroy() {
@@ -85,53 +195,5 @@ public class SettingsActivity extends HostPreferenceActivity implements
 			}
 		}).start();
 
-	}
-
-	@Override
-	public boolean onPreferenceChange(final Preference pref, final Object newValue) {
-		final ListPreference listPref = (ListPreference) pref;
-		final int idx = listPref.findIndexOfValue((String) newValue);
-		listPref.setSummary(listPref.getEntries()[idx]);
-		return true;
-	}
-
-	@Override
-	public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen,
-			final Preference preference) {
-		if (KEY_ALARM_IN_SILENT_MODE.equals(preference.getKey())) {
-			final CheckBoxPreference pref = (CheckBoxPreference) preference;
-			int ringerModeStreamTypes = Settings.System.getInt(getContentResolver(),
-					Settings.System.MODE_RINGER_STREAMS_AFFECTED, 0);
-
-			if (pref.isChecked()) {
-				ringerModeStreamTypes &= ~ALARM_STREAM_TYPE_BIT;
-			} else {
-				ringerModeStreamTypes |= ALARM_STREAM_TYPE_BIT;
-			}
-
-			Settings.System.putInt(getContentResolver(),
-					Settings.System.MODE_RINGER_STREAMS_AFFECTED, ringerModeStreamTypes);
-
-			return true;
-		}
-
-		return super.onPreferenceTreeClick(preferenceScreen, preference);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		refresh();
-	}
-
-	private void refresh() {
-		final CheckBoxPreference alarmInSilentModePref = (CheckBoxPreference) findPreference(KEY_ALARM_IN_SILENT_MODE);
-		final int silentModeStreams = Settings.System.getInt(getContentResolver(),
-				Settings.System.MODE_RINGER_STREAMS_AFFECTED, 0);
-		alarmInSilentModePref.setChecked((silentModeStreams & ALARM_STREAM_TYPE_BIT) == 0);
-
-		final ListPreference snooze = (ListPreference) findPreference(KEY_ALARM_SNOOZE);
-		snooze.setSummary(snooze.getEntry());
-		snooze.setOnPreferenceChangeListener(this);
 	}
 }

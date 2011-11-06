@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/accelerometer" >
+
+        <Preference
+            android:key="@string/pref_calibration"
+            android:summary="@string/summary_pref_calibration"
+            android:title="@string/title_pref_calibration" >
+        </Preference>
+
+        <com.androsz.electricsleepbeta.preference.SeekBarPreference
+            android:defaultValue="0.33"
+            android:enabled="true"
+            android:key="@string/pref_alarm_trigger_sensitivity"
+            android:summary="@string/summary_alarm_trigger_sensitivity"
+            android:title="@string/title_pref_alarm_trigger_sensitivity" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/array_prefs_sensor_delay_friendly"
+            android:entryValues="@array/array_prefs_sensor_delay_values"
+            android:key="@string/pref_sensor_delay"
+            android:summary="@string/summary_pref_sensor_delay"
+            android:title="@string/title_pref_sensor_delay" >
+        </ListPreference>
+
+        <CheckBoxPreference
+            android:key="@string/pref_force_screen"
+            android:summaryOff="@string/summary_pref_force_screen_off"
+            android:summaryOn="@string/summary_pref_force_screen_on"
+            android:title="@string/title_pref_force_screen" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

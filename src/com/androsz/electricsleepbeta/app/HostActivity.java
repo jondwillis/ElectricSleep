@@ -108,12 +108,12 @@ public abstract class HostActivity extends AnalyticActivity {
 		case R.id.menu_item_tutorial:
 			startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
 			break;
-		case R.id.menu_item_about:
-			startActivity(new Intent(this, AboutActivity.class));
+		case R.id.menu_item_calibrate:
+			startActivity(new Intent(this, CalibrationWizardActivity.class));
 			break;
-		case R.id.menu_item_donate:
-			trackPageView("donate");
-			final Uri marketUri = Uri.parse("market://details?id=com.androsz.electricsleepdonate");
+		case R.id.menu_item_rate:
+			trackPageView("rate");
+			final Uri marketUri = Uri.parse("market://details?id=com.myzeo.electricsleep");
 			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
 			try {
 				startActivity(marketIntent);

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/title_misc" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_analytics"
+            android:summaryOff="@string/summary_pref_analytics_off"
+            android:summaryOn="@string/summary_pref_analytics_on"
+            android:title="@string/title_pref_analytics" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

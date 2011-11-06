@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <header
+        android:fragment="com.androsz.electricsleepbeta.app.SettingsActivity$AlarmsPreferenceFragment"
+        android:title="@string/title_pref_alarms" />
+
+    <header
+        android:fragment="com.androsz.electricsleepbeta.app.SettingsActivity$SensorsPreferenceFragment"
+        android:title="@string/sensors" />
+
+    <header
+        android:fragment="com.androsz.electricsleepbeta.app.SettingsActivity$SleepPreferenceFragment"
+        android:title="@string/title_sleep" />
+
+    <header
+        android:fragment="com.androsz.electricsleepbeta.app.SettingsActivity$MiscPreferenceFragment"
+        android:title="@string/title_misc" />
+
+    <header
+        android:summary="View Version and Author Info"
+        android:title="@string/about" >
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.android.com" />
+    </header>
+
+    <header
+        android:summary="Rate ElectricSleep on the Android Market"
+        android:title="Rate" >
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://market.android.com/details?id=com.androsz.electricsleepbeta&amp;referrer=utm_source%3Dmarket_rate%26utm_medium%3Dlink%26utm_campaign%3DElectricSleep" />
+    </header>
+
+    <header android:title="License" >
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.android.com" />
+    </header>
+
+</preference-headers>

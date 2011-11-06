@@ -14,6 +14,7 @@
 
         <ListPreference
             android:defaultValue="30"
+            android:layout="?android:attr/preferenceLayoutChild"
             android:dependency="@string/pref_use_alarm"
             android:entries="@array/array_prefs_alarm_window_friendly"
             android:entryValues="@array/array_prefs_alarm_window_values"

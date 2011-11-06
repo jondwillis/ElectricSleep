@@ -731,5 +731,9 @@
     <string name="export_all">Export All</string>
     <string name="delete_all">Delete All</string>
     <string name="failed_to_open_market">Failed to open market. Your Android Market may not be up to date.</string>
+    <string name="rate">Rate</string>
+    <string name="sensors">Sensors</string>
+    <string name="accelerometer">Accelerometer</string>
+    <string name="calibrate_and_manage_sensors">Calibrate and manage sensors</string>
 
 </resources>

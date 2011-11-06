@@ -18,6 +18,8 @@ import com.androsz.electricsleepbeta.app.HomeActivity;
 
 public abstract class HostPreferenceActivity extends SherlockPreferenceActivity {
 
+	protected static final int NO_CONTENT = 0;
+
 	protected abstract int getContentAreaLayoutId();
 
 	protected abstract String getPreferencesName();
@@ -29,11 +31,13 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		final ListView lvw = getListView();
 		lvw.setBackgroundColor(Color.BLACK);
 
-		if (getPreferencesName() != null) {
-			getPreferenceManager().setSharedPreferencesName(getPreferencesName());
-		}
+		//if (getPreferencesName() != null) {
+		//	getPreferenceManager().setSharedPreferencesName(getPreferencesName());
+		//}
 
-		addPreferencesFromResource(getContentAreaLayoutId());
+		if (getContentAreaLayoutId() != NO_CONTENT) {
+			addPreferencesFromResource(getContentAreaLayoutId());
+		}
 
 		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
 		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/title_sleep_switches" >
+
+        <CheckBoxPreference
+            android:key="@string/pref_airplane_mode"
+            android:summaryOff="@string/summary_pref_airplane_mode_off"
+            android:summaryOn="@string/summary_pref_airplane_mode_on"
+            android:title="@string/title_pref_airplane_mode" />
+
+        <CheckBoxPreference
+            android:key="@string/pref_silent_mode"
+            android:summaryOff="@string/summary_pref_silent_mode_off"
+            android:summaryOn="@string/summary_pref_silent_mode_on"
+            android:title="@string/title_pref_silent_mode" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
