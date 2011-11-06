@@ -111,16 +111,6 @@ public abstract class HostActivity extends AnalyticActivity {
 		case R.id.menu_item_calibrate:
 			startActivity(new Intent(this, CalibrationWizardActivity.class));
 			break;
-		case R.id.menu_item_rate:
-			trackPageView("rate");
-			final Uri marketUri = Uri.parse("market://details?id=com.myzeo.electricsleep");
-			final Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-			try {
-				startActivity(marketIntent);
-			} catch (ActivityNotFoundException anfe) {
-				Toast.makeText(this, R.string.failed_to_open_market, Toast.LENGTH_LONG).show();
-			}
-			break;
 		case R.id.menu_item_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			break;
