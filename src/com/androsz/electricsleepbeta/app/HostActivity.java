@@ -27,13 +27,6 @@ public abstract class HostActivity extends AnalyticActivity {
 
 	static ColorMatrixColorFilter COLOR_FILTER;
 
-	// private AdView adView;
-
-	/*
-	 * @Override protected void onDestroy() { // Destroy the AdView.
-	 * adView.destroy(); super.onDestroy(); }
-	 */
-
 	static {
 		// COLOR_FILTER = new PorterDuffColorFilter(Color.WHITE,
 		// PorterDuff.Mode.MULTIPLY);
