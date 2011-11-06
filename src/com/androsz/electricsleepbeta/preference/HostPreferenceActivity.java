@@ -1,20 +1,12 @@
 package com.androsz.electricsleepbeta.preference;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
 import android.support.v4.app.SherlockPreferenceActivity;
 import android.support.v4.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
-import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.HomeActivity;
+import com.androsz.electricsleepbeta.app.HostActivity;
 
 public abstract class HostPreferenceActivity extends SherlockPreferenceActivity {
 
@@ -39,19 +31,7 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 			addPreferencesFromResource(getContentAreaLayoutId());
 		}
 
-		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
-		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-		bitmapDrawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-		final ActionBar bar = getSupportActionBar();
-		bar.setBackgroundDrawable(bitmapDrawable);
-
-		bar.setDisplayHomeAsUpEnabled(true);
-	}
-
-	public void onClick(final View v) {
-		final Intent intent = new Intent(v.getContext(), HomeActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		HostActivity.prepareActionBar(this);
 	}
 
 	@Override

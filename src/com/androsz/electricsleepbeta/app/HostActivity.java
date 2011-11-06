@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
@@ -47,14 +48,18 @@ public abstract class HostActivity extends AnalyticActivity {
 		root.setBackgroundColor(Color.BLACK);
 		setContentView(root);
 
+		prepareActionBar(this);
+	}
+	
+	public static void prepareActionBar(SupportActivity supportActivity)
+	{
 		// Fetch the tile bitmap from resources
-		final Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.actionbar_bg);
+		final Bitmap bmp = BitmapFactory.decodeResource(supportActivity.getResources(), R.drawable.actionbar_bg);
 		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
 		bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);
 		bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
-		final ActionBar bar = getSupportActionBar();
+		final ActionBar bar = supportActivity.getSupportActionBar();
 		bar.setBackgroundDrawable(bitmapDrawable);
-
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 

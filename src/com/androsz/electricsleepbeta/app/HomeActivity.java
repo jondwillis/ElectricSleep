@@ -186,7 +186,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				sleepChart.sync(cursor);
 			} catch (final Exception e) {
 			}
-			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 3);
+			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2);
 			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text));
 
 			cursor.moveToFirst();
