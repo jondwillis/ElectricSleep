@@ -24,6 +24,17 @@ public abstract class AnalyticFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		// Need to do this for every activity that uses google analytics
+		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY, getActivity().getApplication())
+				.onStartSession();
+		
 		String versionName = "?";
 		final Activity a = getActivity();
 		try {
@@ -34,9 +45,19 @@ public abstract class AnalyticFragment extends Fragment {
 
 		GoogleAnalyticsTracker.getInstance().setProductVersion(a.getPackageName(), versionName);
 
-		// Need to do this for every activity that uses google analytics
-		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY, getActivity().getApplication())
-				.incrementSession();
+		
+		// Example of how to track a pageview event
+		trackPageView(getClass().getSimpleName());
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		
+		GoogleAnalyticsTracker.getInstance().dispatch();
+
+		GoogleAnalyticsSessionHelper.getExistingInstance().onStopSession();
 	}
 
 	@Override
@@ -48,48 +69,11 @@ public abstract class AnalyticFragment extends Fragment {
 		return view;
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-
-		GoogleAnalyticsTracker.getInstance().dispatch();
-
-		GoogleAnalyticsSessionHelper.getExistingInstance().decrementSession();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		// Example of how to track a pageview event
-		trackPageView(getClass().getSimpleName());
-	}
-
 	protected void trackEvent(final String label, final int value) {
-		new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				try {
-					GoogleAnalyticsTracker.getInstance().trackEvent(
-							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
-				} catch (final Exception whocares) {
-				}
-				return null;
-			}
-		}.execute();
-
+		GoogleAnalyticsSessionHelper.trackEvent(label, value);
 	}
 
 	protected void trackPageView(final String pageUrl) {
-		new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				try {
-					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
-				} catch (final Exception whocares) {
-				}
-				return null;
-			}
-		}.execute();
-	}
+		GoogleAnalyticsSessionHelper.trackPageView(pageUrl);
+	}	
 }

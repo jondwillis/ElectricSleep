@@ -1,6 +1,9 @@
 package com.androsz.electricsleepbeta.util;
 
 import android.app.Application;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Build.VERSION;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -37,7 +40,7 @@ public class GoogleAnalyticsSessionHelper {
 		return INSTANCE;
 	}
 
-	public void incrementSession() {
+	public void onStartSession() {
 		if (sessionCount == 0) {
 			GoogleAnalyticsTracker.getInstance().startNewSession(key, appContext);
 		}
@@ -45,11 +48,39 @@ public class GoogleAnalyticsSessionHelper {
 		sessionCount++;
 	}
 
-	public void decrementSession() {
-		if (sessionCount > 0) {
-			sessionCount--;
-		} else {
+	public void onStopSession() {
+		sessionCount--;
+		if(sessionCount < 1)
+		{
+			sessionCount = 0;
 			GoogleAnalyticsTracker.getInstance().stopSession();
 		}
+	}
+
+	public static void trackEvent(final String label, final int value) {
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					GoogleAnalyticsTracker.getInstance().trackEvent(
+							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
+				} catch (final Exception whocares) {
+				}
+				return null;
+			}
+		}.execute();
+	}
+	
+	public static void trackPageView(final String pageUrl) {
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
+				} catch (final Exception whocares) {
+				}
+				return null;
+			}
+		}.execute();
 	}
 }
