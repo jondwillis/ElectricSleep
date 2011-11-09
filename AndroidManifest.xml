@@ -33,6 +33,7 @@
     <application
         android:debuggable="true"
         android:hardwareAccelerated="true"
+        android:uiOptions="splitActionBarWhenNarrow"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name="com.androsz.electricsleepbeta.app.StrictModeWhenDebuggableApplication"

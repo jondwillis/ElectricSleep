@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionManager;
+import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class AnalyticFragment extends Fragment {
@@ -35,8 +35,8 @@ public abstract class AnalyticFragment extends Fragment {
 		GoogleAnalyticsTracker.getInstance().setProductVersion(a.getPackageName(), versionName);
 
 		// Need to do this for every activity that uses google analytics
-		GoogleAnalyticsSessionManager.getInstance(getActivity().getApplication())
-				.incrementActivityCount();
+		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY, getActivity().getApplication())
+				.incrementSession();
 	}
 
 	@Override
@@ -52,11 +52,9 @@ public abstract class AnalyticFragment extends Fragment {
 	public void onDestroy() {
 		super.onDestroy();
 
-		// Purge analytics so they don't hold references to this activity
 		GoogleAnalyticsTracker.getInstance().dispatch();
 
-		// Need to do this for every activity that uses google analytics
-		GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();
+		GoogleAnalyticsSessionHelper.getExistingInstance().decrementSession();
 	}
 
 	@Override

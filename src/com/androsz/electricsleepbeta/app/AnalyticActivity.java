@@ -1,5 +1,6 @@
 package com.androsz.electricsleepbeta.app;
 
+import android.app.Application;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -7,14 +8,18 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionManager;
+import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class AnalyticActivity extends FragmentActivity {
 
+	public static final String KEY = "UA-19363335-1";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		GoogleAnalyticsSessionHelper.getInstance(KEY, getApplication()).incrementSession();
 
 		String versionName = "?";
 		try {
@@ -31,20 +36,15 @@ public abstract class AnalyticActivity extends FragmentActivity {
 		GoogleAnalyticsTracker.getInstance().setCustomVar(2, versionName,
 				Build.MODEL + "-" + Integer.toString(VERSION.SDK_INT));
 
-		GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
-
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 
-		// Purge analytics so they don't hold references to this
-		// activity
 		GoogleAnalyticsTracker.getInstance().dispatch();
 
-		// Need to do this for every activity that uses google analytics
-		GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();
+		GoogleAnalyticsSessionHelper.getExistingInstance().decrementSession();
 	}
 
 	@Override
