@@ -13,6 +13,7 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,70 +31,6 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
  * offers to users.
  */
 public class HomeActivity extends HostActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	/*
-	 * private class LoadLastSleepChartTask extends AsyncTask<String, Void,
-	 * Cursor> {
-	 * 
-	 * @Override protected Cursor doInBackground(String... params) { // TODO:
-	 * CursorLoader return SleepSessions.getSleepMatches(HomeActivity.this,
-	 * params[0], new String[] { SleepSessions.MainTable.KEY_TITLE });//
-	 * managedQuery(SleepSessions.MainTable.CONTENT_URI, // null, // null, //
-	 * new String[] { params[0] }, SleepSessions.MainTable.KEY_TITLE); }
-	 * 
-	 * @Override protected void onPostExecute(final Cursor cursor) { final
-	 * TextView lastSleepTitleText = (TextView)
-	 * findViewById(R.id.home_last_sleep_title_text); final TextView
-	 * reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
-	 * final ViewGroup container = (ViewGroup)
-	 * findViewById(R.id.home_stats_container); if (cursor == null) {
-	 * container.setVisibility(View.GONE); reviewTitleText
-	 * .setText(getString(R.string.home_review_title_text_empty));
-	 * lastSleepTitleText
-	 * .setText(getString(R.string.home_last_sleep_title_text_empty)); } else {
-	 * 
-	 * final TextView avgScoreText = (TextView)
-	 * findViewById(R.id.value_score_text); final TextView avgDurationText =
-	 * (TextView) findViewById(R.id.value_duration_text); final TextView
-	 * avgSpikesText = (TextView) findViewById(R.id.value_spikes_text); final
-	 * TextView avgFellAsleepText = (TextView)
-	 * findViewById(R.id.value_fell_asleep_text); cursor.moveToLast(); try {
-	 * sleepChart.sync(cursor); } catch (final StreamCorruptedException e) {
-	 * e.printStackTrace(); } catch (final IllegalArgumentException e) {
-	 * e.printStackTrace(); } catch (final IOException e) { e.printStackTrace();
-	 * } catch (final ClassNotFoundException e) { e.printStackTrace(); }
-	 * sleepChart.setMinimumHeight(MathUtils
-	 * .getAbsoluteScreenHeightPx(HomeActivity.this) / 3); lastSleepTitleText
-	 * .setText(getString(R.string.home_last_sleep_title_text));
-	 * 
-	 * cursor.moveToFirst(); int avgSleepScore = 0; long avgDuration = 0; int
-	 * avgSpikes = 0; long avgFellAsleep = 0; int count = 0; do { count++; final
-	 * SleepSession sleepRecord = new SleepSession(cursor); avgSleepScore +=
-	 * sleepRecord.getSleepScore(); avgDuration += sleepRecord.duration;
-	 * avgSpikes += sleepRecord.spikes; avgFellAsleep +=
-	 * sleepRecord.getTimeToFallAsleep(); } while (cursor.moveToNext());
-	 * 
-	 * final float invCount = 1.0f / count; avgSleepScore *= invCount;
-	 * avgDuration *= invCount; avgSpikes *= invCount; avgFellAsleep *=
-	 * invCount;
-	 * 
-	 * avgScoreText.setText(avgSleepScore + "%");
-	 * avgDurationText.setText(SleepSession.getTimespanText( avgDuration,
-	 * getResources())); avgSpikesText.setText(avgSpikes + "");
-	 * avgFellAsleepText.setText(SleepSession.getTimespanText( avgFellAsleep,
-	 * getResources()));
-	 * 
-	 * reviewTitleText .setText(getString(R.string.home_review_title_text));
-	 * container.setVisibility(View.VISIBLE);
-	 * sleepChart.setVisibility(View.VISIBLE); } }
-	 * 
-	 * @Override protected void onPreExecute() { sleepChart = (SleepChart)
-	 * findViewById(R.id.home_sleep_chart); }
-	 * 
-	 * }
-	 */
-
-	// LoadLastSleepChartTask loadLastSleepChartTask;
 
 	private SleepChart sleepChart;
 
@@ -147,14 +84,24 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	/*
 	 * Used for overriding default HostActivity behavior..
-	 * @Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		final boolean result = super.onCreateOptionsMenu(menu);
-		menu.findItem(R.id.menu_item_donate).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		menu.findItem(R.id.menu_item_settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		return result;
-	}*/
+	 * 
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) { final boolean
+	 * result = super.onCreateOptionsMenu(menu);
+	 * menu.findItem(R.id.menu_item_donate).setShowAsAction(
+	 * MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	 * menu.findItem(R.id.menu_item_settings).setShowAsAction(MenuItem.
+	 * SHOW_AS_ACTION_IF_ROOM); return result; }
+	 */
+
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item) {
+		//cancel home as up
+		if (item.getItemId() == android.R.id.home) {
+			return true;
+		}
+		
+		return onOptionsItemSelected(item);
+	}
 
 	public void onHistoryClick(final View v) {
 		startActivity(new Intent(this, HistoryMonthActivity.class));
