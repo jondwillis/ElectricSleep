@@ -20,6 +20,8 @@ public class StrictModeWhenDebuggableApplication extends Application {
 			
 			//Send GA stuff to the android log, not the server.
 			GoogleAnalyticsTracker.getInstance().setDryRun(true);
+			//Who really cares that much about exact location anyway?
+			GoogleAnalyticsTracker.getInstance().setAnonymizeIp(true);
 			
 			// we can only use StrictMode in Gingerbread and beyond.
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {

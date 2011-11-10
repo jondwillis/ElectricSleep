@@ -1,9 +1,11 @@
 package com.androsz.electricsleepbeta.util;
 
 import android.app.Application;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -43,7 +45,23 @@ public class GoogleAnalyticsSessionHelper {
 	public void onStartSession() {
 		if (sessionCount == 0) {
 			GoogleAnalyticsTracker.getInstance().startNewSession(key, appContext);
+			Log.w("analytics", "started session");
 		}
+		
+		String versionName = "?";
+		try {
+			versionName = appContext.getPackageManager().getPackageInfo(appContext.getPackageName(), 0).versionName;
+		} catch (final NameNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		GoogleAnalyticsTracker.getInstance().setProductVersion(appContext.getPackageName(), versionName);
+
+		// I have no idea...
+		GoogleAnalyticsTracker.getInstance().setCustomVar(1, Integer.toString(VERSION.SDK_INT),
+				Build.MODEL);
+		GoogleAnalyticsTracker.getInstance().setCustomVar(2, versionName,
+				Build.MODEL + "-" + Integer.toString(VERSION.SDK_INT));
 
 		sessionCount++;
 	}
@@ -53,7 +71,10 @@ public class GoogleAnalyticsSessionHelper {
 		if(sessionCount < 1)
 		{
 			sessionCount = 0;
+			//don't dispatch data to network until we stop
+			GoogleAnalyticsTracker.getInstance().dispatch();
 			GoogleAnalyticsTracker.getInstance().stopSession();
+			Log.w("analytics", "stopped session");
 		}
 	}
 
