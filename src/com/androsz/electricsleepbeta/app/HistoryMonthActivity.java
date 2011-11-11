@@ -1,6 +1,7 @@
 package com.androsz.electricsleepbeta.app;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +13,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.ActionBar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -24,6 +26,7 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -37,11 +40,97 @@ import com.viewpagerindicator.TitleProvider;
 public class HistoryMonthActivity extends HostActivity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
 
+	private final class IndicatorPageChangeListener implements OnPageChangeListener {
+		private final TitlePageIndicator indicator;
+
+		private IndicatorPageChangeListener(TitlePageIndicator indicator) {
+			this.indicator = indicator;
+		}
+
+		@Override
+		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			lastPosition = position;
+		}
+
+		private int lastSettledPosition = 1;
+		private int lastPosition = 1;
+
+		@Override
+		public void onPageScrollStateChanged(int state) {
+
+			if (state == ViewPager.SCROLL_STATE_IDLE) {
+
+				if (lastSettledPosition == lastPosition)
+					return;
+
+				MonthView leftMonth = (MonthView) monthPager.getChildAt(0);
+				MonthView centerMonth = (MonthView) monthPager.getChildAt(1);
+				MonthView rightMonth = (MonthView) monthPager.getChildAt(2);
+
+				final Time oldCenterTime = new Time(centerMonth.getTime());
+
+				String[] newTitles = new String[3];
+
+				if (focusedPage == 0) {
+					
+					final Time oldTopTime = new Time(leftMonth.getTime());
+					
+					final Time time = new Time(oldTopTime);
+					time.month--;
+					time.normalize(true);
+
+					// TODO: load and switch shown events
+					leftMonth.setSelectedTime(time);
+					centerMonth.setSelectedTime(oldTopTime);
+					rightMonth.setSelectedTime(oldCenterTime);
+				} else if (focusedPage == 2) {
+					
+					final Time oldBottomTime = new Time(rightMonth.getTime());
+					
+					final Time time = new Time(oldBottomTime);
+					time.month++;
+					time.normalize(true);
+
+					leftMonth.setSelectedTime(oldCenterTime);
+					centerMonth.setSelectedTime(oldBottomTime);
+					rightMonth.setSelectedTime(time);
+				}
+
+				newTitles[0] = Utils
+						.formatMonthYear(HistoryMonthActivity.this, leftMonth.getTime());
+				newTitles[1] = Utils.formatMonthYear(HistoryMonthActivity.this,
+						centerMonth.getTime());
+				newTitles[2] = Utils.formatMonthYear(HistoryMonthActivity.this,
+						rightMonth.getTime());
+
+				monthAdapter.setTitles(newTitles);
+
+				// always set to middle page to continue to be able to
+				// scroll up/down
+				indicator.setCurrentItem(1, false);
+			}
+		}
+
+		@Override
+		public void onPageSelected(int position) {
+			focusedPage = position;
+		}
+	}
+
 	private class MonthPagerAdapter extends PagerAdapter implements TitleProvider {
 
-		ViewPager container;
+		private String[] titles = new String[] { "", "", "" };
 
-		private MonthView addMonthViewAt(int position, Time time) {
+		public String[] getTitles() {
+			return titles;
+		}
+
+		public void setTitles(String[] titles) {
+			this.titles = titles.clone();
+		}
+
+		public MonthView addMonthViewAt(ViewPager container, int position, Time time) {
+			Log.w("addMonthViewAt", String.format("addMonthViewAt %d", position));
 			final MonthView mv = new MonthView(HistoryMonthActivity.this);
 			mv.setLayoutParams(new ViewSwitcher.LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -54,7 +143,8 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public void destroyItem(View container, int position, Object object) {
-			((ViewPager) container).removeViewAt(position);
+			Log.w("destroyItem", String.format("destroyItem %d", position));
+			// ((ViewPager) container).removeViewAt(position);
 		}
 
 		@Override
@@ -68,34 +158,38 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public String getTitle(int position) {
-			final MonthView mv = (MonthView) container.getChildAt(position);
-			return Utils.formatMonthYear(HistoryMonthActivity.this, mv.getTime());
+			String title = titles[position];
+			return title;
 		}
 
 		@Override
 		public Object instantiateItem(View container, int position) {
-			this.container = (ViewPager) container;
-			final Time time = new Time();
-			time.setToNow();
+			Log.w("instantiateItem", String.format("instantiateItem %d", position));
+			MonthView childAt = (MonthView) ((ViewPager) container).getChildAt(position);
+			if (childAt == null) {
+				final Time time = new Time();
+				time.setToNow();
 
-			// set to first day in month. this prevents errors when the current
-			// month (TODAY) has more days than the neighbor month.
-			time.set(1, time.month, time.year);
-			time.month += (position-1); // add the offset from the center time
-			time.normalize(true);
+				// set to first day in month. this prevents errors when the
+				// current
+				// month (TODAY) has more days than the neighbor month.
+				time.set(1, time.month, time.year);
+				time.month += (position - 1); // add the offset from the center
+												// time
+				time.normalize(true);
 
-			return addMonthViewAt(position, time);
+				MonthView mv = addMonthViewAt((ViewPager) container, position, time);
+
+				titles[position] = Utils.formatMonthYear(HistoryMonthActivity.this, mv.getTime());
+
+				return mv;
+			}
+			return childAt;
 		}
 
 		@Override
 		public boolean isViewFromObject(View view, Object object) {
 			return view == object;
-		}
-
-		private MonthView removeMonthViewAt(ViewPager container, int position) {
-			final MonthView mv = (MonthView) container.getChildAt(position);
-			container.removeViewAt(position);
-			return mv;
 		}
 
 		@Override
@@ -153,6 +247,7 @@ public class HistoryMonthActivity extends HostActivity implements
 			}
 		}
 	};
+	private SpinnerAdapter adapter;
 
 	void eventsChanged() {
 		runOnUiThread(new Runnable() {
@@ -218,10 +313,11 @@ public class HistoryMonthActivity extends HostActivity implements
 				sessionsObserver);
 		getSupportLoaderManager().initLoader(0, null, this);
 
-		final long time = Utils.timeFromIntentInMillis(getIntent());
+		ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		final Time now = new Time();
-		now.set(time);
+		now.setToNow();
 
 		// Get first day of week based on locale and populate the day headers
 		startDay = Calendar.getInstance().getFirstDayOfWeek();
@@ -242,70 +338,14 @@ public class HistoryMonthActivity extends HostActivity implements
 			}
 		}
 
-		// setTitle(Utils.formatMonthYear(this, now));
-
 		monthAdapter = new MonthPagerAdapter();
 		monthPager = (ViewPager) findViewById(R.id.monthpager);
 		monthPager.setAdapter(monthAdapter);
+
 		final TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
+		indicator.setFooterColor(getResources().getColor(R.color.primary1));
 		indicator.setViewPager(monthPager, 1);
-		indicator.setOnPageChangeListener(new OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-				if (state == ViewPager.SCROLL_STATE_IDLE) {
-
-					final Time oldTopTime = new Time(((MonthView) monthPager.getChildAt(0))
-							.getTime());
-					final Time oldCenterTime = new Time(((MonthView) monthPager.getChildAt(1))
-							.getTime());
-					final Time oldBottomTime = new Time(((MonthView) monthPager.getChildAt(2))
-							.getTime());
-
-					if (focusedPage == 0) {
-						// HistoryMonthActivity.this.setTitle(Utils
-						// .formatMonthYear(HistoryMonthActivity.this,
-						// oldTopTime));
-
-						final Time time = new Time(oldTopTime);
-						time.month--;
-						time.normalize(true);
-
-						// TODO: load and switch shown events
-						((MonthView) monthPager.getChildAt(0)).setSelectedTime(time);
-						((MonthView) monthPager.getChildAt(1)).setSelectedTime(oldTopTime);
-						((MonthView) monthPager.getChildAt(2)).setSelectedTime(oldCenterTime);
-
-					} else if (focusedPage == 2) {
-
-						// HistoryMonthActivity.this.setTitle(Utils
-						// .formatMonthYear(HistoryMonthActivity.this,
-						// oldBottomTime));
-
-						final Time time = new Time(oldBottomTime);
-						time.month++;
-						time.normalize(true);
-
-						((MonthView) monthPager.getChildAt(0)).setSelectedTime(oldCenterTime);
-						((MonthView) monthPager.getChildAt(1)).setSelectedTime(oldBottomTime);
-						((MonthView) monthPager.getChildAt(2)).setSelectedTime(time);
-					}
-
-					// always set to middle page to continue to be able to
-					// scroll up/down
-					indicator.setCurrentItem(1, false);
-				}
-			}
-
-			@Override
-			public void onPageSelected(int position) {
-				focusedPage = position;
-			}
-		});
+		indicator.setOnPageChangeListener(new IndicatorPageChangeListener(indicator));
 	}
 
 	@Override
