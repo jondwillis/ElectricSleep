@@ -100,7 +100,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 			return true;
 		}
 		
-		return onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void onHistoryClick(final View v) {
