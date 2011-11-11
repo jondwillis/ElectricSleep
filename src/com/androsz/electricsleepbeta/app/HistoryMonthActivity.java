@@ -1,7 +1,6 @@
 package com.androsz.electricsleepbeta.app;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import android.content.BroadcastReceiver;
@@ -24,9 +23,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -80,9 +77,9 @@ public class HistoryMonthActivity extends HostActivity implements
 					time.normalize(true);
 
 					// TODO: load and switch shown events
-					leftMonth.setSelectedTime(time);
-					centerMonth.setSelectedTime(oldTopTime);
-					rightMonth.setSelectedTime(oldCenterTime);
+					leftMonth.setTime(time);
+					centerMonth.setTime(oldTopTime);
+					rightMonth.setTime(oldCenterTime);
 				} else if (focusedPage == 2) {
 					
 					final Time oldBottomTime = new Time(rightMonth.getTime());
@@ -91,9 +88,9 @@ public class HistoryMonthActivity extends HostActivity implements
 					time.month++;
 					time.normalize(true);
 
-					leftMonth.setSelectedTime(oldCenterTime);
-					centerMonth.setSelectedTime(oldBottomTime);
-					rightMonth.setSelectedTime(time);
+					leftMonth.setTime(oldCenterTime);
+					centerMonth.setTime(oldBottomTime);
+					rightMonth.setTime(time);
 				}
 
 				newTitles[0] = Utils
@@ -130,7 +127,6 @@ public class HistoryMonthActivity extends HostActivity implements
 		}
 
 		public MonthView addMonthViewAt(ViewPager container, int position, Time time) {
-			Log.w("addMonthViewAt", String.format("addMonthViewAt %d", position));
 			final MonthView mv = new MonthView(HistoryMonthActivity.this);
 			mv.setLayoutParams(new ViewSwitcher.LayoutParams(
 					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -143,7 +139,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public void destroyItem(View container, int position, Object object) {
-			Log.w("destroyItem", String.format("destroyItem %d", position));
+			//simply reuse items...
 			// ((ViewPager) container).removeViewAt(position);
 		}
 
@@ -164,7 +160,6 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public Object instantiateItem(View container, int position) {
-			Log.w("instantiateItem", String.format("instantiateItem %d", position));
 			MonthView childAt = (MonthView) ((ViewPager) container).getChildAt(position);
 			if (childAt == null) {
 				final Time time = new Time();
@@ -247,7 +242,6 @@ public class HistoryMonthActivity extends HostActivity implements
 			}
 		}
 	};
-	private SpinnerAdapter adapter;
 
 	void eventsChanged() {
 		runOnUiThread(new Runnable() {
@@ -323,18 +317,15 @@ public class HistoryMonthActivity extends HostActivity implements
 		startDay = Calendar.getInstance().getFirstDayOfWeek();
 		final int diff = startDay - Calendar.SUNDAY - 1;
 		final int startDay = Utils.getFirstDayOfWeek();
-		final int sundayColor = getResources().getColor(R.color.sunday_text_color);
-		final int saturdayColor = getResources().getColor(R.color.saturday_text_color);
+		final int weekendColor = getResources().getColor(R.color.primary1);
 
 		for (int day = 0; day < 7; day++) {
 			final String dayString = DateUtils.getDayOfWeekString(
 					(DAY_OF_WEEK_KINDS[day] + diff) % 7 + 1, DateUtils.LENGTH_MEDIUM);
 			final TextView label = (TextView) findViewById(DAY_OF_WEEK_LABEL_IDS[day]);
 			label.setText(dayString);
-			if (Utils.isSunday(day, startDay)) {
-				label.setTextColor(sundayColor);
-			} else if (Utils.isSaturday(day, startDay)) {
-				label.setTextColor(saturdayColor);
+			if (Utils.isSunday(day, startDay) || Utils.isSaturday(day, startDay)) {
+				label.setTextColor(weekendColor);
 			}
 		}
 

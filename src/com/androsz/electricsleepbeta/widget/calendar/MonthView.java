@@ -139,7 +139,7 @@ public class MonthView extends View {
 	private Time mToday;
 	private Drawable mTodayBackground;
 
-	private Time mCalendarTime;
+	private Time mViewCalendar;
 
 	public MonthView(HistoryMonthActivity historyMonthActivity) {
 		super(historyMonthActivity);
@@ -450,12 +450,15 @@ public class MonthView extends View {
 			public void run() {
 				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
 				final Time monthStart = mTempTime;
-				monthStart.set(mCalendarTime);
+				monthStart.set(mViewCalendar);
 				monthStart.monthDay = 1;
 				monthStart.hour = 0;
 				monthStart.minute = 0;
 				monthStart.second = 0;
-				final long startOfMonthMillis = monthStart.normalize(true);
+				final long startOfMonthMillis = monthStart.normalize(true /*
+																		 * ignore
+																		 * isDst
+																		 */);
 				mSessions = mParentActivity.getSessionsInInterval(startOfMonthMillis,
 						EVENT_NUM_DAYS);
 				// Clear out event days
@@ -499,7 +502,7 @@ public class MonthView extends View {
 
 		final DayOfMonthCursor c = mCursor;
 		final Time time = mTempTime;
-		time.set(mCalendarTime);
+		time.set(mViewCalendar);
 		time.set(0, 0, 0, time.monthDay, time.month, time.year);
 
 		// Compute the day number from the row and column. If the row and
@@ -513,7 +516,7 @@ public class MonthView extends View {
 
 	public long getSelectedTimeInMillis() {
 		final Time time = mTempTime;
-		time.set(mCalendarTime);
+		time.set(mViewCalendar);
 
 		time.month += mCursor.getSelectedMonthOffset();
 		time.monthDay = mCursor.getSelectedDayOfMonth();
@@ -531,7 +534,7 @@ public class MonthView extends View {
 	}
 
 	public Time getTime() {
-		return mCalendarTime;
+		return mViewCalendar;
 	}
 
 	private int getWeekOfYear(int row, int column, boolean isWithinCurrentMonth, Calendar calendar) {
@@ -569,17 +572,17 @@ public class MonthView extends View {
 	private void init() {
 		setFocusable(true);
 		setClickable(true);
-		mCalendarTime = new Time();
+		mViewCalendar = new Time();
 		final long now = System.currentTimeMillis();
-		mCalendarTime.set(now);
-		mCalendarTime.monthDay = 1;
-		final long millis = mCalendarTime.normalize(true /* ignore DST */);
-		mFirstJulianDay = Time.getJulianDay(millis, mCalendarTime.gmtoff);
+		mViewCalendar.set(now);
+		mViewCalendar.monthDay = 1;
+		final long millis = mViewCalendar.normalize(true /* ignore DST */);
+		mFirstJulianDay = Time.getJulianDay(millis, mViewCalendar.gmtoff);
 		mStartDay = Utils.getFirstDayOfWeek();
-		mCalendarTime.set(now);
+		mViewCalendar.set(now);
 
-		mCursor = new DayOfMonthCursor(mCalendarTime.year, mCalendarTime.month,
-				mCalendarTime.monthDay, mParentActivity.getStartDay());
+		mCursor = new DayOfMonthCursor(mViewCalendar.year, mViewCalendar.month,
+				mViewCalendar.monthDay, mParentActivity.getStartDay());
 		mToday = new Time();
 		mToday.set(System.currentTimeMillis());
 
@@ -757,7 +760,7 @@ public class MonthView extends View {
 		case KeyEvent.KEYCODE_DPAD_UP:
 			if (mCursor.up()) {
 				other = mOtherViewCalendar;
-				other.set(mCalendarTime);
+				other.set(mViewCalendar);
 				other.month -= 1;
 				other.monthDay = mCursor.getSelectedDayOfMonth();
 
@@ -770,7 +773,7 @@ public class MonthView extends View {
 		case KeyEvent.KEYCODE_DPAD_DOWN:
 			if (mCursor.down()) {
 				other = mOtherViewCalendar;
-				other.set(mCalendarTime);
+				other.set(mViewCalendar);
 				other.month += 1;
 				other.monthDay = mCursor.getSelectedDayOfMonth();
 
@@ -783,7 +786,7 @@ public class MonthView extends View {
 		case KeyEvent.KEYCODE_DPAD_LEFT:
 			if (mCursor.left()) {
 				other = mOtherViewCalendar;
-				other.set(mCalendarTime);
+				other.set(mViewCalendar);
 				other.month -= 1;
 				other.monthDay = mCursor.getSelectedDayOfMonth();
 
@@ -796,7 +799,7 @@ public class MonthView extends View {
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			if (mCursor.right()) {
 				other = mOtherViewCalendar;
-				other.set(mCalendarTime);
+				other.set(mViewCalendar);
 				other.month += 1;
 				other.monthDay = mCursor.getSelectedDayOfMonth();
 
@@ -944,28 +947,39 @@ public class MonthView extends View {
 			}
 		}.execute();
 	}
-	
-	public void setTime(Time time)
-	{
-		// Save the selected time so that we can restore it later when we switch
-		// views.
-		mSavedTime.set(time);
 
-		mCalendarTime.set(time);
-		mCalendarTime.monthDay = 1;
-		final long millis = mCalendarTime.normalize(true /* ignore DST */);
-		mFirstJulianDay = Time.getJulianDay(millis, mCalendarTime.gmtoff);
-		mCalendarTime.set(time);
+	public void setTime(Time time) {
+		mViewCalendar.set(time);
+		mViewCalendar.monthDay = 1;
+		final long millis = mViewCalendar.normalize(true /* ignore DST */);
+		mFirstJulianDay = Time.getJulianDay(millis, mViewCalendar.gmtoff);
+		mViewCalendar.set(time);
+
+		mCursor = new DayOfMonthCursor(time.year, time.month, time.monthDay,
+				mCursor.getWeekStartDay());
+		
+		this.mSelectionMode = MonthView.SELECTION_HIDDEN;
+
 		mRedrawScreen = true;
 		invalidate();
 	}
 
 	public void setSelectedTime(Time time) {
+		// Save the selected time so that we can restore it later when we switch
+		// views.
+		mSavedTime.set(time);
+
+		mViewCalendar.set(time);
+		mViewCalendar.monthDay = 1;
+		final long millis = mViewCalendar.normalize(true /* ignore DST */);
+		mFirstJulianDay = Time.getJulianDay(millis, mViewCalendar.gmtoff);
+		mViewCalendar.set(time);
 
 		mCursor = new DayOfMonthCursor(time.year, time.month, time.monthDay,
 				mCursor.getWeekStartDay());
-		
-		setTime(time);
+
+		mRedrawScreen = true;
+		invalidate();
 	}
 
 	public void setSelectionMode(int selectionMode) {
@@ -974,6 +988,6 @@ public class MonthView extends View {
 
 	@Override
 	public String toString() {
-		return Utils.formatMonthYear(getContext(), mCalendarTime);
+		return Utils.formatMonthYear(getContext(), mViewCalendar);
 	}
 }
