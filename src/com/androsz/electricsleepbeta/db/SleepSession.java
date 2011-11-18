@@ -125,7 +125,7 @@ public class SleepSession {
 		return Math.round(chartData.get(chartData.size() - 1).x);
 	}
 
-	public int getEndTimeOfDay() {
+	public long getEndTimeOfDay() {
 		final Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(getEndTime());
 		return cal.get(Calendar.MINUTE) + (cal.get(Calendar.HOUR_OF_DAY) * 60);
@@ -166,7 +166,7 @@ public class SleepSession {
 		return Math.round(chartData.get(0).x);
 	}
 
-	public int getStartTimeOfDay() {
+	public long getStartTimeOfDay() {
 		final Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(getStartTime());
 		return cal.get(Calendar.MINUTE) + (cal.get(Calendar.HOUR_OF_DAY) * 60);

@@ -250,7 +250,7 @@ public class HistoryMonthActivity extends HostActivity implements
 			public void run() {
 				for (int i = 0; i < monthPager.getChildCount(); i++) {
 					final MonthView mv = (MonthView) monthPager.getChildAt(i);
-					mv.forceReloadEvents();
+					mv.forceReloadEvents(mSessions);
 				}
 			}
 		});

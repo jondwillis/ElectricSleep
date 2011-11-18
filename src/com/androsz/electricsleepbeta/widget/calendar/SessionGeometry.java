@@ -138,64 +138,61 @@ public class SessionGeometry {
 		endDay = sessionBounds[3];
 	}
 
-	// Computes the rectangle coordinates of the given event on the screen.
-	// Returns true if the rectangle is visible on the screen.
-	boolean computeEventRect(int date, int left, int top, int cellWidth, SessionGeometry event) {
+	 // Computes the rectangle coordinates of the given event on the screen.
+    // Returns true if the rectangle is visible on the screen.
+    boolean computeEventRect(int date, int left, int top, int cellWidth) {
 
-		final float cellMinuteHeight = mMinuteHeight;
-		final Long startDay = event.startDay;
-		final Long endDay = event.endDay;
+            final float cellMinuteHeight = mMinuteHeight;
 
-		if (startDay > date || endDay < date) {
-			return false;
-		}
+            if (this.startDay > date || this.endDay < date) {
+                    return false;
+            }
 
-		long startTime = event.startTime;
-		long endTime = event.endTime;
 
-		// If the event started on a previous day, then show it starting
-		// at the beginning of this day.
-		if (startDay < date) {
-			startTime = 0;
-		}
+            // If the event started on a previous day, then show it starting
+            // at the beginning of this day.
+            if (this.startDay < date) {
+                    this.startTime = 0;
+            }
 
-		// If the event ends on a future day, then show it extending to
-		// the end of this day.
-		if (endDay > date) {
-			endTime = MINUTES_PER_DAY;
-		}
+            // If the event ends on a future day, then show it extending to
+            // the end of this day.
+            if (this.endDay > date) {
+                    this.endTime = MINUTES_PER_DAY;
+            }
 
-		final int col = event.getColumn();
-		final int maxCols = event.getMaxColumns();
-		final int startHour = (int) (startTime / 60);
-		int endHour = (int) (endTime / 60);
+            final int col = this.getColumn();
+            final int maxCols = this.getMaxColumns();
+            final int startHour = (int) (this.startTime / 60);
+            int endHour = (int) (this.endTime / 60);
 
-		// If the end point aligns on a cell boundary then count it as
-		// ending in the previous cell so that we don't cross the border
-		// between hours.
-		if (endHour * 60 == endTime) {
-			endHour -= 1;
-		}
+            // If the end point aligns on a cell boundary then count it as
+            // ending in the previous cell so that we don't cross the border
+            // between hours.
+            if (endHour * 60 == this.endTime) {
+                    endHour -= 1;
+            }
 
-		event.top = top;
-		event.top += (int) (startTime * cellMinuteHeight);
-		event.top += startHour * mHourGap;
+            this.top = top;
+            this.top += (int) (this.startTime * cellMinuteHeight);
+            this.top += startHour * mHourGap;
 
-		event.bottom = top;
-		event.bottom += (int) (endTime * cellMinuteHeight);
-		event.bottom += endHour * mHourGap;
+            this.bottom = top;
+            this.bottom += (int) (this.endTime * cellMinuteHeight);
+            this.bottom += endHour * this.mHourGap;
 
-		// Make the rectangle be at least mMinEventHeight pixels high
-		if (event.bottom < event.top + mMinEventHeight) {
-			event.bottom = event.top + mMinEventHeight;
-		}
+            // Make the rectangle be at least mMinEventHeight pixels high
+            if (this.bottom < this.top + mMinEventHeight) {
+            	this.bottom = this.top + mMinEventHeight;
+            }
 
-		final float colWidth = (float) (cellWidth - 2 * mCellMargin) / (float) maxCols;
-		event.left = left + mCellMargin + col * colWidth;
-		event.right = event.left + colWidth;
-		return true;
-	}
-
+            final float colWidth = (float) (cellWidth - 2 * mCellMargin)
+                            / (float) maxCols;
+            this.left = left + mCellMargin + col * colWidth;
+            this.right = this.left + colWidth;
+            return true;
+    }
+    
 	/**
 	 * Returns true if this event intersects the selection region.
 	 */

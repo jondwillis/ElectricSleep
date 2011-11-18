@@ -383,14 +383,17 @@ public class MonthView extends View {
 		// Long[]{0L,0L,0L,0L});
 		// allGeometry.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 -
 		// TEXT_TOP_MARGIN) / 24.0f);
-		// allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-		// allGeometry.setHourGap(HOUR_GAP);
+		 //allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+	//allGeometry.setHourGap(HOUR_GAP);
 		for (final Long[] session : mSessions) {
 			final SessionGeometry geometry = new SessionGeometry(session);
-			if (!geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH, geometry)) {
-				continue;
+			float hourHeight = (mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN) / 24.0f;
+			 geometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+			 geometry.setHourGap(HOUR_GAP);
+			geometry.setHourHeight(hourHeight);
+			if (geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH)) {
+				drawEventRect(rect, geometry, canvas, p);
 			}
-			drawEventRect(rect, geometry, canvas, p);
 		}
 
 	}
@@ -444,7 +447,7 @@ public class MonthView extends View {
 		mBitmapRect.right = width;
 	}
 
-	public void forceReloadEvents() {
+	public void forceReloadEvents(final ArrayList<Long[]> sessions) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -459,8 +462,8 @@ public class MonthView extends View {
 																		 * ignore
 																		 * isDst
 																		 */);
-				mSessions = mParentActivity.getSessionsInInterval(startOfMonthMillis,
-						EVENT_NUM_DAYS);
+				mSessions = new ArrayList<Long[]>(sessions);// mParentActivity.getSessionsInInterval(startOfMonthMillis,
+				// EVENT_NUM_DAYS);
 				// Clear out event days
 				Arrays.fill(eventDay, false);
 				// Compute the new set of days with events
@@ -957,7 +960,7 @@ public class MonthView extends View {
 
 		mCursor = new DayOfMonthCursor(time.year, time.month, time.monthDay,
 				mCursor.getWeekStartDay());
-		
+
 		this.mSelectionMode = MonthView.SELECTION_HIDDEN;
 
 		mRedrawScreen = true;

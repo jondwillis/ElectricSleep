@@ -401,7 +401,7 @@ public class SleepSessions {
 
 			do {
 				final SleepSession session = new SleepSession(c);
-				sessions.add(new Long[] { session.getStartTime(), session.getEndTime(),
+				sessions.add(new Long[] { session.getStartTimeOfDay(), session.getEndTimeOfDay(),
 						(long) session.getStartJulianDay(), (long) session.getEndJulianDay() });
 			} while (c.moveToNext());
 			c.close();
