@@ -308,7 +308,7 @@ public class HistoryMonthActivity extends HostActivity implements
 		getSupportLoaderManager().initLoader(0, null, this);
 
 		ActionBar bar = getSupportActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		//bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		final Time now = new Time();
 		now.setToNow();

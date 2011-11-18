@@ -18,34 +18,40 @@
         android:layout_gravity="bottom|center_horizontal"
         android:background="@color/primary1_transparent"
         android:orientation="horizontal" >
-
+        
         <Button
             android:id="@+id/leftButton"
             android:layout_width="160dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="4dip"
             android:layout_weight="1"
             android:drawableLeft="@drawable/arrow_left"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:onClick="onLeftButtonClick" >
+
         </Button>
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="10"
             android:orientation="vertical" >
         </LinearLayout>
-
+
         <Button
             android:id="@+id/rightButton"
             android:layout_width="160dip"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_marginTop="4dip"
             android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:drawableRight="@drawable/arrow_right"
             android:onClick="onRightButtonClick" >
+
         </Button>
     </LinearLayout>
 
