@@ -22,6 +22,7 @@ import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.util.MathUtils;
+import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepChart extends GraphicalView implements Parcelable {
 
@@ -179,7 +180,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 	}
 
 	public void sync(final SleepSession sleepRecord) {
-		xySeriesMovement.setXY(sleepRecord.chartData);
+		xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
 		calibrationLevel = sleepRecord.alarm;
 
 		rating = sleepRecord.rating;

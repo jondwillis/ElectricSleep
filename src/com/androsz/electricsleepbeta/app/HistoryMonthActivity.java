@@ -292,7 +292,6 @@ public class HistoryMonthActivity extends HostActivity implements
 
 			return sessions;
 		}
-
 	}
 
 	public int getStartDay() {
