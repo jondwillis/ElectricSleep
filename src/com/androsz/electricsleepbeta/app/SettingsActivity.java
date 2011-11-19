@@ -43,10 +43,10 @@ public class SettingsActivity extends HostPreferenceActivity {
 	protected int getContentAreaLayoutId() {
 		return R.xml.settings;
 	}
-
+	
 	@Override
-	protected String getPreferencesName() {
-		return PREFERENCES;
+	protected int getHeadersResourceId() {
+		return R.xml.settings_headers;
 	}
 	
 	/**
@@ -157,14 +157,6 @@ public class SettingsActivity extends HostPreferenceActivity {
 		}
 	}
 
-	/**
-	 * Populate the activity with the top-level headers.
-	 */
-	@Override
-	public void onBuildHeaders(List<Header> target) {
-		super.onBuildHeaders(target);
-		loadHeadersFromResource(R.xml.settings_headers, target);
-	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {

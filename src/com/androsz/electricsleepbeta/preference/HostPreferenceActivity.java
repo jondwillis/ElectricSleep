@@ -1,22 +1,39 @@
 package com.androsz.electricsleepbeta.preference;
 
+import java.util.List;
+
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceActivity.Header;
 import android.support.v4.app.SherlockPreferenceActivity;
 import android.support.v4.view.MenuItem;
 import android.widget.ListView;
 
+import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.AnalyticActivity;
 import com.androsz.electricsleepbeta.app.HostActivity;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
-public abstract class HostPreferenceActivity extends SherlockPreferenceActivity implements GoogleAnalyticsTrackerHelper {
+public abstract class HostPreferenceActivity extends SherlockPreferenceActivity implements
+		GoogleAnalyticsTrackerHelper {
 
 	protected abstract int getContentAreaLayoutId();
 
-	protected abstract String getPreferencesName();
+	protected abstract int getHeadersResourceId();
+
+	protected static final int NO_HEADERS = 0;
+
+	/**
+	 * Populate the activity with the top-level headers.
+	 */
+	@Override
+	public void onBuildHeaders(List<Header> target) {
+		if (getHeadersResourceId() != NO_HEADERS) {
+			loadHeadersFromResource(getHeadersResourceId(), target);
+		}
+	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -26,7 +43,7 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		lvw.setBackgroundColor(Color.BLACK);
 
 		//if pre-honeycomb, don't try to use fragments and just load the old-style prefs
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || getHeadersResourceId() == NO_HEADERS)
 		{
 			addPreferencesFromResource(getContentAreaLayoutId());
 			//TODO is this needed anymore? it is inconsistent between API levels
@@ -48,16 +65,16 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		super.onStart();
-		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY, getApplication()).onStartSession();
-		
+		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY, getApplication())
+				.onStartSession();
+
 		trackPageView(getClass().getSimpleName());
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();

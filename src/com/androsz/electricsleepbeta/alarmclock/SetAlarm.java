@@ -136,11 +136,6 @@ public class SetAlarm extends HostPreferenceActivity implements
 	}
 
 	@Override
-	protected String getPreferencesName() {
-		return null;
-	}
-
-	@Override
 	public void onBackPressed() {
 		// In the usual case of viewing an alarm, mTimePickerCancelled is
 		// initialized to false. When creating a new alarm, this value is
@@ -420,5 +415,10 @@ public class SetAlarm extends HostPreferenceActivity implements
 			Log.v("updateTime " + mId);
 		}
 		mTimePref.setSummary(Alarms.formatTime(this, mHour, mMinutes, mRepeatPref.getDaysOfWeek()));
+	}
+
+	@Override
+	protected int getHeadersResourceId() {
+		return NO_HEADERS;
 	}
 }
