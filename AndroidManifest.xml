@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:installLocation="internalOnly"
     package="com.androsz.electricsleepbeta"
     android:versionCode="18"
     android:versionName="1.0" >
@@ -165,7 +164,7 @@
             </intent-filter>
         </service>
 
-        <receiver
+        <!-- <receiver
             android:icon="@drawable/icon"
             android:label="@string/title_sleep"
             android:name="com.androsz.electricsleepbeta.appwidget.SleepWidget" >
@@ -176,7 +175,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidgetprovider_sleep" />
-        </receiver>
+        </receiver> -->
         <receiver android:name="com.androsz.electricsleepbeta.alarmclock.AlarmInitReceiver" >
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
