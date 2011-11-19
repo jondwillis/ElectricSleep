@@ -1,10 +1,8 @@
 package com.androsz.electricsleepbeta.preference;
 
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Build.VERSION;
 import android.support.v4.app.SherlockPreferenceActivity;
 import android.support.v4.view.MenuItem;
 import android.widget.ListView;
@@ -13,11 +11,8 @@ import com.androsz.electricsleepbeta.app.AnalyticActivity;
 import com.androsz.electricsleepbeta.app.HostActivity;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class HostPreferenceActivity extends SherlockPreferenceActivity implements GoogleAnalyticsTrackerHelper {
-
-	protected static final int NO_CONTENT = 0;
 
 	protected abstract int getContentAreaLayoutId();
 
@@ -30,12 +25,14 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		final ListView lvw = getListView();
 		lvw.setBackgroundColor(Color.BLACK);
 
-		//if (getPreferencesName() != null) {
-		//	getPreferenceManager().setSharedPreferencesName(getPreferencesName());
-		//}
-
-		if (getContentAreaLayoutId() != NO_CONTENT) {
+		//if pre-honeycomb, don't try to use fragments and just load the old-style prefs
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+		{
 			addPreferencesFromResource(getContentAreaLayoutId());
+			//TODO is this needed anymore? it is inconsistent between API levels
+			//if (getPreferencesName() != null) {
+			//	getPreferenceManager().setSharedPreferencesName(getPreferencesName());
+			//}
 		}
 
 		HostActivity.prepareActionBar(this);

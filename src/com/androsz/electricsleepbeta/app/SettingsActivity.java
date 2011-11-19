@@ -41,7 +41,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 
 	@Override
 	protected int getContentAreaLayoutId() {
-		return NO_CONTENT;
+		return R.xml.settings;
 	}
 
 	@Override
@@ -162,6 +162,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 	 */
 	@Override
 	public void onBuildHeaders(List<Header> target) {
+		super.onBuildHeaders(target);
 		loadHeadersFromResource(R.xml.settings_headers, target);
 	}
 
@@ -180,7 +181,6 @@ public class SettingsActivity extends HostPreferenceActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
 		new Thread(new Runnable() {
 
 			@Override
@@ -192,6 +192,5 @@ public class SettingsActivity extends HostPreferenceActivity {
 				ed.commit();
 			}
 		}).start();
-
 	}
 }

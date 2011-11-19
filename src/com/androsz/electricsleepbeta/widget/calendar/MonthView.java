@@ -19,9 +19,12 @@ package com.androsz.electricsleepbeta.widget.calendar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,7 +34,9 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.GestureDetector;
@@ -41,7 +46,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.HistoryActivity;
 import com.androsz.electricsleepbeta.app.HistoryMonthActivity;
+import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
+import com.androsz.electricsleepbeta.db.SleepSessions;
 
 public class MonthView extends View {
 
@@ -383,13 +391,13 @@ public class MonthView extends View {
 		// Long[]{0L,0L,0L,0L});
 		// allGeometry.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 -
 		// TEXT_TOP_MARGIN) / 24.0f);
-		 //allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-	//allGeometry.setHourGap(HOUR_GAP);
+		// allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+		// allGeometry.setHourGap(HOUR_GAP);
 		for (final Long[] session : mSessions) {
 			final SessionGeometry geometry = new SessionGeometry(session);
 			float hourHeight = (mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN) / 24.0f;
-			 geometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-			 geometry.setHourGap(HOUR_GAP);
+			geometry.setMinEventHeight(MIN_EVENT_HEIGHT);
+			geometry.setHourGap(HOUR_GAP);
 			geometry.setHourHeight(hourHeight);
 			if (geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH)) {
 				drawEventRect(rect, geometry, canvas, p);
@@ -907,48 +915,53 @@ public class MonthView extends View {
 				// if we have more than one applicable entry, then
 				// open the history activity and show all entries
 				// for the selected date
-				/*
-				 * if (applicableEvents.size() == 1) { final Intent
-				 * reviewSleepIntent = new Intent(getContext(),
-				 * ReviewSleepActivity.class); final Cursor c =
-				 * SleepSessions.getSleepMatches( mParentActivity,
-				 * applicableEvents.get(0).title, new String[] {
-				 * SleepSessions.MainTable._ID }); c.moveToFirst(); // TODO:
-				 * hook this into sleep db
-				 * 
-				 * /* final Cursor c = null; SleepSessions .getSleepMatches(
-				 * mParentActivity, applicableEvents.get(0).title, new String[]
-				 * { BaseColumns._ID, SleepSessions.MainTable.KEY_TITLE,
-				 * SleepSessions.MainTable.KEY_ALARM,
-				 * SleepSessions.MainTable.KEY_DURATION,
-				 * SleepSessions.MainTable.KEY_MIN,
-				 * SleepSessions.MainTable.KEY_NOTE,
-				 * SleepSessions.MainTable.KEY_RATING, //
-				 * SleepSessions.MainTable.KEY_SLEEP_DATA ,
-				 * SleepSessions.MainTable.KEY_SPIKES, SleepSessions
-				 * .MainTable.KEY_TIME_FELL_ASLEEP });
-				 * 
-				 * 
-				 * if (c == null) { // we may have lost the cursor since the //
-				 * applicableEvents were // loaded. // do nothing return null; }
-				 * final Uri data = Uri.withAppendedPath(
-				 * SleepSessions.MainTable.CONTENT_URI,
-				 * String.valueOf(c.getLong(0))); // c.close();
-				 * reviewSleepIntent.setData(data);
-				 * getContext().startActivity(reviewSleepIntent); } else if
-				 * (applicableEvents.size() > 1) { final java.text.DateFormat
-				 * sdf = java.text.DateFormat
-				 * .getDateInstance(java.text.DateFormat.SHORT,
-				 * Locale.getDefault()); final Calendar calendar =
-				 * Calendar.getInstance(); calendar.setTimeInMillis(millis);
-				 * final String formattedMDY = sdf
-				 * .format((calendar.getTime())); getContext().startActivity(
-				 * new Intent(getContext(), HistoryActivity.class)
-				 * .putExtra(HistoryActivity.SEARCH_FOR, formattedMDY)); }
-				 */
+//
+//				if (applicableEvents.size() == 1) {
+//					final Intent reviewSleepIntent = new Intent(getContext(),
+//							ReviewSleepActivity.class);
+//					final Cursor c = SleepSessions.getSleepMatches(mParentActivity,
+//							applicableEvents.get(0).title,
+//							new String[] { SleepSessions.MainTable._ID });
+//					c.moveToFirst();
+//					// TODO:
+//					// hook this into sleep db
+//
+//					//final Cursor c = null;
+//					SleepSessions.getSleepMatches(mParentActivity, applicableEvents.get(0).title,
+//							new String[] {
+//									BaseColumns._ID,
+//									SleepSessions.MainTable.KEY_TITLE,
+//									SleepSessions.MainTable.KEY_ALARM,
+//									SleepSessions.MainTable.KEY_DURATION,
+//									SleepSessions.MainTable.KEY_MIN,
+//									SleepSessions.MainTable.KEY_NOTE,
+//									SleepSessions.MainTable.KEY_RATING, //
+//									SleepSessions.MainTable.KEY_SLEEP_DATA,
+//									SleepSessions.MainTable.KEY_SPIKES,
+//									SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP });
+//
+//					if (c == null) { // we may have lost the cursor since the //
+//						// applicableEvents were // loaded. // do nothing return
+//						// null; }
+//						final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+//								String.valueOf(c.getLong(0))); // c.close();
+//						reviewSleepIntent.setData(data);
+//						getContext().startActivity(reviewSleepIntent);
+//					} else if (applicableEvents.size() > 1) {
+//						final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
+//								java.text.DateFormat.SHORT, Locale.getDefault());
+//						final Calendar calendar = Calendar.getInstance();
+//						calendar.setTimeInMillis(millis);
+//						final String formattedMDY = sdf.format((calendar.getTime()));
+//						getContext().startActivity(
+//								new Intent(getContext(), HistoryActivity.class).putExtra(
+//										HistoryActivity.SEARCH_FOR, formattedMDY));
+//					}
+//				}
 				return null;
 			}
 		}.execute();
+
 	}
 
 	public void setTime(Time time) {

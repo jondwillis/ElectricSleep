@@ -105,6 +105,7 @@ public class HistoryMonthActivity extends HostActivity implements
 				// always set to middle page to continue to be able to
 				// scroll up/down
 				indicator.setCurrentItem(1, false);
+				eventsChanged();
 			}
 		}
 
