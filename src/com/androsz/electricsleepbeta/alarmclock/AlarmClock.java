@@ -256,7 +256,9 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 	protected void onDestroy() {
 		super.onDestroy();
 		ToastMaster.cancelToast();
-		mCursor.close();
+		if (mCursor != null && !mCursor.isClosed()) {
+			mCursor.close();
+		}
 	}
 
 	@Override
@@ -294,8 +296,8 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 		mAlarmsList.setOnItemClickListener(this);
 		mAlarmsList.setOnCreateContextMenuListener(this);
 		mAlarmsList.setBackgroundColor(Color.BLACK);
-		//mAlarmsList.setCacheColorHint(0);
-		//mAlarmsList.setBackgroundDrawable(getResources().getDrawable(
-		//		R.drawable.gradient_background_vert));
+		// mAlarmsList.setCacheColorHint(0);
+		// mAlarmsList.setBackgroundDrawable(getResources().getDrawable(
+		// R.drawable.gradient_background_vert));
 	}
 }

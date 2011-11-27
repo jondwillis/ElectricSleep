@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.util.DBUtils;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -101,6 +102,7 @@ public class SleepSessions {
 		// The columns!
 		public static final String KEY_ALARM = "sleep_data_alarm";
 
+		public static final String KEY_ROW_ID = "rowid";
 		// DATABASE_VERSION = 4
 		public static final String KEY_DURATION = "KEY_SLEEP_DATA_DURATION";
 		public static final String KEY_MIN = "sleep_data_min";
@@ -114,13 +116,12 @@ public class SleepSessions {
 		/**
 		 * The default sort order for this table
 		 */
-		public static final String DEFAULT_SORT_ORDER = _ID + " COLLATE LOCALIZED ASC";
+		public static final String DEFAULT_SORT_ORDER = KEY_ROW_ID + " ASC";
 
-		public static final String[] ALL_COLUMNS_PROJECTION = new String[] { _ID, KEY_TITLE,
+		public static final String[] ALL_COLUMNS_PROJECTION = new String[] { KEY_ROW_ID, KEY_TITLE,
 				KEY_ALARM, KEY_DURATION, KEY_MIN, KEY_NOTE, KEY_RATING, KEY_SLEEP_DATA, KEY_SPIKES,
 				KEY_TIME_FELL_ASLEEP };
 
-		public static final String KEY_ROW_ID = "rowid";
 
 		// This class cannot be instantiated
 		private MainTable() {
@@ -154,7 +155,11 @@ public class SleepSessions {
 			// Create and initialize projection map for all columns. This is
 			// simply an identity mapping.
 			projectionMap = new HashMap<String, String>();
-			// projectionMap.put(MainTable._ID, MainTable._ID);
+			
+			//projectionMap.put(MainTable.KEY_ROW_ID, "rowid AS " +
+			//		MainTable._ID);
+			//projectionMap.put(MainTable._ID, MainTable._ID);
+			projectionMap.put(MainTable.KEY_ROW_ID, MainTable.KEY_ROW_ID);
 			projectionMap.put(MainTable.KEY_TITLE, MainTable.KEY_TITLE);
 			projectionMap.put(MainTable.KEY_SLEEP_DATA, MainTable.KEY_SLEEP_DATA);
 			projectionMap.put(MainTable.KEY_MIN, MainTable.KEY_MIN);
@@ -165,11 +170,6 @@ public class SleepSessions {
 			projectionMap.put(MainTable.KEY_TIME_FELL_ASLEEP, MainTable.KEY_TIME_FELL_ASLEEP);
 			projectionMap.put(MainTable.KEY_NOTE, MainTable.KEY_NOTE);
 
-			projectionMap.put(BaseColumns._ID, MainTable.KEY_ROW_ID + " AS " + BaseColumns._ID);
-			projectionMap.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, MainTable.KEY_ROW_ID
-					+ " AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
-			projectionMap.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, MainTable.KEY_ROW_ID
-					+ " AS " + SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
 		}
 
 		@Override
@@ -240,8 +240,9 @@ public class SleepSessions {
 
 			final long rowId = db.insert(MainTable.TABLE_NAME, null, values);
 
+			Log.w("es", "inserted " + rowId);
 			// If the insert succeeded, the row ID exists.
-			if (rowId > 0) {
+			if (rowId != -1) {
 				final Uri noteUri = ContentUris
 						.withAppendedId(MainTable.CONTENT_ID_URI_BASE, rowId);
 				notifyChange(noteUri);
@@ -272,7 +273,6 @@ public class SleepSessions {
 			final SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(MainTable.TABLE_NAME);
 			qb.setProjectionMap(projectionMap);
-
 			switch (uriMatcher.match(uri)) {
 			case TABLE:
 				// If the incoming URI is for main table.
@@ -280,12 +280,7 @@ public class SleepSessions {
 
 			case ROW:
 				// The incoming URI is for a single row.
-				String finalWhere = MainTable.KEY_ROW_ID + " = " +uri.getLastPathSegment();
-				//count = db.delete(MainTable.TABLE_NAME, finalWhere, selectionArgs);
-				qb.appendWhere(finalWhere);
-				//qb.appendWhere(MainTable.KEY_ROW_ID + "=?");
-				//selectionArgs = DBUtils.appendSelectionArgs(selectionArgs,
-				//		new String[] { uri.getLastPathSegment() });
+				qb.appendWhere(MainTable.KEY_ROW_ID + " = " +uri.getLastPathSegment());
 				break;
 
 			default:
@@ -353,7 +348,7 @@ public class SleepSessions {
 			GoogleAnalyticsTracker.getInstance().trackEvent(Integer.toString(VERSION.SDK_INT),
 					Build.MODEL, "createSessionIOException : " + e.getMessage(), 0);
 		}
-
+		
 		values.put(MainTable.KEY_MIN, sleepRecord.min);
 		values.put(MainTable.KEY_ALARM, sleepRecord.alarm);
 		values.put(MainTable.KEY_RATING, sleepRecord.rating);
@@ -363,7 +358,7 @@ public class SleepSessions {
 		values.put(MainTable.KEY_NOTE, sleepRecord.note);
 
 		final Uri uri = contentResolver.insert(MainTable.CONTENT_URI, values);
-
+		
 		return uri;
 	}
 	
@@ -397,7 +392,7 @@ public class SleepSessions {
 	public static ArrayList<Long[]> getStartAndEndTimesFromCursor(Context context, Cursor c) {
 		final ArrayList<Long[]> sessions = new ArrayList<Long[]>(20);
 
-		if (c != null && c.moveToFirst()) {
+		if (c != null && !c.isClosed() && c.moveToFirst()) {
 
 			do {
 				final SleepSession session = new SleepSession(c);

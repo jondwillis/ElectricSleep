@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.StaleDataException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -69,9 +70,9 @@ public class HistoryMonthActivity extends HostActivity implements
 				String[] newTitles = new String[3];
 
 				if (focusedPage == 0) {
-					
+
 					final Time oldTopTime = new Time(leftMonth.getTime());
-					
+
 					final Time time = new Time(oldTopTime);
 					time.month--;
 					time.normalize(true);
@@ -81,9 +82,9 @@ public class HistoryMonthActivity extends HostActivity implements
 					centerMonth.setTime(oldTopTime);
 					rightMonth.setTime(oldCenterTime);
 				} else if (focusedPage == 2) {
-					
+
 					final Time oldBottomTime = new Time(rightMonth.getTime());
-					
+
 					final Time time = new Time(oldBottomTime);
 					time.month++;
 					time.normalize(true);
@@ -140,7 +141,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public void destroyItem(View container, int position, Object object) {
-			//simply reuse items...
+			// simply reuse items...
 			// ((ViewPager) container).removeViewAt(position);
 		}
 
@@ -308,7 +309,7 @@ public class HistoryMonthActivity extends HostActivity implements
 		getSupportLoaderManager().initLoader(0, null, this);
 
 		ActionBar bar = getSupportActionBar();
-		//bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		// bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		final Time now = new Time();
 		now.setToNow();
@@ -369,11 +370,14 @@ public class HistoryMonthActivity extends HostActivity implements
 			@Override
 			public void run() {
 				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-				mSessions = SleepSessions.getStartAndEndTimesFromCursor(HistoryMonthActivity.this,
-						data);
-				eventsChanged();
-				// TODO: notify MonthViews that mEvents have change in a
-				// ..better way?
+				try {
+
+					mSessions = SleepSessions.getStartAndEndTimesFromCursor(
+							HistoryMonthActivity.this, data);
+					eventsChanged();
+				} catch (IllegalStateException ex) {
+				} catch (StaleDataException ex) {
+				}
 			}
 		}).start();
 	}

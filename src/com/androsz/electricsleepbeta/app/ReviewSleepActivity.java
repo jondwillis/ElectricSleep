@@ -15,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
@@ -29,7 +30,7 @@ public class ReviewSleepActivity extends HostActivity implements
 		@Override
 		protected Void doInBackground(final Void... params) {
 			SleepSessions.deleteSession(ReviewSleepActivity.this,
-					Long.parseLong(uri.getLastPathSegment()));
+					Long.parseLong(getIntent().getData().getLastPathSegment()));
 			return null;
 		}
 
@@ -58,8 +59,6 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	ProgressDialog progress;
 
-	private Uri uri;
-
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_review_sleep;
@@ -84,19 +83,22 @@ public class ReviewSleepActivity extends HostActivity implements
 		if (savedInstanceState != null) {
 			final int selectedTab = savedInstanceState.getInt("selectedTab");
 			bar.setSelectedNavigationItem(selectedTab);
-			uri = Uri.parse(savedInstanceState.getString("uri"));
-		} else {
-			uri = getIntent().getData();
 		}
 
 		getSupportLoaderManager().initLoader(0, null, this);
-
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, uri, SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null,
-				null, null);
+		//getData will be null when we are only interested in the most recent entry
+		if(getIntent().getData() != null)
+		{
+			return new CursorLoader(this, getIntent().getData(),
+					SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
+		}
+		
+		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
+				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
 	}
 
 	@Override
@@ -113,14 +115,13 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data.moveToFirst()) {
+		if (data.moveToLast()) {
 			final SleepSession sleepRecord = new SleepSession(data);
 
 			chartFragment.setSleepRecord(sleepRecord);
 			analysisFragment.setSleepRecord(sleepRecord);
-		}
-		else
-		{
+		} else {
+			Toast.makeText(this, "Could not display the correct Sleep record. This error has been reported.", Toast.LENGTH_LONG).show();
 			trackEvent("ReviewSleepActivity couldn't data.moveToFirst()", 0);
 		}
 	}
@@ -166,7 +167,6 @@ public class ReviewSleepActivity extends HostActivity implements
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString("uri", uri.toString());
 		final ActionBar bar = getSupportActionBar();
 		final int selectedTab = bar.getSelectedTab().getPosition();
 		outState.putInt("selectedTab", selectedTab);

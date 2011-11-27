@@ -1,5 +1,8 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.io.IOException;
+import java.io.StreamCorruptedException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +18,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -82,24 +86,13 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
 	}
 
-	/*
-	 * Used for overriding default HostActivity behavior..
-	 * 
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { final boolean
-	 * result = super.onCreateOptionsMenu(menu);
-	 * menu.findItem(R.id.menu_item_donate).setShowAsAction(
-	 * MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-	 * menu.findItem(R.id.menu_item_settings).setShowAsAction(MenuItem.
-	 * SHOW_AS_ACTION_IF_ROOM); return result; }
-	 */
-
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		//cancel home as up
+		// cancel home as up
 		if (item.getItemId() == android.R.id.home) {
 			return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -131,8 +124,23 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 			try {
 				sleepChart.sync(cursor);
-			} catch (final Exception e) {
+			} catch (StreamCorruptedException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
+			
+			sleepChart.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					
+				}
+			});
+			
 			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2);
 			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text));
 
@@ -173,25 +181,6 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 			container.setVisibility(View.VISIBLE);
 			sleepChart.setVisibility(View.VISIBLE);
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		// if (loadLastSleepChartTask != null) {
-		// loadLastSleepChartTask.cancel(true);
-		// }
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		// if (loadLastSleepChartTask != null) {
-		// loadLastSleepChartTask.cancel(true);
-		// }
-		// loadLastSleepChartTask = new LoadLastSleepChartTask();
-		// loadLastSleepChartTask.execute(getString(R.string.to));
 	}
 
 	public void onSleepClick(final View v) throws Exception {
