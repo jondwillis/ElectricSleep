@@ -45,7 +45,6 @@ public class GoogleAnalyticsSessionHelper {
 	public void onStartSession() {
 		if (sessionCount == 0) {
 			GoogleAnalyticsTracker.getInstance().startNewSession(key, appContext);
-			Log.w("analytics", "started session");
 		}
 		
 		String versionName = "?";
@@ -74,7 +73,6 @@ public class GoogleAnalyticsSessionHelper {
 			//don't dispatch data to network until we stop
 			GoogleAnalyticsTracker.getInstance().dispatch();
 			GoogleAnalyticsTracker.getInstance().stopSession();
-			Log.w("analytics", "stopped session");
 		}
 	}
 
