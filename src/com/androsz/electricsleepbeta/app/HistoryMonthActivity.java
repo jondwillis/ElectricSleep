@@ -283,7 +283,7 @@ public class HistoryMonthActivity extends HostActivity implements
 			for (final Long[] session : mSessions) {
 				final long startTime = session[0];
 				final long endTime = session[1];
-				if (startTime >= startMillis && startTime <= endMillis) {
+				if (startTime >= startMillis && endTime <= endMillis) {
 					sessions.add(session);
 				}
 			}

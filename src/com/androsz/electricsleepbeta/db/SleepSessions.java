@@ -156,10 +156,10 @@ public class SleepSessions {
 			// simply an identity mapping.
 			projectionMap = new HashMap<String, String>();
 			
-			//projectionMap.put(MainTable.KEY_ROW_ID, "rowid AS " +
-			//		MainTable._ID);
+			projectionMap.put(MainTable.KEY_ROW_ID, "rowid AS " +
+					MainTable._ID);
 			//projectionMap.put(MainTable._ID, MainTable._ID);
-			projectionMap.put(MainTable.KEY_ROW_ID, MainTable.KEY_ROW_ID);
+			//projectionMap.put(MainTable.KEY_ROW_ID, MainTable.KEY_ROW_ID);
 			projectionMap.put(MainTable.KEY_TITLE, MainTable.KEY_TITLE);
 			projectionMap.put(MainTable.KEY_SLEEP_DATA, MainTable.KEY_SLEEP_DATA);
 			projectionMap.put(MainTable.KEY_MIN, MainTable.KEY_MIN);
@@ -397,7 +397,7 @@ public class SleepSessions {
 			do {
 				final SleepSession session = new SleepSession(c);
 				sessions.add(new Long[] { session.getStartTimeOfDay(), session.getEndTimeOfDay(),
-						(long) session.getStartJulianDay(), (long) session.getEndJulianDay() });
+						(long) session.getStartJulianDay(), (long) session.getEndJulianDay(), c.getLong(0) });
 			} while (c.moveToNext());
 			c.close();
 		}

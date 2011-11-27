@@ -153,13 +153,20 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		if (data == null) {
+			finish();
 			// There are no results
 			mTextView.setVisibility(View.VISIBLE);
 			mTextView.setText(getString(R.string.no_results));
 			mListView.setVisibility(View.GONE);
 		} else {
 			if (data.getCount() == 1) {
-				mListView.getAdapter().getItem(0);
+				//TODO launch reviewsleep on this row
+				Object what = mListView.getAdapter().getItem(0);
+			}
+			else if(data.getCount() == 0)
+			{
+				finish();
+				return;
 			}
 			sleepHistoryAdapter.swapCursor(data);
 			mTextView.setVisibility(View.GONE);

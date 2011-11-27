@@ -902,62 +902,91 @@ public class MonthView extends View {
 			protected Void doInBackground(Void... params) {
 				final ArrayList<Long[]> applicableEvents = new ArrayList<Long[]>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
-				for (final Long[] session : mSessions) {
-					final long startTime = session[0] - millis;
-					final long endTime = session[1] - millis;
-					if ((endTime > 0)
-							&& ((startTime <= ONE_DAY_IN_MS && startTime > 0) || startTime < 0)) {
 
+				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
+				for (final Long[] session : mSessions) {
+					if (julianDay >= session[2] && julianDay <= session[3]) {
 						applicableEvents.add(session);
 					}
+					/*
+					 * final long startTime = session[0] - thismillis; final
+					 * long endTime = session[1] - thismillis; if ((endTime > 0)
+					 * && ((startTime <= ONE_DAY_IN_MS && startTime > 0) ||
+					 * startTime < 0)) {
+					 * 
+					 * applicableEvents.add(session); }
+					 */
+				}
+
+				if (applicableEvents.size() == 1) {
+					final Intent reviewSleepIntent = new Intent(getContext(),
+							ReviewSleepActivity.class);
+					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+							String.valueOf(applicableEvents.get(0)[4]));
+					reviewSleepIntent.setData(data);
+					getContext().startActivity(reviewSleepIntent);
+				} else if (applicableEvents.size() > 1) {
+
+					final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
+							java.text.DateFormat.SHORT, Locale.getDefault());
+					final Calendar calendar = Calendar.getInstance();
+					calendar.setTimeInMillis(millis);
+					final String formattedMDY = sdf.format((calendar.getTime()));
+					getContext().startActivity(
+							new Intent(getContext(), HistoryActivity.class).putExtra(
+									HistoryActivity.SEARCH_FOR, formattedMDY));
 				}
 
 				// if we have more than one applicable entry, then
 				// open the history activity and show all entries
 				// for the selected date
-//
-//				if (applicableEvents.size() == 1) {
-//					final Intent reviewSleepIntent = new Intent(getContext(),
-//							ReviewSleepActivity.class);
-//					final Cursor c = SleepSessions.getSleepMatches(mParentActivity,
-//							applicableEvents.get(0).title,
-//							new String[] { SleepSessions.MainTable._ID });
-//					c.moveToFirst();
-//					// TODO:
-//					// hook this into sleep db
-//
-//					//final Cursor c = null;
-//					SleepSessions.getSleepMatches(mParentActivity, applicableEvents.get(0).title,
-//							new String[] {
-//									BaseColumns._ID,
-//									SleepSessions.MainTable.KEY_TITLE,
-//									SleepSessions.MainTable.KEY_ALARM,
-//									SleepSessions.MainTable.KEY_DURATION,
-//									SleepSessions.MainTable.KEY_MIN,
-//									SleepSessions.MainTable.KEY_NOTE,
-//									SleepSessions.MainTable.KEY_RATING, //
-//									SleepSessions.MainTable.KEY_SLEEP_DATA,
-//									SleepSessions.MainTable.KEY_SPIKES,
-//									SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP });
-//
-//					if (c == null) { // we may have lost the cursor since the //
-//						// applicableEvents were // loaded. // do nothing return
-//						// null; }
-//						final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
-//								String.valueOf(c.getLong(0))); // c.close();
-//						reviewSleepIntent.setData(data);
-//						getContext().startActivity(reviewSleepIntent);
-//					} else if (applicableEvents.size() > 1) {
-//						final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
-//								java.text.DateFormat.SHORT, Locale.getDefault());
-//						final Calendar calendar = Calendar.getInstance();
-//						calendar.setTimeInMillis(millis);
-//						final String formattedMDY = sdf.format((calendar.getTime()));
-//						getContext().startActivity(
-//								new Intent(getContext(), HistoryActivity.class).putExtra(
-//										HistoryActivity.SEARCH_FOR, formattedMDY));
-//					}
-//				}
+				//
+				// if (applicableEvents.size() == 1) {
+				// final Intent reviewSleepIntent = new Intent(getContext(),
+				// ReviewSleepActivity.class);
+				// final Cursor c =
+				// SleepSessions.getSleepMatches(mParentActivity,
+				// applicableEvents.get(0).title,
+				// new String[] { SleepSessions.MainTable._ID });
+				// c.moveToFirst();
+				// // TODO:
+				// // hook this into sleep db
+				//
+				// //final Cursor c = null;
+				// SleepSessions.getSleepMatches(mParentActivity,
+				// applicableEvents.get(0).title,
+				// new String[] {
+				// BaseColumns._ID,
+				// SleepSessions.MainTable.KEY_TITLE,
+				// SleepSessions.MainTable.KEY_ALARM,
+				// SleepSessions.MainTable.KEY_DURATION,
+				// SleepSessions.MainTable.KEY_MIN,
+				// SleepSessions.MainTable.KEY_NOTE,
+				// SleepSessions.MainTable.KEY_RATING, //
+				// SleepSessions.MainTable.KEY_SLEEP_DATA,
+				// SleepSessions.MainTable.KEY_SPIKES,
+				// SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP });
+				//
+				// if (c == null) { // we may have lost the cursor since the //
+				// // applicableEvents were // loaded. // do nothing return
+				// // null; }
+				// final Uri data =
+				// Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+				// String.valueOf(c.getLong(0))); // c.close();
+				// reviewSleepIntent.setData(data);
+				// getContext().startActivity(reviewSleepIntent);
+				// } else if (applicableEvents.size() > 1) {
+				// final java.text.DateFormat sdf =
+				// java.text.DateFormat.getDateInstance(
+				// java.text.DateFormat.SHORT, Locale.getDefault());
+				// final Calendar calendar = Calendar.getInstance();
+				// calendar.setTimeInMillis(millis);
+				// final String formattedMDY = sdf.format((calendar.getTime()));
+				// getContext().startActivity(
+				// new Intent(getContext(), HistoryActivity.class).putExtra(
+				// HistoryActivity.SEARCH_FOR, formattedMDY));
+				// }
+				// }
 				return null;
 			}
 		}.execute();
