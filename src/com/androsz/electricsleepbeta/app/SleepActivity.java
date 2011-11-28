@@ -12,9 +12,11 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -67,15 +69,11 @@ public class SleepActivity extends HostActivity {
 	private final BroadcastReceiver batteryChangedReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
-			final boolean pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) > 0;
-			final int visibility = (pluggedIn ? View.GONE : View.VISIBLE);
-
-			textSleepPluggedIn.setVisibility(visibility);
-			divSleepPluggedIn.setVisibility(visibility);
-
-			showOrHideWarnings();
+			pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) > 0;
+			airplaneModeNagChanged();
 		}
 	};
+
 	AsyncTask<Void, Void, Void> dimScreenTask;
 	private View divSleepNoAlarm;
 	private View divSleepPluggedIn;
@@ -212,10 +210,14 @@ public class SleepActivity extends HostActivity {
 		return R.layout.activity_sleep;
 	}
 
+	boolean pluggedIn = false;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.monitoring_sleep);
+		airplaneModeOn = Settings.System.getInt(getContentResolver(),
+				Settings.System.AIRPLANE_MODE_ON, 0) != 0;
 
 		registerReceiver(sleepStoppedReceiver, new IntentFilter(
 				SleepMonitoringService.SLEEP_STOPPED));
@@ -249,6 +251,7 @@ public class SleepActivity extends HostActivity {
 
 	@Override
 	protected void onPause() {
+		unregisterReceiver(airplaneModeChangedReceiver);
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(syncChartReceiver);
 		unregisterReceiver(batteryChangedReceiver);
@@ -265,6 +268,25 @@ public class SleepActivity extends HostActivity {
 		super.onRestoreInstanceState(savedState);
 	}
 
+	boolean airplaneModeOn = false;
+	BroadcastReceiver airplaneModeChangedReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			airplaneModeOn = intent.getBooleanExtra("state", false);
+			airplaneModeNagChanged();
+		}
+
+	};
+
+	private void airplaneModeNagChanged() {
+		final int visibility = (pluggedIn || airplaneModeOn ? View.GONE : View.VISIBLE);
+
+		textSleepPluggedIn.setVisibility(visibility);
+		divSleepPluggedIn.setVisibility(visibility);
+
+		showOrHideWarnings();
+	}
+
 	@Override
 	protected void onResume() {
 		sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
@@ -275,6 +297,8 @@ public class SleepActivity extends HostActivity {
 		textSleepPluggedIn = (TextView) findViewById(R.id.text_sleep_plugged_in);
 		divSleepPluggedIn = findViewById(R.id.div_sleep_plugged_in);
 
+		registerReceiver(airplaneModeChangedReceiver, new IntentFilter(
+				Intent.ACTION_AIRPLANE_MODE_CHANGED));
 		registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 		registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
 		registerReceiver(batteryChangedReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
