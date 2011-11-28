@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,41 +18,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
 public class HistoryActivity extends HostActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-	private class DeleteSleepTask extends AsyncTask<Long, Void, Void> {
-
-		@Override
-		protected Void doInBackground(final Long... params) {
-			SleepSessions.deleteSession(HistoryActivity.this, params[0]);
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(final Void results) {
-			// mListView.removeAllViewsInLayout();
-			// getSupportLoaderManager().restartLoader(0,
-			// getLoaderArgs(getIntent(), false), HistoryActivity.this);
-			Toast.makeText(HistoryActivity.this, getString(R.string.deleted_sleep_record),
-					Toast.LENGTH_SHORT).show();
-
-			if (progress != null && progress.isShowing()) {
-				progress.dismiss();
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			progress.setMessage(getString(R.string.deleting_sleep));
-			progress.show();
-		}
-	}
 
 	private final class ListOnItemClickListener implements OnItemClickListener {
 		@Override
@@ -160,11 +130,9 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 			mListView.setVisibility(View.GONE);
 		} else {
 			if (data.getCount() == 1) {
-				//TODO launch reviewsleep on this row
+				// TODO launch reviewsleep on this row
 				Object what = mListView.getAdapter().getItem(0);
-			}
-			else if(data.getCount() == 0)
-			{
+			} else if (data.getCount() == 0) {
 				finish();
 				return;
 			}
@@ -185,7 +153,7 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 										public void onClick(final DialogInterface dialog,
 												final int id) {
 
-											new DeleteSleepTask().execute(rowId, null, null);
+											new DeleteSleepTask(HistoryActivity.this, progress).execute(new Long[]{rowId}, null, null);
 										}
 									})
 							.setNegativeButton(getString(R.string.cancel),
@@ -213,8 +181,35 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_item_delete_all:
-			// TODO
+		case R.id.menu_item_delete_all:final AlertDialog.Builder dialog = new AlertDialog.Builder(HistoryActivity.this)
+		.setMessage(getString(R.string.delete_sleep_record))
+		.setPositiveButton(getString(R.string.ok),
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog,
+							final int id) {
+						
+						Long[] rowIds = new Long[sleepHistoryAdapter.getCount()];
+						Cursor c = sleepHistoryAdapter.getCursor();
+						c.moveToFirst();
+						int i = 0;
+						do
+						{
+							rowIds[i++] = c.getLong(0);
+						}while(c.moveToNext());
+						
+						new DeleteSleepTask(HistoryActivity.this, progress).execute(rowIds, null, null);
+					}
+				})
+		.setNegativeButton(getString(R.string.cancel),
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog,
+							final int id) {
+						dialog.cancel();
+					}
+				});
+dialog.show();
 			break;
 		case R.id.menu_item_export_all:
 			// TODO
