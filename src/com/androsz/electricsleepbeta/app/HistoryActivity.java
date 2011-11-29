@@ -124,14 +124,21 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		if (data == null) {
 			finish();
-			// There are no results
-			mTextView.setVisibility(View.VISIBLE);
-			mTextView.setText(getString(R.string.no_results));
-			mListView.setVisibility(View.GONE);
 		} else {
 			if (data.getCount() == 1) {
-				// TODO launch reviewsleep on this row
-				Object what = mListView.getAdapter().getItem(0);
+				Cursor c = sleepHistoryAdapter.getCursor();
+				c.moveToFirst();
+				final Intent reviewSleepIntent = new Intent(HistoryActivity.this,
+						ReviewSleepActivity.class);
+
+				final Uri uri = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+						String.valueOf(
+								c.getLong(0)));
+				reviewSleepIntent.setData(uri);
+				reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(reviewSleepIntent);
+				
 			} else if (data.getCount() == 0) {
 				finish();
 				return;
