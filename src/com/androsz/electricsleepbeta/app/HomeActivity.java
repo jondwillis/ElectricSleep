@@ -135,14 +135,15 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				e.printStackTrace();
 			}
 
+			final long sleepChartRowId = cursor.getLong(0);
 			sleepChart.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					final Intent reviewSleepIntent = new Intent(HomeActivity.this,
 							ReviewSleepActivity.class);
 
-					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
-							String.valueOf(cursor.getLong(0)));
+					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_ID_URI_BASE,
+							String.valueOf(sleepChartRowId));
 					reviewSleepIntent.setData(data);
 					startActivity(reviewSleepIntent);
 				}
