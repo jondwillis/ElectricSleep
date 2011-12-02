@@ -110,10 +110,13 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	public void onLoadFinished(Loader<Cursor> arg0, final Cursor cursor) {
 		final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
 		final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
-		final ViewGroup container = (ViewGroup) findViewById(R.id.home_stats_container);
+		//final ViewGroup container = (ViewGroup) findViewById(R.id.home_stats_container);
+		final ViewGroup statsContainer = (ViewGroup) findViewById(R.id.home_statistics_dashboard);
 		if (cursor == null || cursor.getCount() == 0) {
-			container.setVisibility(View.GONE);
+			statsContainer.setVisibility(View.GONE);
+			sleepChart.setVisibility(View.GONE);
 			reviewTitleText.setText(getString(R.string.home_review_title_text_empty));
+			lastSleepTitleText.setVisibility(View.GONE);
 			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text_empty));
 		} else {
 
@@ -151,6 +154,8 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2);
 			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text));
+			sleepChart.setVisibility(View.VISIBLE);
+			lastSleepTitleText.setVisibility(View.VISIBLE);
 
 			new AsyncTask<Void, Void, Void>() {
 				int avgSleepScore = 0;
@@ -194,12 +199,11 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 					avgFellAsleepText.setText(SleepSession.getTimespanText(avgFellAsleep,
 							getResources()));
 					reviewTitleText.setText(getString(R.string.home_review_title_text));
+					statsContainer.setVisibility(View.VISIBLE);
 					super.onPostExecute(result);
 				}
 			}.execute();
 
-			container.setVisibility(View.VISIBLE);
-			sleepChart.setVisibility(View.VISIBLE);
 		}
 	}
 
