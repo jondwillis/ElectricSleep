@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
         android:indeterminateOnly="true" >
+
     </ProgressBar>
 
 </LinearLayout>

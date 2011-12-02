@@ -40,6 +40,7 @@ public class CheckForScreenBugActivity extends CalibrateForResultActivity {
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		this.setTheme(com.actionbarsherlock.R.style.Theme_Sherlock);
 		setContentView(R.layout.activity_check_for_screen_bug);
 	}
 
