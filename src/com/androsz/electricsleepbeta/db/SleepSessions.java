@@ -17,6 +17,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -69,6 +70,7 @@ public class SleepSessions {
 	 * Definition of the contract for the main table of our provider.
 	 */
 	public static final class MainTable implements BaseColumns {
+
 		public static final String TABLE_NAME = "FTSsleephistory";
 
 		/**
@@ -122,7 +124,6 @@ public class SleepSessions {
 				KEY_ALARM, KEY_DURATION, KEY_MIN, KEY_NOTE, KEY_RATING, KEY_SLEEP_DATA, KEY_SPIKES,
 				KEY_TIME_FELL_ASLEEP };
 
-
 		// This class cannot be instantiated
 		private MainTable() {
 		}
@@ -155,11 +156,10 @@ public class SleepSessions {
 			// Create and initialize projection map for all columns. This is
 			// simply an identity mapping.
 			projectionMap = new HashMap<String, String>();
-			
-			projectionMap.put(MainTable.KEY_ROW_ID, "rowid AS " +
-					MainTable._ID);
-			//projectionMap.put(MainTable._ID, MainTable._ID);
-			//projectionMap.put(MainTable.KEY_ROW_ID, MainTable.KEY_ROW_ID);
+
+			projectionMap.put(MainTable.KEY_ROW_ID, "rowid AS " + MainTable._ID);
+			// projectionMap.put(MainTable._ID, MainTable._ID);
+			// projectionMap.put(MainTable.KEY_ROW_ID, MainTable.KEY_ROW_ID);
 			projectionMap.put(MainTable.KEY_TITLE, MainTable.KEY_TITLE);
 			projectionMap.put(MainTable.KEY_SLEEP_DATA, MainTable.KEY_SLEEP_DATA);
 			projectionMap.put(MainTable.KEY_MIN, MainTable.KEY_MIN);
@@ -237,10 +237,18 @@ public class SleepSessions {
 			}
 
 			final SQLiteDatabase db = helper.getWritableDatabase();
+			
+			//hack to work around an sqlite bug returning the wrong rowid on some devices.
+			SQLiteStatement statement = db.compileStatement(String.format(
+					"SELECT IFNULL(max(%s), 0) as %s from %s", MainTable.KEY_ROW_ID,
+					MainTable.KEY_ROW_ID, MainTable.TABLE_NAME));
+			long maxRowId = statement.simpleQueryForLong();
+			long rowId = maxRowId + 1;
+			
+			values.put(MainTable.KEY_ROW_ID, rowId);
+			db.insert(MainTable.TABLE_NAME, null, values);
+			
 
-			final long rowId = db.insert(MainTable.TABLE_NAME, null, values);
-
-			Log.w("es", "inserted " + rowId);
 			// If the insert succeeded, the row ID exists.
 			if (rowId != -1) {
 				final Uri noteUri = ContentUris
@@ -280,7 +288,7 @@ public class SleepSessions {
 
 			case ROW:
 				// The incoming URI is for a single row.
-				qb.appendWhere(MainTable.KEY_ROW_ID + " = " +uri.getLastPathSegment());
+				qb.appendWhere(MainTable.KEY_ROW_ID + " = " + uri.getLastPathSegment());
 				break;
 
 			default:
@@ -293,8 +301,7 @@ public class SleepSessions {
 
 			final SQLiteDatabase db = helper.getReadableDatabase();
 
-			final Cursor c = qb.query(db, projection, selection, selectionArgs, null, null,
-					sortOrder);
+			Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
 			c.setNotificationUri(getContext().getContentResolver(), uri);
 			return c;
@@ -348,7 +355,7 @@ public class SleepSessions {
 			GoogleAnalyticsTracker.getInstance().trackEvent(Integer.toString(VERSION.SDK_INT),
 					Build.MODEL, "createSessionIOException : " + e.getMessage(), 0);
 		}
-		
+
 		values.put(MainTable.KEY_MIN, sleepRecord.min);
 		values.put(MainTable.KEY_ALARM, sleepRecord.alarm);
 		values.put(MainTable.KEY_RATING, sleepRecord.rating);
@@ -358,10 +365,10 @@ public class SleepSessions {
 		values.put(MainTable.KEY_NOTE, sleepRecord.note);
 
 		final Uri uri = contentResolver.insert(MainTable.CONTENT_URI, values);
-		
+
 		return uri;
 	}
-	
+
 	public static int deleteSession(final Context context, CharSequence sessionTitle) {
 		final ContentResolver contentResolver = context.getContentResolver();
 
@@ -397,7 +404,8 @@ public class SleepSessions {
 			do {
 				final SleepSession session = new SleepSession(c);
 				sessions.add(new Long[] { session.getStartTimeOfDay(), session.getEndTimeOfDay(),
-						(long) session.getStartJulianDay(), (long) session.getEndJulianDay(), c.getLong(0) });
+						(long) session.getStartJulianDay(), (long) session.getEndJulianDay(),
+						c.getLong(0) });
 			} while (c.moveToNext());
 			c.close();
 		}

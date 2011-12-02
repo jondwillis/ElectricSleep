@@ -33,10 +33,9 @@ public class ReviewSleepActivity extends HostActivity implements
 
 				SleepSessions.deleteSession(ReviewSleepActivity.this,
 						Long.parseLong(getIntent().getData().getLastPathSegment()));
-			}
-			else
-			{
-				Toast.makeText(ReviewSleepActivity.this, "Wait for the sleep session to load.", Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(ReviewSleepActivity.this, "Wait for the sleep session to load.",
+						Toast.LENGTH_LONG).show();
 			}
 			return null;
 		}
@@ -97,14 +96,7 @@ public class ReviewSleepActivity extends HostActivity implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		// getData will be null when we are only interested in the most recent
-		// entry
-		if (getIntent().getData() != null) {
-			return new CursorLoader(this, getIntent().getData(),
-					SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
-		}
-
-		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
+		return new CursorLoader(this, getIntent().getData(),
 				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
 	}
 

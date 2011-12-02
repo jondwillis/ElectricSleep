@@ -56,10 +56,11 @@ public class SaveSleepActivity extends HostActivity implements OnRatingBarChange
 						}
 						return why;
 					}
-					//final Uri uri = Uri.parse(intent.getStringExtra(SaveSleepReceiver.EXTRA_URI));
-					//if (uri != null) {
-					//	reviewSleepIntent.setData(uri);
-					//}
+					
+					final Uri uri = Uri.parse(intent.getStringExtra(SaveSleepReceiver.EXTRA_URI));
+					if (uri != null) {
+						reviewSleepIntent.setData(uri);
+					}
 
 					reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 							| Intent.FLAG_ACTIVITY_NEW_TASK);
