@@ -460,18 +460,14 @@ public class MonthView extends View {
 			@Override
 			public void run() {
 				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
-				final Time monthStart = mTempTime;
-				monthStart.set(mViewCalendar);
-				monthStart.monthDay = 1;
-				monthStart.hour = 0;
-				monthStart.minute = 0;
-				monthStart.second = 0;
-				final long startOfMonthMillis = monthStart.normalize(true /*
-																		 * ignore
-																		 * isDst
-																		 */);
-				mSessions = new ArrayList<Long[]>(sessions);// mParentActivity.getSessionsInInterval(startOfMonthMillis,
-				// EVENT_NUM_DAYS);
+				//final Time monthStart = mTempTime;
+				//monthStart.set(mViewCalendar);
+				//monthStart.monthDay = 1;
+				//monthStart.hour = 0;
+				//monthStart.minute = 0;
+				//monthStart.second = 0;
+				//final long startOfMonthMillis = monthStart.normalize(true);
+				mSessions = sessions;//new ArrayList<Long[]>(sessions);
 				// Clear out event days
 				Arrays.fill(eventDay, false);
 				// Compute the new set of days with events
@@ -900,13 +896,14 @@ public class MonthView extends View {
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				final ArrayList<Long[]> applicableEvents = new ArrayList<Long[]>();
+				//final ArrayList<Long[]> applicableEvents = new ArrayList<Long[]>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
+				int applicableEventsCount = 0;
 				for (final Long[] session : mSessions) {
 					if (julianDay >= session[2] && julianDay <= session[3]) {
-						applicableEvents.add(session);
+						applicableEventsCount++;
 					}
 					/*
 					 * final long startTime = session[0] - thismillis; final
@@ -918,14 +915,14 @@ public class MonthView extends View {
 					 */
 				}
 
-				if (applicableEvents.size() == 1) {
+				if (applicableEventsCount == 1) {
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
 					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
-							String.valueOf(applicableEvents.get(0)[4]));
+							String.valueOf(mSessions.get(0)[4]));
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
-				} else if (applicableEvents.size() > 1) {
+				} else if (applicableEventsCount > 1) {
 
 					final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
 							java.text.DateFormat.SHORT, Locale.getDefault());

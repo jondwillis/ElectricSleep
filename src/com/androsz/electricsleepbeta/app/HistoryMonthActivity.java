@@ -24,6 +24,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -69,6 +70,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 				String[] newTitles = new String[3];
 
+				int focusedPage = HistoryMonthActivity.this.focusedPage;
 				if (focusedPage == 0) {
 
 					final Time oldTopTime = new Time(leftMonth.getTime());
@@ -106,7 +108,7 @@ public class HistoryMonthActivity extends HostActivity implements
 				// always set to middle page to continue to be able to
 				// scroll up/down
 				indicator.setCurrentItem(1, false);
-				eventsChanged();
+				eventsChanged(focusedPage);
 			}
 		}
 
@@ -240,20 +242,27 @@ public class HistoryMonthActivity extends HostActivity implements
 			if (action.equals(Intent.ACTION_TIME_CHANGED)
 					|| action.equals(Intent.ACTION_DATE_CHANGED)
 					|| action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
-				eventsChanged();
+				eventsChanged(-1);
 			}
 		}
 	};
 
-	void eventsChanged() {
+	void eventsChanged(final int whichPage) {
 		runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
-				for (int i = 0; i < monthPager.getChildCount(); i++) {
-					final MonthView mv = (MonthView) monthPager.getChildAt(i);
-					mv.forceReloadEvents(mSessions);
-				}
+				//if (whichPage == -1) {
+					for (int i = 0; i < monthPager.getChildCount(); i++) {
+						final MonthView mv = (MonthView) monthPager.getChildAt(i);
+						Time t = mv.getTime();
+						mv.forceReloadEvents(getSessionsInInterval(t.toMillis(true), 31));
+					}
+				//} else {
+				//	final MonthView mv = (MonthView) monthPager.getChildAt(whichPage);
+				//	Time t = mv.getTime();
+				//	mv.forceReloadEvents(getSessionsInInterval(mv.getTime().toMillis(true), 31));
+				//}
 			}
 		});
 	}
@@ -264,31 +273,31 @@ public class HistoryMonthActivity extends HostActivity implements
 	}
 
 	public ArrayList<Long[]> getSessionsInInterval(long startMillis, int days) {
+
+		final ArrayList<Long[]> sessions = new ArrayList<Long[]>(20);
+		final Time local = new Time();
+		
+		local.set(startMillis);
+
+		// expand start and days to include days shown from previous month
+		// and next month. can be slightly wasteful.
+		// start -= 1000 * 60 * 60 * 24 * 7; // 7 days
+		// days += 7;
+		final int startJulianDay = Time.getJulianDay(startMillis, local.gmtoff);
+		local.monthDay += days;
+		local.normalize(true);
+		final int endJulianDay = Time.getJulianDay(local.toMillis(true), local.gmtoff);
+
 		synchronized (mSessions) {
-			final ArrayList<Long[]> sessions = new ArrayList<Long[]>(20);
-			final Time local = new Time();
-
-			local.set(startMillis);
-
-			// expand start and days to include days shown from previous month
-			// and next month. can be slightly wasteful.
-			// start -= 1000 * 60 * 60 * 24 * 7; // 7 days
-			// days += 7;
-
-			Time.getJulianDay(startMillis, local.gmtoff);
-			local.monthDay += days;
-			final long endMillis = local.normalize(true);
-			// endMillis+=startMillis;
-
 			for (final Long[] session : mSessions) {
-				final long startTime = session[0];
-				final long endTime = session[1];
-				if (startTime >= startMillis && endTime <= endMillis) {
+				final long sessionStartJulianDay = session[2];
+				final long sessionEndJulianDay = session[3];
+				if (sessionStartJulianDay >= startJulianDay && sessionEndJulianDay <= endJulianDay) {
 					sessions.add(session);
 				}
 			}
 
-			// TODO
+			// TODO ?
 			// SleepSession.computePositions(sessions.values());
 
 			return sessions;
@@ -360,7 +369,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		mSessions = new ArrayList<Long[]>(0);
+		loader.forceLoad();
 	}
 
 	@Override
@@ -371,10 +380,9 @@ public class HistoryMonthActivity extends HostActivity implements
 			public void run() {
 				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 				try {
-
 					mSessions = SleepSessions.getStartAndEndTimesFromCursor(
 							HistoryMonthActivity.this, data);
-					eventsChanged();
+					eventsChanged(-1);
 				} catch (IllegalStateException ex) {
 				} catch (StaleDataException ex) {
 				}

@@ -126,18 +126,18 @@ public class HistoryActivity extends HostActivity implements LoaderManager.Loade
 			finish();
 		} else {
 			if (data.getCount() == 1) {
-				Cursor c = sleepHistoryAdapter.getCursor();
-				c.moveToFirst();
+				data.moveToFirst();
 				final Intent reviewSleepIntent = new Intent(HistoryActivity.this,
 						ReviewSleepActivity.class);
 
 				final Uri uri = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
 						String.valueOf(
-								c.getLong(0)));
+								data.getLong(0)));
 				reviewSleepIntent.setData(uri);
 				reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(reviewSleepIntent);
+				finish();
 				
 			} else if (data.getCount() == 0) {
 				finish();
