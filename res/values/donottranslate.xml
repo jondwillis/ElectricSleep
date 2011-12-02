@@ -45,5 +45,7 @@
     </string-array>
     <!-- Order of month year label in month view -->
     <string name="month_year">%B %Y</string>
+    <string name="developer_email_address">customersupport@myzeo.com</string>
+    <string name="email_developer_subject">ElectricSleep by Zeo Feedback (%s)</string>
 
 </resources>

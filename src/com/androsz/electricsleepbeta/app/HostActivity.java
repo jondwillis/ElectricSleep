@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -50,11 +52,11 @@ public abstract class HostActivity extends AnalyticActivity {
 
 		prepareActionBar(this);
 	}
-	
-	public static void prepareActionBar(SupportActivity supportActivity)
-	{
+
+	public static void prepareActionBar(SupportActivity supportActivity) {
 		// Fetch the tile bitmap from resources
-		final Bitmap bmp = BitmapFactory.decodeResource(supportActivity.getResources(), R.drawable.actionbar_bg);
+		final Bitmap bmp = BitmapFactory.decodeResource(supportActivity.getResources(),
+				R.drawable.actionbar_bg);
 		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
 		bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);
 		bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
@@ -113,8 +115,27 @@ public abstract class HostActivity extends AnalyticActivity {
 			startActivity(new Intent(this, SettingsActivity.class));
 			break;
 		case R.id.menu_item_report:
-			startActivity(new Intent("android.intent.action.VIEW",
-					Uri.parse("http://code.google.com/p/electricsleep/issues/entry")));
+			String versionName = "???";
+			try {
+				versionName = getPackageManager().getPackageInfo(this.getPackageName(),
+						PackageManager.GET_META_DATA).versionName;
+			} catch (NameNotFoundException e) {
+				this.trackEvent("Retrieving VersionName failed for HostActivity.", 1);
+				break;
+			}
+
+			final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+			emailIntent.setType("plain/text");
+			emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+					new String[] { getString(R.string.developer_email_address) });
+			//emailIntent.putExtra(android.content.Intent.EXTRA_CC,
+			//		new String[] { getString(R.string.developer_email_address) });
+			emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+					getString(R.string.email_developer_subject, versionName));
+			emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+			startActivity(Intent.createChooser(emailIntent, getString(R.string.title_report)));
+			// startActivity(new Intent("android.intent.action.VIEW",
+			// Uri.parse("http://code.google.com/p/electricsleep/issues/entry")));
 			break;
 		}
 		return super.onOptionsItemSelected(item);
