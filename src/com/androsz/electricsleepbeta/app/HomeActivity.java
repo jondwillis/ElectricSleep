@@ -152,7 +152,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				}
 			});
 
-			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2);
+			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
 			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text));
 			sleepChart.setVisibility(View.VISIBLE);
 			lastSleepTitleText.setVisibility(View.VISIBLE);
