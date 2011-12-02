@@ -5,7 +5,7 @@
         android:id="@+id/menu_item_export_all"
         android:icon="@android:drawable/ic_menu_share"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/export_all"></item>
+        android:title="@string/export_all" android:visible="false"></item>
 
     <item
         android:id="@+id/menu_item_delete_all"

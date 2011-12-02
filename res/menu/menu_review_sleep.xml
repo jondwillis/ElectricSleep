@@ -5,7 +5,7 @@
         android:id="@+id/menu_item_export_sleep_record"
         android:icon="@android:drawable/ic_menu_share"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/export"></item>
+        android:title="@string/export" android:visible="false"></item>
 
     <item
         android:id="@+id/menu_item_delete_sleep_record"
