@@ -151,10 +151,7 @@ public class SleepActivity extends HostActivity {
 						if (forceScreenOn) {
 							textSleepDim.setVisibility(View.VISIBLE);
 
-							// queue the dim screen task
-							if (dimScreenTask != null) {
-								dimScreenTask.cancel(true);
-							}
+							cancelDimScreenTask();
 							dimScreenTask = new DimScreenTask();
 							dimScreenTask.execute();
 
@@ -255,11 +252,16 @@ public class SleepActivity extends HostActivity {
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(syncChartReceiver);
 		unregisterReceiver(batteryChangedReceiver);
+		cancelDimScreenTask();
+		super.onPause();
+	}
+
+	private void cancelDimScreenTask() {
 		// cancel the dim screen task if it hasn't completed
 		if (dimScreenTask != null) {
 			dimScreenTask.cancel(true);
+			Toast.makeText(this, "Warning: dim sleep mode can only occur on the Sleep screen.", Toast.LENGTH_LONG).show();
 		}
-		super.onPause();
 	}
 
 	@Override
