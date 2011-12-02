@@ -21,8 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:drawableTop="@drawable/home_btn_sleep"
-            android:onClick="onSleepClick"
-            android:text="@string/title_sleep" >
+            android:onClick="onSleepClick" >
         </Button>
 
         <Button
@@ -32,8 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:drawableTop="@drawable/home_btn_history"
-            android:onClick="onHistoryClick"
-            android:text="@string/title_history" >
+            android:onClick="onHistoryClick" >
         </Button>
 
         <Button
@@ -43,8 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
             android:drawableTop="@drawable/home_btn_alarms"
-            android:onClick="onAlarmsClick"
-            android:text="@string/title_pref_alarms" >
+            android:onClick="onAlarmsClick" >
         </Button>
     </LinearLayout>
 

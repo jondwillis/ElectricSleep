@@ -15,30 +15,27 @@
             style="@style/HomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="1"
             android:drawableTop="@drawable/home_btn_sleep"
-            android:onClick="onSleepClick"
-            android:text="@string/title_sleep" />
+            android:onClick="onSleepClick" />
 
         <Button
             android:id="@+id/home_btn_history"
             style="@style/HomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="1"
             android:drawableTop="@drawable/home_btn_history"
-            android:onClick="onHistoryClick"
-            android:text="@string/title_history" />
+            android:onClick="onHistoryClick" />
 
         <Button
             android:id="@+id/home_btn_alarms"
             style="@style/HomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_weight="1"
             android:drawableTop="@drawable/home_btn_alarms"
-            android:onClick="onAlarmsClick"
-            android:text="@string/title_pref_alarms" />
+            android:onClick="onAlarmsClick" />
     </LinearLayout>
 
     <View

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--
-    Base application theme is the default theme.
+    
+   <!--
 	<style name="Theme" ></style>
 
-	<style name="Theme.electricsleep"  parent="@Style/Theme.Sherlock"> 
+	  <style name="Theme.electricsleep"  parent="@style/Theme.Sherlock"> 
 		<item name="android:windowContentOverlay">@android:color/transparent</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
@@ -18,13 +18,12 @@
     -->
 
     <style name="HomeButton">
-        <item name="android:padding">8dip</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:textSize">@dimen/text_size_large</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColor">@color/primary1</item>
-        <item name="android:background">@null</item>
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:textSize">0dp</item>
+		<item name="android:background">@null</item>
     </style>
 
     <style name="AppwidgetButton">
@@ -95,19 +94,18 @@
         <item name="android:paddingBottom">8dip</item>
     </style>
 
-    <style name="TextHeader">
-        <item name="android:textSize">18sp</item>
+    <style name="TextHeader" parent="@android:style/TextAppearance.Large">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/primary1</item>
     </style>
 
-    <style name="TextHeaderTwo">
+    <style name="TextHeaderTwo" parent="@android:style/TextAppearance.Large">
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text</item>
     </style>
 
-    <style name="TextBody">
+    <style name="TextBody" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">15sp</item>
         <item name="android:lineSpacingMultiplier">1.1</item>
         <item name="android:textColor">@color/text</item>
