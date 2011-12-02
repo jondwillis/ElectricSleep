@@ -19,8 +19,29 @@ public class ReviewSleepChart extends SleepChart {
 	@Override
 	protected AbstractChart buildChart() {
 		final TimeChart chart = (TimeChart) super.buildChart();
-		chart.setDateFormat("h");
-		chart.getRenderer().setXLabels(6);
+		
+		//final double firstX = xyMultipleSeriesRenderer.getXAxisMin();
+		//final double lastX = xyMultipleSeriesRenderer.getXAxisMax();
+		//final int HOUR_IN_MS = 1000 * 60 * 60;
+		//if (lastX - firstX > HOUR_IN_MS*2) {
+		//	chart.getRenderer().setXLabels(8);
+		//	chart.setDateFormat("h");
+		//}
+		
+		xyMultipleSeriesRenderer.setInScroll(true);
 		return chart;
+	}
+	
+	@Override
+	public void reconfigure()
+	{
+		if (makesSenseToDisplay()) {
+			super.reconfigure();
+			final int HOUR_IN_MS = 1000 * 60 * 60;
+			final double firstX = xyMultipleSeriesRenderer.getXAxisMin();
+			final double lastX = xyMultipleSeriesRenderer.getXAxisMax();
+			final double length = lastX-firstX;
+			
+		}
 	}
 }

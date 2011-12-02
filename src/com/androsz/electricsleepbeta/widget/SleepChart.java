@@ -100,8 +100,10 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
-					.calculatePxFromDp(context, 30) + textSize));
+			//xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
+			//		.calculatePxFromDp(context, 30) + textSize*3));
+			xyMultipleSeriesRenderer.setAntialiasing(true);
+			xyMultipleSeriesRenderer.setFitLegend(true);
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
@@ -111,10 +113,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
 			xyMultipleSeriesRenderer.setApplyBackgroundColor(false);
-			xyMultipleSeriesRenderer.setInScroll(true);
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
-			timeChart.setDateFormat("h:mm a");
+			timeChart.setDateFormat("h:mm:ss");
 			return timeChart;
 		}
 		return null;
@@ -138,17 +139,22 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			final double firstX = xySeriesMovement.getX(0);
 			final double lastX = xySeriesMovement.getX(xySeriesMovement.getItemCount() - 1);
 
-			if (makesSenseToDisplay()) {
+			//if (makesSenseToDisplay()) {
 				// reconfigure the calibration line..
 				xySeriesCalibration.clear();
 
 				xySeriesCalibration.add(firstX, calibrationLevel);
 				xySeriesCalibration.add(lastX, calibrationLevel);
-			}
+			//}
 
-			final int HOUR_IN_MS = 1000 * 60 * 60;
-			if (lastX - firstX > HOUR_IN_MS) {
+			final int MINUTE_IN_MS = 1000 * 60;
+			final int HOUR_IN_MS = MINUTE_IN_MS * 60;
+			if (lastX - firstX > HOUR_IN_MS*2) {
 				((TimeChart) mChart).setDateFormat("h");
+				xyMultipleSeriesRenderer.setXLabels(8);
+			}else if (lastX - firstX > MINUTE_IN_MS*3) {
+				((TimeChart) mChart).setDateFormat("h:mm");
+				xyMultipleSeriesRenderer.setXLabels(5);
 			}
 
 			xyMultipleSeriesRenderer.setXAxisMin(firstX);
