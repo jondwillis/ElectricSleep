@@ -128,11 +128,9 @@ public abstract class HostActivity extends AnalyticActivity {
 			emailIntent.setType("plain/text");
 			emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
 					new String[] { getString(R.string.developer_email_address) });
-			//emailIntent.putExtra(android.content.Intent.EXTRA_CC,
-			//		new String[] { getString(R.string.developer_email_address) });
 			emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 					getString(R.string.email_developer_subject, versionName));
-			emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+			emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.developer_email_body));
 			startActivity(Intent.createChooser(emailIntent, getString(R.string.title_report)));
 			// startActivity(new Intent("android.intent.action.VIEW",
 			// Uri.parse("http://code.google.com/p/electricsleep/issues/entry")));
