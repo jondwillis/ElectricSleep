@@ -64,9 +64,6 @@
             android:label="@string/dim_press_back_to_exit_"
             android:name="com.androsz.electricsleepbeta.app.DimSleepActivity" />
         <activity
-            android:label="@string/about"
-            android:name="com.androsz.electricsleepbeta.app.AboutActivity" />
-        <activity
             android:label="@string/title_calibrate"
             android:name="com.androsz.electricsleepbeta.app.CalibrationWizardActivity" />
         <activity
