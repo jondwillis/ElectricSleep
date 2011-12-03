@@ -66,8 +66,8 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				final int sensorDelay = Integer.parseInt(userPrefs.getString(
 						context.getString(R.string.pref_sensor_delay), ""
 								+ SensorManager.SENSOR_DELAY_NORMAL));
-				final boolean useAlarm = userPrefs.getBoolean(
-						context.getString(R.string.pref_use_alarm), false);
+				//final boolean useAlarm = userPrefs.getBoolean(
+				//		context.getString(R.string.pref_use_alarm), false);
 				final int alarmWindow = Integer.parseInt(userPrefs.getString(
 						context.getString(R.string.pref_alarm_window), "-1"));
 				final boolean airplaneMode = userPrefs.getBoolean(
@@ -80,7 +80,7 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				serviceIntent = new Intent(context, SleepMonitoringService.class);
 				serviceIntent.putExtra(EXTRA_ALARM, alarmTriggerSensitivity);
 				serviceIntent.putExtra(EXTRA_SENSOR_DELAY, sensorDelay);
-				serviceIntent.putExtra(EXTRA_USE_ALARM, useAlarm);
+				serviceIntent.putExtra(EXTRA_USE_ALARM, true);
 				serviceIntent.putExtra(EXTRA_ALARM_WINDOW, alarmWindow);
 				serviceIntent.putExtra(EXTRA_AIRPLANE_MODE, airplaneMode);
 				serviceIntent.putExtra(EXTRA_SILENT_MODE, silentMode);
