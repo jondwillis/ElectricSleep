@@ -735,5 +735,6 @@
     <string name="sensors">Sensors</string>
     <string name="accelerometer">Accelerometer</string>
     <string name="calibrate_and_manage_sensors">Calibrate and manage sensors</string>
+    <string name="your_rating">Your Rating</string>
 
 </resources>

@@ -9,6 +9,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
+        <TextView
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="@string/your_rating" />
+
         <RatingBar
             android:id="@+id/value_rating_bar"
             android:layout_width="wrap_content"
@@ -18,132 +25,101 @@
             android:numStars="5"
             android:stepSize="1" />
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+        <TextView
+            android:id="@+id/header_score_text"
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="2"
+            android:text="@string/sleep_score" >
+        </TextView>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/value_score_text"
+            style="@style/HomeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="x"
+            android:textSize="40dip" >
+        </TextView>
 
-                <TextView
-                    android:id="@+id/header_score_text"
-                    style="@style/TextHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/sleep_score" >
-                </TextView>
+        <TextView
+            android:id="@+id/header_duration_text"
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="2"
+            android:text="@string/duration" >
+        </TextView>
 
-                <TextView
-                    android:id="@+id/value_score_text"
-                    style="@style/HomeButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="x"
-                    android:textSize="40dip" >
-                </TextView>
-            </TableRow>
+        <TextView
+            android:id="@+id/value_duration_text"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="x" >
+        </TextView>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/header_spikes_text"
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="2"
+            android:text="@string/spikes" >
+        </TextView>
 
-                <TextView
-                    android:id="@+id/header_duration_text"
-                    style="@style/TextHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/duration" >
-                </TextView>
+        <TextView
+            android:id="@+id/value_spikes_text"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="x" >
+        </TextView>
 
-                <TextView
-                    android:id="@+id/value_duration_text"
-                    style="@style/TextHeaderTwo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="x" >
-                </TextView>
-            </TableRow>
+        <TextView
+            android:id="@+id/header_fell_asleep_text"
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="2"
+            android:text="@string/fell_asleep" >
+        </TextView>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/value_fell_asleep_text"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="x" >
+        </TextView>
 
-                <TextView
-                    android:id="@+id/header_spikes_text"
-                    style="@style/TextHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/spikes" >
-                </TextView>
+        <TextView
+            android:id="@+id/header_note_text"
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="2"
+            android:text="@string/note" >
+        </TextView>
 
-                <TextView
-                    android:id="@+id/value_spikes_text"
-                    style="@style/TextHeaderTwo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="x" >
-                </TextView>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/header_fell_asleep_text"
-                    style="@style/TextHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/fell_asleep" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/value_fell_asleep_text"
-                    style="@style/TextHeaderTwo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:text="x" >
-                </TextView>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/header_note_text"
-                    style="@style/TextHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/note" >
-                </TextView>
-            </TableRow>
-
-            <TextView
-                android:id="@+id/value_note_text"
-                style="@style/TextHeaderTwo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="left"
-                android:text="x" >
-            </TextView>
-        </TableLayout>
+        <TextView
+            android:id="@+id/value_note_text"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="x" >
+        </TextView>
     </LinearLayout>
 
 </ScrollView>
