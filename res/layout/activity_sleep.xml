@@ -53,7 +53,6 @@
             android:text="@string/sleep_dim" />
     </LinearLayout>
     <!-- </ScrollView> -->
-
     <com.androsz.electricsleepbeta.widget.SleepChart
         android:id="@+id/sleep_movement_chart"
         android:layout_width="match_parent"
@@ -63,25 +62,35 @@
         android:animateLayoutChanges="true"
         android:visibility="gone" />
 
+
     <LinearLayout
         android:id="@+id/wait_for_sleep_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true" >
+        android:layout_weight="1"
+        android:gravity="center" >
 
-        <ProgressBar
+        <LinearLayout
+            android:id="@+id/wait_for_sleep_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:indeterminate="true" />
+            android:orientation="vertical" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:gravity="center"
-            android:text="@string/dialog_wait_for_sleep_data_message" >
-        </TextView>
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" >
+            </ProgressBar>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_wait_for_sleep_data_message" >
+            </TextView>
+        </LinearLayout>
     </LinearLayout>
+    
 
 </LinearLayout>

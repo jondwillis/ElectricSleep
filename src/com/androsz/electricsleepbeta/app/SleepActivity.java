@@ -18,6 +18,7 @@ import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -200,7 +201,7 @@ public class SleepActivity extends HostActivity {
 		}
 	};
 
-	private LinearLayout waitForSleepData;
+	private ViewGroup waitForSleepData;
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -292,7 +293,7 @@ public class SleepActivity extends HostActivity {
 	@Override
 	protected void onResume() {
 		sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
-		waitForSleepData = (LinearLayout) findViewById(R.id.wait_for_sleep_data);
+		waitForSleepData = (ViewGroup) findViewById(R.id.wait_for_sleep_data);
 		textSleepNoAlarm = (TextView) findViewById(R.id.text_sleep_no_alarm);
 		divSleepNoAlarm = findViewById(R.id.div_sleep_no_alarm);
 		textSleepDim = (TextView) findViewById(R.id.text_sleep_dim);
