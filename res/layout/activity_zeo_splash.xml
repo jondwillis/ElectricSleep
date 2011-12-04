@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent" android:layout_gravity="center_horizontal" >
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,7 +11,6 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/textView1"
             style="@style/TextHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,10 +18,11 @@
             android:text="Welcome to ElectricSleep" />
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/button_learn_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:onClick="onClick"
             android:scaleType="center"
             android:src="@drawable/powered_by_zeo" />
 
@@ -40,30 +41,31 @@
             android:text="Message about how you can learn more about Zeo. Lorem ipsum..." />
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/primary1_transparent"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <Button
-                android:id="@+id/button1"
-                android:layout_margin="4dip"
+                android:id="@+id/button_learn_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dip"
+                android:onClick="onClick"
                 android:text="Learn more about Zeo" />
 
             <Button
-                android:id="@+id/button2"
-                android:layout_margin="4dip"
+                android:id="@+id/button_get_started"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="4dip"
+                android:onClick="onClick"
                 android:text="Get Started"
                 android:visibility="gone" />
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/checkBox1"
+            android:id="@+id/checkbox_dont_show_again"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don&apos;t display this message again"

@@ -38,6 +38,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 	// name of the preferences file that holds environmental preferences
 	// example: show the user a donate message once
 	public static final String PREFERENCES_ENVIRONMENT = "prefsVersion";
+	public static final String PREFERENCES_KEY_DONT_SHOW_ZEO = "dontShowZeoMessage";
 
 	@Override
 	protected int getContentAreaLayoutId() {

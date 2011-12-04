@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
@@ -70,7 +71,6 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 
 	@Override
 	protected int getWizardLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.wizard_welcome;
 	}
 
@@ -84,7 +84,15 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 		}
 	}
 
-	//Prevents options from showing up if required
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.button_learn_more:
+			ZeoSplashActivity.learnMore(this);
+			break;
+		}
+	}
+
+	// Prevents options from showing up if required
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		if (required) {
@@ -93,8 +101,8 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 			return super.onCreateOptionsMenu(menu);
 		}
 	}
-	
-	//Prevents Home button from triggering if required
+
+	// Prevents Home button from triggering if required
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		if (required && item.getItemId() == android.R.id.home) {

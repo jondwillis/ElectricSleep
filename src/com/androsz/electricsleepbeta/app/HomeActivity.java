@@ -55,10 +55,9 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 		final ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
-		new AsyncTask<Void, Void, Void>() {
+		/*new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
-				PreferenceManager.setDefaultValues(HomeActivity.this, R.xml.settings, false);
 				final SharedPreferences userPrefs = getSharedPreferences(
 						SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
 				final int prefsVersion = userPrefs.getInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
@@ -66,15 +65,12 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				if (prefsVersion == 0) {
 					startActivity(new Intent(HomeActivity.this, WelcomeTutorialWizardActivity.class)
 							.putExtra("required", true));
-				} else {
-
-					if (WelcomeTutorialWizardActivity
-							.enforceCalibrationBeforeStartingSleep(HomeActivity.this)) {
-					}
+				} else if (WelcomeTutorialWizardActivity
+						.enforceCalibrationBeforeStartingSleep(HomeActivity.this)) {
 				}
 				return null;
 			}
-		}.execute();
+		}.execute();*/
 
 		sleepChart = (SleepChart) findViewById(R.id.home_sleep_chart);
 
@@ -84,7 +80,8 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
-				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, SleepSessions.MainTable.KEY_ROW_ID + " DESC");
+				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
+				SleepSessions.MainTable.KEY_ROW_ID + " DESC");
 	}
 
 	@Override
@@ -110,7 +107,8 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	public void onLoadFinished(Loader<Cursor> arg0, final Cursor cursor) {
 		final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
 		final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
-		//final ViewGroup container = (ViewGroup) findViewById(R.id.home_stats_container);
+		// final ViewGroup container = (ViewGroup)
+		// findViewById(R.id.home_stats_container);
 		final ViewGroup statsContainer = (ViewGroup) findViewById(R.id.home_statistics_dashboard);
 		if (cursor == null || cursor.getCount() == 0) {
 			statsContainer.setVisibility(View.GONE);
@@ -145,14 +143,16 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 					final Intent reviewSleepIntent = new Intent(HomeActivity.this,
 							ReviewSleepActivity.class);
 
-					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_ID_URI_BASE,
+					final Uri data = Uri.withAppendedPath(
+							SleepSessions.MainTable.CONTENT_ID_URI_BASE,
 							String.valueOf(sleepChartRowId));
 					reviewSleepIntent.setData(data);
 					startActivity(reviewSleepIntent);
 				}
 			});
 
-			sleepChart.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
+			sleepChart
+					.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
 			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text));
 			sleepChart.setVisibility(View.VISIBLE);
 			lastSleepTitleText.setVisibility(View.VISIBLE);

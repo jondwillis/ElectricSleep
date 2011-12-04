@@ -33,11 +33,11 @@
     <application
         android:debuggable="true"
         android:hardwareAccelerated="true"
-        android:uiOptions="splitActionBarWhenNarrow"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name="com.androsz.electricsleepbeta.app.StrictModeWhenDebuggableApplication"
-        android:theme="@style/Theme.Sherlock" >
+        android:theme="@style/Theme.Sherlock"
+        android:uiOptions="splitActionBarWhenNarrow" >
 
         <!-- Used for install referrer tracking -->
         <receiver
@@ -47,18 +47,23 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
         <activity
             android:label="@string/app_name"
             android:name="com.androsz.electricsleepbeta.app.HomeActivity" >
+        </activity>
+        <activity
+            android:label="@string/title_sleep"
+            android:name="com.androsz.electricsleepbeta.app.SleepActivity" />
+        <activity
+            android:label="@string/app_name"
+            android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:label="@string/title_sleep"
-            android:name="com.androsz.electricsleepbeta.app.SleepActivity" />
         <activity
             android:excludeFromRecents="true"
             android:label="@string/dim_press_back_to_exit_"
@@ -158,7 +163,8 @@
             </intent-filter>
         </service>
 
-        <!-- <receiver
+        <!--
+        <receiver
             android:icon="@drawable/icon"
             android:label="@string/title_sleep"
             android:name="com.androsz.electricsleepbeta.appwidget.SleepWidget" >
@@ -169,7 +175,8 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidgetprovider_sleep" />
-        </receiver> -->
+        </receiver>
+        -->
         <receiver android:name="com.androsz.electricsleepbeta.alarmclock.AlarmInitReceiver" >
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
