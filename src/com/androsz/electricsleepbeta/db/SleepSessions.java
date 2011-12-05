@@ -410,7 +410,6 @@ public class SleepSessions {
 			//c.close();
 			return sessions;
 		}
-		
 		throw new IllegalArgumentException("Cursor was null or closed.");
 	}
 

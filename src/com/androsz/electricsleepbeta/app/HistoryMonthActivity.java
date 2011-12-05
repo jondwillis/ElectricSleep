@@ -206,7 +206,7 @@ public class HistoryMonthActivity extends HostActivity implements
 		@Override
 		public void finishUpdate(View container) {
 			if (!alreadyLoaded && ((ViewPager) container).getChildCount() == getCount()) {
-				getSupportLoaderManager().restartLoader(0, null, HistoryMonthActivity.this);
+				getSupportLoaderManager().getLoader(0).forceLoad();
 				alreadyLoaded = true;
 			}
 		}
@@ -371,7 +371,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.menu_multiple_history, menu);
+		// getMenuInflater().inflate(R.menu.menu_multiple_history, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -399,11 +399,14 @@ public class HistoryMonthActivity extends HostActivity implements
 			public void run() {
 				// android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 				try {
+					mSessions = new ArrayList<Long[]>(0);
 					mSessions = SleepSessions.getStartAndEndTimesFromCursor(
 							HistoryMonthActivity.this, data);
-					eventsChanged(-1);
+				} catch (IllegalArgumentException ex) {
 				} catch (IllegalStateException ex) {
 				} catch (StaleDataException ex) {
+				} finally {
+					eventsChanged(-1);
 				}
 			}
 		}).start();
