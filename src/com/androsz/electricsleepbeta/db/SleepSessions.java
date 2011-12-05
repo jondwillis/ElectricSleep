@@ -397,9 +397,9 @@ public class SleepSessions {
 	}
 
 	public static ArrayList<Long[]> getStartAndEndTimesFromCursor(Context context, Cursor c) {
-		final ArrayList<Long[]> sessions = new ArrayList<Long[]>(20);
 
 		if (c != null && !c.isClosed() && c.moveToFirst()) {
+			final ArrayList<Long[]> sessions = new ArrayList<Long[]>(20);
 
 			do {
 				final SleepSession session = new SleepSession(c);
@@ -408,9 +408,10 @@ public class SleepSessions {
 						c.getLong(0) });
 			} while (c.moveToNext());
 			c.close();
+			return sessions;
 		}
 
-		return sessions;
+		throw new IllegalArgumentException("Cursor was null or closed.");
 	}
 
 	/**

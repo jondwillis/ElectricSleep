@@ -900,10 +900,10 @@ public class MonthView extends View {
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
-				int applicableEventsCount = 0;
+				ArrayList<Long> applicableRowIds = new ArrayList<Long>();
 				for (final Long[] session : mSessions) {
 					if (julianDay >= session[2] && julianDay <= session[3]) {
-						applicableEventsCount++;
+						applicableRowIds.add(session[4]);
 					}
 					/*
 					 * final long startTime = session[0] - thismillis; final
@@ -915,14 +915,14 @@ public class MonthView extends View {
 					 */
 				}
 
-				if (applicableEventsCount == 1) {
+				if (applicableRowIds.size() == 1) {
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
 					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
-							String.valueOf(mSessions.get(0)[4]));
+							String.valueOf(applicableRowIds.get(0)));
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
-				} else if (applicableEventsCount > 1) {
+				} else if (applicableRowIds.size() > 1) {
 
 					final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
 							java.text.DateFormat.SHORT, Locale.getDefault());
@@ -933,57 +933,7 @@ public class MonthView extends View {
 							new Intent(getContext(), HistoryActivity.class).putExtra(
 									HistoryActivity.SEARCH_FOR, formattedMDY));
 				}
-
-				// if we have more than one applicable entry, then
-				// open the history activity and show all entries
-				// for the selected date
-				//
-				// if (applicableEvents.size() == 1) {
-				// final Intent reviewSleepIntent = new Intent(getContext(),
-				// ReviewSleepActivity.class);
-				// final Cursor c =
-				// SleepSessions.getSleepMatches(mParentActivity,
-				// applicableEvents.get(0).title,
-				// new String[] { SleepSessions.MainTable._ID });
-				// c.moveToFirst();
-				// // TODO:
-				// // hook this into sleep db
-				//
-				// //final Cursor c = null;
-				// SleepSessions.getSleepMatches(mParentActivity,
-				// applicableEvents.get(0).title,
-				// new String[] {
-				// BaseColumns._ID,
-				// SleepSessions.MainTable.KEY_TITLE,
-				// SleepSessions.MainTable.KEY_ALARM,
-				// SleepSessions.MainTable.KEY_DURATION,
-				// SleepSessions.MainTable.KEY_MIN,
-				// SleepSessions.MainTable.KEY_NOTE,
-				// SleepSessions.MainTable.KEY_RATING, //
-				// SleepSessions.MainTable.KEY_SLEEP_DATA,
-				// SleepSessions.MainTable.KEY_SPIKES,
-				// SleepSessions.MainTable.KEY_TIME_FELL_ASLEEP });
-				//
-				// if (c == null) { // we may have lost the cursor since the //
-				// // applicableEvents were // loaded. // do nothing return
-				// // null; }
-				// final Uri data =
-				// Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
-				// String.valueOf(c.getLong(0))); // c.close();
-				// reviewSleepIntent.setData(data);
-				// getContext().startActivity(reviewSleepIntent);
-				// } else if (applicableEvents.size() > 1) {
-				// final java.text.DateFormat sdf =
-				// java.text.DateFormat.getDateInstance(
-				// java.text.DateFormat.SHORT, Locale.getDefault());
-				// final Calendar calendar = Calendar.getInstance();
-				// calendar.setTimeInMillis(millis);
-				// final String formattedMDY = sdf.format((calendar.getTime()));
-				// getContext().startActivity(
-				// new Intent(getContext(), HistoryActivity.class).putExtra(
-				// HistoryActivity.SEARCH_FOR, formattedMDY));
-				// }
-				// }
+				
 				return null;
 			}
 		}.execute();

@@ -17,7 +17,9 @@ import android.os.Build.VERSION;
 import android.text.format.Time;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.AnalyticActivity;
 import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
+import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.PointD;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -80,7 +82,6 @@ public class SleepSession {
 			chartData = (List<PointD>) byteArrayToObject(cursor.getBlob(cursor
 					.getColumnIndexOrThrow(MainTable.KEY_SLEEP_DATA)));
 		} catch (final Exception e) {
-
 			GoogleAnalyticsTracker.getInstance().trackEvent(Integer.toString(VERSION.SDK_INT),
 					Build.MODEL, "sleepSessionInstatiation : " + e.getMessage(), 0);
 		}
