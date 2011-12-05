@@ -202,10 +202,10 @@ public class HistoryMonthActivity extends HostActivity implements
 		}
 
 		boolean alreadyLoaded = false;
+
 		@Override
 		public void finishUpdate(View container) {
- 			if(!alreadyLoaded && ((ViewPager)container).getChildCount() == getCount())
-			{ 
+			if (!alreadyLoaded && ((ViewPager) container).getChildCount() == getCount()) {
 				getSupportLoaderManager().restartLoader(0, null, HistoryMonthActivity.this);
 				alreadyLoaded = true;
 			}
@@ -371,7 +371,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_multiple_history, menu);
+		//getMenuInflater().inflate(R.menu.menu_multiple_history, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -393,20 +393,20 @@ public class HistoryMonthActivity extends HostActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
-		// new Thread(new Runnable() {
+		new Thread(new Runnable() {
 
-		// @Override
-		// public void run() {
-		// android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-		try {
-			mSessions = SleepSessions
-					.getStartAndEndTimesFromCursor(HistoryMonthActivity.this, data);
-			eventsChanged(-1);
-		} catch (IllegalStateException ex) {
-		} catch (StaleDataException ex) {
-		}
-		// }
-		// }).start();
+			// @Override
+			public void run() {
+				// android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+				try {
+					mSessions = SleepSessions.getStartAndEndTimesFromCursor(
+							HistoryMonthActivity.this, data);
+					eventsChanged(-1);
+				} catch (IllegalStateException ex) {
+				} catch (StaleDataException ex) {
+				}
+			}
+		}).start();
 	}
 
 	@Override
