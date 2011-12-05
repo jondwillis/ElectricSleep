@@ -459,7 +459,7 @@ public class MonthView extends View {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
+//				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
 				//final Time monthStart = mTempTime;
 				//monthStart.set(mViewCalendar);
 				//monthStart.monthDay = 1;
@@ -467,7 +467,7 @@ public class MonthView extends View {
 				//monthStart.minute = 0;
 				//monthStart.second = 0;
 				//final long startOfMonthMillis = monthStart.normalize(true);
-				mSessions = sessions;//new ArrayList<Long[]>(sessions);
+				mSessions = new ArrayList<Long[]>(sessions);//new ArrayList<Long[]>(sessions);
 				// Clear out event days
 				Arrays.fill(eventDay, false);
 				// Compute the new set of days with events

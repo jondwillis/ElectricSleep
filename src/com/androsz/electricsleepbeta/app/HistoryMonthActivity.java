@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.database.StaleDataException;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.LoaderManager;
@@ -148,12 +149,8 @@ public class HistoryMonthActivity extends HostActivity implements
 		}
 
 		@Override
-		public void finishUpdate(View container) {
-		}
-
-		@Override
 		public int getCount() {
-			return 3;
+			return titles.length;
 		}
 
 		@Override
@@ -202,6 +199,16 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public void startUpdate(View container) {
+		}
+
+		boolean alreadyLoaded = false;
+		@Override
+		public void finishUpdate(View container) {
+ 			if(!alreadyLoaded && ((ViewPager)container).getChildCount() == getCount())
+			{ 
+				getSupportLoaderManager().restartLoader(0, null, HistoryMonthActivity.this);
+				alreadyLoaded = true;
+			}
 		}
 	}
 
@@ -252,17 +259,23 @@ public class HistoryMonthActivity extends HostActivity implements
 
 			@Override
 			public void run() {
-				//if (whichPage == -1) {
-					for (int i = 0; i < monthPager.getChildCount(); i++) {
-						final MonthView mv = (MonthView) monthPager.getChildAt(i);
-						Time t = mv.getTime();
-						mv.forceReloadEvents(getSessionsInInterval(t.toMillis(true), 31));
-					}
-				//} else {
-				//	final MonthView mv = (MonthView) monthPager.getChildAt(whichPage);
-				//	Time t = mv.getTime();
-				//	mv.forceReloadEvents(getSessionsInInterval(mv.getTime().toMillis(true), 31));
-				//}
+				// if (whichPage == -1) {
+				ViewPager vp = monthPager;
+				for (int i = 0; i < vp.getChildCount(); i++) {
+					final MonthView mv = (MonthView) monthPager.getChildAt(i);
+					Time t = mv.getTime();
+					mv.forceReloadEvents(mSessions);/*
+													 * getSessionsInInterval(t.
+													 * toMillis(true), 31));
+													 */
+				}
+				// } else {
+				// final MonthView mv = (MonthView)
+				// monthPager.getChildAt(whichPage);
+				// Time t = mv.getTime();
+				// mv.forceReloadEvents(getSessionsInInterval(mv.getTime().toMillis(true),
+				// 31));
+				// }
 			}
 		});
 	}
@@ -276,7 +289,7 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		final ArrayList<Long[]> sessions = new ArrayList<Long[]>(20);
 		final Time local = new Time();
-		
+
 		local.set(startMillis);
 
 		// expand start and days to include days shown from previous month
@@ -315,7 +328,6 @@ public class HistoryMonthActivity extends HostActivity implements
 		sessionsObserver = new SessionsContentObserver();
 		getContentResolver().registerContentObserver(SleepSessions.MainTable.CONTENT_URI, true,
 				sessionsObserver);
-		getSupportLoaderManager().initLoader(0, null, this);
 
 		ActionBar bar = getSupportActionBar();
 		// bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -347,6 +359,8 @@ public class HistoryMonthActivity extends HostActivity implements
 		indicator.setFooterColor(getResources().getColor(R.color.primary1));
 		indicator.setViewPager(monthPager, 1);
 		indicator.setOnPageChangeListener(new IndicatorPageChangeListener(indicator));
+
+		getSupportLoaderManager().initLoader(0, null, HistoryMonthActivity.this);
 	}
 
 	@Override
@@ -362,6 +376,12 @@ public class HistoryMonthActivity extends HostActivity implements
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		getContentResolver().unregisterContentObserver(sessionsObserver);
@@ -369,25 +389,24 @@ public class HistoryMonthActivity extends HostActivity implements
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		loader.forceLoad();
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
-		new Thread(new Runnable() {
+		// new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-				try {
-					mSessions = SleepSessions.getStartAndEndTimesFromCursor(
-							HistoryMonthActivity.this, data);
-					eventsChanged(-1);
-				} catch (IllegalStateException ex) {
-				} catch (StaleDataException ex) {
-				}
-			}
-		}).start();
+		// @Override
+		// public void run() {
+		// android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+		try {
+			mSessions = SleepSessions
+					.getStartAndEndTimesFromCursor(HistoryMonthActivity.this, data);
+			eventsChanged(-1);
+		} catch (IllegalStateException ex) {
+		} catch (StaleDataException ex) {
+		}
+		// }
+		// }).start();
 	}
 
 	@Override

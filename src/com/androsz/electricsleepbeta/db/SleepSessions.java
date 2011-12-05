@@ -407,10 +407,10 @@ public class SleepSessions {
 						(long) session.getStartJulianDay(), (long) session.getEndJulianDay(),
 						c.getLong(0) });
 			} while (c.moveToNext());
-			c.close();
+			//c.close();
 			return sessions;
 		}
-
+		
 		throw new IllegalArgumentException("Cursor was null or closed.");
 	}
 
