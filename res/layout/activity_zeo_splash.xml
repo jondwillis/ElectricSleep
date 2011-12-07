@@ -31,18 +31,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Development of ElectricSleep is now supported by Zeo. We&apos;ve made some changes and have more planned. Lorem ipsum..." />
+            android:gravity="center_horizontal"
+            android:text="Development of ElectricSleep is now supported by Zeo. We&apos;ve made some changes and have have plans to bring you more features and an even better sleep tracking experience." />
 
         <TextView
             style="@style/TextBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Message about how you can learn more about Zeo. Lorem ipsum..." />
+            android:gravity="center_horizontal"
+            android:text="Zeo helps people take control of their sleep through a variety of solutions. Learn more about these solutions, including Zeo Sleep Manager." />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dip"
             android:background="@color/primary1_transparent"
             android:orientation="vertical" >
 
