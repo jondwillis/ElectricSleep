@@ -737,5 +737,6 @@
     <string name="calibrate_and_manage_sensors">Calibrate and manage sensors</string>
     <string name="your_rating">Your Rating</string>
     <string name="developer_email_body">Please indicate the nature of this email (Bug, Request, Help, Other):\n</string>
+    <string name="zeo_message_two">Click \"Learn more about Zeo\" for information about how Zeo helps people take control of their sleep, and the Zeo Sleep Manager.</string>
 
 </resources>
