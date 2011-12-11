@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.myzeo.android</groupId>
-	<artifactId>electricsleep</artifactId>
+	<groupId>com.androsz</groupId>
+	<artifactId>electricsleepbeta</artifactId>
 	<packaging>apk</packaging>
 	<version>1.0.0</version>
 
@@ -69,13 +69,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<apk.prefix>electricsleep</apk.prefix>
-
+		
 		<java.version>1.6</java.version>
-		<android.version>4.0_r1</android.version>
+		<android.version>3.2_r1</android.version>
 		<android.platform>14</android.platform>
-		<actionbarsherlock.version>3.4.1</actionbarsherlock.version>
+		<actionbarsherlock.version>3.4.2</actionbarsherlock.version>
+		<viewpagerindicator.version>2.0.0</viewpagerindicator.version>
 	</properties>
 
 	<dependencyManagement>
@@ -95,12 +94,12 @@
 				<groupId>com.actionbarsherlock</groupId>
 				<artifactId>plugin-preference</artifactId>
 				<version>${actionbarsherlock.version}</version>
-				<type>jar</type>
+				<type>apklib</type>
 			</dependency>
 			<dependency>
 				<groupId>com.viewpagerindicator</groupId>
 				<artifactId>library</artifactId>
-				<version>1.2.1</version>
+				<version>${viewpagerindicator.version}</version>
 				<type>apklib</type>
 			</dependency>
 		</dependencies>
@@ -128,7 +127,7 @@
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
-					<version>3.0.0-alpha-13</version>
+					<version>3.0.0</version>
 					<configuration>
 						<sdk>
 							<platform>${android.platform}</platform>
@@ -136,15 +135,6 @@
 						<undeployBeforeDeploy>true</undeployBeforeDeploy>
 					</configuration>
 					<extensions>true</extensions>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>2.7</version>
-					<configuration>
-						<failsOnError>true</failsOnError>
-					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
