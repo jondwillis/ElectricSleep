@@ -303,13 +303,17 @@ public class SetAlarm extends HostPreferenceActivity implements
 		// Asynchronously save the alarm since this method is called _before_
 		// the value of the preference has changed.
 		new AsyncTask<Void, Void, Void>() {
-
+			
 			@Override
-			protected Void doInBackground(Void... params) {
+			protected void onPreExecute() {
 				// Editing any preference (except enable) enables the alarm.
 				if (p != mEnabledPref) {
 					mEnabledPref.setChecked(true);
 				}
+			}
+
+			@Override
+			protected Void doInBackground(Void... params) {
 				saveAlarm();
 				return null;
 			}
