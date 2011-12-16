@@ -159,7 +159,7 @@
         <!-- 3.  Code elsewhere within your activity, if appropriate, to receive -->
         <!-- intents from the shortcut itself. -->
         <activity
-            android:label="Guhhh"
+            android:label="@string/title_sleep"
             android:name=".app.LauncherShortcuts" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
@@ -169,7 +169,7 @@
         <!-- intent-filter.  This gives you a way to set the text (and optionally the -->
         <!-- icon) that will be seen in the launcher's create-shortcut user interface. -->
         <activity-alias
-            android:label="@string/app_name"
+            android:label="@string/title_sleep"
             android:name=".app.CreateShortcuts"
             android:targetActivity=".app.LauncherShortcuts" > 
             <!-- This intent-filter allows your shortcuts to be created in the launcher. -->
