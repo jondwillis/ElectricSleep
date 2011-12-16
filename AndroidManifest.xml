@@ -7,9 +7,9 @@
 
     <supports-screens
         android:anyDensity="true"
-        android:smallScreens="true"
         android:largeScreens="true"
         android:normalScreens="true"
+        android:smallScreens="true"
         android:xlargeScreens="true" />
 
     <uses-sdk
@@ -141,6 +141,43 @@
         <activity
             android:label="@string/title_history"
             android:name="com.androsz.electricsleepbeta.app.HistoryMonthActivity" />
+
+        <!-- Shortcuts Samples -->
+        <!-- This section of sample code shows how your application can add shortcuts to -->
+        <!-- the launcher (home screen).  Shortcuts have a three step life cycle. -->
+        <!-- 1.  Your application offers to provide shortcuts to the launcher.  When -->
+        <!-- the user installs a shortcut, an activity within your application -->
+        <!-- generates the actual shortcut and returns it to the launcher, where it -->
+        <!-- is shown to the user as an icon. -->
+        <!-- 2.  Any time the user clicks on an installed shortcut, an intent is sent. -->
+        <!-- Typically this would then be handled as necessary by an activity within -->
+        <!-- your application. -->
+        <!-- 3.  The shortcut is deleted.  There is no notification to your application. -->
+        <!-- In order provide shortcuts from your application, you provide three things: -->
+        <!-- 1.  An intent-filter declaring your ability to provide shortcuts -->
+        <!-- 2.  Code within the activity to provide the shortcuts as requested -->
+        <!-- 3.  Code elsewhere within your activity, if appropriate, to receive -->
+        <!-- intents from the shortcut itself. -->
+        <activity
+            android:label="Guhhh"
+            android:name=".app.LauncherShortcuts" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <!-- It is recommended that you use an activity-alias to provide the "CREATE_SHORTCUT" -->
+        <!-- intent-filter.  This gives you a way to set the text (and optionally the -->
+        <!-- icon) that will be seen in the launcher's create-shortcut user interface. -->
+        <activity-alias
+            android:label="@string/app_name"
+            android:name=".app.CreateShortcuts"
+            android:targetActivity=".app.LauncherShortcuts" > 
+            <!-- This intent-filter allows your shortcuts to be created in the launcher. -->
+            <intent-filter >
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
 
         <receiver android:name="com.androsz.electricsleepbeta.alarmclock.AlarmReceiver" >
             <intent-filter >
