@@ -170,6 +170,7 @@
         <!-- icon) that will be seen in the launcher's create-shortcut user interface. -->
         <activity-alias
             android:label="@string/title_sleep"
+            android:icon="@drawable/home_btn_sleep_pressed"
             android:name=".app.CreateShortcuts"
             android:targetActivity=".app.LauncherShortcuts" > 
             <!-- This intent-filter allows your shortcuts to be created in the launcher. -->
