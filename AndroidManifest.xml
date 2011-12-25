@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="internalOnly"
     package="com.androsz.electricsleepbeta"
-    android:versionCode="18"
-    android:versionName="1.0" >
+    android:versionCode="19"
+    android:versionName="1.0.1" >
 
     <supports-screens
         android:anyDensity="true"
@@ -36,8 +36,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name="com.androsz.electricsleepbeta.app.StrictModeWhenDebuggableApplication"
-        android:theme="@style/Theme.Sherlock"
-        android:uiOptions="splitActionBarWhenNarrow" >
+        android:theme="@style/Theme.Sherlock" >
 
         <!-- Used for install referrer tracking -->
         <receiver
@@ -54,7 +53,7 @@
         </activity>
         <activity
             android:label="@string/title_sleep"
-            android:name="com.androsz.electricsleepbeta.app.SleepActivity" />
+            android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:uiOptions="splitActionBarWhenNarrow" />
         <activity
             android:label="@string/app_name"
             android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity" >
