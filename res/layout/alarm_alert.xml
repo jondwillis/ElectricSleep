@@ -6,8 +6,7 @@
 	Unless required by applicable law or agreed to in writing, software distributed 
 	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
-	the specific language governing permissions and limitations under the License.
--->
+	the specific language governing permissions and limitations under the License.-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -68,20 +67,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
-
+            android:orientation="vertical" >
             <Button
                 android:id="@+id/snooze"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:text="@string/alarm_alert_snooze_text" >
+
             </Button>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" >
+            </LinearLayout>
 
             <Button
                 android:id="@+id/dismiss"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:text="@string/alarm_alert_dismiss_text" />
         </LinearLayout>
     </LinearLayout>
