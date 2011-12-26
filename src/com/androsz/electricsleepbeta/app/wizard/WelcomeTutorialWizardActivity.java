@@ -1,4 +1,4 @@
-package com.androsz.electricsleepbeta.app;
+package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
+import com.androsz.electricsleepbeta.app.ZeoSplashActivity;
 
 public class WelcomeTutorialWizardActivity extends WizardActivity {
 
@@ -121,7 +124,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 
 	@Override
 	public void onLeftButtonClick(final View v) {
-		if (viewFlipper.getDisplayedChild() == 0) {
+		if (getCurrentWizardIndex() == 0) {
 			onFinishWizardActivity();
 		} else {
 			super.onLeftButtonClick(v);
@@ -154,8 +157,14 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 	protected void setupNavigationButtons() {
 		super.setupNavigationButtons();
 		final Button leftButton = (Button) findViewById(R.id.leftButton);
-		if (viewFlipper.getDisplayedChild() == 0) {
+		if (getCurrentWizardIndex() == 0) {
 			leftButton.setText(R.string.skip_tutorial);
 		}
+	}
+
+	@Override
+	protected PagerAdapter getPagerAdapter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

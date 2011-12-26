@@ -69,10 +69,10 @@
             android:name="com.androsz.electricsleepbeta.app.DimSleepActivity" />
         <activity
             android:label="@string/title_calibrate"
-            android:name="com.androsz.electricsleepbeta.app.CalibrationWizardActivity" />
+            android:name=".app.wizard.CalibrationWizardActivity" />
         <activity
             android:label="@string/welcome_tutorial"
-            android:name="com.androsz.electricsleepbeta.app.WelcomeTutorialWizardActivity" />
+            android:name=".app.wizard.WelcomeTutorialWizardActivity" />
         <activity
             android:label="@string/title_calibrate"
             android:name="com.androsz.electricsleepbeta.app.HelloWizardActivity" />

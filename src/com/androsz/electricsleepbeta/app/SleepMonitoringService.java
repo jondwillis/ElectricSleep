@@ -140,7 +140,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				final long now = System.currentTimeMillis();
 				try {
 					final Alarm alarm = Alarms.calculateNextAlert(context);
-					if (now > alarm.time + 60*alarmWindow * 1000) {
+					if (now > alarm.time + 60 * alarmWindow * 1000) {
 						Alarms.setTimeToIgnore(context, alarm, alarm.time);
 						Alarms.setNextAlert(context);
 					}
@@ -149,12 +149,12 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				}
 				stopSelf();
 			} else {
-				if(action.equals(Alarms.CANCEL_SNOOZE))
-				{
+				if (action.equals(Alarms.CANCEL_SNOOZE)) {
 					final long now = System.currentTimeMillis();
 					try {
-						final Alarm alarm = Alarms.getAlarm(context.getContentResolver(), intent.getIntExtra(Alarms.ALARM_ID, -1));
-						if (now > alarm.time + 60*alarmWindow * 1000) {
+						final Alarm alarm = Alarms.getAlarm(context.getContentResolver(),
+								intent.getIntExtra(Alarms.ALARM_ID, -1));
+						if (now > alarm.time + 60 * alarmWindow * 1000) {
 							Alarms.setTimeToIgnore(context, alarm, alarm.time);
 							Alarms.setNextAlert(context);
 						}
@@ -331,9 +331,12 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		if (waitForSensorsToWarmUp < 5) {
 			if (waitForSensorsToWarmUp == 4) {
 				waitForSensorsToWarmUp++;
-				updateTimer.scheduleAtFixedRate(new UpdateTimerTask(), updateInterval,
-						updateInterval);
-
+				try {
+					updateTimer.scheduleAtFixedRate(new UpdateTimerTask(), updateInterval,
+							updateInterval);
+				} catch (IllegalStateException ise) {
+					// user stopped monitoring really quickly after starting.
+				}
 				gravity[0] = event.values[0];
 				gravity[1] = event.values[1];
 				gravity[2] = event.values[2];

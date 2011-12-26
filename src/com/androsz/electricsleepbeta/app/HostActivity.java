@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.internal.view.menu.MenuItemImpl;
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
+import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
 
 public abstract class HostActivity extends AnalyticActivity {
 

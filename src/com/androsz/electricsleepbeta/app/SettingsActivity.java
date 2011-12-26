@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.preference.HostPreferenceActivity;
 
 public class SettingsActivity extends HostPreferenceActivity {

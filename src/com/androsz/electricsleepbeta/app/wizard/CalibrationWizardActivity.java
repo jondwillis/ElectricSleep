@@ -1,13 +1,20 @@
-package com.androsz.electricsleepbeta.app;
+package com.androsz.electricsleepbeta.app.wizard;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.CalibrateAlarmActivity;
+import com.androsz.electricsleepbeta.app.CalibrateForResultActivity;
+import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
+import com.androsz.electricsleepbeta.app.CheckForScreenBugActivity;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
+import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 
 public class CalibrationWizardActivity extends WizardActivity {
 
@@ -98,8 +105,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 					CheckForScreenBugAccelerometerService.BUG_PRESENT);
 			break;
 		}
-		viewFlipper.showNext();
-		setupNavigationButtons();
+		onLeftButtonClick(null);
 	}
 
 	@Override
@@ -150,8 +156,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 		super.onRestoreInstanceState(savedState);
 
-		viewFlipper.setDisplayedChild(savedState.getInt("child"));
-
 		alarmTriggerCalibration = savedState.getDouble("alarm");
 		screenBugPresent = savedState.getBoolean("screenBug");
 
@@ -161,7 +165,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt("child", viewFlipper.getDisplayedChild());
 
 		outState.putDouble("alarm", alarmTriggerCalibration);
 		outState.putBoolean("screenBug", screenBugPresent);
@@ -170,8 +173,8 @@ public class CalibrationWizardActivity extends WizardActivity {
 	@Override
 	protected boolean onWizardActivity() {
 		boolean didActivity = false;
-		final int currentChildId = viewFlipper.getCurrentView().getId();
-		switch (currentChildId) {
+		
+		switch (getCurrentWizardIndex()) {
 		case R.id.alarmTest:
 			currentTask = new AlarmCalibrationTask().execute(null, null, null);
 			didActivity = true;
@@ -182,5 +185,11 @@ public class CalibrationWizardActivity extends WizardActivity {
 			break;
 		}
 		return didActivity;
+	}
+
+	@Override
+	protected PagerAdapter getPagerAdapter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
