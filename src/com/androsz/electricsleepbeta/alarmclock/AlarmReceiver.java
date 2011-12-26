@@ -97,7 +97,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 		// Maintain a cpu wake lock until the AlarmAlert and AlarmKlaxon can
 		// pick it up.
-		WakeLockManager.acquire(context, "klaxon", PowerManager.PARTIAL_WAKE_LOCK
+		WakeLockManager.acquire(context, "alarmReceiver", PowerManager.PARTIAL_WAKE_LOCK
 				| PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE);
 
 		/* Close dialogs and window shade */
