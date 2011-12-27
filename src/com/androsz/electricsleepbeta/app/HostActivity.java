@@ -93,7 +93,8 @@ public abstract class HostActivity extends AnalyticActivity {
 			} catch (NoSuchFieldException nsfe) {
 				trackEvent("mShowAsAction reflection error", 1);
 			} catch (IllegalArgumentException e) {
-				trackEvent("mShowAsAction reflection error", 2);
+				//do not track this. it happens a lot.
+				//trackEvent("mShowAsAction reflection error", 2);
 			} catch (IllegalAccessException e) {
 				trackEvent("mShowAsAction reflection error", 3);
 			}
