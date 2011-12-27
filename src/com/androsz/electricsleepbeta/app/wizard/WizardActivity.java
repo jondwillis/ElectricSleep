@@ -43,7 +43,9 @@ public abstract class WizardActivity extends HostActivity {
 		@Override
 		public void onPageScrollStateChanged(int state) {
 			if (state == ViewPager.SCROLL_STATE_IDLE) {
-
+				
+				onWizardActivity();
+				
 				setupNavigationButtons();
 			}
 		}
@@ -106,7 +108,6 @@ public abstract class WizardActivity extends HostActivity {
 		} else {
 			if (!onWizardActivity()) {
 				wizardPager.setCurrentItem(displayedChildIndex + 1);
-				setupNavigationButtons();
 			}
 		}
 	}
