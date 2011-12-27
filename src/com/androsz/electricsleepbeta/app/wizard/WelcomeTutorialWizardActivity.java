@@ -8,16 +8,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActionBar;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.ZeoSplashActivity;
+import com.viewpagerindicator.TitleProvider;
 
 public class WelcomeTutorialWizardActivity extends WizardActivity {
 
@@ -71,11 +76,6 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 	}
 
 	private boolean required = false;
-
-	@Override
-	protected int getWizardLayoutId() {
-		return R.layout.wizard_welcome;
-	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -162,9 +162,77 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 		}
 	}
 
+	private class WizardPagerAdapter extends PagerAdapter implements TitleProvider {
+
+		private String[] titles = new String[] { "Zeo", "Welcome", "How It Works" };
+
+		@Override
+		public String getTitle(int position) {
+			return titles[position];
+		}
+
+		@Override
+		public int getCount() {
+			return titles.length;
+		}
+
+		@Override
+		public void startUpdate(View container) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public Object instantiateItem(View container, int position) {
+			View instantiatedItem = null;
+			LayoutInflater inflater = getLayoutInflater();
+			switch (position) {
+			case 0:
+				instantiatedItem = inflater.inflate(R.layout.activity_zeo_splash, null);
+				break;
+			case 1:
+				instantiatedItem = inflater.inflate(R.layout.wizard_welcome_welcome, null);
+				break;
+			case 2:
+				instantiatedItem = inflater.inflate(R.layout.wizard_welcome_how, null);
+				break;
+			}
+			((ViewGroup) container).addView(instantiatedItem);
+			return instantiatedItem;
+		}
+
+		@Override
+		public void destroyItem(View container, int position, Object object) {
+			((ViewPager) container).removeView((View) object);
+		}
+
+		@Override
+		public void finishUpdate(View container) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public boolean isViewFromObject(View view, Object object) {
+			return ((View) object).equals(view);
+		}
+
+		@Override
+		public Parcelable saveState() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void restoreState(Parcelable state, ClassLoader loader) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
 	@Override
 	protected PagerAdapter getPagerAdapter() {
-		// TODO Auto-generated method stub
-		return null;
+		return new WizardPagerAdapter();
 	}
 }

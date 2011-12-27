@@ -80,10 +80,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	private boolean screenBugPresent;
 
-	@Override
-	protected int getWizardLayoutId() {
-		return R.layout.wizard_calibration;
-	}
 
 	@Override
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {

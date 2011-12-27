@@ -29,8 +29,6 @@ public abstract class WizardActivity extends HostActivity {
 		return R.layout.activity_wizard;
 	}
 
-	protected abstract int getWizardLayoutId();
-
 	@Override
 	public void onBackPressed() {
 		onLeftButtonClick(null);
@@ -40,45 +38,35 @@ public abstract class WizardActivity extends HostActivity {
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			lastPosition = position;
 		}
-
-		private int lastSettledPosition = 1;
-		private int lastPosition = 1;
 
 		@Override
 		public void onPageScrollStateChanged(int state) {
-
 			if (state == ViewPager.SCROLL_STATE_IDLE) {
-
-				if (lastSettledPosition == lastPosition)
-					return;
 
 				setupNavigationButtons();
 			}
 		}
 
 		@Override
-		public void onPageSelected(int position) {			
+		public void onPageSelected(int position) {
 		}
 	}
 
-	protected abstract PagerAdapter getPagerAdapter();	
-	
+	protected abstract PagerAdapter getPagerAdapter();
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		final ViewStub wizardViewFlipperStub = (ViewStub) findViewById(R.id.wizardPager);
-		wizardPager = (ViewPager) wizardViewFlipperStub.inflate();
-		PagerAdapter pagerAdapter = getPagerAdapter();
-		wizardPager.setAdapter(pagerAdapter);
+
+		wizardPager = (ViewPager) findViewById(R.id.wizardPager);
+		wizardPager.setAdapter(getPagerAdapter());
 
 		final TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
 		indicator.setFooterColor(getResources().getColor(R.color.primary1));
-		indicator.setViewPager(wizardPager, 1);
-		
-		wizardPager.setOnPageChangeListener(new IndicatorPageChangeListener());
+		indicator.setViewPager(wizardPager, 0);
+		indicator.setOnPageChangeListener(new IndicatorPageChangeListener());
+
 		setupNavigationButtons();
 	}
 
@@ -110,7 +98,7 @@ public abstract class WizardActivity extends HostActivity {
 
 	public void onRightButtonClick(final View v) {
 
-		final int lastPageIndex = wizardPager.getChildCount() - 1;
+		final int lastPageIndex = getPagerAdapter().getCount() - 1;
 		final int displayedChildIndex = getCurrentWizardIndex();
 
 		if (displayedChildIndex == lastPageIndex) {
@@ -134,7 +122,7 @@ public abstract class WizardActivity extends HostActivity {
 	protected void setupNavigationButtons() {
 		final Button leftButton = (Button) findViewById(R.id.leftButton);
 		final Button rightButton = (Button) findViewById(R.id.rightButton);
-		final int lastChildIndex = wizardPager.getChildCount() - 1;
+		final int lastChildIndex = getPagerAdapter().getCount() - 1;
 		final int displayedChildIndex = getCurrentWizardIndex();
 		if (displayedChildIndex > -1 && displayedChildIndex < lastChildIndex) {
 			leftButton.setText(R.string.back);
