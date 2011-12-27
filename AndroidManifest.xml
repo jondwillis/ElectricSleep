@@ -3,7 +3,7 @@
     android:installLocation="internalOnly"
     package="com.androsz.electricsleepbeta"
     android:versionCode="19"
-    android:versionName="1.0.1" >
+    android:versionName="1.1" >
 
     <supports-screens
         android:anyDensity="true"
