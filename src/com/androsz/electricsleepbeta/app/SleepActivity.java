@@ -19,6 +19,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -76,8 +77,6 @@ public class SleepActivity extends HostActivity {
 	};
 
 	AsyncTask<Void, Void, Void> dimScreenTask;
-	private View divSleepNoAlarm;
-	private View divSleepPluggedIn;
 	private SleepChart sleepChart;
 	private final BroadcastReceiver sleepStoppedReceiver = new BroadcastReceiver() {
 		@Override
@@ -139,25 +138,23 @@ public class SleepActivity extends HostActivity {
 						if (result != null) {
 							sleepChart.xyMultipleSeriesRenderer.setChartTitle(context.getString(
 									R.string.you_will_be_awoken_before, result[0], result[1]));
-							textSleepNoAlarm.setVisibility(View.GONE);
-							divSleepNoAlarm.setVisibility(View.GONE);
+							buttonSleepNoAlarm.setVisibility(View.GONE);
 						} else {
 							sleepChart.xyMultipleSeriesRenderer.setChartTitle("");
-							textSleepNoAlarm.setVisibility(View.VISIBLE);
-							divSleepNoAlarm.setVisibility(View.VISIBLE);
+							buttonSleepNoAlarm.setVisibility(View.VISIBLE);
 						}
 						// dims the screen while in this activity and
 						// forceScreenOn is
 						// enabled
 						if (forceScreenOn) {
-							textSleepDim.setVisibility(View.VISIBLE);
+							buttonSleepDim.setVisibility(View.VISIBLE);
 
 							cancelDimScreenTask();
 							dimScreenTask = new DimScreenTask();
 							dimScreenTask.execute();
 
 						} else {
-							textSleepDim.setVisibility(View.GONE);
+							buttonSleepDim.setVisibility(View.GONE);
 						}
 
 						if (sleepChart.makesSenseToDisplay()) {
@@ -171,18 +168,17 @@ public class SleepActivity extends HostActivity {
 				}.execute();
 			} else {
 				sleepChart.xyMultipleSeriesRenderer.setChartTitle("");
-				textSleepNoAlarm.setVisibility(View.VISIBLE);
-				divSleepNoAlarm.setVisibility(View.VISIBLE);
+				buttonSleepNoAlarm.setVisibility(View.VISIBLE);
 				showOrHideWarnings();
 			}
 		}
 	};
 
-	private TextView textSleepDim;
+	private Button buttonSleepDim;
 
-	private TextView textSleepNoAlarm;
+	private Button buttonSleepNoAlarm;
 
-	private TextView textSleepPluggedIn;
+	private Button buttonSleepPluggedIn;
 
 	private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
 		@Override
@@ -284,8 +280,7 @@ public class SleepActivity extends HostActivity {
 	private void airplaneModeNagChanged() {
 		final int visibility = (pluggedIn || airplaneModeOn ? View.GONE : View.VISIBLE);
 
-		textSleepPluggedIn.setVisibility(visibility);
-		divSleepPluggedIn.setVisibility(visibility);
+		buttonSleepPluggedIn.setVisibility(visibility);
 
 		showOrHideWarnings();
 	}
@@ -294,11 +289,9 @@ public class SleepActivity extends HostActivity {
 	protected void onResume() {
 		sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
 		waitForSleepData = (ViewGroup) findViewById(R.id.wait_for_sleep_data);
-		textSleepNoAlarm = (TextView) findViewById(R.id.text_sleep_no_alarm);
-		divSleepNoAlarm = findViewById(R.id.div_sleep_no_alarm);
-		textSleepDim = (TextView) findViewById(R.id.text_sleep_dim);
-		textSleepPluggedIn = (TextView) findViewById(R.id.text_sleep_plugged_in);
-		divSleepPluggedIn = findViewById(R.id.div_sleep_plugged_in);
+		buttonSleepNoAlarm = (Button) findViewById(R.id.text_sleep_no_alarm);
+		buttonSleepDim = (Button) findViewById(R.id.text_sleep_dim);
+		buttonSleepPluggedIn = (Button) findViewById(R.id.text_sleep_plugged_in);
 
 		registerReceiver(airplaneModeChangedReceiver, new IntentFilter(
 				Intent.ACTION_AIRPLANE_MODE_CHANGED));
@@ -321,8 +314,8 @@ public class SleepActivity extends HostActivity {
 		final ScrollView landscapeWarnings = (ScrollView) findViewById(R.id.sleep_landscape_warnings);
 		// make sure we're in landscape. portrait doesn't have this problem.
 		if (landscapeWarnings != null) {
-			int visibility = textSleepPluggedIn.getVisibility() + textSleepDim.getVisibility()
-					+ textSleepNoAlarm.getVisibility();
+			int visibility = buttonSleepPluggedIn.getVisibility() + buttonSleepDim.getVisibility()
+					+ buttonSleepNoAlarm.getVisibility();
 
 			// if all are gone...
 			visibility = (visibility == (View.GONE * 3)) ? View.GONE : View.VISIBLE;
