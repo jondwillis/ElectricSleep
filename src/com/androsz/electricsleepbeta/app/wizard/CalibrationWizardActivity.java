@@ -1,194 +1,219 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
+import java.util.List;
+
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.CalibrateAlarmActivity;
-import com.androsz.electricsleepbeta.app.CalibrateForResultActivity;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
-import com.androsz.electricsleepbeta.app.CheckForScreenBugActivity;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
+import com.androsz.electricsleepbeta.app.SleepActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
+import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
+import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.viewpagerindicator.TitleProvider;
 
 public class CalibrationWizardActivity extends WizardActivity {
+	public static final int LIGHT_SLEEP_CALIBRATION_INTERVAL = 500;
 
-	private class AlarmCalibrationTask extends AsyncTask<Void, Void, Void> {
+	private CalibrateLightSleepFragment calibrateLightSleepFragment = new CalibrateLightSleepFragment(
+			R.layout.activity_calibrate_alarm);
 
-		@Override
-		protected Void doInBackground(final Void... params) {
+	private CheckForScreenBugFragment checkForScreenBugFragment = new CheckForScreenBugFragment(R.layout.activity_check_for_screen_bug);
 
-			return null;
+	private double lightSleepTrigger;
+
+	private boolean isScreenBugPresent;
+
+	private class LayoutFragment extends Fragment {
+
+		private int layoutId;
+
+		public LayoutFragment(int layoutId) {
+			this.layoutId = layoutId;
 		}
 
 		@Override
-		protected void onPostExecute(final Void result) {
-			final Intent i = new Intent(CalibrationWizardActivity.this,
-					SleepMonitoringService.class);
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			// TODO Auto-generated method stub
+			View myFragmentView = inflater.inflate(layoutId, container, false);
+
+			return myFragmentView;
+		}
+	}
+
+	private class CalibrateLightSleepFragment extends LayoutFragment {
+		public CalibrateLightSleepFragment(int layoutId) {
+			super(layoutId);
+		}
+
+		@Override
+		public void onActivityCreated(Bundle savedInstanceState) {
+			super.onActivityCreated(savedInstanceState);
+
+			if (savedInstanceState == null) {
+				sleepChart = (SleepChart) findViewById(R.id.calibration_sleep_chart);
+			} else {
+				sleepChart = (SleepChart) savedInstanceState.getParcelable(SLEEP_CHART);
+			}
+
+			final DecimalSeekBar seekBar = (DecimalSeekBar) findViewById(R.id.calibration_level_seekbar);
+			seekBar.setMax((int) SettingsActivity.MAX_ALARM_SENSITIVITY);
+			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onProgressChanged(final SeekBar seekBar, final int progress,
+						final boolean fromUser) {
+					if (fromUser) {
+						sleepChart.setCalibrationLevel(progress / DecimalSeekBar.PRECISION);
+					}
+				}
+
+				@Override
+				public void onStartTrackingTouch(final SeekBar seekBar) {
+				}
+
+				@Override
+				public void onStopTrackingTouch(final SeekBar seekBar) {
+				}
+			});
+
+			sleepChart.setCalibrationLevel(SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		}
+
+		private static final String SLEEP_CHART = "sleepChart";
+
+		SleepChart sleepChart;
+
+		private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void onReceive(final Context context, final Intent intent) {
+
+				sleepChart = (SleepChart) findViewById(R.id.calibration_sleep_chart);
+
+				// inlined for efficiency
+				sleepChart.xySeriesMovement.setXY((List<org.achartengine.model.PointD>) intent
+						.getSerializableExtra(SleepMonitoringService.SLEEP_DATA));
+				sleepChart.reconfigure();
+				sleepChart.repaint();
+			}
+		};
+
+		private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(final Context context, final Intent intent) {
+				/*
+				 * CalibrateAlarmActivity.this .setResult(
+				 * CALIBRATION_SUCCEEDED, new Intent().putExtra("y",
+				 * sleepChart.getCalibrationLevel()));
+				 */
+				findViewById(R.id.calibration_sleep_chart).setVisibility(View.VISIBLE);
+				findViewById(R.id.calibration_level_seekbar).setVisibility(View.VISIBLE);
+				findViewById(R.id.warming_up_text).setVisibility(View.GONE);
+				if (sleepChart != null) {
+					final DecimalSeekBar seekBar = (DecimalSeekBar) findViewById(R.id.calibration_level_seekbar);
+					seekBar.setProgress((float) sleepChart.getCalibrationLevel());
+					sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
+							intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+							sleepChart.getCalibrationLevel());
+				}
+			}
+		};
+
+		@Override
+		public void onConfigurationChanged(Configuration newConfig) {
+			// TODO
+			// do not call super to prevent onWindowFocusChanged to be called
+			// and
+			// subsequent failure of the test
+			super.onConfigurationChanged(newConfig);
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+			registerReceiver(updateChartReceiver, new IntentFilter(SleepActivity.UPDATE_CHART));
+			registerReceiver(syncChartReceiver, new IntentFilter(SleepActivity.SYNC_CHART));
+			sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
+		}
+
+		@Override
+		public void onSaveInstanceState(final Bundle outState) {
+			super.onSaveInstanceState(outState);
+			outState.putParcelable(SLEEP_CHART, sleepChart);
+		}
+
+		public void end() {
+			lightSleepTrigger = sleepChart.getCalibrationLevel();
+			stopService(new Intent(getActivity(), SleepMonitoringService.class));
+		}
+
+		public void begin() {
+			final Intent i = new Intent(getActivity(), SleepMonitoringService.class);
 			stopService(i);
-			i.putExtra("testModeRate", ALARM_CALIBRATION_TIME);
+			i.putExtra("testModeRate", LIGHT_SLEEP_CALIBRATION_INTERVAL);
 			i.putExtra("alarm", SettingsActivity.MAX_ALARM_SENSITIVITY);
 			startService(i);
 		}
 
-		@Override
-		protected void onPreExecute() {
-			startActivityForResult(new Intent(CalibrationWizardActivity.this,
-					CalibrateAlarmActivity.class), CALIBRATE_REQUEST_CODE);
-		}
 	}
 
-	private class ScreenBugCalibrationTask extends AsyncTask<Void, Void, Void> {
+	// hack-ish but necessary because lockscreens can differ
+	public static Intent BUG_PRESENT_INTENT = null;
 
-		@Override
-		protected Void doInBackground(final Void... params) {
+	private class CheckForScreenBugFragment extends LayoutFragment {
 
-			// try {
-			// Thread.sleep(10000);
-			// } catch (final InterruptedException e) {
-			// e.printStackTrace();
-			// }
-			return null;
+		public CheckForScreenBugFragment(int layoutId) {
+			super(layoutId);
 		}
 
 		@Override
-		protected void onPostExecute(final Void result) {
-			// sendBroadcast(new Intent(
-			// CheckForScreenBugAccelerometerService.BUG_PRESENT));
-		}
+		public void onResume() {
+			super.onResume();
 
-		@Override
-		protected void onPreExecute() {
-			startActivityForResult(new Intent(CalibrationWizardActivity.this,
-					CheckForScreenBugActivity.class), SCREEN_TEST_REQUEST_CODE);
-		}
-	}
+			final Intent i = new Intent(getActivity(), CheckForScreenBugAccelerometerService.class);
 
-	public static final int ALARM_CALIBRATION_TIME = 500;
-
-	private final static int CALIBRATE_REQUEST_CODE = 0xDEAD;
-
-	private static AsyncTask<Void, Void, Void> currentTask;
-	private final static int SCREEN_TEST_REQUEST_CODE = 0xBEEF;
-
-	private double alarmTriggerCalibration;
-
-	private boolean screenBugPresent;
-
-	@Override
-	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-		if (resultCode == CalibrateForResultActivity.CALIBRATION_FAILED) {
-			if (currentTask != null) {
-				currentTask.cancel(true);
+			// this replaces the need for broadcast receivers.
+			// the service updates BUG_PRESENT_INTENT, THEN our activity is
+			// alerted.
+			if (BUG_PRESENT_INTENT != null) {
+				stopService(i);
+				BUG_PRESENT_INTENT = null;
+				finish();
 			} else {
-				stopService(new Intent(this, SleepMonitoringService.class));
+				startService(i);
 			}
-			return;
 		}
-		switch (requestCode) {
-		case CALIBRATE_REQUEST_CODE:
-			alarmTriggerCalibration = data.getDoubleExtra("y", 0);
-			stopService(new Intent(this, SleepMonitoringService.class));
-			break;
-		case SCREEN_TEST_REQUEST_CODE:
-			screenBugPresent = data.getAction().equals(
-					CheckForScreenBugAccelerometerService.BUG_PRESENT);
-			break;
+
+	}
+
+	private class WizardPagerAdapter extends FragmentPagerAdapter implements TitleProvider {
+
+		public WizardPagerAdapter(FragmentManager fm) {
+			super(fm);
 		}
-		onLeftButtonClick(null);
-	}
-
-	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	protected void onFinishWizardActivity() throws IllegalStateException {
-		final SharedPreferences.Editor ed = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
-				.edit();
-		ed.putFloat(getString(R.string.pref_alarm_trigger_sensitivity),
-				(float) alarmTriggerCalibration);
-		ed.putBoolean(getString(R.string.pref_force_screen), screenBugPresent);
-		ed.commit();
-
-		if (ed.commit()) {
-			final SharedPreferences.Editor ed2 = getSharedPreferences(
-					SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
-			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
-					getResources().getInteger(R.integer.prefs_version));
-			ed2.commit();
-
-			trackEvent("alarm-level", (int) Math.round(alarmTriggerCalibration * 100));
-			trackEvent("screen-bug", screenBugPresent ? 1 : 0);
-			finish();
-		} else {
-			trackEvent("calibration-fail", 0);
-			throw new IllegalStateException("Calibration failed to write settings...");
-		}
-	}
-
-	@Override
-	protected void onPrepareLastSlide() {
-		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
-		textViewAlarm.setText(String.format("%.2f", alarmTriggerCalibration));
-		final TextView textViewScreen = (TextView) findViewById(R.id.screenResult);
-		textViewScreen.setText(screenBugPresent + "");
-	}
-
-	@Override
-	protected void onRestoreInstanceState(final Bundle savedState) {
-
-		super.onRestoreInstanceState(savedState);
-
-		alarmTriggerCalibration = savedState.getDouble("alarm");
-		screenBugPresent = savedState.getBoolean("screenBug");
-
-		setupNavigationButtons();
-	}
-
-	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		outState.putDouble("alarm", alarmTriggerCalibration);
-		outState.putBoolean("screenBug", screenBugPresent);
-	}
-
-	@Override
-	protected boolean onWizardActivity() {
-		boolean didActivity = false;
-
-		switch (getCurrentWizardIndex()) {
-		case 2:
-			currentTask = new AlarmCalibrationTask().execute(null, null, null);
-			didActivity = true;
-			break;
-		case 3:
-			currentTask = new ScreenBugCalibrationTask().execute(null, null, null);
-			didActivity = true;
-			break;
-		}
-		return didActivity;
-	}
-
-	private class WizardPagerAdapter extends PagerAdapter implements TitleProvider {
 
 		private String[] titles = new String[] { "Why", "Instructions", "Light Sleep",
 				"Screen Test", "Done" };
@@ -204,69 +229,96 @@ public class CalibrationWizardActivity extends WizardActivity {
 		}
 
 		@Override
-		public void startUpdate(View container) {
-			// TODO Auto-generated method stub
+		public Fragment getItem(int position) {
 
-		}
-
-		@Override
-		public Object instantiateItem(View container, int position) {
-			View instantiatedItem = null;
-			LayoutInflater inflater = getLayoutInflater();
 			switch (position) {
 			case 0:
-				instantiatedItem = inflater.inflate(R.layout.wizard_calibration_about, null);
-				break;
+				return new LayoutFragment(R.layout.wizard_calibration_about);
 			case 1:
-				instantiatedItem = inflater.inflate(R.layout.wizard_calibration_instructions, null);
-				break;
+				return new LayoutFragment(R.layout.wizard_calibration_instructions);
 			case 2:
-				instantiatedItem = inflater.inflate(R.layout.wizard_calibration_lightsleep, null);
-				break;
+				return calibrateLightSleepFragment;
 			case 3:
-				instantiatedItem = inflater.inflate(R.layout.wizard_calibration_bugcheck, null);
-				break;
+				return checkForScreenBugFragment;
 			case 4:
-				instantiatedItem = inflater.inflate(R.layout.wizard_calibration_results, null);
-				break;
+				return new LayoutFragment(R.layout.wizard_calibration_results);
+
+			default:
+				throw new IllegalStateException("Could not find the correct fragment.");
 			}
-			((ViewGroup) container).addView(instantiatedItem);
-			return instantiatedItem;
 		}
-
-		@Override
-		public void destroyItem(View container, int position, Object object) {
-			((ViewPager) container).removeView((View) object);
-		}
-
-		@Override
-		public void finishUpdate(View container) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean isViewFromObject(View view, Object object) {
-			return ((View) object).equals(view);
-		}
-
-		@Override
-		public Parcelable saveState() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void restoreState(Parcelable state, ClassLoader loader) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	@Override
 	protected PagerAdapter getPagerAdapter() {
-		return new WizardPagerAdapter();
+		return new WizardPagerAdapter(getSupportFragmentManager());
+	}
+
+	@Override
+	protected void onFinishWizardActivity() throws IllegalStateException {
+		final SharedPreferences.Editor ed = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
+				.edit();
+		ed.putFloat(getString(R.string.pref_alarm_trigger_sensitivity), (float) lightSleepTrigger);
+		ed.putBoolean(getString(R.string.pref_force_screen), isScreenBugPresent);
+		ed.commit();
+
+		if (ed.commit()) {
+			final SharedPreferences.Editor ed2 = getSharedPreferences(
+					SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
+			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
+					getResources().getInteger(R.integer.prefs_version));
+			ed2.commit();
+
+			trackEvent("alarm-level", (int) Math.round(lightSleepTrigger * 100));
+			trackEvent("screen-bug", isScreenBugPresent ? 1 : 0);
+			finish();
+		} else {
+			trackEvent("calibration-fail", 0);
+		}
+	}
+
+	@Override
+	protected void onPrepareLastSlide() {
+		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
+		textViewAlarm.setText(String.format("%.2f", lightSleepTrigger));
+		final TextView textViewScreen = (TextView) findViewById(R.id.screenResult);
+		textViewScreen.setText(isScreenBugPresent + "");
+	}
+
+	@Override
+	protected void onRestoreInstanceState(final Bundle savedState) {
+
+		super.onRestoreInstanceState(savedState);
+
+		lightSleepTrigger = savedState.getDouble("alarm");
+		isScreenBugPresent = savedState.getBoolean("screenBug");
+
+		setupNavigationButtons();
+	}
+
+	@Override
+	protected void onSaveInstanceState(final Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putDouble("alarm", lightSleepTrigger);
+		outState.putBoolean("screenBug", isScreenBugPresent);
+	}
+
+	@Override
+	public void onLeftButtonClick(View v) {
+		super.onLeftButtonClick(v);
+	}
+
+	@Override
+	protected boolean onPerformWizardAction() {
+		switch (getCurrentWizardIndex()) {
+		case 2:
+			calibrateLightSleepFragment.begin();
+			break;
+		case 3:
+			break;
+		}
+		return false;
 	}
 
 }

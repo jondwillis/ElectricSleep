@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 
+import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 
 public class CheckForScreenBugAccelerometerService extends Service implements SensorEventListener {
@@ -51,7 +52,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 		@Override
 		public void run() {
 			if (bugPresent) {
-				CheckForScreenBugActivity.BUG_PRESENT_INTENT = new Intent(BUG_PRESENT);
+				CalibrationWizardActivity.BUG_PRESENT_INTENT = new Intent(BUG_PRESENT);
 			}
 			turnScreenOn();
 		}
@@ -90,7 +91,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
 		if (!powerManager.isScreenOn() && screenIsOff && bugPresent) {
-			CheckForScreenBugActivity.BUG_PRESENT_INTENT = new Intent(BUG_NOT_PRESENT);
+			CalibrationWizardActivity.BUG_PRESENT_INTENT = new Intent(BUG_NOT_PRESENT);
 			turnScreenOn();
 		}
 	}

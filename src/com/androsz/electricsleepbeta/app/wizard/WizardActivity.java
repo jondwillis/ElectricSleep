@@ -1,28 +1,20 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.format.Time;
 import android.view.View;
-import android.view.ViewStub;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ViewSwitcher;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HostActivity;
-import com.androsz.electricsleepbeta.widget.ViewFlipperBugfix;
-import com.androsz.electricsleepbeta.widget.calendar.MonthView;
-import com.androsz.electricsleepbeta.widget.calendar.Utils;
 import com.viewpagerindicator.TitlePageIndicator;
-import com.viewpagerindicator.TitleProvider;
 
 public abstract class WizardActivity extends HostActivity {
 
-	private ViewPager wizardPager;
+	private DisablablePager wizardPager;
+	private TitlePageIndicator indicator;
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -43,9 +35,9 @@ public abstract class WizardActivity extends HostActivity {
 		@Override
 		public void onPageScrollStateChanged(int state) {
 			if (state == ViewPager.SCROLL_STATE_IDLE) {
-				
-				onWizardActivity();
-				
+
+				onPerformWizardAction();
+
 				setupNavigationButtons();
 			}
 		}
@@ -61,10 +53,10 @@ public abstract class WizardActivity extends HostActivity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		wizardPager = (ViewPager) findViewById(R.id.wizardPager);
+		wizardPager = (DisablablePager) findViewById(R.id.wizardPager);
 		wizardPager.setAdapter(getPagerAdapter());
 
-		final TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
+		indicator = (DisablablePageIndicator) findViewById(R.id.indicator);
 		indicator.setFooterColor(getResources().getColor(R.color.primary1));
 		indicator.setViewPager(wizardPager, 0);
 		indicator.setOnPageChangeListener(new IndicatorPageChangeListener());
@@ -87,6 +79,10 @@ public abstract class WizardActivity extends HostActivity {
 	protected int getCurrentWizardIndex() {
 		return wizardPager.getCurrentItem();
 	}
+	
+	protected void setPagingEnabled(boolean enabled)
+	{
+	}
 
 	protected abstract void onPrepareLastSlide();
 
@@ -106,7 +102,7 @@ public abstract class WizardActivity extends HostActivity {
 		if (displayedChildIndex == lastPageIndex) {
 			onFinishWizardActivity();
 		} else {
-			if (!onWizardActivity()) {
+			if (!onPerformWizardAction()) {
 				wizardPager.setCurrentItem(displayedChildIndex + 1);
 			}
 		}
@@ -118,7 +114,7 @@ public abstract class WizardActivity extends HostActivity {
 		outState.putInt("child", getCurrentWizardIndex());
 	}
 
-	protected abstract boolean onWizardActivity();
+	protected abstract boolean onPerformWizardAction();
 
 	protected void setupNavigationButtons() {
 		final Button leftButton = (Button) findViewById(R.id.leftButton);
