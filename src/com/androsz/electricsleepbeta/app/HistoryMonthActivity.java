@@ -62,6 +62,8 @@ public class HistoryMonthActivity extends HostActivity implements
 
 				if (lastSettledPosition == lastPosition)
 					return;
+				
+				lastSettledPosition = lastPosition;
 
 				MonthView leftMonth = (MonthView) monthPager.getChildAt(0);
 				MonthView centerMonth = (MonthView) monthPager.getChildAt(1);

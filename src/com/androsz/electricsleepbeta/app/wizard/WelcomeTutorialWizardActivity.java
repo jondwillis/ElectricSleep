@@ -148,9 +148,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 	}
 
 	@Override
-	protected boolean onPerformWizardAction() {
-		// TODO Auto-generated method stub
-		return false;
+	protected void onPerformWizardAction(int index) {
 	}
 
 	@Override

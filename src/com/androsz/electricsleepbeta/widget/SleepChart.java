@@ -2,6 +2,7 @@ package com.androsz.electricsleepbeta.widget;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.util.ArrayList;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.AbstractChart;
@@ -26,6 +27,20 @@ import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepChart extends GraphicalView implements Parcelable {
 
+/*	public static final Parcelable.Creator<SleepChart> CREATOR = new Parcelable.Creator<SleepChart>() {
+
+		@Override
+		public SleepChart createFromParcel(Parcel source) {
+			// TODO Auto-generated method stub
+			return new SleepChart(null, source);
+		}
+
+		@Override
+		public SleepChart[] newArray(int size) {
+			return new SleepChart[size];
+		}
+	};*/
+
 	protected double calibrationLevel;// =
 										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
@@ -42,15 +57,11 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
 
-	public SleepChart(final Context context) {
-		super(context);
-	}
-
 	public SleepChart(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 	}
-
-	public SleepChart(final Context context, Parcel in) {
+/*
+	public SleepChart(final Context context) {
 		super(context);
 		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) in.readSerializable();
 		xyMultipleSeriesRenderer = (XYMultipleSeriesRenderer) in.readSerializable();
@@ -61,7 +72,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		calibrationLevel = in.readDouble();
 		rating = in.readInt();
 	}
-
+*/
 	@Override
 	protected AbstractChart buildChart() {
 		if (xySeriesMovement == null) {
@@ -100,12 +111,12 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			//xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
-			//		.calculatePxFromDp(context, 30) + textSize*3));
+			// xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
+			// .calculatePxFromDp(context, 30) + textSize*3));
 			xyMultipleSeriesRenderer.setAntialiasing(true);
 			xyMultipleSeriesRenderer.setFitLegend(true);
 			int[] margins = xyMultipleSeriesRenderer.getMargins();
-			margins[2] += 20; //increase bottom margin
+			margins[2] += 20; // increase bottom margin
 			xyMultipleSeriesRenderer.setMargins(margins);
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
@@ -141,22 +152,22 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		if (makesSenseToDisplay()) {
 			final double firstX = xySeriesMovement.getX(0);
 			final double lastX = xySeriesMovement.getX(xySeriesMovement.getItemCount() - 1);
-			final double duration = lastX-firstX;
+			final double duration = lastX - firstX;
 
-			//if (makesSenseToDisplay()) {
-				// reconfigure the calibration line..
-				xySeriesCalibration.clear();
+			// if (makesSenseToDisplay()) {
+			// reconfigure the calibration line..
+			xySeriesCalibration.clear();
 
-				xySeriesCalibration.add(firstX, calibrationLevel);
-				xySeriesCalibration.add(lastX, calibrationLevel);
-			//}
+			xySeriesCalibration.add(firstX, calibrationLevel);
+			xySeriesCalibration.add(lastX, calibrationLevel);
+			// }
 
 			final int MINUTE_IN_MS = 1000 * 60;
 			final int HOUR_IN_MS = MINUTE_IN_MS * 60;
-			if (duration > HOUR_IN_MS*2) {
+			if (duration > HOUR_IN_MS * 2) {
 				((TimeChart) mChart).setDateFormat("h");
 				xyMultipleSeriesRenderer.setXLabels(8);
-			}else if (duration > MINUTE_IN_MS*3) {
+			} else if (duration > MINUTE_IN_MS * 3) {
 				((TimeChart) mChart).setDateFormat("h:mm");
 				xyMultipleSeriesRenderer.setXLabels(5);
 			}
@@ -185,6 +196,13 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		} else {
 			xySeriesMovement.add(x, y);
 		}
+		reconfigure();
+		repaint();
+	}
+
+	public void clearMovement() {
+		xySeriesMovement.setXY(new ArrayList<org.achartengine.model.PointD>());
+
 		reconfigure();
 		repaint();
 	}

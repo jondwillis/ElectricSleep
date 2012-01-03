@@ -1,5 +1,7 @@
 package com.androsz.electricsleepbeta.app;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 
+import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 
@@ -32,6 +35,8 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 	public static final String BUG_NOT_PRESENT = "BUG_NOT_PRESENT";
 
 	public static final String BUG_PRESENT = "BUG_PRESENT";
+
+	private static final int NOTIFICATION_ID = 0x1337b;
 
 	private boolean bugPresent = true;
 	boolean didNotTurnScreenOn = true;
@@ -57,6 +62,31 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 			turnScreenOn();
 		}
 	};
+	
+
+	private Notification createServiceNotification() {
+		final int icon = R.drawable.icon_small;
+		final CharSequence tickerText = getString(R.string.notification_screenbug_ticker);
+		final long when = System.currentTimeMillis();
+
+		final Notification notification = new Notification(icon, tickerText, when);
+
+		notification.flags = Notification.FLAG_ONGOING_EVENT;
+
+		final CharSequence contentTitle = getString(R.string.notification_sleep_title);
+		final CharSequence contentText = getString(R.string.notification_sleep_text);
+		Intent notificationIntent = new Intent();
+		
+		notificationIntent
+				.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+				0);
+
+		notification.setLatestEventInfo(this, contentTitle, contentText, contentIntent);
+
+		return notification;
+	}
 
 	@Override
 	public void onAccuracyChanged(final Sensor sensor, final int accuracy) {
@@ -106,6 +136,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 			screenOnOffReceiver = new ScreenReceiver();
 			registerReceiver(screenOnOffReceiver, filter);
 			powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			startForeground(NOTIFICATION_ID, createServiceNotification());
 			WakeLockManager.acquire(this, "screenBugPartial", PowerManager.PARTIAL_WAKE_LOCK);
 			registerAccelerometerListener();
 		}
