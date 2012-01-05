@@ -58,7 +58,7 @@ public class HistoryMonthActivity extends HostActivity implements
 		@Override
 		public void onPageScrollStateChanged(int state) {
 
-			if (state == ViewPager.SCROLL_STATE_SETTLING) {
+			if (state == ViewPager.SCROLL_STATE_IDLE) {
 
 				if (lastSettledPosition == lastPosition)
 					return;
