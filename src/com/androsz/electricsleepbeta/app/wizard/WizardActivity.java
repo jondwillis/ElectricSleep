@@ -28,12 +28,12 @@ public abstract class WizardActivity extends HostActivity {
 
 	private final class IndicatorPageChangeListener implements OnPageChangeListener {
 
-		private int lastSettledPosition = 0;
-		private int lastPosition = 0;
+		private int lastSettledPosition = -1;
+		private int lastPosition = -2;
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			lastPosition = position;
+		//	lastPosition = position;
 		}
 
 		@Override
@@ -51,6 +51,7 @@ public abstract class WizardActivity extends HostActivity {
 
 		@Override
 		public void onPageSelected(int position) {
+			lastPosition = position;
 		}
 	}
 
@@ -63,23 +64,24 @@ public abstract class WizardActivity extends HostActivity {
 		wizardPager = (DisablablePager) findViewById(R.id.wizardPager);
 		wizardPager.setAdapter(getPagerAdapter());
 
-
+		int initialPosition = 0;
 		if (savedInstanceState != null) {
-			wizardPager.setCurrentItem(savedInstanceState.getInt("child"), false);
+			initialPosition = savedInstanceState.getInt("child");
+			wizardPager.setCurrentItem(initialPosition, false);
 		}
 		
 		indicator = (DisablablePageIndicator) findViewById(R.id.indicator);
 		indicator.setFooterColor(getResources().getColor(R.color.primary1));
-		indicator.setViewPager(wizardPager, 0);
 		indicator.setOnPageChangeListener(new IndicatorPageChangeListener());
+		indicator.setViewPager(wizardPager, initialPosition);
+
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		// onPerformWizardAction();
 		setupNavigationButtons();
+		onPerformWizardAction(getCurrentWizardIndex());
 	}
 
 	protected abstract void onFinishWizardActivity() throws IllegalStateException;

@@ -19,17 +19,17 @@ import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
-public class CalibrateLightSleepFragment extends LayoutFragment {
+public class CalibrateLightSleepFragment extends LayoutFragment implements Calibrator {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		if (savedInstanceState == null) {
+		//if (savedInstanceState == null) {
 			sleepChart = (SleepChart) getActivity().findViewById(R.id.calibration_sleep_chart);
-		} else {
-			sleepChart = (SleepChart) savedInstanceState.getParcelable(SLEEP_CHART);
-		}
+		//} else {
+		//	sleepChart = (SleepChart) savedInstanceState.getParcelable(SLEEP_CHART);
+		//}
 
 		final DecimalSeekBar seekBar = (DecimalSeekBar) getActivity().findViewById(
 				R.id.calibration_level_seekbar);
@@ -111,40 +111,36 @@ public class CalibrateLightSleepFragment extends LayoutFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		end();
+		stopCalibration(getActivity());
 		getActivity().unregisterReceiver(updateChartReceiver);
 		getActivity().unregisterReceiver(syncChartReceiver);
 	}
 
 	@Override
-	public void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putParcelable(SLEEP_CHART, sleepChart);
-	}
-
-	public void end() {
-		if (sleepChart != null) {
-			// getActivity().lightSleepTrigger =
-			// sleepChart.getCalibrationLevel();
-			getActivity().stopService(new Intent(getActivity(), SleepMonitoringService.class));
-			sleepChart.clearMovement();
-			// sleepChart.setVisibility(View.INVISIBLE);
-			// findViewById(R.id.calibration_level_seekbar).setVisibility(View.INVISIBLE);
-			// findViewById(R.id.warming_up_text).setVisibility(View.VISIBLE);
-		}
-	}
-
-	public void begin() {
-			final Intent i = new Intent(getActivity(), SleepMonitoringService.class);
-			getActivity().stopService(i);
-			i.putExtra("testModeRate", CalibrationWizardActivity.LIGHT_SLEEP_CALIBRATION_INTERVAL);
-			i.putExtra("alarm", SettingsActivity.MAX_ALARM_SENSITIVITY);
-			getActivity().startService(i);
+	public int getLayoutResourceId() {
+		return R.layout.wizard_calibration_lightsleep;
 	}
 
 	@Override
-	public int getLayoutResourceId() {
-		return R.layout.wizard_calibration_lightsleep;
+	public void startCalibration(Context context) {
+		final Intent i = new Intent(context, SleepMonitoringService.class);
+		context.stopService(i);
+		i.putExtra("testModeRate", CalibrationWizardActivity.LIGHT_SLEEP_CALIBRATION_INTERVAL);
+		i.putExtra("alarm", SettingsActivity.MAX_ALARM_SENSITIVITY);
+		context.startService(i);
+	}
+
+	@Override
+	public void stopCalibration(Context context) {
+		// getActivity().lightSleepTrigger =
+		// sleepChart.getCalibrationLevel();
+		context.stopService(new Intent(context, SleepMonitoringService.class));
+		if (sleepChart != null) {
+			sleepChart.clearMovement();
+		}
+		// sleepChart.setVisibility(View.INVISIBLE);
+		// findViewById(R.id.calibration_level_seekbar).setVisibility(View.INVISIBLE);
+		// findViewById(R.id.warming_up_text).setVisibility(View.VISIBLE);
 	}
 
 }

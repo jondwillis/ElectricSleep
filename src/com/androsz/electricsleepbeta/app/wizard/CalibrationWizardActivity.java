@@ -118,8 +118,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 		lightSleepTrigger = savedState.getDouble("alarm");
 		isScreenBugPresent = savedState.getBoolean("screenBug");
-
-		setupNavigationButtons();
 	}
 
 	@Override
@@ -138,21 +136,21 @@ public class CalibrationWizardActivity extends WizardActivity {
 	@Override
 	protected void onPerformWizardAction(int index) {
 		if (index == 2) {
-			calibrateLightSleepFragment.begin();
+			calibrateLightSleepFragment.startCalibration(this);
 
-			checkForScreenBugFragment.end();
+			checkForScreenBugFragment.stopCalibration(this);
 
 		} else if (index == 3) {
 
-			checkForScreenBugFragment.begin();
+			checkForScreenBugFragment.startCalibration(this);
 
-			calibrateLightSleepFragment.end();
+			calibrateLightSleepFragment.stopCalibration(this);
 
 		} else {
 
-			calibrateLightSleepFragment.end();
+			calibrateLightSleepFragment.stopCalibration(this);
 
-			checkForScreenBugFragment.end();
+			checkForScreenBugFragment.stopCalibration(this);
 
 		}
 	}

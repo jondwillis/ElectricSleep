@@ -1,12 +1,13 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
 
-public class CheckForScreenBugFragment extends LayoutFragment {
+public class CheckForScreenBugFragment extends LayoutFragment implements Calibrator {
 
 	@Override
 	public void onResume() {
@@ -21,8 +22,14 @@ public class CheckForScreenBugFragment extends LayoutFragment {
 			if (CalibrationWizardActivity.BUG_PRESENT_INTENT != null) {
 				getActivity().stopService(i);
 				CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
+				onRightButtonClicked(null);
 			}
 		}
+	}
+
+	private void onRightButtonClicked(Object object) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/*
@@ -39,36 +46,35 @@ public class CheckForScreenBugFragment extends LayoutFragment {
 
 	private boolean canBegin = false;
 
-	public void begin() {
-		canBegin = true;
-
-			final Intent i = new Intent(getActivity(), CheckForScreenBugAccelerometerService.class);
-			// this replaces the need for broadcast receivers.
-			// the service updates BUG_PRESENT_INTENT, THEN our activity is
-			// alerted.
-			if (CalibrationWizardActivity.BUG_PRESENT_INTENT != null) {
-				getActivity().stopService(i);
-				CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
-			} else {
-				getActivity().startService(i);
-			}
-	}
-
-	public void end() {
-		canBegin = false;
-		// if (this.isAdded()) {
-		Activity a = getActivity();
-		if (a != null) {
-			final Intent i = new Intent(a, CheckForScreenBugAccelerometerService.class);
-
-			a.stopService(i);
-			CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
-		}
-	}
-
 	@Override
 	public int getLayoutResourceId() {
 		// TODO Auto-generated method stub
 		return R.layout.wizard_calibration_screenbug;
+	}
+
+	@Override
+	public void startCalibration(Context context) {
+		canBegin = true;
+
+		final Intent i = new Intent(context, CheckForScreenBugAccelerometerService.class);
+		// this replaces the need for broadcast receivers.
+		// the service updates BUG_PRESENT_INTENT, THEN our activity is
+		// alerted.
+		if (CalibrationWizardActivity.BUG_PRESENT_INTENT != null) {
+			context.stopService(i);
+			CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
+		} else {
+			context.startService(i);
+		}
+
+	}
+
+	@Override
+	public void stopCalibration(Context context) {
+		canBegin = false;
+		final Intent i = new Intent(context, CheckForScreenBugAccelerometerService.class);
+
+		context.stopService(i);
+		CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
 	}
 }
