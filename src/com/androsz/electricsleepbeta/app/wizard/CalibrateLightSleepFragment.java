@@ -2,6 +2,8 @@ package com.androsz.electricsleepbeta.app.wizard;
 
 import java.util.List;
 
+import org.achartengine.model.PointD;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -67,11 +69,15 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 
+			//throw new Exception("UHHHH");
 			sleepChart = (SleepChart) getActivity().findViewById(R.id.calibration_sleep_chart);
 
-			// inlined for efficiency
-			sleepChart.xySeriesMovement.setXY((List<org.achartengine.model.PointD>) intent
-					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA));
+			List<PointD> points = (List<PointD>) intent
+					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
+			for (PointD point : points) {
+				sleepChart.xySeriesMovement.add(point.x, point.y);
+			}
+			
 			sleepChart.reconfigure();
 			sleepChart.repaint();
 		}
@@ -134,7 +140,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 	public void stopCalibration(Context context) {
 		// getActivity().lightSleepTrigger =
 		// sleepChart.getCalibrationLevel();
-		context.stopService(new Intent(context, SleepMonitoringService.class));
+		//context.stopService(new Intent(context, SleepMonitoringService.class));
 		if (sleepChart != null) {
 			sleepChart.clearMovement();
 		}

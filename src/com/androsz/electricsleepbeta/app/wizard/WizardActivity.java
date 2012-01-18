@@ -13,7 +13,7 @@ import com.viewpagerindicator.TitlePageIndicator;
 
 public abstract class WizardActivity extends HostActivity {
 
-	private DisablablePager wizardPager;
+	private ViewPager wizardPager;
 	private TitlePageIndicator indicator;
 
 	@Override
@@ -61,7 +61,7 @@ public abstract class WizardActivity extends HostActivity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		wizardPager = (DisablablePager) findViewById(R.id.wizardPager);
+		wizardPager = (ViewPager) findViewById(R.id.wizardPager);
 		wizardPager.setAdapter(getPagerAdapter());
 
 		int initialPosition = 0;
@@ -70,7 +70,7 @@ public abstract class WizardActivity extends HostActivity {
 			wizardPager.setCurrentItem(initialPosition, false);
 		}
 		
-		indicator = (DisablablePageIndicator) findViewById(R.id.indicator);
+		indicator = (TitlePageIndicator) findViewById(R.id.indicator);
 		indicator.setFooterColor(getResources().getColor(R.color.primary1));
 		indicator.setOnPageChangeListener(new IndicatorPageChangeListener());
 		indicator.setViewPager(wizardPager, initialPosition);

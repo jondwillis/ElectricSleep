@@ -89,11 +89,11 @@ public class SleepActivity extends HostActivity {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 
-			// sleepChart = (SleepChart)
-			// findViewById(R.id.sleep_movement_chart);
-			// inlined for efficiency
-			sleepChart.xySeriesMovement.setXY((List<PointD>) intent
-					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA));
+			List<PointD> points = (List<PointD>) intent
+					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
+			for (PointD point : points) {
+				sleepChart.xySeriesMovement.add(point.x, point.y);
+			}
 
 			final double alarmTriggerSensitivity = intent.getDoubleExtra(
 					StartSleepReceiver.EXTRA_ALARM, SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
@@ -257,7 +257,8 @@ public class SleepActivity extends HostActivity {
 		// cancel the dim screen task if it hasn't completed
 		if (dimScreenTask != null) {
 			dimScreenTask.cancel(true);
-			Toast.makeText(this, "Warning: dim sleep mode can only occur on the Sleep screen.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Warning: dim sleep mode can only occur on the Sleep screen.",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 

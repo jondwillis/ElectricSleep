@@ -3,6 +3,7 @@ package com.androsz.electricsleepbeta.widget;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.AbstractChart;
@@ -201,14 +202,19 @@ public class SleepChart extends GraphicalView implements Parcelable {
 	}
 
 	public void clearMovement() {
-		xySeriesMovement.setXY(new ArrayList<org.achartengine.model.PointD>());
+		xySeriesMovement.clear();
 
 		reconfigure();
 		repaint();
 	}
 
 	public void sync(final SleepSession sleepRecord) {
-		xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
+		List<PointD> points = sleepRecord.chartData;
+		for (PointD point : points) {
+			xySeriesMovement.add(point.x, point.y);
+		}
+		
+		//xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
 		calibrationLevel = sleepRecord.alarm;
 
 		rating = sleepRecord.rating;
