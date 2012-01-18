@@ -97,9 +97,9 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 				final DecimalSeekBar seekBar = (DecimalSeekBar) getActivity().findViewById(
 						R.id.calibration_level_seekbar);
 				seekBar.setProgress((float) sleepChart.getCalibrationLevel());
-				sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
-						intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
-						sleepChart.getCalibrationLevel());
+				//sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
+				//		intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+				//		sleepChart.getCalibrationLevel());
 			}
 		}
 	};
@@ -142,7 +142,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 		// sleepChart.getCalibrationLevel();
 		//context.stopService(new Intent(context, SleepMonitoringService.class));
 		if (sleepChart != null) {
-			sleepChart.clearMovement();
+			sleepChart.clear();
 		}
 		// sleepChart.setVisibility(View.INVISIBLE);
 		// findViewById(R.id.calibration_level_seekbar).setVisibility(View.INVISIBLE);

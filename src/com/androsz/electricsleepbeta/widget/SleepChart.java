@@ -2,8 +2,6 @@ package com.androsz.electricsleepbeta.widget;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.AbstractChart;
@@ -28,20 +26,6 @@ import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepChart extends GraphicalView implements Parcelable {
 
-/*	public static final Parcelable.Creator<SleepChart> CREATOR = new Parcelable.Creator<SleepChart>() {
-
-		@Override
-		public SleepChart createFromParcel(Parcel source) {
-			// TODO Auto-generated method stub
-			return new SleepChart(null, source);
-		}
-
-		@Override
-		public SleepChart[] newArray(int size) {
-			return new SleepChart[size];
-		}
-	};*/
-
 	protected double calibrationLevel;// =
 										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
@@ -58,11 +42,15 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
 
+	public SleepChart(final Context context) {
+		super(context);
+	}
+
 	public SleepChart(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 	}
-/*
-	public SleepChart(final Context context) {
+
+	public SleepChart(final Context context, Parcel in) {
 		super(context);
 		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) in.readSerializable();
 		xyMultipleSeriesRenderer = (XYMultipleSeriesRenderer) in.readSerializable();
@@ -73,7 +61,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		calibrationLevel = in.readDouble();
 		rating = in.readInt();
 	}
-*/
+
 	@Override
 	protected AbstractChart buildChart() {
 		if (xySeriesMovement == null) {
@@ -112,8 +100,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
 			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			// xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
-			// .calculatePxFromDp(context, 30) + textSize*3));
+			//xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
+			//		.calculatePxFromDp(context, 30) + textSize*3));
 			xyMultipleSeriesRenderer.setAntialiasing(true);
 			xyMultipleSeriesRenderer.setFitLegend(true);
 			int[] margins = xyMultipleSeriesRenderer.getMargins();
@@ -122,7 +110,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
-			xyMultipleSeriesRenderer.setXLabels(4);
+			xyMultipleSeriesRenderer.setXLabels(6);
 			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
@@ -153,25 +141,24 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		if (makesSenseToDisplay()) {
 			final double firstX = xySeriesMovement.getX(0);
 			final double lastX = xySeriesMovement.getX(xySeriesMovement.getItemCount() - 1);
-			final double duration = lastX - firstX;
 
-			// if (makesSenseToDisplay()) {
-			// reconfigure the calibration line..
-			xySeriesCalibration.clear();
+			//if (makesSenseToDisplay()) {
+				// reconfigure the calibration line..
+				xySeriesCalibration.clear();
 
-			xySeriesCalibration.add(firstX, calibrationLevel);
-			xySeriesCalibration.add(lastX, calibrationLevel);
-			// }
+				xySeriesCalibration.add(firstX, calibrationLevel);
+				xySeriesCalibration.add(lastX, calibrationLevel);
+			//}
 
 			final int MINUTE_IN_MS = 1000 * 60;
 			final int HOUR_IN_MS = MINUTE_IN_MS * 60;
-			if (duration > HOUR_IN_MS * 2) {
+			/*if (lastX - firstX > HOUR_IN_MS*2) {
 				((TimeChart) mChart).setDateFormat("h");
 				xyMultipleSeriesRenderer.setXLabels(8);
-			} else if (duration > MINUTE_IN_MS * 3) {
+			}else if (lastX - firstX > MINUTE_IN_MS*3) {
 				((TimeChart) mChart).setDateFormat("h:mm");
 				xyMultipleSeriesRenderer.setXLabels(5);
-			}
+			}*/
 
 			xyMultipleSeriesRenderer.setXAxisMin(firstX);
 			xyMultipleSeriesRenderer.setXAxisMax(lastX);
@@ -201,20 +188,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		repaint();
 	}
 
-	public void clearMovement() {
-		xySeriesMovement.clear();
-
-		reconfigure();
-		repaint();
-	}
-
 	public void sync(final SleepSession sleepRecord) {
-		List<PointD> points = sleepRecord.chartData;
-		for (PointD point : points) {
-			xySeriesMovement.add(point.x, point.y);
-		}
-		
-		//xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
+		xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
 		calibrationLevel = sleepRecord.alarm;
 
 		rating = sleepRecord.rating;
@@ -234,6 +209,10 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		dest.writeSerializable(xySeriesCalibrationRenderer);
 		dest.writeDouble(calibrationLevel);
 		dest.writeInt(rating);
+	}
 
+	public void clear() {
+		xySeriesMovement.clear();
+		xySeriesCalibration.clear();
 	}
 }
