@@ -37,7 +37,7 @@
     <string name="project_lead">Project Lead</string>
     <string name="developers">Developers</string>
     <string name="querying_sleep_database">Querying sleep database...</string>
-    <string name="share_electricsleep">Share ElectricSleep</string>
+    <string name="share_electricsleep">Share SleepMate</string>
     <string name="title_sleep_switches">Sleep Switches</string>
     <string name="fell_asleep">Time to Fall Asleep</string>
     <string name="note">Note</string>
@@ -78,15 +78,15 @@
     <string name="calibrate">Calibrate</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
-    <string name="account_creation">ElectricSleep Account Creation</string>
+    <string name="account_creation">SleepMate Account Creation</string>
     <string name="skip_tutorial">Skip Tutorial</string>
-    <string name="electricsleep_about">How ElectricSleep Works</string>
+    <string name="electricsleep_about">How SleepMate Works</string>
     <string name="electricsleep_description">
-		\tElectricSleep is a new way to sleep. After you
+		\tSleepMate is a new way to sleep. After you
 		place your Android device within a foot or two of you on your
 		bed,
 		press sleep and
-		ElectricSleep
+		SleepMate
 		will record data from your device\'s
 		accelerometer all
 		night.\n\n
@@ -103,7 +103,7 @@
 		with a traditional alarm.
 	</string>
     <string name="title_review_sleep">Review Sleep</string>
-    <string name="title_welcome">Welcome to ElectricSleep!</string>
+    <string name="title_welcome">Welcome to SleepMate!</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="ok">OK</string>
@@ -144,13 +144,13 @@
 		automatically</string>
     <string name="title_pref_calibration">Calibration Wizard</string>
     <string name="pref_calibration">calibrationWizard</string>
-    <string name="summary_pref_alarms">Manage ElectricSleep\'s built-in alarms - these
+    <string name="summary_pref_alarms">Manage SleepMate\'s built-in alarms - these
 		are
 		persistent even if Light Sleep Pre-Alarm is disabled.</string>
     <string name="preset">Preset:</string>
-    <string name="summary_pref_use_alarm_off">ElectricSleep will not try to wake you up *before*
+    <string name="summary_pref_use_alarm_off">SleepMate will not try to wake you up *before*
 		the next enabled alarm in sleep mode</string>
-    <string name="summary_pref_use_alarm_on">ElectricSleep is set to try to wake you up
+    <string name="summary_pref_use_alarm_on">SleepMate is set to try to wake you up
 		*before*
 		the next
 		enabled alarm in sleep mode</string>
@@ -165,9 +165,9 @@
 		Wizard or manually
 		configure your Settings now.</string>
     <string name="message_prefs_not_compatible">Your preferences are not compatible with this
-		version of ElectricSleep. They have been reset to the latest default
+		version of SleepMate. They have been reset to the latest default
 		values to prevent errors.</string>
-    <string name="message_not_calibrated">You have not yet calibrated ElectricSleep to work
+    <string name="message_not_calibrated">You have not yet calibrated SleepMate to work
 		on your device.</string>
     <string name="alarm_trigger_sensitivity_set_to">Alarm trigger sensitivity set to: </string>
     <string name="move_once">Move once.</string>
@@ -216,7 +216,7 @@
 	</string>
     <string name="calibrate_title_alarm">Calibrate Light Sleep Sensitivity</string>
     <string name="calibrate_description_placement">
-		ElectricSleep uses your device\'s accelerometer to record movement
+		SleepMate uses your device\'s accelerometer to record movement
 		during sleep. As such, your device must move slightly when you move
 		during the
 		night.\n\n
@@ -247,8 +247,8 @@
     <string name="finish">Finish</string>
     <string name="back">Back</string>
     <string name="next">Next</string>
-    <string name="app_name">ElectricSleep</string>
-    <string name="description_logo">ElectricSleep</string>
+    <string name="app_name">SleepMate</string>
+    <string name="description_logo">SleepMate</string>
     <string name="description_home">Home</string>
     <string name="description_search">Search</string>
     <string name="description_map">Map</string>
@@ -265,14 +265,14 @@
     <string name="title_calibrate">Calibration</string>
     <string name="title_settings">Settings</string>
     <string name="title_history">History</string>
-    <string name="search_label">ElectricSleep</string>
+    <string name="search_label">SleepMate</string>
     <string name="search_hint">Date of Sleep</string>
     <string name="title_group_functions">Functions</string>
     <string name="title_group_statistics">Statistics</string>
     <string name="title_group_configuration">Configuration</string>
     <string name="title_home">Electric Sleep Home</string>
-    <string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
-    <string name="notification_sleep_title">ElectricSleep is active</string>
+    <string name="notification_sleep_ticker">SleepMate is monitoring movements</string>
+    <string name="notification_sleep_title">SleepMate is active</string>
     <string name="notification_sleep_text">Select to interrupt or view progress</string>
     <string name="dialog_wait_for_sleep_data_message">Sleep well! (this area will display a chart
 		throughout the night)</string>
@@ -282,7 +282,7 @@
 		to go off.</string>
     <string name="exit">Exit</string>
     <string name="calibrate_description_welcome">
-		This wizard will calibrate ElectricSleep. The process takes less than
+		This wizard will calibrate SleepMate. The process takes less than
 		a
 		minute and requires that you briefly simulate your sleeping
 		conditions.\nWhy?\n
@@ -303,7 +303,7 @@
 		\n
 		<li>
 
-			ElectricSleep needs to
+			SleepMate needs to
 			            <b>tune itself</b>
 
 			on your unique device so it can
@@ -349,7 +349,7 @@
     <string name="summary_pref_alarm_window">The window of time before the next enabled alarm
 		is
 		set to go
-		off during which ElectricSleep will try to wake you.</string>
+		off during which SleepMate will try to wake you.</string>
     <string name="stop">Stop</string>
     <string name="donate">Donate</string>
     <string name="notification_save_sleep_title">Save sleep</string>
@@ -724,7 +724,7 @@
 		<xliff:g id="pre">%s</xliff:g>
 		and
 		<xliff:g id="post">%s</xliff:g></string>
-    <string name="sleep_no_alarm">No alarm has been set. ElectricSleep will not wake
+    <string name="sleep_no_alarm">No alarm has been set. SleepMate will not wake
 		you up.</string>
     <string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
     <string name="export">Export</string>
