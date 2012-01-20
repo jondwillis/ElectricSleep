@@ -56,10 +56,10 @@ public class VerticalSeekBar extends DecimalSeekBar {
 				myListener.onStartTrackingTouch(this);
 			break;
 		case MotionEvent.ACTION_MOVE:
-			setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
+			float dx = getFloatMax() - (getFloatMax() * event.getY() / getHeight());
+			setProgress(dx);
 			onSizeChanged(getWidth(), getHeight(), 0, 0);
-			myListener.onProgressChanged(this, getMax()
-					- (int) (getMax() * event.getY() / getHeight()), true);
+			myListener.onProgressChanged(this, (int) (dx*PRECISION), true);
 			break;
 		case MotionEvent.ACTION_UP:
 			myListener.onStopTrackingTouch(this);

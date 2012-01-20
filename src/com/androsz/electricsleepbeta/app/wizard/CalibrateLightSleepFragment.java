@@ -96,7 +96,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 			getActivity().findViewById(R.id.calibration_level_seekbar).setVisibility(View.VISIBLE);
 			getActivity().findViewById(R.id.warming_up_text).setVisibility(View.GONE);
 			if (sleepChart != null) {
-				final DecimalSeekBar seekBar = (DecimalSeekBar) getActivity().findViewById(
+				final VerticalSeekBar seekBar = (VerticalSeekBar) getActivity().findViewById(
 						R.id.calibration_level_seekbar);
 				seekBar.setProgress((float) sleepChart.getCalibrationLevel());
 				sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),

@@ -45,12 +45,16 @@ public class DecimalSeekBar extends SeekBar {
 		super.setMax(Math.round((max * PRECISION)));
 	}
 
+	public float getFloatMax() {
+		return getMax() / PRECISION;
+	}
+
 	public void setProgress(final float progress) {
 		super.setProgress(Math.round(progress * PRECISION));
 	}
 
 	@Override
 	public void setProgress(final int progress) {
-		super.setProgress(Math.round(progress * PRECISION));
+		super.setProgress(Math.round((float) progress / PRECISION));
 	}
 }
