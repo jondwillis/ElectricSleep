@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Welcome to ElectricSleep" />
+            android:text="@string/welcome_to_electricsleep" />
 
         <ImageButton
             android:id="@+id/button_learn_more_img"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center_horizontal"
-            android:text="Development of ElectricSleep is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience." />
+            android:text="@string/development_is_now_supported_by" />
 
         <TextView
             style="@style/TextBody"

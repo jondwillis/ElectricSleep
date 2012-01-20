@@ -27,7 +27,7 @@
     </header>
  -->
     <header
-        android:summary="Rate ElectricSleep on the Android Market"
+        android:summary="@string/rate_in_market"
         android:title="Rate" >
 
         <intent

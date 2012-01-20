@@ -739,5 +739,7 @@
     <string name="developer_email_body">Please indicate the nature of this email (Bug, Request, Help, Other):\n</string>
     <string name="zeo_message_two">Click \"Learn more about Zeo\" for information about how Zeo helps people take control of their sleep, and the Zeo Sleep Manager.</string>
     <string name="notification_screenbug_ticker">Waiting for the phone to enter standby.</string>
-
+    <string name="welcome_to_electricsleep">Welcome to SleepMate</string>
+    <string name="development_is_now_supported_by">Development of SleepMate is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
+	<string name="rate_in_market">Rate SleepMate on the Android Market</string>
 </resources>
