@@ -97,9 +97,9 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 				final DecimalSeekBar seekBar = (DecimalSeekBar) getActivity().findViewById(
 						R.id.calibration_level_seekbar);
 				seekBar.setProgress((float) sleepChart.getCalibrationLevel());
-				//sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
-				//		intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
-				//		sleepChart.getCalibrationLevel());
+				sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
+						intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+						sleepChart.getCalibrationLevel());
 			}
 		}
 	};
@@ -140,13 +140,13 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 	public void stopCalibration(Context context) {
 		// getActivity().lightSleepTrigger =
 		// sleepChart.getCalibrationLevel();
-		//context.stopService(new Intent(context, SleepMonitoringService.class));
+		context.stopService(new Intent(context, SleepMonitoringService.class));
 		if (sleepChart != null) {
 			sleepChart.clear();
+			 sleepChart.setVisibility(View.INVISIBLE);
+			 getActivity().findViewById(R.id.calibration_level_seekbar).setVisibility(View.INVISIBLE);
+			 getActivity().findViewById(R.id.warming_up_text).setVisibility(View.VISIBLE);
 		}
-		// sleepChart.setVisibility(View.INVISIBLE);
-		// findViewById(R.id.calibration_level_seekbar).setVisibility(View.INVISIBLE);
-		// findViewById(R.id.warming_up_text).setVisibility(View.VISIBLE);
 	}
 
 }
