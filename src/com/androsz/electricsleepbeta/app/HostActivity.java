@@ -13,6 +13,7 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,21 +50,15 @@ public abstract class HostActivity extends AnalyticActivity {
 		super.onCreate(savedInstanceState);
 
 		final View root = getLayoutInflater().inflate(getContentAreaLayoutId(), null, false);
-		root.setBackgroundColor(Color.BLACK);
+		root.setBackgroundColor(getResources().getColor(R.color.background));
 		setContentView(root);
 
 		prepareActionBar(this);
 	}
 
 	public static void prepareActionBar(SupportActivity supportActivity) {
-		// Fetch the tile bitmap from resources
-		final Bitmap bmp = BitmapFactory.decodeResource(supportActivity.getResources(),
-				R.drawable.actionbar_bg);
-		final BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-		bitmapDrawable.setTileModeX(Shader.TileMode.REPEAT);
-		bitmapDrawable.setTileModeY(Shader.TileMode.REPEAT);
 		final ActionBar bar = supportActivity.getSupportActionBar();
-		bar.setBackgroundDrawable(bitmapDrawable);
+		bar.setBackgroundDrawable(new ColorDrawable(supportActivity.getResources().getColor(R.color.actionbar_background)));
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 

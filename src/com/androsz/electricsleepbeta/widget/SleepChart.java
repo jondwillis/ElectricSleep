@@ -72,8 +72,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
-					R.color.primary1_transparent));
-			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary1));
+					R.color.primary_dark_transparent));
+			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary_dark));
 
 			// set up calibration line series/renderer
 			xySeriesCalibration = new XYSeries(

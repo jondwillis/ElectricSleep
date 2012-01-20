@@ -3,6 +3,7 @@ package com.androsz.electricsleepbeta.preference;
 import java.util.List;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity.Header;
@@ -40,7 +41,8 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		super.onCreate(savedInstanceState);
 
 		final ListView lvw = getListView();
-		lvw.setBackgroundColor(Color.BLACK);
+		this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+		lvw.setBackgroundColor(getResources().getColor(R.color.background));
 
 		//if pre-honeycomb, don't try to use fragments and just load the old-style prefs
 		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || getHeadersResourceId() == NO_HEADERS)

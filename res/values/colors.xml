@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- electricsleep -->
+    <!-- us -->
+    <color name="background">#ff2d2d2d</color>
+    <color name="background_light">#ffe3e3e3</color>
+    <color name="actionbar_background">#ff1a1b20</color>
     <color name="text">#ffffffff</color>
     <color name="text_alt">#ffA4C639</color>
     <color name="titlebar_separator">#ffffffff</color>
     <color name="secondary1">#ff303030</color> <!-- ff30587c ff97c03d -->
     <color name="secondary2">#ff000000</color>
     <color name="secondary3">#ff202020</color>
-    <color name="primary1">#ffA4C639</color>
-    <color name="primary2">#ff000000</color>
-    <color name="primary3">#88A4C639</color>
+    <color name="primary1">#fffdb913</color>
+    <color name="primary1_transparent">#88fdb913</color>
+    <color name="primary_dark">#fff45600</color>
+    <color name="primary_dark_transparent">#88f45600</color>
     <color name="background_transparent_darken">#66000000</color>
     <color name="background_transparent_lighten">#44ffffff</color>
-    <color name="primary1_transparent">#88A4C639</color>
 
     <!-- calendar -->
     <color name="month_day_number">#ffCCCCCC</color>
