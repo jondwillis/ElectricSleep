@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
-public class VerticalSeekBar extends SeekBar {
+public class VerticalSeekBar extends DecimalSeekBar {
 
 	private OnSeekBarChangeListener myListener;
 

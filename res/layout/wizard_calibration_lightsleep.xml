@@ -20,19 +20,27 @@
         android:text="@string/warming_up" >
     </TextView>
 
-    <com.androsz.electricsleepbeta.widget.SleepChart
-        android:id="@+id/calibration_sleep_chart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_margin="4dip"
-        android:layout_weight="100" />
-
-    <com.androsz.electricsleepbeta.widget.DecimalSeekBar
-        android:id="@+id/calibration_level_seekbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="0.1" android:scrollbarAlwaysDrawVerticalTrack="true" />
+        android:orientation="horizontal" >
+
+        <com.androsz.electricsleepbeta.widget.VerticalSeekBar
+            android:id="@+id/calibration_level_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="0.1"
+            android:scrollbarAlwaysDrawVerticalTrack="true" />
+        
+        <com.androsz.electricsleepbeta.widget.SleepChart
+            android:id="@+id/calibration_sleep_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_margin="4dip"
+            android:layout_weight="100" />
+
+    </LinearLayout>
 
 </LinearLayout>

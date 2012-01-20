@@ -19,10 +19,16 @@ public class DecimalSeekBar extends SeekBar {
 
 	public DecimalSeekBar(final Context context) {
 		super(context);
+		setMax(Math.round((10 * PRECISION)));
 	}
 
 	public DecimalSeekBar(final Context context, final AttributeSet as) {
 		super(context, as);
+		setMax(Math.round((10 * PRECISION)));
+	}
+
+	public DecimalSeekBar(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
 		setMax(Math.round((10 * PRECISION)));
 	}
 

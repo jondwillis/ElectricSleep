@@ -20,6 +20,7 @@ import com.androsz.electricsleepbeta.app.SleepActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 import com.androsz.electricsleepbeta.widget.SleepChart;
+import com.androsz.electricsleepbeta.widget.VerticalSeekBar;
 
 public class CalibrateLightSleepFragment extends LayoutFragment implements Calibrator {
 
@@ -33,11 +34,12 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 		//	sleepChart = (SleepChart) savedInstanceState.getParcelable(SLEEP_CHART);
 		//}
 
-		final DecimalSeekBar seekBar = (DecimalSeekBar) getActivity().findViewById(
+		final VerticalSeekBar seekBar = (VerticalSeekBar) getActivity().findViewById(
 				R.id.calibration_level_seekbar);
 		seekBar.setMax((int) SettingsActivity.MAX_ALARM_SENSITIVITY);
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
+			
 			@Override
 			public void onProgressChanged(final SeekBar seekBar, final int progress,
 					final boolean fromUser) {
