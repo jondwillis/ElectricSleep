@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class ZeoSplashActivity extends HostActivity {
@@ -26,6 +27,7 @@ public class ZeoSplashActivity extends HostActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button_learn_more:
+		case R.id.button_learn_more_img:
 			learnMore(this);
 			break;
 		case R.id.button_get_started:

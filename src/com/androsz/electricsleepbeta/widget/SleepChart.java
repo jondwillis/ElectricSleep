@@ -72,8 +72,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
-					R.color.primary1_transparent));
-			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary1));
+					R.color.primary_dark_transparent));
+			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary_dark));
 
 			// set up calibration line series/renderer
 			xySeriesCalibration = new XYSeries(
@@ -105,12 +105,12 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setAntialiasing(true);
 			xyMultipleSeriesRenderer.setFitLegend(true);
 			int[] margins = xyMultipleSeriesRenderer.getMargins();
-			margins[2] += 20; //increase bottom margin
+			margins[2] += 20; // increase bottom margin
 			xyMultipleSeriesRenderer.setMargins(margins);
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
-			xyMultipleSeriesRenderer.setXLabels(4);
+			xyMultipleSeriesRenderer.setXLabels(6);
 			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
@@ -141,7 +141,6 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		if (makesSenseToDisplay()) {
 			final double firstX = xySeriesMovement.getX(0);
 			final double lastX = xySeriesMovement.getX(xySeriesMovement.getItemCount() - 1);
-			final double duration = lastX-firstX;
 
 			//if (makesSenseToDisplay()) {
 				// reconfigure the calibration line..
@@ -153,13 +152,13 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 			final int MINUTE_IN_MS = 1000 * 60;
 			final int HOUR_IN_MS = MINUTE_IN_MS * 60;
-			if (duration > HOUR_IN_MS*2) {
+			/*if (lastX - firstX > HOUR_IN_MS*2) {
 				((TimeChart) mChart).setDateFormat("h");
 				xyMultipleSeriesRenderer.setXLabels(8);
-			}else if (duration > MINUTE_IN_MS*3) {
+			}else if (lastX - firstX > MINUTE_IN_MS*3) {
 				((TimeChart) mChart).setDateFormat("h:mm");
 				xyMultipleSeriesRenderer.setXLabels(5);
-			}
+			}*/
 
 			xyMultipleSeriesRenderer.setXAxisMin(firstX);
 			xyMultipleSeriesRenderer.setXAxisMax(lastX);
@@ -210,6 +209,10 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		dest.writeSerializable(xySeriesCalibrationRenderer);
 		dest.writeDouble(calibrationLevel);
 		dest.writeInt(rating);
+	}
 
+	public void clear() {
+		xySeriesMovement.clear();
+		xySeriesCalibration.clear();
 	}
 }

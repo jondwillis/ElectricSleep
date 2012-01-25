@@ -47,6 +47,7 @@ public class StartSleepReceiver extends BroadcastReceiver {
 			Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 		} else if (service != null && activity != null) {
 			context.startService(service);
+			activity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(activity);
 		}
 	}

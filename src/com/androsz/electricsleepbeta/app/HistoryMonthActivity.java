@@ -49,19 +49,12 @@ public class HistoryMonthActivity extends HostActivity implements
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			lastPosition = position;
 		}
-
-		private int lastSettledPosition = 1;
-		private int lastPosition = 1;
 
 		@Override
 		public void onPageScrollStateChanged(int state) {
 
 			if (state == ViewPager.SCROLL_STATE_IDLE) {
-
-				if (lastSettledPosition == lastPosition)
-					return;
 
 				MonthView leftMonth = (MonthView) monthPager.getChildAt(0);
 				MonthView centerMonth = (MonthView) monthPager.getChildAt(1);

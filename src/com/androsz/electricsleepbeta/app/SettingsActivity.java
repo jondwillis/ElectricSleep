@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.preference.HostPreferenceActivity;
 
 public class SettingsActivity extends HostPreferenceActivity {
@@ -32,7 +33,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 	public static final String KEY_VOLUME_BEHAVIOR = "volume_button_setting";
 
 	public static double MAX_ALARM_SENSITIVITY = 1;
-	// name of the preferences file that holds ElectricSleep's main preferences
+	// name of the preferences file that holds main preferences
 	// this is actually what android uses as default..
 	public static String PREFERENCES = "com.androsz.electricsleepbeta_preferences";
 	// name of the preferences file that holds environmental preferences

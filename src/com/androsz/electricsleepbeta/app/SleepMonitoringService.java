@@ -36,6 +36,7 @@ import android.provider.Settings;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
+import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -140,7 +141,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				final long now = System.currentTimeMillis();
 				try {
 					final Alarm alarm = Alarms.calculateNextAlert(context);
-					if (now > alarm.time + 60*alarmWindow * 1000) {
+					if (now > alarm.time + 60 * alarmWindow * 1000) {
 						Alarms.setTimeToIgnore(context, alarm, alarm.time);
 						Alarms.setNextAlert(context);
 					}
@@ -149,12 +150,12 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				}
 				stopSelf();
 			} else {
-				if(action.equals(Alarms.CANCEL_SNOOZE))
-				{
+				if (action.equals(Alarms.CANCEL_SNOOZE)) {
 					final long now = System.currentTimeMillis();
 					try {
-						final Alarm alarm = Alarms.getAlarm(context.getContentResolver(), intent.getIntExtra(Alarms.ALARM_ID, -1));
-						if (now > alarm.time + 60*alarmWindow * 1000) {
+						final Alarm alarm = Alarms.getAlarm(context.getContentResolver(),
+								intent.getIntExtra(Alarms.ALARM_ID, -1));
+						if (now > alarm.time + 60 * alarmWindow * 1000) {
 							Alarms.setTimeToIgnore(context, alarm, alarm.time);
 							Alarms.setNextAlert(context);
 						}
@@ -245,7 +246,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		if (this.testModeRate == Integer.MIN_VALUE) {
 			notificationIntent = new Intent(this, SleepActivity.class);
 		} else {
-			notificationIntent = new Intent();
+			notificationIntent =  new Intent(this, CalibrationWizardActivity.class);
 		}
 		notificationIntent
 				.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -328,32 +329,45 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 	@Override
 	public void onSensorChanged(final SensorEvent event) {
-		if (waitForSensorsToWarmUp < 5) {
-			if (waitForSensorsToWarmUp == 4) {
-				waitForSensorsToWarmUp++;
-				updateTimer.scheduleAtFixedRate(new UpdateTimerTask(), updateInterval,
-						updateInterval);
+		new Thread(new Runnable() {
 
-				gravity[0] = event.values[0];
-				gravity[1] = event.values[1];
-				gravity[2] = event.values[2];
+			@Override
+			public void run() {
+				synchronized (gravity) {
+
+					if (waitForSensorsToWarmUp < 5) {
+						if (waitForSensorsToWarmUp == 4) {
+							waitForSensorsToWarmUp++;
+							try {
+								updateTimer.scheduleAtFixedRate(new UpdateTimerTask(),
+										updateInterval, updateInterval);
+							} catch (IllegalStateException ise) {
+								// user stopped monitoring really quickly after
+								// starting.
+							}
+							gravity[0] = event.values[0];
+							gravity[1] = event.values[1];
+							gravity[2] = event.values[2];
+						}
+						waitForSensorsToWarmUp++;
+						return;
+					}
+
+					gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+					gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+					gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+
+					final double curX = event.values[0] - gravity[0];
+					final double curY = event.values[1] - gravity[1];
+					final double curZ = event.values[2] - gravity[2];
+
+					final double mAccelCurrent = Math.sqrt(curX * curX + curY * curY + curZ * curZ);
+
+					final double absAccel = Math.abs(mAccelCurrent);
+					maxNetForce = absAccel > maxNetForce ? absAccel : maxNetForce;
+				}
 			}
-			waitForSensorsToWarmUp++;
-			return;
-		}
-
-		gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-		gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-		gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
-
-		final double curX = event.values[0] - gravity[0];
-		final double curY = event.values[1] - gravity[1];
-		final double curZ = event.values[2] - gravity[2];
-
-		final double mAccelCurrent = Math.sqrt(curX * curX + curY * curY + curZ * curZ);
-
-		final double absAccel = Math.abs(mAccelCurrent);
-		maxNetForce = absAccel > maxNetForce ? absAccel : maxNetForce;
+		}).start();
 	}
 
 	@Override

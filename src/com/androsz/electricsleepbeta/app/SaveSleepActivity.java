@@ -56,7 +56,7 @@ public class SaveSleepActivity extends HostActivity implements OnRatingBarChange
 						}
 						return why;
 					}
-					
+
 					final Uri uri = Uri.parse(intent.getStringExtra(SaveSleepReceiver.EXTRA_URI));
 					if (uri != null) {
 						reviewSleepIntent.setData(uri);
@@ -75,7 +75,9 @@ public class SaveSleepActivity extends HostActivity implements OnRatingBarChange
 						trackEvent(result, 0);
 						Toast.makeText(context, result, Toast.LENGTH_LONG).show();
 					}
-					progress.dismiss();
+					if (progress != null) {
+						progress.dismiss();
+					}
 					finish();
 				}
 			}.execute();

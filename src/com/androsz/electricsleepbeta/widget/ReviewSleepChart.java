@@ -8,10 +8,6 @@ import android.util.AttributeSet;
 
 public class ReviewSleepChart extends SleepChart {
 
-	public ReviewSleepChart(final Context context) {
-		super(context);
-	}
-
 	public ReviewSleepChart(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 	}

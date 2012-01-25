@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/how_it_works"
+            style="@style/TextHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/electricsleep_about" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/imgConfigure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/how_it_works"
+            android:layout_margin="15dip"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:tint="@android:color/white" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textConfigure"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imgConfigure"
+            android:layout_toRightOf="@+id/imgSleep"
+            android:text="@string/how_configure" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/imgSleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgConfigure"
+            android:layout_margin="10dip"
+            android:layout_toRightOf="@+id/welcomeTitle"
+            android:src="@drawable/home_btn_sleep" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textSleep"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imgSleep"
+            android:layout_toRightOf="@+id/imgSleep"
+            android:text="@string/how_sleep" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/imgAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgSleep"
+            android:layout_margin="15dip"
+            android:layout_toRightOf="@+id/welcomeTitle"
+            android:src="@drawable/ic_menu_alarms"
+            android:tint="@android:color/white" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textAlarm"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imgAlarm"
+            android:layout_toRightOf="@+id/imgSleep"
+            android:text="@string/how_wake" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/imgReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgAlarm"
+            android:layout_margin="10dip"
+            android:layout_toRightOf="@+id/welcomeTitle"
+            android:src="@drawable/home_btn_history" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/textReview"
+            style="@style/TextHeaderTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imgReview"
+            android:layout_toRightOf="@+id/imgSleep"
+            android:text="@string/how_review" >
+        </TextView>
+    </RelativeLayout>
+
+</ScrollView>

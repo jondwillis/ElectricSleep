@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
@@ -45,7 +46,7 @@ public abstract class AnalyticFragment extends Fragment implements GoogleAnalyti
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(getContentAreaLayoutId(), container, false);
 
-		view.setBackgroundColor(Color.BLACK);
+		view.setBackgroundColor(getResources().getColor(R.color.background));
 		//view.setBackgroundResource(R.drawable.gradient_background_vert);
 		return view;
 	}

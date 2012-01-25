@@ -117,6 +117,7 @@ public class AlarmKlaxon extends Service {
 		// Listen for incoming calls to kill the alarm.
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+		WakeLockManager.release("alarmReceiver");
 		WakeLockManager.acquire(this, "klaxon", PowerManager.PARTIAL_WAKE_LOCK
 				| PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE);
 	}
