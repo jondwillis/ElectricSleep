@@ -104,7 +104,7 @@
             <dependency>
                 <groupId>org.achartengine</groupId>
                 <artifactId>org.achartengine</artifactId>
-                <version>0.7.0</version>
+                <version>0.7.0-electricsleep</version>
                 <type>apklib</type>
             </dependency>
             <dependency>
