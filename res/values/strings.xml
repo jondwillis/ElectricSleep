@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+    <string name="sleep_efficiency">Sleep Efficiency</string>
+    <string name="morning_feel">Morning Feel</string>
+    <string name="oops_there_was_error_while_generating_image_for_sharing">Oops, there was an error generating image of sleep for sharing.</string>
+    <string name="unfortunately_no_sleep_record_was_available_for_sharing">Unfortunately, no sleep record was available for sharing</string>
+    <string name="i_am_sorry_but_cannot_share_zeo_sleep_without_sdcard">I\'m sorry but sharing Zeo sleep information requires an SD card be present in your phone (to share the image with other apps).</string>
+    <string name="see_how_i_slept_on">See how I slept on</string>
+    <string name="try_out_zeo">Try out Zeo: www.myZeo.com</string>
     <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS
 		ANYTHING.</string>
     <string name="legend_light_sleep_trigger">Light Sleep Trigger</string>
@@ -421,7 +428,7 @@
     <string name="alarm_alert_dismiss_text">Dismiss</string>
 
     <!--
-         Alarm Alert screen: this message is shown after an alarm rung unattended 
+         Alarm Alert screen: this message is shown after an alarm rung unattended
 		for a number of minutes. It tells the user that the alarm has been silenced.
     -->
     <string name="alarm_alert_alert_silenced">
@@ -434,7 +441,7 @@
     <string name="alarm_alert_snooze_text">Snooze</string>
 
     <!--
-         Toast that appears after Alarm is snoozed from the Alarm dialog. Says 
+         Toast that appears after Alarm is snoozed from the Alarm dialog. Says
 		the alarm will snooze for xxx minutes.
     -->
     <string name="alarm_alert_snooze_set">
@@ -444,7 +451,7 @@
 	</string>
 
     <!--
-         0: nothing 1: days 2: hours 3: days hours 4: minutes 5: days minutes 
+         0: nothing 1: days 2: hours 3: days hours 4: minutes 5: days minutes
 		6: hours minutes 7: days hours minutes
     -->
     <skip />
@@ -528,28 +535,28 @@
 	</string>
 
     <!--
-         Repeat options that appear under an alarm on main Alarm Clock screen 
-		to identify repetition schedule: special case for when the alarm is set to 
+         Repeat options that appear under an alarm on main Alarm Clock screen
+		to identify repetition schedule: special case for when the alarm is set to
 		repeat every day
     -->
     <string name="every_day">every day</string>
 
     <!--
-         Repeat options that appear under an alarm on main Alarm Clock screen 
-		to identify repetition schedule: special case for when the alarm is set to 
+         Repeat options that appear under an alarm on main Alarm Clock screen
+		to identify repetition schedule: special case for when the alarm is set to
 		never repeat
     -->
     <string name="never">Never</string>
 
     <!--
-         Repeat options that appear under an alarm on main Alarm Clock screen 
-		to identify repetition schedule: concatenate days with this character, i.e. 
+         Repeat options that appear under an alarm on main Alarm Clock screen
+		to identify repetition schedule: concatenate days with this character, i.e.
 		"Mon, Tue, Wed"
     -->
     <string name="day_concat">", "</string>
 
     <!--
-         Appears at the top of the Clock Picker screen: Tell user to select 
+         Appears at the top of the Clock Picker screen: Tell user to select
 		a clock to display
     -->
     <string name="clock_instructions">Select a clock to display.</string>
@@ -561,8 +568,8 @@
     <string name="alarmclock_settings">Alarmclock Settings</string>
 
     <!--
-         Setting title for whether the alarm should play in silent mode. Usually, 
-		silent mode only affects the ringer, but this setting will make the alarms 
+         Setting title for whether the alarm should play in silent mode. Usually,
+		silent mode only affects the ringer, but this setting will make the alarms
 		respect silent mode too.
     -->
     <string name="alarm_in_silent_mode_title">Alarm in silent mode</string>
@@ -574,7 +581,7 @@
     <string name="snooze_duration_title">Snooze duration</string>
 
     <!--
-         Entries listed in the ListPreference when invoking the snooze duration 
+         Entries listed in the ListPreference when invoking the snooze duration
 		preference.
     -->
     <string-array name="snooze_duration_entries">
@@ -587,7 +594,7 @@
     </string-array>
 
     <!--
-         Values that are retrieved from the ListPreference. These must match 
+         Values that are retrieved from the ListPreference. These must match
 		the snooze_duration_entries above.
     -->
     <string-array name="snooze_duration_values">
@@ -670,8 +677,8 @@
     <string name="battery_charging_level"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <!--
-         What to show the user if the weather widget exists but fails to respond. 
-		This is a sign of an error; if the weather widget is not present on the device, 
+         What to show the user if the weather widget exists but fails to respond.
+		This is a sign of an error; if the weather widget is not present on the device,
 		we show nothing at all.
     -->
     <string name="weather_fetch_failure">Weather information currently unavailable.</string>
@@ -699,12 +706,12 @@
     <!-- Title of event when no explicit title is specified by the user -->
     <string name="no_title_label">(No title)</string>
     <!--
-         This string is used in a popup window when there are more events than 
-		can be displayed so it displays the events that it can and then displays 
-		this line so that the user knows how many more events there are that could 
-		not be displayed. For example, if there are 6 events but we can only display 
-		4 events then we will display the first 4 events and then show 'plus 2 more' 
-		to indicate that there are two more events that we could not display because 
+         This string is used in a popup window when there are more events than
+		can be displayed so it displays the events that it can and then displays
+		this line so that the user knows how many more events there are that could
+		not be displayed. For example, if there are 6 events but we can only display
+		4 events then we will display the first 4 events and then show 'plus 2 more'
+		to indicate that there are two more events that we could not display because
 		of lack of room.
     -->
     <string name="plus_N_more">
