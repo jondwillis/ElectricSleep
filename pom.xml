@@ -191,7 +191,6 @@
 						<sdk>
 							<platform>${android.platform}</platform>
 						</sdk>
-						<undeployBeforeDeploy>true</undeployBeforeDeploy>
 					</configuration>
 					<extensions>true</extensions>
 				</plugin>
