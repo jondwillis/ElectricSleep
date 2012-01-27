@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/frags"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+    <com.androsz.electricsleepbeta.widget.ReviewSleepChart
+        android:id="@+id/sleep_movement_chart"
+        android:layout_height="300dp"
+        android:layout_width="800dp"
+        android:orientation="horizontal"
+        android:padding="8dip" />
+
+    <TableLayout
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:stretchColumns="1">
+        <TableRow>
+            <TextView
+              android:layout_gravity="left|center_vertical"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
+              android:text="@string/morning_feel" />
+            <RatingBar
+              android:id="@+id/morning_feel"
+              android:isIndicator="true"
+              android:layout_gravity="right|center_vertical"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
+              android:numStars="5"
+              android:stepSize="1" />
+        </TableRow>
+        <TableRow>
+            <TextView
+              android:layout_gravity="left|center_vertical"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
+              android:text="@string/sleep_efficiency" />
+            <TextView
+              android:id="@+id/sleep_efficiency"
+              android:layout_gravity="right|center_vertical"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:text="@string/try_out_zeo" />
+
+</LinearLayout>
