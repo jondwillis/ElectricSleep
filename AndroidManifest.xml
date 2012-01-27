@@ -36,7 +36,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name="com.androsz.electricsleepbeta.app.StrictModeWhenDebuggableApplication"
-        android:theme="@style/Theme.Sherlock" >
+        android:theme="@style/Theme.SleepMate" >
 
         <!-- Used for install referrer tracking -->
         <receiver
@@ -89,7 +89,8 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:label="@string/title_review_sleep"
-            android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" />
+            android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity"
+            android:theme="@style/Theme.SleepMate.Light" />
         <activity
             android:excludeFromRecents="true"
             android:label="@string/title_save_sleep"
@@ -126,8 +127,8 @@
             android:taskAffinity="" />
 
         <!--
-             This activity is basically the same as AlarmAlert but with a more 
-			generic theme. It also shows as full screen (with status bar) but with the 
+             This activity is basically the same as AlarmAlert but with a more
+			generic theme. It also shows as full screen (with status bar) but with the
 			wallpaper background.
         -->
         <activity
@@ -171,7 +172,7 @@
             android:label="@string/title_sleep"
             android:icon="@drawable/home_btn_sleep_pressed"
             android:name=".app.CreateShortcuts"
-            android:targetActivity=".app.LauncherShortcuts" > 
+            android:targetActivity=".app.LauncherShortcuts" >
             <!-- This intent-filter allows your shortcuts to be created in the launcher. -->
             <intent-filter >
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
@@ -188,10 +189,10 @@
         </receiver>
 
         <!--
-             This service receives the same intent as AlarmReceiver but it does 
-			not respond to the same broadcast. The AlarmReceiver will receive the alert 
-			broadcast and will start this service with the same intent. The service plays 
-			the alarm alert and vibrates the device. This allows the alert to continue 
+             This service receives the same intent as AlarmReceiver but it does
+			not respond to the same broadcast. The AlarmReceiver will receive the alert
+			broadcast and will start this service with the same intent. The service plays
+			the alarm alert and vibrates the device. This allows the alert to continue
 			playing even if another activity causes the AlarmAlert activity to pause.
         -->
         <service android:name="com.androsz.electricsleepbeta.alarmclock.AlarmKlaxon" >
