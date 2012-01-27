@@ -13,23 +13,22 @@ public abstract class AnalyticActivity extends FragmentActivity implements Googl
 	protected void onStart()
 	{
 		super.onStart();
-		
-		GoogleAnalyticsSessionHelper.getInstance(KEY, getApplication()).onStartSession();
 
-		trackPageView(getClass().getSimpleName());
+		//GoogleAnalyticsSessionHelper.getInstance(KEY, getApplication()).onStartSession();
+        //trackPageView(getClass().getSimpleName());
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
-		GoogleAnalyticsSessionHelper.getExistingInstance().onStopSession();
+		//GoogleAnalyticsSessionHelper.getExistingInstance().onStopSession();
 	}
 
 	public void trackEvent(final String label, final int value) {
-		GoogleAnalyticsSessionHelper.trackEvent(label, value);
+		//GoogleAnalyticsSessionHelper.trackEvent(label, value);
 	}
 
 	public void trackPageView(final String pageUrl) {
-		GoogleAnalyticsSessionHelper.trackPageView(pageUrl);
+		//GoogleAnalyticsSessionHelper.trackPageView(pageUrl);
 	}
 }

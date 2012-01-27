@@ -13,6 +13,7 @@ import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -115,7 +116,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
-			xyMultipleSeriesRenderer.setApplyBackgroundColor(false);
+            xyMultipleSeriesRenderer.setBackgroundColor(Color.RED);
+            xyMultipleSeriesRenderer.setMarginsColor(Color.TRANSPARENT);
+            xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
 			timeChart.setDateFormat("h:mm:ss");
