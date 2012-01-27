@@ -50,15 +50,13 @@ public abstract class HostActivity extends AnalyticActivity {
 		super.onCreate(savedInstanceState);
 
 		final View root = getLayoutInflater().inflate(getContentAreaLayoutId(), null, false);
-		root.setBackgroundColor(getResources().getColor(R.color.background));
 		setContentView(root);
 
 		prepareActionBar(this);
-	}
+    }
 
 	public static void prepareActionBar(SupportActivity supportActivity) {
 		final ActionBar bar = supportActivity.getSupportActionBar();
-		bar.setBackgroundDrawable(new ColorDrawable(supportActivity.getResources().getColor(R.color.actionbar_background)));
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 

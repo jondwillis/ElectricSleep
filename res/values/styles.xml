@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    
+
    <!--
 	<style name="Theme" ></style>
 
-	  <style name="Theme.electricsleep"  parent="@style/Theme.Sherlock"> 
+	  <style name="Theme.electricsleep"  parent="@style/Theme.Sherlock">
 		<item name="android:windowContentOverlay">@android:color/transparent</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
 		<item name="android:windowTitleSize">@dimen/title_height</item>
 	</style>
 
-	<style name="WindowTitleBackground"> parent="@android:style/windowTitleBackground" 
+	<style name="WindowTitleBackground"> parent="@android:style/windowTitleBackground"
 		<item name="android:background">@android:color/transparent</item>
 	</style>
     -->
@@ -119,7 +119,7 @@
     </style>
 
     <!--
-         This theme is similar to the Theme.Dialog.Alert but does not rely on 
+         This theme is similar to the Theme.Dialog.Alert but does not rely on
 		a non-public resource.
     -->
     <style name="alarm_alert" parent="android:Theme.Dialog">
@@ -152,4 +152,44 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="Theme.SleepMate" parent="Theme.Sherlock">
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="abBackground">@drawable/actionbar_background</item>
+        <item name="abLogo">@drawable/logo_white</item>
+        <item name="actionBarTabStyle">@style/ZeoActionBarTabStyle</item>
+        <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
+    </style>
+
+    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock.Light">
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:textColor">@color/text_light</item>
+
+        <item name="abBackground">@drawable/actionbar_background</item>
+        <item name="abLogo">@drawable/logo_white</item>
+        <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
+        <item name="actionBarTabStyle">@style/ZeoActionBarTabStyle</item>
+        <item name="actionBarTabBarStyle">@style/ZeoActionBarTabBarStyle</item>
+        <item name="actionBarTabTextStyle">@style/ZeoActionBarTabTextStyle</item>
+        <item name="actionMenuTextColor">@color/actionbar_text_light</item>
+        <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
+    </style>
+
+    <style name="ZeoActionBarTabStyle" parent="Widget.Sherlock.ActionBar.TabView">
+        <item name="android:background">@drawable/zeo_tab_indicator_holo</item>
+    </style>
+
+    <style name="ZeoActionBarTabBarStyle" parent="@style/Widget.Sherlock.ActionBar.TabBar">
+        <item name="android:background">@color/actionbar_background</item>
+    </style>
+
+    <style name="ZeoActionBarTabTextStyle" parent="Widget.Sherlock.Light.ActionBar.TabText">
+        <item name="android:textColor">@color/actionbar_text_light</item>
+    </style>
+
+    <style name="ZeoActionBarTitleTextStyle" parent="TextAppearance.Widget.Title">
+        <item name="android:textColor">@color/actionbar_text_light</item>
+    </style>
 </resources>
