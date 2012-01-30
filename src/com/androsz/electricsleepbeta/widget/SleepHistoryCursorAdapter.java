@@ -25,8 +25,9 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 	@Override
 	public void bindView(final View view, final Context context, final Cursor cursor) {
 
-		final ReviewSleepChart sleepChart = (ReviewSleepChart) view
-				.findViewById(R.id.sleep_history_list_item_sleepchartview);
+		final SleepChart sleepChart =
+            (SleepChart) view.findViewById(R.id.sleep_history_list_item_sleepchartview);
+        sleepChart.setScroll(true);
 
 		try {
 			sleepChart.sync(cursor);

@@ -12,6 +12,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Parcel;
@@ -43,25 +45,45 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 	public XYSeriesRenderer xySeriesMovementRenderer;
 
-	public SleepChart(final Context context) {
-		super(context);
+    private boolean mSetScroll;
+    private int mBackgroundColor;
+
+    public SleepChart(final Context context) {
+		this(context, null);
 	}
 
 	public SleepChart(final Context context, final AttributeSet attrs) {
-		super(context, attrs);
-	}
+		this(context, attrs, 0);
+    }
 
-	public SleepChart(final Context context, Parcel in) {
-		super(context);
-		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) in.readSerializable();
-		xyMultipleSeriesRenderer = (XYMultipleSeriesRenderer) in.readSerializable();
-		xySeriesMovement = (XYSeries) in.readSerializable();
-		xySeriesMovementRenderer = (XYSeriesRenderer) in.readSerializable();
-		xySeriesCalibration = (XYSeries) in.readSerializable();
-		xySeriesCalibrationRenderer = (XYSeriesRenderer) in.readSerializable();
-		calibrationLevel = in.readDouble();
-		rating = in.readInt();
-	}
+    public SleepChart(final Context context, final AttributeSet attrs, int defStyle) {
+        super(context, attrs);
+        // After this point buildChart() should have been invoked and the various renders and series
+        // should have been populated.
+
+        // Now begin processing attributes
+        final Resources resources = context.getResources();
+        final TypedArray array =
+            context.obtainStyledAttributes(attrs, R.styleable.SleepChart, defStyle, 0);
+
+        // background color processing
+        if (array.hasValue(R.styleable.SleepChart_backgroundColor)) {
+            int backgroundColor =
+                array.getColor(R.styleable.SleepChart_backgroundColor, R.color.background);
+            xyMultipleSeriesRenderer.setBackgroundColor(backgroundColor);
+            xyMultipleSeriesRenderer.setMarginsColor(backgroundColor);
+            xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
+        } else {
+            xyMultipleSeriesRenderer.setBackgroundColor(Color.TRANSPARENT);
+            xyMultipleSeriesRenderer.setMarginsColor(Color.TRANSPARENT);
+            xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
+        }
+
+        // inside scrollview flag
+        if (array.getBoolean(R.styleable.SleepChart_setScroll, false)) {
+            xyMultipleSeriesRenderer.setInScroll(true);
+        }
+    }
 
 	@Override
 	protected AbstractChart buildChart() {
@@ -116,9 +138,6 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setShowGrid(true);
 			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
-            xyMultipleSeriesRenderer.setBackgroundColor(Color.RED);
-            xyMultipleSeriesRenderer.setMarginsColor(Color.TRANSPARENT);
-            xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
 			timeChart.setDateFormat("h:mm:ss");
@@ -174,6 +193,10 @@ public class SleepChart extends GraphicalView implements Parcelable {
 	public void setCalibrationLevel(final double calibrationLevel) {
 		this.calibrationLevel = calibrationLevel;
 	}
+
+    public void setScroll(boolean scroll) {
+        mSetScroll = scroll;
+    }
 
 	public void sync(final Cursor cursor) throws StreamCorruptedException,
 			IllegalArgumentException, IOException, ClassNotFoundException {
