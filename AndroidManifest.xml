@@ -28,7 +28,7 @@
 
         <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.HomeActivity">
         </activity>
-        <activity android:label="@string/title_sleep" android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:uiOptions="splitActionBarWhenNarrow"/>
+        <activity android:label="@string/title_sleep" android:name="com.androsz.electricsleepbeta.app.SleepActivity"/>
         <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
