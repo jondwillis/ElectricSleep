@@ -17,9 +17,7 @@ import android.os.Build.VERSION;
 import android.text.format.Time;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.AnalyticActivity;
 import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
-import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.PointD;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 

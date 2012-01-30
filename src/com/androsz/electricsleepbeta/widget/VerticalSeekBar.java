@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.SeekBar;
 
 public class VerticalSeekBar extends DecimalSeekBar {
 
@@ -52,9 +51,10 @@ public class VerticalSeekBar extends DecimalSeekBar {
 
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			if (myListener != null)
-				myListener.onStartTrackingTouch(this);
-			break;
+			if (myListener != null) {
+                myListener.onStartTrackingTouch(this);
+            }
+            break;
 		case MotionEvent.ACTION_MOVE:
 			float dx = getFloatMax() - (getFloatMax() * event.getY() / getHeight());
 			setProgress(dx);

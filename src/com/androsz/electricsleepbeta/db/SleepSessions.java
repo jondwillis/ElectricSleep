@@ -23,9 +23,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.androsz.electricsleepbeta.util.DBUtils;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /*
@@ -237,17 +235,17 @@ public class SleepSessions {
 			}
 
 			final SQLiteDatabase db = helper.getWritableDatabase();
-			
+
 			//hack to work around an sqlite bug returning the wrong rowid on some devices.
 			SQLiteStatement statement = db.compileStatement(String.format(
 					"SELECT IFNULL(max(%s), 0) as %s from %s", MainTable.KEY_ROW_ID,
 					MainTable.KEY_ROW_ID, MainTable.TABLE_NAME));
 			long maxRowId = statement.simpleQueryForLong();
 			long rowId = maxRowId + 1;
-			
+
 			values.put(MainTable.KEY_ROW_ID, rowId);
 			db.insert(MainTable.TABLE_NAME, null, values);
-			
+
 
 			// If the insert succeeded, the row ID exists.
 			if (rowId != -1) {

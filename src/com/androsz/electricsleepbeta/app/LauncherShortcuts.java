@@ -19,21 +19,19 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.widget.TextView;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life
  * cycle.
- * 
+ *
  * 1. Your application offers to provide shortcuts to the launcher. When the
  * user installs a shortcut, an activity within your application generates the
  * actual shortcut and returns it to the launcher, where it is shown to the user
  * as an icon.
- * 
+ *
  * 2. Any time the user clicks on an installed shortcut, an intent is sent.
  * Typically this would then be handled as necessary by an activity within your
  * application.
@@ -71,10 +69,10 @@ public class LauncherShortcuts extends Activity {
 	/**
 	 * This function creates a shortcut and returns it to the caller. There are
 	 * actually two intents that you will send back.
-	 * 
+	 *
 	 * The first intent serves as a container for the shortcut and is returned
 	 * to the launcher by setResult(). This intent must contain three fields:
-	 * 
+	 *
 	 * <ul>
 	 * <li>{@link android.content.Intent#EXTRA_SHORTCUT_INTENT} The shortcut
 	 * intent.</li>
@@ -85,14 +83,14 @@ public class LauncherShortcuts extends Activity {
 	 * {@link android.content.Intent#EXTRA_SHORTCUT_ICON_RESOURCE} if provided
 	 * as a drawable resource.</li>
 	 * </ul>
-	 * 
+	 *
 	 * If you use a simple drawable resource, note that you must wrapper it
 	 * using {@link android.content.Intent.ShortcutIconResource}, as shown
 	 * below. This is required so that the launcher can access resources that
 	 * are stored in your application's .apk file. If you return a bitmap, such
 	 * as a thumbnail, you can simply put the bitmap into the extras bundle
 	 * using {@link android.content.Intent#EXTRA_SHORTCUT_ICON}.
-	 * 
+	 *
 	 * The shortcut intent can be any intent that you wish the launcher to send,
 	 * when the user clicks on the shortcut. Typically this will be
 	 * {@link android.content.Intent#ACTION_VIEW} with an appropriate Uri for

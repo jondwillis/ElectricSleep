@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import android.content.Context;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.util.Log;
 
 /**
  * Manages and simplifies access to multiple WakeLocks that can be concurrently
@@ -14,7 +15,9 @@ import android.os.PowerManager.WakeLock;
 public class WakeLockManager {
 	private static Map<String, PowerManager.WakeLock> locks = new ConcurrentHashMap<String, PowerManager.WakeLock>();
 
-	public static void acquire(Context context, String id, int flags) {
+    private static final String TAG = WakeLockManager.class.getSimpleName();
+
+    public static void acquire(Context context, String id, int flags) {
 		acquire(context, id, flags, 0);
 	}
 
@@ -44,8 +47,9 @@ public class WakeLockManager {
 			if (wakeLock != null) {
 				wakeLock.release();
 			}
-		} catch (Exception whocares) {
-			// android's wakelocks are buggy?
+		} catch (Exception ex) {
+            // android's wakelocks are buggy?
+            Log.d(TAG, "Exception while attempting to release wake lock.", ex);
 		} finally {
 			locks.remove(id);
 		}

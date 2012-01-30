@@ -16,13 +16,10 @@ import android.provider.Settings;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
@@ -113,7 +110,7 @@ public class SleepActivity extends HostActivity {
 					protected String[] doInBackground(Void... params) {
 						String[] result = null;
 						final Alarm alarm = Alarms.calculateNextAlert(context);
-						try {
+						//try {
 							if (alarm != null) {
 								final Calendar alarmTime = Calendar.getInstance();
 								alarmTime.setTimeInMillis(alarm.time);
@@ -127,9 +124,9 @@ public class SleepActivity extends HostActivity {
 								final String dateTimePre = df.format(alarmTime.getTime());
 								result = new String[] { dateTimePre, dateTime };
 							}
-						} catch (final Exception e) {
-
-						}
+                            //} catch (final Exception e) {
+                            //Log.d(TAG, "");
+                            //}
 						return result;
 					}
 

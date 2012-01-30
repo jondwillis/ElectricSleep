@@ -12,7 +12,6 @@ import android.database.Cursor;
 import android.database.StaleDataException;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.LoaderManager;
@@ -39,6 +38,8 @@ import com.viewpagerindicator.TitleProvider;
 
 public class HistoryMonthActivity extends HostActivity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = HistoryMonthActivity.class.getSimpleName();
 
 	private final class IndicatorPageChangeListener implements OnPageChangeListener {
 		private final TitlePageIndicator indicator;
@@ -396,8 +397,12 @@ public class HistoryMonthActivity extends HostActivity implements
 					mSessions = SleepSessions.getStartAndEndTimesFromCursor(
 							HistoryMonthActivity.this, data);
 				} catch (IllegalArgumentException ex) {
-				} catch (IllegalStateException ex) {
-				} catch (StaleDataException ex) {
+                    Log.d(TAG, "Failure to provide proper arguments when accessing session data.",
+                          ex);
+                } catch (IllegalStateException ex) {
+                    Log.d(TAG, "Sleep sessions in illegal state.", ex);
+                } catch (StaleDataException ex) {
+                    Log.d(TAG, "Sleep session data was stale.", ex);
 				} finally {
 					eventsChanged(-1);
 				}

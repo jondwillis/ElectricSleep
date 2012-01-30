@@ -11,13 +11,15 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 /**
  * @author Jon
- * 
+ *
  *         Singleton that helps keep GA sessions open only as long as they are
  *         needed
  */
 public class GoogleAnalyticsSessionHelper {
 
-	private static GoogleAnalyticsSessionHelper INSTANCE;
+    private static final String TAG = GoogleAnalyticsSessionHelper.class.getSimpleName();
+
+    private static GoogleAnalyticsSessionHelper INSTANCE;
 
 	private final String key;
 	private final Application appContext;
@@ -46,7 +48,7 @@ public class GoogleAnalyticsSessionHelper {
 		if (sessionCount == 0) {
 			GoogleAnalyticsTracker.getInstance().startNewSession(key, appContext);
 		}
-		
+
 		String versionName = "?";
 		try {
 			versionName = appContext.getPackageManager().getPackageInfo(appContext.getPackageName(), 0).versionName;
@@ -83,21 +85,23 @@ public class GoogleAnalyticsSessionHelper {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackEvent(
 							Integer.toString(VERSION.SDK_INT), Build.MODEL, label, value);
-				} catch (final Exception whocares) {
-				}
+				} catch (final Exception ex) {
+                    Log.d(TAG, "Exception when attempting to track event.", ex);
+                }
 				return null;
 			}
 		}.execute();
 	}
-	
+
 	public static void trackPageView(final String pageUrl) {
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
 				try {
 					GoogleAnalyticsTracker.getInstance().trackPageView(pageUrl);
-				} catch (final Exception whocares) {
-				}
+				} catch (final Exception ex) {
+                    Log.d(TAG, "Exception while attempting to track page view.", ex);
+                }
 				return null;
 			}
 		}.execute();

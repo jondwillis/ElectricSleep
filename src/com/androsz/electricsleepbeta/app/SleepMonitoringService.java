@@ -32,6 +32,7 @@ import android.os.Build.VERSION;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
@@ -42,6 +43,9 @@ import com.androsz.electricsleepbeta.util.WakeLockManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SleepMonitoringService extends Service implements SensorEventListener {
+
+    private static final String TAG = SleepMonitoringService.class.getSimpleName();
+
 	private final class UpdateTimerTask extends TimerTask {
 		@Override
 		public void run() {
@@ -82,7 +86,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		}
 	}
 
-	public static final String EXTRA_ALARM_WINDOW = "alarmWindow";
+    public static final String EXTRA_ALARM_WINDOW = "alarmWindow";
 
 	public static final String EXTRA_ID = "id";
 	public static final String EXTRA_NAME = "name";
@@ -147,7 +151,8 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 					}
 				} catch (final NullPointerException npe) {
 					// there are no enabled alarms
-				}
+                    Log.d(TAG, "No enabled alarms.");
+                }
 				stopSelf();
 			} else {
 				if (action.equals(Alarms.CANCEL_SNOOZE)) {
@@ -161,6 +166,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 						}
 					} catch (final NullPointerException npe) {
 						// there are no enabled alarms
+                        Log.d(TAG, "No enabled alarms.");
 					}
 				}
 				createSaveSleepNotification();
@@ -344,6 +350,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 							} catch (IllegalStateException ise) {
 								// user stopped monitoring really quickly after
 								// starting.
+                                Log.d(TAG, "User stopped monitoring quickly after starting.");
 							}
 							gravity[0] = event.values[0];
 							gravity[1] = event.values[1];
