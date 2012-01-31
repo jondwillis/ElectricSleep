@@ -45,7 +45,7 @@ public abstract class AnalyticFragment extends Fragment implements GoogleAnalyti
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(getContentAreaLayoutId(), container, false);
 
-		view.setBackgroundColor(getResources().getColor(R.color.background));
+		view.setBackgroundColor(getResources().getColor(R.color.background_dark));
 		//view.setBackgroundResource(R.drawable.gradient_background_vert);
 		return view;
 	}

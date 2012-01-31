@@ -69,7 +69,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
         // background color processing
         if (array.hasValue(R.styleable.SleepChart_backgroundColor)) {
             int backgroundColor =
-                array.getColor(R.styleable.SleepChart_backgroundColor, R.color.background);
+                array.getColor(R.styleable.SleepChart_backgroundColor, R.color.background_dark);
             xyMultipleSeriesRenderer.setBackgroundColor(backgroundColor);
             xyMultipleSeriesRenderer.setMarginsColor(backgroundColor);
             xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
@@ -136,7 +136,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setXLabels(6);
 			xyMultipleSeriesRenderer.setYLabels(0);
 			xyMultipleSeriesRenderer.setShowGrid(true);
-			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
+			//TODO
+			//xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text_));
 			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);

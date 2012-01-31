@@ -10,19 +10,21 @@
         android:id="@+id/home_button_container"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="4dip"
+        android:gravity="center|center_vertical|fill|fill_horizontal"
         android:orientation="vertical" >
-
+
         <Button
             android:id="@+id/home_btn_sleep"
             style="@style/HomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
+            android:layout_gravity="center"
             android:drawableTop="@drawable/home_btn_sleep"
-            android:onClick="onSleepClick" >
+            android:gravity="fill"
+            android:onClick="onSleepClick"
+            android:text="" >
+
         </Button>
 
         <Button
@@ -30,9 +32,11 @@
             style="@style/HomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
             android:drawableTop="@drawable/home_btn_history"
-            android:onClick="onHistoryClick" >
+            android:onClick="onHistoryClick"
+            android:text=""
+            android:gravity="center"
+            android:layout_gravity="center">
         </Button>
 
         <Button
@@ -40,9 +44,10 @@
             style="@style/HomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.33"
             android:drawableTop="@drawable/home_btn_alarms"
-            android:onClick="onAlarmsClick" >
+            android:onClick="onAlarmsClick" 
+            android:text="" 
+            android:layout_gravity="center">
         </Button>
     </LinearLayout>
 
@@ -203,7 +208,7 @@
                     android:layout_marginTop="5dip"
                     android:animateLayoutChanges="true"
                     android:visibility="gone"
-                    sleepmate:backgroundColor="@color/background"
+                    sleepmate:backgroundColor="@null"
                     sleepmate:setScroll="true"
                     />
             </RelativeLayout>

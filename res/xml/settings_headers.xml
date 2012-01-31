@@ -11,7 +11,7 @@
 
     <header
         android:fragment="com.androsz.electricsleepbeta.app.SettingsActivity$SleepPreferenceFragment"
-        android:title="@string/title_sleep" />
+        android:title="@string/tracking" />
 
     <header
         android:fragment="com.androsz.electricsleepbeta.app.SettingsActivity$MiscPreferenceFragment"
