@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:sleepmate="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
   android:id="@+id/frags"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-    <com.androsz.electricsleepbeta.widget.ReviewSleepChart
+    <com.androsz.electricsleepbeta.widget.SleepChart
         android:id="@+id/sleep_movement_chart"
         android:layout_height="300dp"
         android:layout_width="800dp"
         android:orientation="horizontal"
-        android:padding="8dip" />
+        android:padding="8dip"
+        sleepmate:setScroll="false" />
 
     <TableLayout
       android:layout_height="wrap_content"

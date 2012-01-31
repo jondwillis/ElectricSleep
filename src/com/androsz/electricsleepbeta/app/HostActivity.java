@@ -2,27 +2,19 @@ package com.androsz.electricsleepbeta.app;
 
 import java.lang.reflect.Field;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.actionbarsherlock.internal.view.menu.MenuItemImpl;
 import com.androsz.electricsleepbeta.R;
@@ -31,7 +23,9 @@ import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
 
 public abstract class HostActivity extends AnalyticActivity {
 
-	static ColorMatrixColorFilter COLOR_FILTER;
+    private static final String TAG = HostActivity.class.getSimpleName();
+
+    static ColorMatrixColorFilter COLOR_FILTER;
 
 	static {
 		// COLOR_FILTER = new PorterDuffColorFilter(Color.WHITE,
@@ -88,7 +82,8 @@ public abstract class HostActivity extends AnalyticActivity {
 			} catch (IllegalArgumentException e) {
 				//do not track this. it happens a lot.
 				//trackEvent("mShowAsAction reflection error", 2);
-			} catch (IllegalAccessException e) {
+                Log.d(TAG, "Illegal argument exception when creating host activity options.");
+            } catch (IllegalAccessException e) {
 				trackEvent("mShowAsAction reflection error", 3);
 			}
 		}

@@ -1,0 +1,6 @@
+<resources>
+  <declare-styleable name="SleepChart">
+      <attr name="backgroundColor" format="color" />
+      <attr name="setScroll" format="boolean" />
+  </declare-styleable>
+</resources>

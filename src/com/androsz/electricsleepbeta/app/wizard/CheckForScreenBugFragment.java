@@ -1,6 +1,5 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -29,15 +28,15 @@ public class CheckForScreenBugFragment extends LayoutFragment implements Calibra
 
 	private void onRightButtonClicked(Object object) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/*
 	 * @Override public void onPause() { super.onPause();
-	 * 
+	 *
 	 * final Intent i = new Intent(getActivity(),
 	 * CheckForScreenBugAccelerometerService.class);
-	 * 
+	 *
 	 * // this replaces the need for broadcast receivers. // the service updates
 	 * BUG_PRESENT_INTENT, THEN our activity is // alerted. if
 	 * (BUG_PRESENT_INTENT != null) { stopService(i); BUG_PRESENT_INTENT = null;

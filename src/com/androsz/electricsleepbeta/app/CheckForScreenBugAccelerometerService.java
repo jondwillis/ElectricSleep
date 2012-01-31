@@ -62,7 +62,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 			turnScreenOn();
 		}
 	};
-	
+
 
 	private Notification createServiceNotification() {
 		final int icon = R.drawable.icon_small;
@@ -76,7 +76,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 		final CharSequence contentTitle = getString(R.string.notification_sleep_title);
 		final CharSequence contentText = getString(R.string.notification_sleep_text);
 		Intent notificationIntent = new Intent();
-		
+
 		notificationIntent
 				.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 

@@ -24,7 +24,6 @@ import java.util.Locale;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,7 +35,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.BaseColumns;
 import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.GestureDetector;
@@ -219,7 +217,7 @@ public class MonthView extends View {
 
 	/**
 	 * Draw a single box onto the canvas.
-	 * 
+	 *
 	 * @param day
 	 *            The Julian day.
 	 * @param weekNum
@@ -408,7 +406,7 @@ public class MonthView extends View {
 
 	/**
 	 * Draw the grid lines for the calendar
-	 * 
+	 *
 	 * @param canvas
 	 *            The canvas to draw on.
 	 * @param p
@@ -910,7 +908,7 @@ public class MonthView extends View {
 					 * long endTime = session[1] - thismillis; if ((endTime > 0)
 					 * && ((startTime <= ONE_DAY_IN_MS && startTime > 0) ||
 					 * startTime < 0)) {
-					 * 
+					 *
 					 * applicableEvents.add(session); }
 					 */
 				}
@@ -933,7 +931,7 @@ public class MonthView extends View {
 							new Intent(getContext(), HistoryActivity.class).putExtra(
 									HistoryActivity.SEARCH_FOR, formattedMDY));
 				}
-				
+
 				return null;
 			}
 		}.execute();

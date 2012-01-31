@@ -4,18 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
-import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class ZeoSplashActivity extends HostActivity {
 
@@ -43,7 +39,7 @@ public class ZeoSplashActivity extends HostActivity {
 
 		final ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
-		
+
 		PreferenceManager.setDefaultValues(ZeoSplashActivity.this, R.xml.settings, false);
 		final SharedPreferences userPrefs = getSharedPreferences(
 				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
@@ -72,7 +68,7 @@ public class ZeoSplashActivity extends HostActivity {
 				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
 		ed.putBoolean(SettingsActivity.PREFERENCES_KEY_DONT_SHOW_ZEO, cbxDontShowAgain.isChecked());
 		ed.commit();
-		
+
 		finishAndStartHome();
 	}
 

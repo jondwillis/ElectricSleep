@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.RingtonePreference;
 import android.util.AttributeSet;
-import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 

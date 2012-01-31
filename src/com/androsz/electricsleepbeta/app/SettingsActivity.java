@@ -1,7 +1,5 @@
 package com.androsz.electricsleepbeta.app;
 
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,12 +43,12 @@ public class SettingsActivity extends HostPreferenceActivity {
 	protected int getContentAreaLayoutId() {
 		return R.xml.settings;
 	}
-	
+
 	@Override
 	protected int getHeadersResourceId() {
 		return R.xml.settings_headers;
 	}
-	
+
 	/**
 	 * This fragment shows the preferences for the first header.
 	 */
@@ -64,7 +62,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 			addPreferencesFromResource(R.xml.settings_fragment_alarms);
 			refresh(this.getActivity());
 		}
-		
+
 
 		private void refresh(Context c) {
 			final CheckBoxPreference alarmInSilentModePref = (CheckBoxPreference) findPreference(KEY_ALARM_IN_SILENT_MODE);
@@ -76,7 +74,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 			snooze.setSummary(snooze.getEntry());
 			snooze.setOnPreferenceChangeListener(this);
 		}
-		
+
 		@Override
 		public boolean onPreferenceChange(final Preference pref, final Object newValue) {
 			final ListPreference listPref = (ListPreference) pref;
@@ -119,7 +117,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 
 			// Load the preferences from an XML resource
 			addPreferencesFromResource(R.xml.settings_fragment_sensors);
-			
+
 			findPreference(getText(R.string.pref_calibration)).setOnPreferenceClickListener(
 					new OnPreferenceClickListener() {
 
@@ -163,14 +161,14 @@ public class SettingsActivity extends HostPreferenceActivity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		final SharedPreferences serviceIsRunningPrefs = getSharedPreferences(
 				SleepMonitoringService.SERVICE_IS_RUNNING, Context.MODE_PRIVATE);
 		if (serviceIsRunningPrefs.getBoolean("serviceIsRunning", false)) {
 			Toast.makeText(this, R.string.changes_made_to_these_settings, Toast.LENGTH_LONG).show();
 		}
 	}
-	
+
 
 	@Override
 	protected void onDestroy() {
