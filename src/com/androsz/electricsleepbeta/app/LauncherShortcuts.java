@@ -118,7 +118,7 @@ public class LauncherShortcuts extends Activity {
 		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
 		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.title_sleep));
 		Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this,
-				R.drawable.home_btn_sleep_pressed);
+				R.drawable.home_btn_sleep);
 		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
