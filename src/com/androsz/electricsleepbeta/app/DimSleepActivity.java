@@ -55,8 +55,7 @@ public class DimSleepActivity extends AnalyticActivity {
 
 		win.setAttributes(winParams);
 
-		getSupportActionBar().setDisplayShowHomeEnabled(false);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		getSupportActionBar().hide();
 
 		final LinearLayout blackness = new LinearLayout(this);
 		blackness.setLayoutParams(new LayoutParams(
