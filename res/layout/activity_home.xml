@@ -1,15 +1,15 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sleepmate="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="4" >
 
     <LinearLayout
         android:id="@+id/home_button_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/home_btn_sleep"
@@ -45,10 +45,10 @@
     <ScrollView
         android:id="@+id/home_stats_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
         android:animateLayoutChanges="true"
         android:background="@color/background_light"
-        android:fillViewport="true"
         android:padding="5dp" >
 
         <RelativeLayout
@@ -195,9 +195,16 @@
                 android:layout_marginRight="4dip"
                 android:layout_marginTop="5dip"
                 android:animateLayoutChanges="true"
-                android:visibility="gone"
-                sleepmate:setScroll="true" />
+                sleepmate:setScroll="true"
+                android:visibility="gone" />
         </RelativeLayout>
     </ScrollView>
+
+    <fragment
+        android:id="@+id/fragment_suggestion"
+        android:name="com.androsz.electricsleepbeta.app.SuggestionFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </LinearLayout>
