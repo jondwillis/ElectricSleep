@@ -1,6 +1,7 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.LayoutFragment;
 
 public class CalibrationInstructionsFragment extends LayoutFragment
 {
