@@ -740,4 +740,7 @@
 	<string name="rate_in_market">Rate SleepMate on the Android Market</string>
 	<string name="track">Track</string>
 	<string name="alarms">Alarms</string>
+	<string name="sleep_aids">Sleep Aids</string>
+	<string name="advice">Advice</string>
+	<string name="consultation">Consultation</string>
 </resources>
