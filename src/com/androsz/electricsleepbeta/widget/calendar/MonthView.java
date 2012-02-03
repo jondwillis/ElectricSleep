@@ -113,6 +113,8 @@ public class MonthView extends View {
 	private boolean mLaunchDayView;
 	private int mMonthDayNumberColor;
 	// Cached colors
+    private int mMonthBackgroundColor;
+
 	private int mMonthOtherMonthColor;
 	private int mMonthOtherMonthDayNumberColor;
 
@@ -307,7 +309,13 @@ public class MonthView extends View {
 				final Drawable background = mTodayBackground;
 				background.setBounds(r);
 				background.draw(canvas);
-			}
+			} else {
+                // Background for dates that are within the month.
+                p.setStyle(Style.FILL);
+                p.setColor(mMonthBackgroundColor);
+                canvas.drawRect(r, p);
+            }
+
 			// Places events for that day
 			drawEvents(day, canvas, r, p, !isToday /* draw bb background */);
 		}
@@ -600,6 +608,7 @@ public class MonthView extends View {
 
 		// Cache color lookups
 		final Resources res = getResources();
+        mMonthBackgroundColor = res.getColor(R.color.month_background);
 		mMonthOtherMonthColor = res.getColor(R.color.month_other_month);
 		mMonthOtherMonthDayNumberColor = res.getColor(R.color.month_other_month_day_number);
 		mMonthDayNumberColor = res.getColor(R.color.month_day_number);

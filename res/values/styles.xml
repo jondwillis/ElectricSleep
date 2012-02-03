@@ -175,4 +175,9 @@
     <style name="ZeoActionBarTitleTextStyle" parent="TextAppearance.Widget.Title">
         <item name="android:textColor">@color/actionbar_text_light</item>
     </style>
+
+    <style name="Widget.ZeoTitlePageIndicator" parent="Widget.TitlePageIndicator">
+        <item name="android:background">@color/background_dark</item>
+        <item name="footerColor">@color/primary1</item>
+    </style>
 </resources>
