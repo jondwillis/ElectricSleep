@@ -4,11 +4,11 @@
     <!-- us -->
     <color name="background">#ff2d2d2d</color>
     <color name="background_light">#ffe3e3e3</color>
-    <color name="actionbar_background">#ff222222</color>
+    <color name="actionbar_background">#ff1a1b20</color>
     <color name="text">#ffffffff</color>
     <color name="actionbar_text_light">#ffbbbbbb</color>
     <color name="text_alt">#ffA4C639</color>
-    <color name="text_light">#ff333333</color>
+    <color name="text_light">#ff404040</color>
     <color name="titlebar_separator">#ffffffff</color>
     <color name="secondary1">#ff303030</color> <!-- ff30587c ff97c03d -->
     <color name="secondary2">#ff000000</color>
@@ -19,6 +19,9 @@
     <color name="primary_dark_transparent">#88f45600</color>
     <color name="background_transparent_darken">#66000000</color>
     <color name="background_transparent_lighten">#44ffffff</color>
+    <!-- TODO This is almost same color as month_other_month_day_number -->
+    <color name="faded_grey">#ffb5b5b5</color>
+    <color name="grid_color">#33888888</color>
 
     <!-- calendar -->
     <color name="month_day_number">#ffCCCCCC</color>
@@ -47,6 +50,5 @@
     <color name="white">#ffffffff</color>
     <color name="red">#ffee0000</color>
     <color name="grey">#ffaaaaaa</color>
-
 
 </resources>
