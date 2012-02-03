@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:sleepmate="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+  xmlns:electricsleep="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
   android:id="@+id/frags"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -13,7 +13,7 @@
         android:layout_width="800dp"
         android:orientation="horizontal"
         android:padding="8dip"
-        sleepmate:setScroll="false" />
+        electricsleep:setScroll="false" />
 
     <TableLayout
       android:layout_height="wrap_content"

@@ -1,6 +1,8 @@
 <resources>
   <declare-styleable name="SleepChart">
-      <attr name="backgroundColor" format="color" />
+      <attr name="gridColor" format="color" />
       <attr name="setScroll" format="boolean" />
+      <attr name="android:background" />
+      <attr name="android:textColor" />
   </declare-styleable>
 </resources>
