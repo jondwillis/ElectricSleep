@@ -190,7 +190,7 @@
                   android:layout_width="match_parent"
                   android:layout_height="1dip"
                   android:layout_above="@+id/home_last_sleep_title_text"
-                  android:background="@color/background_transparent_darken" />
+                  android:background="@color/background_dark" />
 
                 <TextView
                   android:id="@+id/home_last_sleep_title_text"

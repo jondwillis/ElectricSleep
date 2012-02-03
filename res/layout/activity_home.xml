@@ -52,7 +52,7 @@
         android:id="@+id/div"
         android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:background="@color/background_transparent_darken" />
+        android:background="@color/background_dark" />
 
     <com.androsz.electricsleepbeta.widget.SafeViewFlipper
       android:id="@+id/content_view_flipper"
@@ -181,7 +181,7 @@
                 <View
                   android:layout_width="match_parent"
                   android:layout_height="1dip"
-                  android:background="@color/background_transparent_darken" />
+                  android:background="@color/background_dark" />
 
                 <TextView
                   android:layout_width="match_parent"
