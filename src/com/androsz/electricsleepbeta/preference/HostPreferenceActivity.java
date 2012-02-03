@@ -2,7 +2,6 @@ package com.androsz.electricsleepbeta.preference;
 
 import java.util.List;
 
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
