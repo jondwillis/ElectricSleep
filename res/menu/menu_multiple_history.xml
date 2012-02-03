@@ -10,7 +10,7 @@
     <item
         android:id="@+id/menu_item_delete_all"
         android:icon="@android:drawable/ic_menu_delete"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="never"
         android:title="@string/delete_all"></item>
 
 </menu>
