@@ -82,7 +82,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
         if (array.hasValue(R.styleable.SleepChart_android_textColor)) {
             int textColor =
-                array.getColor(R.styleable.SleepChart_android_textColor, R.color.text_light);
+                array.getColor(R.styleable.SleepChart_android_textColor, R.color.text_dark);
             xyMultipleSeriesRenderer.setLabelsColor(textColor);
             xyMultipleSeriesRenderer.setAxesColor(textColor);
         }
@@ -118,9 +118,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xySeriesCalibrationRenderer = new XYSeriesRenderer();
 			xySeriesCalibrationRenderer.setFillBelowLine(true);
 			xySeriesCalibrationRenderer.setFillBelowLineColor(
-				context.getResources().getColor(R.color.text_light));
+				context.getResources().getColor(R.color.text_dark));
 			xySeriesCalibrationRenderer.setColor(
-				context.getResources().getColor(R.color.text_light));
+				context.getResources().getColor(R.color.text_dark));
 
 			// add series to the dataset
 			xyMultipleSeriesDataset = new XYMultipleSeriesDataset();

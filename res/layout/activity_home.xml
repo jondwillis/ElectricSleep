@@ -198,7 +198,7 @@
                   android:layout_marginRight="4dip"
                   android:layout_marginTop="5dip"
                   android:animateLayoutChanges="true"
-                  android:textColor="@color/text_light"
+                  android:textColor="@color/text_dark"
                   electricsleep:gridColor="@color/grid_color"
                   electricsleep:setScroll="true"
                   />
