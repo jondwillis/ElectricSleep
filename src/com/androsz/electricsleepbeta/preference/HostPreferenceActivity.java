@@ -41,8 +41,8 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		super.onCreate(savedInstanceState);
 
 		final ListView lvw = getListView();
-		this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-		lvw.setBackgroundColor(getResources().getColor(R.color.background));
+		this.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_dark)));
+		lvw.setBackgroundColor(getResources().getColor(R.color.background_dark));
 
 		//if pre-honeycomb, don't try to use fragments and just load the old-style prefs
 		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || getHeadersResourceId() == NO_HEADERS)

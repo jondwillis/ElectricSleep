@@ -15,6 +15,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.LayoutFragment;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;

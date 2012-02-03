@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
+import com.androsz.electricsleepbeta.app.LayoutFragment;
 
 public class CheckForScreenBugFragment extends LayoutFragment implements Calibrator {
 

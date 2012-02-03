@@ -294,6 +294,6 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 		mAlarmsList.setVerticalScrollBarEnabled(true);
 		mAlarmsList.setOnItemClickListener(this);
 		mAlarmsList.setOnCreateContextMenuListener(this);
-		mAlarmsList.setBackgroundColor(getResources().getColor(R.color.background));
+		mAlarmsList.setBackgroundColor(getResources().getColor(R.color.background_dark));
 	}
 }

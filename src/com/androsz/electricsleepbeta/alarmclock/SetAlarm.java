@@ -224,7 +224,7 @@ public class SetAlarm extends HostPreferenceActivity implements
 		// We have to do this to get the save/cancel buttons to highlight on
 		// their own.
 		getListView().setItemsCanFocus(true);
-		getListView().setBackgroundColor(getResources().getColor(R.color.background));
+		getListView().setBackgroundColor(getResources().getColor(R.color.background_dark));
 
 		// Attach actions to each button.
 		Button b = (Button) findViewById(R.id.alarm_save);

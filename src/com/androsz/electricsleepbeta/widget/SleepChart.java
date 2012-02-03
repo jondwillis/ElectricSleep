@@ -70,7 +70,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
         // background color processing
         if (array.hasValue(R.styleable.SleepChart_android_background)) {
             int backgroundColor =
-                array.getColor(R.styleable.SleepChart_android_background, R.color.background);
+                array.getColor(R.styleable.SleepChart_android_background, R.color.background_dark);
             xyMultipleSeriesRenderer.setBackgroundColor(backgroundColor);
             xyMultipleSeriesRenderer.setMarginsColor(backgroundColor);
             xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
@@ -94,7 +94,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
         if (array.hasValue(R.styleable.SleepChart_gridColor)) {
             xyMultipleSeriesRenderer.setGridColor(
-                array.getColor(R.styleable.SleepChart_gridColor, R.color.text));
+                array.getColor(R.styleable.SleepChart_gridColor, R.color.text_dark));
         }
     }
 
