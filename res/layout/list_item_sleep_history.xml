@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <com.androsz.electricsleepbeta.widget.SleepChart
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sleepmate="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+    xmlns:electricsleep="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:id="@+id/sleep_history_list_item_sleepchartview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp"
-    sleepmate:setScroll="true"
+    electricsleep:setScroll="true"
     />

@@ -1,18 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sleepmate="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:electricsleep="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent"
+  android:orientation="vertical">
 
-    <com.androsz.electricsleepbeta.widget.SleepChart
-        android:id="@+id/sleep_movement_chart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:padding="8dip"
-        sleepmate:setScroll="true"
-        />
+    <LinearLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical" >
 
-</LinearLayout>
+        <TextView
+          style="@style/TextHeader"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left|center_vertical"
+          android:text="@string/your_rating" />
+
+        <RatingBar
+          android:id="@+id/value_rating_bar"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:isIndicator="true"
+          android:numStars="5"
+          android:stepSize="1" />
+
+        <TextView
+          android:id="@+id/header_score_text"
+          style="@style/TextHeader"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left|center_vertical"
+          android:layout_weight="2"
+          android:text="@string/sleep_efficiency" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/value_score_text"
+          style="@style/HomeButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right|center_vertical"
+          android:text="x"
+          android:textSize="40dip" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/header_duration_text"
+          style="@style/TextHeader"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left|center_vertical"
+          android:layout_weight="2"
+          android:text="@string/duration" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/value_duration_text"
+          style="@style/TextHeaderTwo"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right|center_vertical"
+          android:text="x" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/header_spikes_text"
+          style="@style/TextHeader"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left|center_vertical"
+          android:layout_weight="2"
+          android:text="@string/spikes" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/value_spikes_text"
+          style="@style/TextHeaderTwo"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right|center_vertical"
+          android:text="x" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/header_fell_asleep_text"
+          style="@style/TextHeader"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left|center_vertical"
+          android:layout_weight="2"
+          android:text="@string/time_to_fall_asleep" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/value_fell_asleep_text"
+          style="@style/TextHeaderTwo"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right|center_vertical"
+          android:text="x" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/header_note_text"
+          style="@style/TextHeader"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="left|center_vertical"
+          android:layout_weight="2"
+          android:text="@string/note" >
+        </TextView>
+
+        <TextView
+          android:id="@+id/value_note_text"
+          style="@style/TextHeaderTwo"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          android:text="x" >
+        </TextView>
+
+       <com.androsz.electricsleepbeta.widget.SleepChart
+          android:id="@+id/sleep_movement_chart"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:padding="8dip"
+          electricsleep:setScroll="true"
+          />
+    </LinearLayout>
+</ScrollView>
