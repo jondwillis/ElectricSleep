@@ -23,7 +23,8 @@
         android:layout_gravity="center"
         android:background="@color/primary1_transparent"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:weightSum="12" >
 
         <Button
             android:id="@+id/leftButton"
@@ -49,7 +50,6 @@
             android:id="@+id/rightButton"
             android:layout_width="160dip"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
             android:layout_margin="4dip"
             android:layout_weight="1"
             android:drawableRight="@drawable/arrow_right"

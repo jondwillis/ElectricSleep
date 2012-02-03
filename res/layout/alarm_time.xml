@@ -51,7 +51,7 @@
     </com.androsz.electricsleepbeta.alarmclock.DontPressWithParentLayout>
 
     <ImageView
-        android:layout_width="1px"
+        android:layout_width="1dp"
         android:layout_height="match_parent"
         android:paddingBottom="4dip"
         android:paddingTop="4dip"

@@ -22,10 +22,6 @@ public class ZeoSplashActivity extends HostActivity {
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button_learn_more:
-		case R.id.button_learn_more_img:
-			learnMore(this);
-			break;
 		case R.id.button_get_started:
 			getStarted();
 			break;
