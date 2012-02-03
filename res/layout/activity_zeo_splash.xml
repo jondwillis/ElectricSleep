@@ -17,15 +17,6 @@
             android:gravity="center_horizontal"
             android:text="@string/welcome_to_electricsleep" />
 
-        <ImageButton
-            android:id="@+id/button_learn_more_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:onClick="onClick"
-            android:scaleType="center"
-            android:src="@drawable/powered_by_zeo" />
-
         <TextView
             style="@style/TextBody"
             android:layout_width="wrap_content"
