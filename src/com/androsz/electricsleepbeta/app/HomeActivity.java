@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
@@ -33,9 +34,14 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
  */
 public class HomeActivity extends HostActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    /* Warning - these values must remain consistent with activity_home. */
+    private static final int FLIP_INVISIBLE = 0;
+    private static final int FLIP_NO_RECORDS = 1;
+    private static final int FLIP_RECENT_RECORD = 2;
+
 	private SleepChart sleepChart;
 
-	@Override
+    @Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_home;
 	}
@@ -46,8 +52,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
 		final ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
@@ -71,7 +76,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 		sleepChart = (SleepChart) findViewById(R.id.home_sleep_chart);
 
 		getSupportLoaderManager().initLoader(0, null, this);
-	}
+    }
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -103,18 +108,14 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	public void onLoadFinished(Loader<Cursor> arg0, final Cursor cursor) {
 		final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
 		final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
-		// final ViewGroup container = (ViewGroup)
-		// findViewById(R.id.home_stats_container);
+
 		final ViewGroup statsContainer = (ViewGroup) findViewById(R.id.home_statistics_dashboard);
 		if (cursor == null || cursor.getCount() == 0) {
-			statsContainer.setVisibility(View.GONE);
-			sleepChart.setVisibility(View.GONE);
-			reviewTitleText.setText(getString(R.string.home_review_title_text_empty));
-			lastSleepTitleText.setVisibility(View.GONE);
-			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text_empty));
-		} else {
+            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
+            flipper.setDisplayedChild(FLIP_NO_RECORDS);
 
-			final TextView avgScoreText = (TextView) findViewById(R.id.value_score_text);
+		} else {
+            final TextView avgScoreText = (TextView) findViewById(R.id.value_score_text);
 			final TextView avgDurationText = (TextView) findViewById(R.id.value_duration_text);
 			final TextView avgSpikesText = (TextView) findViewById(R.id.value_spikes_text);
 			final TextView avgFellAsleepText = (TextView) findViewById(R.id.value_fell_asleep_text);
@@ -147,11 +148,8 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				}
 			});
 
-			sleepChart
-					.setMinimumHeight(MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
-			lastSleepTitleText.setText(getString(R.string.home_last_sleep_title_text));
-			sleepChart.setVisibility(View.VISIBLE);
-			lastSleepTitleText.setVisibility(View.VISIBLE);
+			sleepChart.setMinimumHeight(
+                MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
 
 			new AsyncTask<Void, Void, Void>() {
 				int avgSleepScore = 0;
@@ -194,13 +192,13 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 					avgSpikesText.setText(avgSpikes + "");
 					avgFellAsleepText.setText(SleepSession.getTimespanText(avgFellAsleep,
 							getResources()));
-					reviewTitleText.setText(getString(R.string.home_review_title_text));
-					statsContainer.setVisibility(View.VISIBLE);
 					super.onPostExecute(result);
 				}
 			}.execute();
 
-		}
+            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
+            flipper.setDisplayedChild(FLIP_RECENT_RECORD);
+        }
 	}
 
 	public void onSleepClick(final View v) throws Exception {

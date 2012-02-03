@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:layout_weight="2"
-            android:text="@string/fell_asleep" >
+            android:text="@string/time_to_fall_asleep" >
         </TextView>
 
         <TextView

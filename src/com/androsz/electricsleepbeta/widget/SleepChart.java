@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Paint.Align;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -29,7 +30,7 @@ import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepChart extends GraphicalView implements Parcelable {
 
-	protected double calibrationLevel;// =
+    protected double calibrationLevel;// =
 										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 
 	public int rating;
@@ -67,9 +68,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
             context.obtainStyledAttributes(attrs, R.styleable.SleepChart, defStyle, 0);
 
         // background color processing
-        if (array.hasValue(R.styleable.SleepChart_backgroundColor)) {
+        if (array.hasValue(R.styleable.SleepChart_android_background)) {
             int backgroundColor =
-                array.getColor(R.styleable.SleepChart_backgroundColor, R.color.background);
+                array.getColor(R.styleable.SleepChart_android_background, R.color.background);
             xyMultipleSeriesRenderer.setBackgroundColor(backgroundColor);
             xyMultipleSeriesRenderer.setMarginsColor(backgroundColor);
             xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
@@ -79,9 +80,21 @@ public class SleepChart extends GraphicalView implements Parcelable {
             xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
         }
 
+        if (array.hasValue(R.styleable.SleepChart_android_textColor)) {
+            int textColor =
+                array.getColor(R.styleable.SleepChart_android_textColor, R.color.text_light);
+            xyMultipleSeriesRenderer.setLabelsColor(textColor);
+            xyMultipleSeriesRenderer.setAxesColor(textColor);
+        }
+
         // inside scrollview flag
         if (array.getBoolean(R.styleable.SleepChart_setScroll, false)) {
             xyMultipleSeriesRenderer.setInScroll(true);
+        }
+
+        if (array.hasValue(R.styleable.SleepChart_gridColor)) {
+            xyMultipleSeriesRenderer.setGridColor(
+                array.getColor(R.styleable.SleepChart_gridColor, R.color.text));
         }
     }
 
@@ -94,18 +107,20 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xySeriesMovementRenderer = new XYSeriesRenderer();
 
 			xySeriesMovementRenderer.setFillBelowLine(true);
-			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
-					R.color.primary_dark_transparent));
-			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary_dark));
+			xySeriesMovementRenderer.setFillBelowLineColor(
+                context.getResources().getColor(R.color.primary_dark_transparent));
+			xySeriesMovementRenderer.setColor(
+                context.getResources().getColor(R.color.primary_dark));
 
-			// set up calibration line series/renderer
+            // set up calibration line series/renderer
 			xySeriesCalibration = new XYSeries(
 					context.getString(R.string.legend_light_sleep_trigger));
 			xySeriesCalibrationRenderer = new XYSeriesRenderer();
 			xySeriesCalibrationRenderer.setFillBelowLine(true);
-			xySeriesCalibrationRenderer.setFillBelowLineColor(context.getResources().getColor(
-					R.color.background_transparent_lighten));
-			xySeriesCalibrationRenderer.setColor(context.getResources().getColor(R.color.white));
+			xySeriesCalibrationRenderer.setFillBelowLineColor(
+				context.getResources().getColor(R.color.text_light));
+			xySeriesCalibrationRenderer.setColor(
+				context.getResources().getColor(R.color.text_light));
 
 			// add series to the dataset
 			xyMultipleSeriesDataset = new XYMultipleSeriesDataset();
@@ -128,19 +143,23 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xyMultipleSeriesRenderer.setAntialiasing(true);
 			xyMultipleSeriesRenderer.setFitLegend(true);
 			int[] margins = xyMultipleSeriesRenderer.getMargins();
+            margins[0] += 20; // increase top margin
+            margins[1] += 25; // increase left margin
 			margins[2] += 20; // increase bottom margin
 			xyMultipleSeriesRenderer.setMargins(margins);
 			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
 			xyMultipleSeriesRenderer.setShowLegend(true);
 			xyMultipleSeriesRenderer.setShowLabels(true);
 			xyMultipleSeriesRenderer.setXLabels(6);
-			xyMultipleSeriesRenderer.setYLabels(0);
+			xyMultipleSeriesRenderer.setYLabels(8);
+			xyMultipleSeriesRenderer.setYLabelsAlign(Align.RIGHT);
 			xyMultipleSeriesRenderer.setShowGrid(true);
-			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
-			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
+
 			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
 					xyMultipleSeriesRenderer);
-			timeChart.setDateFormat("h:mm:ss");
+            // TODO determine what to do here. Ideally the date format would change as the total
+            // duration increased.
+            timeChart.setDateFormat("h");
 			return timeChart;
 		}
 		return null;
