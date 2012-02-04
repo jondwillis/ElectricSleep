@@ -31,8 +31,7 @@
               android:layout_gravity="right|center_vertical"
               android:layout_height="wrap_content"
               android:layout_width="wrap_content"
-              android:numStars="5"
-              android:stepSize="1" />
+              style="@style/FiveStarRatingBar.Light" />
         </TableRow>
         <TableRow>
             <TextView

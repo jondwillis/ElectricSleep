@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="HomeButton">
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_light</item>
         <item name="android:drawablePadding">0dp</item>
         <item name="android:textStyle">bold</item>
-		<item name="android:background">@null</item>
+        <item name="android:background">@null</item>
     </style>
 
     <style name="AppwidgetButton">
@@ -135,21 +136,19 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="Theme.SleepMate" parent="Theme.Sherlock">
+    <style name="Theme.SleepMate" parent="Theme.Sherlock.Light">
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="android:windowBackground">@color/background_dark</item>
-
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="actionBarTabStyle">@style/ZeoActionBarTabStyle</item>
         <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
     </style>
 
-    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock.Light">
+    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock">
         <item name="android:colorBackground">@color/background_light</item>
         <item name="android:windowBackground">@color/background_light</item>
         <item name="android:textColor">@color/text_light</item>
-
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
@@ -175,4 +174,18 @@
     <style name="ZeoActionBarTitleTextStyle" parent="TextAppearance.Widget.Title">
         <item name="android:textColor">@color/actionbar_text_light</item>
     </style>
+
+    <style name="FiveStarRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:numStars">5</item>
+        <item name="android:stepSize">1</item>
+    </style>
+
+    <style name="FiveStarRatingBar.Light" parent="FiveStarRatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_light</item>
+    </style>
+
+    <style name="FiveStarRatingBar.Dark" parent="FiveStarRatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_dark</item>
+    </style>
+
 </resources>
