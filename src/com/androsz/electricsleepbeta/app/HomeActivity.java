@@ -13,6 +13,7 @@ import android.support.v4.app.ActionBar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,6 +84,12 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
 				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
 				SleepSessions.MainTable.KEY_ROW_ID + " DESC");
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_home, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
