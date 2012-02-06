@@ -167,7 +167,7 @@ public class ReviewSleepActivity extends HostActivity implements
 							});
 			dialog.show();
 			break;
-		case R.id.menu_item_export_sleep_record:
+		case R.id.menu_item_share_sleep_record:
             if (mSleepRecord == null) {
                 // Emit error if user attempts to share when no record is loaded.
                 Toast.makeText(this,

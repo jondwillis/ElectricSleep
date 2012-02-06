@@ -22,8 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:isIndicator="true"
-            android:numStars="5"
-            android:stepSize="1" />
+            style="@style/FiveStarRatingBar.Light" />
 
         <TextView
             android:id="@+id/header_score_text"

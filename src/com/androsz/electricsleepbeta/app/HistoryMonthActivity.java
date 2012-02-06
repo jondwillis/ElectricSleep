@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.ActionBar;
+import android.support.v4.app.ActionBar.OnNavigationListener;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -26,6 +27,7 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -37,7 +39,7 @@ import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
 public class HistoryMonthActivity extends HostActivity implements
-		LoaderManager.LoaderCallbacks<Cursor> {
+		LoaderManager.LoaderCallbacks<Cursor>, OnNavigationListener {
 
     private static final String TAG = HistoryMonthActivity.class.getSimpleName();
 
@@ -324,8 +326,11 @@ public class HistoryMonthActivity extends HostActivity implements
 				sessionsObserver);
 
 		ActionBar bar = getSupportActionBar();
-		// bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(this, R.array.review_sleep_actionbar_navigation, R.layout.abs__simple_spinner_item);
+        list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		getSupportActionBar().setListNavigationCallbacks(list, this);
+		
 		final Time now = new Time();
 		now.setToNow();
 
@@ -439,5 +444,14 @@ public class HistoryMonthActivity extends HostActivity implements
 		filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
 		registerReceiver(mIntentReceiver, filter);
 
+	}
+
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		/*getSupportFragmentManager()
+			.beginTransaction()
+			.replace(android.R.id.content, FragmentStackSupport.CountingFragment.newInstance(itemPosition))
+			.commit();*/
+		return true;
 	}
 }
