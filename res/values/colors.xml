@@ -29,5 +29,6 @@
     <color name="panel_text_foreground">#ffffffff</color>
     <color name="daynames_background">#FFDDDDDD</color>
     <color name="daynames_text_color">#ff000000</color>
+    <color name="month_day_event_off">#ff69696B</color>
 
 </resources>
