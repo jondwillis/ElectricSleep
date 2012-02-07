@@ -17,9 +17,9 @@
 package com.androsz.electricsleepbeta.widget.calendar;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -47,7 +47,7 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HistoryListFragment;
 import com.androsz.electricsleepbeta.app.HistoryMonthFragment;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class MonthView extends View {
 
@@ -103,7 +103,7 @@ public class MonthView extends View {
 	// width/height.
 	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(4);
 
-	private ArrayList<Long[]> mSessions = new ArrayList<Long[]>(0);
+	private List<Long[]> mSessions = new ArrayList<Long[]>(0);
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -443,7 +443,7 @@ public class MonthView extends View {
 		mBitmapRect.right = width;
 	}
 
-	public void forceReloadEvents(final ArrayList<Long[]> sessions) {
+	public void forceReloadEvents(final List<Long[]> sessions) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -891,7 +891,7 @@ public class MonthView extends View {
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
-				ArrayList<Long> applicableRowIds = new ArrayList<Long>();
+				List<Long> applicableRowIds = new ArrayList<Long>();
 				for (final Long[] session : mSessions) {
 					if (julianDay >= session[2] && julianDay <= session[3]) {
 						applicableRowIds.add(session[4]);
@@ -909,20 +909,15 @@ public class MonthView extends View {
 				if (applicableRowIds.size() == 1) {
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
-					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+					final Uri data = Uri.withAppendedPath(SleepSession.CONTENT_URI,
 							String.valueOf(applicableRowIds.get(0)));
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
 				} else if (applicableRowIds.size() > 1) {
 
-					final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
-							java.text.DateFormat.SHORT, Locale.getDefault());
-					final Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(millis);
-					final String formattedMDY = sdf.format((calendar.getTime()));
 					getContext().startActivity(
-							new Intent(getContext(), HistoryListFragment.class).putExtra(
-									HistoryListFragment.SEARCH_FOR, formattedMDY));
+							new Intent(getContext(), HistoryActivity.class).putExtra(
+                                HistoryActivity.SEARCH_FOR, millis));
 				}
 
 				return null;

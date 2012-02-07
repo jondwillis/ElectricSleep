@@ -150,7 +150,7 @@
         <service android:icon="@drawable/icon" android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.SleepMonitoringService"/>
         <service android:icon="@drawable/icon" android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService"/>
 
-        <provider android:authorities="com.androsz.electricsleepbeta.db.sleepcontentprovider" android:name="com.androsz.electricsleepbeta.db.SleepSessions$Provider"/>
+        <provider android:authorities="com.androsz.electricsleepbeta.db.electric_sleep_provider" android:name="com.androsz.electricsleepbeta.db.ElectricSleepProvider"/>
         <provider android:authorities="com.androsz.electricsleepbeta.alarmclock" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmProvider"/>
     </application>
 

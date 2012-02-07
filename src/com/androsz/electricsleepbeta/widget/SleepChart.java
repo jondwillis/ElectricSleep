@@ -19,6 +19,7 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateUtils;
 import android.util.AttributeSet;
 
 import com.androsz.electricsleepbeta.R;
@@ -29,6 +30,8 @@ import com.androsz.electricsleepbeta.util.MathUtils;
 import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepChart extends GraphicalView implements Parcelable {
+
+    Context mContext;
 
     protected double calibrationLevel;// =
 										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
@@ -59,6 +62,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     public SleepChart(final Context context, final AttributeSet attrs, int defStyle) {
         super(context, attrs);
+
+        mContext = context;
+
         // After this point buildChart() should have been invoked and the various renders and series
         // should have been populated.
 
@@ -222,7 +228,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		sync(new SleepSession(cursor));
 	}
 
-	public void sync(final Double x, final Double y, final double alarm) {
+	public void sync(final Double x, final Double y, final double calibrationLevel) {
 		if (xySeriesMovement.getItemCount() >= SleepMonitoringService.MAX_POINTS_IN_A_GRAPH) {
 			xySeriesMovement.add(x, y);
 			xySeriesMovement.remove(0);
@@ -234,12 +240,16 @@ public class SleepChart extends GraphicalView implements Parcelable {
 	}
 
 	public void sync(final SleepSession sleepRecord) {
-		xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
-		calibrationLevel = sleepRecord.alarm;
+		xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.getData()));
+		calibrationLevel = sleepRecord.getCalibrationLevel();
 
-		rating = sleepRecord.rating;
+		rating = sleepRecord.getRating();
 
-		xyMultipleSeriesRenderer.setChartTitle(sleepRecord.title);
+        // TODO this need to take into account timezone information.
+        xyMultipleSeriesRenderer.setChartTitle(
+            DateUtils.formatDateTime(mContext, sleepRecord.getStartTimestamp(), 0) +
+            " to " +
+            DateUtils.formatDateTime(mContext, sleepRecord.getEndTimestamp(), 0));
 		reconfigure();
 		repaint();
 	}

@@ -50,11 +50,11 @@ public class ReviewSleepAnalysisFragment extends HostFragment {
 		if (scoreTV != null) {
 			scoreTV.setText(sleepRecord.getSleepScore() + "%");
 			durationTV.setText(sleepRecord.getDurationText(getResources()));
-			spikesTV.setText(Integer.toString(sleepRecord.spikes));
+			spikesTV.setText(Integer.toString(sleepRecord.getSpikes()));
 			fellAsleepTV.setText(sleepRecord.getFellAsleepText(getResources()));
-			noteTV.setText(sleepRecord.note);
+			noteTV.setText(sleepRecord.getNote());
 
-			ratingRB.setRating(sleepRecord.rating);
+			ratingRB.setRating(sleepRecord.getRating());
 		}
 	}
 }

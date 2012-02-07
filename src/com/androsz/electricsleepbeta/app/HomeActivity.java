@@ -25,7 +25,6 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.db.SleepSession;
-import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.util.MathUtils;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
@@ -81,11 +80,11 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, SleepSessions.MainTable.CONTENT_URI,
-				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
-				SleepSessions.MainTable.KEY_ROW_ID + " DESC");
+		return new CursorLoader(this, SleepSession.CONTENT_URI,
+                                null, null, null,
+                                SleepSession.START_TIMESTAMP + " DESC");
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_home, menu);
@@ -147,9 +146,8 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 					final Intent reviewSleepIntent = new Intent(HomeActivity.this,
 							ReviewSleepActivity.class);
 
-					final Uri data = Uri.withAppendedPath(
-							SleepSessions.MainTable.CONTENT_ID_URI_BASE,
-							String.valueOf(sleepChartRowId));
+					final Uri data = Uri.withAppendedPath(SleepSession.CONTENT_URI,
+                                                          String.valueOf(sleepChartRowId));
 					reviewSleepIntent.setData(data);
 					startActivity(reviewSleepIntent);
 				}
@@ -177,8 +175,8 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 							return null;
 						}
 						avgSleepScore += sleepRecord.getSleepScore();
-						avgDuration += sleepRecord.duration;
-						avgSpikes += sleepRecord.spikes;
+						avgDuration += sleepRecord.getDuration();
+						avgSpikes += sleepRecord.getSpikes();
 						avgFellAsleep += sleepRecord.getTimeToFallAsleep();
 
 					} while (cursor.moveToNext());
