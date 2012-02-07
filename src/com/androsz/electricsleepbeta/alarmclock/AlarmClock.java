@@ -65,11 +65,6 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 			final View indicator = view.findViewById(R.id.indicator);
 			indicator.setBackgroundColor(android.R.color.transparent);
 
-			// Set the initial resource for the bar image.
-			final ImageView barOnOff = (ImageView) indicator.findViewById(R.id.bar_onoff);
-			barOnOff.setImageResource(alarm.enabled ? R.drawable.ic_indicator_on
-					: R.drawable.ic_indicator_off);
-
 			// Set the initial state of the clock "checkbox"
 			final CheckBox clockOnOff = (CheckBox) indicator.findViewById(R.id.clock_onoff);
 			clockOnOff.setChecked(alarm.enabled);
@@ -79,7 +74,12 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 				@Override
 				public void onClick(final View v) {
 					clockOnOff.toggle();
-					updateIndicatorAndAlarm(clockOnOff.isChecked(), barOnOff, alarm);
+					boolean enabled = clockOnOff.isChecked();
+					Alarms.enableAlarm(AlarmClock.this, alarm.id, enabled);
+					if (enabled) {
+						SetAlarm.popAlarmSetToast(AlarmClock.this, alarm.hour, alarm.minutes,
+								alarm.daysOfWeek);
+					}
 				}
 			});
 
@@ -275,15 +275,6 @@ public class AlarmClock extends com.androsz.electricsleepbeta.app.HostActivity i
 			break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void updateIndicatorAndAlarm(final boolean enabled, final ImageView bar,
-			final Alarm alarm) {
-		bar.setImageResource(enabled ? R.drawable.ic_indicator_on : R.drawable.ic_indicator_off);
-		Alarms.enableAlarm(this, alarm.id, enabled);
-		if (enabled) {
-			SetAlarm.popAlarmSetToast(this, alarm.hour, alarm.minutes, alarm.daysOfWeek);
-		}
 	}
 
 	private void updateLayout() {
