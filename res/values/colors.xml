@@ -23,10 +23,12 @@
     <color name="month_saturday">#ffCCCCCC</color>
     <color name="month_sunday">#ffCCCCCC</color>
     <color name="month_today_number">#ffA4C639</color>
-    <color name="month_other_month">#66ffffff</color>
-    <color name="month_other_month_day_number">#ffB3B3B3</color>
+    <color name="month_background">#ff888888</color>
+    <color name="month_other_month">#ff141414</color>
+    <color name="month_other_month_day_number">#ff727272</color>
     <color name="panel_text_foreground">#ffffffff</color>
     <color name="daynames_background">#FFDDDDDD</color>
     <color name="daynames_text_color">#ff000000</color>
+    <color name="month_day_event_off">#ff69696B</color>
 
 </resources>

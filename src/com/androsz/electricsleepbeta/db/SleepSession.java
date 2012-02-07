@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.provider.BaseColumns;
 import android.text.format.Time;
 
 import com.androsz.electricsleepbeta.R;
@@ -21,9 +22,11 @@ import com.androsz.electricsleepbeta.db.SleepSessions.MainTable;
 import com.androsz.electricsleepbeta.util.PointD;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class SleepSession {
+public class SleepSession implements BaseColumns, SleepSessionKeys, SleepSessions.TimestampColumns {
 
-	public static Object byteArrayToObject(final byte[] bytes) throws StreamCorruptedException,
+    static final String PATH = "sleep_sessions";
+
+    public static Object byteArrayToObject(final byte[] bytes) throws StreamCorruptedException,
 			IOException, ClassNotFoundException {
 		final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 		final ObjectInputStream ois = new ObjectInputStream(bais);
@@ -55,7 +58,7 @@ public class SleepSession {
 		return baos.toByteArray();
 	}
 
-	public final double alarm;
+    public final double alarm;
 
 	public List<PointD> chartData;
 
@@ -71,7 +74,7 @@ public class SleepSession {
 
 	public final String title;
 
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public SleepSession(final Cursor cursor) {
 
 		title = cursor.getString(cursor.getColumnIndexOrThrow(MainTable.KEY_TITLE));
@@ -175,3 +178,18 @@ public class SleepSession {
 	}
 
 }
+
+interface SleepSessionKeys {
+    String DATA = "data";
+    String DURATION = "duration";
+    String END_TIMESTAMP = "end_timestamp";
+    String FELL_ASLEEP_TIMESTAMP = "fell_asleep_timestamp";
+    String MIN = "min";
+    String NOTE = "note";
+    String RATING = "rating";
+    String SLEEP_DATA = "data";
+    String SPIKES = "spikes";
+    String START_TIMESTAMP = "start_timestamp";
+    String TIMEZONE = "timezone";
+}
+

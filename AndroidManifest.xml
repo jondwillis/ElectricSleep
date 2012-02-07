@@ -28,31 +28,31 @@
 
         <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.HomeActivity">
         </activity>
-        <activity android:label="@string/tracking" android:name="com.androsz.electricsleepbeta.app.SleepActivity"/>
-        <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity">
+        <activity android:label="@string/tracking" android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:theme="@style/Theme.SleepMate.Light"/>
+        <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity" android:theme="@style/Theme.SleepMate.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:excludeFromRecents="true" android:label="@string/dim_press_back_to_exit_" android:name="com.androsz.electricsleepbeta.app.DimSleepActivity"/>
-        <activity android:label="@string/title_calibrate" android:name=".app.wizard.CalibrationWizardActivity"/>
-        <activity android:label="@string/welcome_tutorial" android:name=".app.wizard.WelcomeTutorialWizardActivity"/>
-        <activity android:label="@string/title_calibrate" android:name="com.androsz.electricsleepbeta.app.HelloWizardActivity"/>
+        <activity android:excludeFromRecents="true" android:label="@string/dim_press_back_to_exit_" android:name="com.androsz.electricsleepbeta.app.DimSleepActivity" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:label="@string/title_calibrate" android:name=".app.wizard.CalibrationWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:label="@string/welcome_tutorial" android:name=".app.wizard.WelcomeTutorialWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:label="@string/title_calibrate" android:name="com.androsz.electricsleepbeta.app.HelloWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/calibrating" android:name="com.androsz.electricsleepbeta.app.CalibrateAlarmActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/go_into_standy" android:name="com.androsz.electricsleepbeta.app.CheckForScreenBugActivity" android:theme="@android:style/Theme.Dialog"/>
-        <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Light"/>
-        <activity android:excludeFromRecents="true" android:label="@string/title_save_sleep" android:name="com.androsz.electricsleepbeta.app.SaveSleepActivity" android:windowSoftInputMode="stateUnchanged"/>
-        <activity android:label="@string/title_settings" android:name="com.androsz.electricsleepbeta.app.SettingsActivity"/>
-        <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:exported="true" android:label="@string/alarm_list_title" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmClock" android:taskAffinity=""/>
-        <activity android:excludeFromRecents="true" android:label="@string/alarmclock_settings" android:name="com.androsz.electricsleepbeta.alarmclock.SettingsActivity" android:taskAffinity="">
+        <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:excludeFromRecents="true" android:label="@string/title_save_sleep" android:name="com.androsz.electricsleepbeta.app.SaveSleepActivity" android:windowSoftInputMode="stateUnchanged" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:label="@string/title_settings" android:name="com.androsz.electricsleepbeta.app.SettingsActivity" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:exported="true" android:label="@string/alarm_list_title" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmClock" android:taskAffinity="" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:excludeFromRecents="true" android:label="@string/alarmclock_settings" android:name="com.androsz.electricsleepbeta.alarmclock.SettingsActivity" android:taskAffinity="" android:theme="@style/Theme.SleepMate.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
-        <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:label="@string/set_alarm" android:name="com.androsz.electricsleepbeta.alarmclock.SetAlarm"/>
-        <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:launchMode="singleInstance" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmAlert" android:taskAffinity=""/>
+        <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:label="@string/set_alarm" android:name="com.androsz.electricsleepbeta.alarmclock.SetAlarm" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:launchMode="singleInstance" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmAlert" android:taskAffinity="" android:theme="@style/Theme.SleepMate.Dark"/>
 
         <!--
              This activity is basically the same as AlarmAlert but with a more

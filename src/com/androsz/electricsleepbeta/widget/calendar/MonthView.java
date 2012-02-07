@@ -51,7 +51,7 @@ import com.androsz.electricsleepbeta.db.SleepSessions;
 
 public class MonthView extends View {
 
-	private static int BUSY_BITS_MARGIN = 4;
+    private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
 	private static int EVENT_NUM_DAYS = 31;
 	private static int HORIZONTAL_FLING_THRESHOLD = 33;
@@ -113,6 +113,8 @@ public class MonthView extends View {
 	private boolean mLaunchDayView;
 	private int mMonthDayNumberColor;
 	// Cached colors
+    private int mMonthBackgroundColor;
+
 	private int mMonthOtherMonthColor;
 	private int mMonthOtherMonthDayNumberColor;
 
@@ -121,7 +123,10 @@ public class MonthView extends View {
 
 	private int mMonthTodayNumberColor;
 
-	// This Time object is used to set the time for the other Month view.
+    private int mEventOnColor;
+    private int mEventOffColor;
+
+    // This Time object is used to set the time for the other Month view.
 	private final Time mOtherViewCalendar = new Time();
 	private final HistoryMonthFragment mParentActivity;
 
@@ -307,7 +312,13 @@ public class MonthView extends View {
 				final Drawable background = mTodayBackground;
 				background.setBounds(r);
 				background.draw(canvas);
-			}
+			} else {
+                // Background for dates that are within the month.
+                p.setStyle(Style.FILL);
+                p.setColor(mMonthBackgroundColor);
+                canvas.drawRect(r, p);
+            }
+
 			// Places events for that day
 			drawEvents(day, canvas, r, p, !isToday /* draw bb background */);
 		}
@@ -373,36 +384,15 @@ public class MonthView extends View {
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
-		if (drawBg) {
-			final RectF rf = mRectF;
-			rf.left = left;
-			rf.right = left + BUSY_BITS_WIDTH;
-			rf.bottom = rect.bottom - BUSY_BITS_MARGIN;
-			rf.top = top;
-
-			p.setColor(this.mMonthOtherMonthColor);
-			p.setStyle(Style.FILL);
-			canvas.drawRect(rf, p);
-		}
-
-		// SessionGeometry allGeometry = new SessionGeometry(new
-		// Long[]{0L,0L,0L,0L});
-		// allGeometry.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 -
-		// TEXT_TOP_MARGIN) / 24.0f);
-		// allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-		// allGeometry.setHourGap(HOUR_GAP);
-		for (final Long[] session : mSessions) {
-			final SessionGeometry geometry = new SessionGeometry(session);
-			float hourHeight = (mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN) / 24.0f;
-			geometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-			geometry.setHourGap(HOUR_GAP);
-			geometry.setHourHeight(hourHeight);
-			if (geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH)) {
-				drawEventRect(rect, geometry, canvas, p);
-			}
-		}
-
-	}
+        Paint paint = new Paint();
+        paint.setColor(mEventOffColor);
+        final int height = Math.abs(rect.bottom - rect.top);
+        final int width = Math.abs(rect.right - rect.left);
+        int cy = (int) (rect.top + (height / 1.4));
+        int cx = (int) (rect.left + (width / 2));
+        int r = (int) (width / 4);
+        canvas.drawCircle(cx, cy, r, paint);
+    }
 
 	/**
 	 * Draw the grid lines for the calendar
@@ -600,6 +590,7 @@ public class MonthView extends View {
 
 		// Cache color lookups
 		final Resources res = getResources();
+        mMonthBackgroundColor = res.getColor(R.color.month_background);
 		mMonthOtherMonthColor = res.getColor(R.color.month_other_month);
 		mMonthOtherMonthDayNumberColor = res.getColor(R.color.month_other_month_day_number);
 		mMonthDayNumberColor = res.getColor(R.color.month_day_number);
@@ -607,8 +598,10 @@ public class MonthView extends View {
 		mMonthSaturdayColor = res.getColor(R.color.month_saturday);
 		mMonthSundayColor = res.getColor(R.color.month_sunday);
 		mBusybitsColor = res.getColor(R.color.primary1);
+        mEventOnColor = res.getColor(R.color.primary_dark);
+        mEventOffColor = res.getColor(R.color.month_day_event_off);
 
-		mGestureDetector = new GestureDetector(getContext(),
+        mGestureDetector = new GestureDetector(getContext(),
 				new GestureDetector.SimpleOnGestureListener() {
 					@Override
 					public boolean onDown(MotionEvent e) {

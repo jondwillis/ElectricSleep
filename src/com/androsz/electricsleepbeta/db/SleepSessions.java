@@ -1,8 +1,14 @@
 package com.androsz.electricsleepbeta.db;
 
+import com.androsz.electricsleepbeta.util.PointD;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -23,6 +29,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -31,14 +38,21 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  */
 public class SleepSessions {
 
-	/**
+    private static final String TAG = SleepSessions.class.getSimpleName();
+
+    interface TimestampColumns {
+        String CREATED_ON = "created_on";
+        String UPDATED_ON = "updated_on";
+    }
+
+    /**
 	 * Helper that receives callbacks for database creation, upgrade, etc.
 	 */
 	private final static class Helper extends SQLiteOpenHelper {
 
 		private static final String DB_NAME = "sleephistory";
 
-		private static final int DB_VERSION = 5;
+		private static final int DB_VERSION = 6;
 
 		public Helper(Context context) {
 			super(context, DB_NAME, null, DB_VERSION);
@@ -54,15 +68,96 @@ public class SleepSessions {
 					+ MainTable.KEY_SPIKES + ", " + MainTable.KEY_TIME_FELL_ASLEEP + ", "
 					+ MainTable.KEY_NOTE + ");";
 			db.execSQL(FTS_TABLE_CREATE);
-		}
+
+            createSleepSessionTable(db);
+        }
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// TODO
-			// db.execSQL("DROP TABLE IF EXISTS " + MainTable.TABLE_NAME);
-			// onCreate(db);
-		}
-	}
+            if (oldVersion == 5) {
+                upgradeToVersion6(db);
+                ++oldVersion;
+            }
+        }
+
+        private void createSleepSessionTable(SQLiteDatabase db) {
+            db.execSQL(
+                "CREATE TABLE " + SleepSession.PATH + " (" +
+                SleepSession._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SleepSession.CREATED_ON + " INTEGER NOT NULL," +
+                SleepSession.UPDATED_ON + " INTEGER NOT NULL," +
+                SleepSession.TIMEZONE + " TEXT NOT NULL," +
+                SleepSession.START_TIMESTAMP + " INTEGER NOT NULL," +
+                SleepSession.END_TIMESTAMP + " INTEGER NOT NULL," +
+                SleepSession.DATA + " BLOB," +
+                SleepSession.RATING + " INTEGER," +
+                SleepSession.SPIKES + " INTEGER," +
+                SleepSession.FELL_ASLEEP_TIMESTAMP + " INTEGER," +
+                SleepSession.DURATION + " INTEGER," +
+                SleepSession.MIN + " INTEGER," +
+                SleepSession.NOTE + " TEXT" +
+                ")");
+        }
+
+        private void upgradeToVersion6(SQLiteDatabase db) {
+            // create the sleep session table
+            createSleepSessionTable(db);
+            final String DURATION = "KEY_SLEEP_DATA_DURATION";
+            final String MIN = "sleep_data_min";
+            final String NOTE = "KEY_SLEEP_DATA_NOTE";
+            final String RATING = "sleep_data_rating";
+            final String SPIKES = "KEY_SLEEP_DATA_SPIKES";
+            final String DATA = "sleep_data";
+
+            // copy over existing data
+            Cursor cursor = db.query(
+                "FTSsleephistory",
+                new String[] {
+                    DATA, SPIKES, RATING, NOTE, MIN, DURATION
+                },
+                null, null,
+                null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    ContentValues values = new ContentValues(8);
+
+                    // populate the start and end timestamps
+                    byte[] bytes = cursor.getBlob(0);
+                    try {
+                        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+                        List<PointD> data = (List<PointD>) ois.readObject();
+                        long startTimestamp = Math.round(data.get(0).x);
+                        long endTimestamp = Math.round(data.get(data.size() - 1).x);
+                        values.put(SleepSession.START_TIMESTAMP, startTimestamp);
+                        values.put(SleepSession.END_TIMESTAMP, endTimestamp);
+                        long duration = endTimestamp - startTimestamp;
+                        Log.d(TAG, "Calculated timestamp is: " + duration);
+                    } catch (ClassNotFoundException e) {
+                        Log.e(TAG, "List class does not exist. Something is terribly wrong.");
+                    } catch (IOException e) {
+                        Log.w(TAG, "Failure to parse data to load start and end timestamp");
+                    }
+
+                    // copy over all the other values
+                    values.put(SleepSession.DATA, bytes);
+                    values.put(SleepSession.SPIKES, cursor.getInt(1));
+                    values.put(SleepSession.RATING, cursor.getInt(2));
+                    values.put(SleepSession.NOTE, cursor.getString(3));
+                    values.put(SleepSession.MIN, cursor.getDouble(4));
+                    values.put(SleepSession.DURATION, cursor.getLong(5));
+                    Log.d(TAG, "Original duration: " + cursor.getLong(5));
+
+
+                    final long now = System.currentTimeMillis();
+                    values.put(SleepSession.CREATED_ON, now);
+                    values.put(SleepSession.UPDATED_ON, now);
+                    values.put(SleepSession.TIMEZONE, TimeZone.getDefault().getID());
+
+                    db.insert(SleepSession.PATH, null, values);
+                } while (cursor.moveToNext());
+            }
+        }
+    }
 
 	/**
 	 * Definition of the contract for the main table of our provider.
