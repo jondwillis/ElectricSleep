@@ -1,10 +1,12 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -30,7 +32,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.calendar.MonthView;
 import com.androsz.electricsleepbeta.widget.calendar.Utils;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -239,7 +241,7 @@ public class HistoryMonthFragment extends HostFragment implements
 
     private int startDay;
 
-    ArrayList<Long[]> mSessions = new ArrayList<Long[]>(0);
+    List<Long[]> mSessions = new ArrayList<Long[]>(0);
 
     private int focusedPage = 0;
 
@@ -333,7 +335,7 @@ public class HistoryMonthFragment extends HostFragment implements
         HostActivity a = (HostActivity) getActivity();
         sessionsObserver = new SessionsContentObserver();
         a.getContentResolver().registerContentObserver(
-                SleepSessions.MainTable.CONTENT_URI, true, sessionsObserver);
+                SleepSession.CONTENT_URI, true, sessionsObserver);
 
         final Time now = new Time();
         now.setToNow();
@@ -373,9 +375,9 @@ public class HistoryMonthFragment extends HostFragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
-                SleepSessions.MainTable.CONTENT_URI,
-                SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
-                null);
+				SleepSession.CONTENT_URI,
+				null, null, null,
+				null);
     }
 
     @Override
@@ -398,8 +400,7 @@ public class HistoryMonthFragment extends HostFragment implements
                 // android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
                 try {
                     mSessions = new ArrayList<Long[]>(0);
-                    mSessions = SleepSessions.getStartAndEndTimesFromCursor(
-                            getActivity(), data);
+                    mSessions = SleepSession.getStartEndTimestamps(data);
                 } catch (IllegalArgumentException ex) {
                     Log.d(TAG,
                             "Failure to provide proper arguments when accessing session data.",
