@@ -40,7 +40,6 @@
         <activity android:label="@string/title_calibrate" android:name=".app.wizard.CalibrationWizardActivity"/>
         <activity android:label="@string/welcome_tutorial" android:name=".app.wizard.WelcomeTutorialWizardActivity"/>
         <activity android:label="@string/title_calibrate" android:name="com.androsz.electricsleepbeta.app.HelloWizardActivity"/>
-        <activity android:label="@string/history" android:name="com.androsz.electricsleepbeta.app.HistoryActivity"/>
         <activity android:label="@string/calibrating" android:name="com.androsz.electricsleepbeta.app.CalibrateAlarmActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/go_into_standy" android:name="com.androsz.electricsleepbeta.app.CheckForScreenBugActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Light"/>
@@ -61,8 +60,7 @@
 			wallpaper background.
         -->
         <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:launchMode="singleInstance" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmAlertFullScreen" android:taskAffinity="" android:theme="@android:style/Theme.Wallpaper.NoTitleBar"/>
-        <activity android:label="@string/history" android:name="com.androsz.electricsleepbeta.app.HistoryMonthActivity"/>
-
+       
         <!-- Shortcuts Samples -->
         <!-- This section of sample code shows how your application can add shortcuts to -->
         <!-- the launcher (home screen).  Shortcuts have a three step life cycle. -->

@@ -44,8 +44,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.HistoryActivity;
-import com.androsz.electricsleepbeta.app.HistoryMonthActivity;
+import com.androsz.electricsleepbeta.app.HistoryListFragment;
+import com.androsz.electricsleepbeta.app.HistoryMonthFragment;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
 import com.androsz.electricsleepbeta.db.SleepSessions;
 
@@ -123,7 +123,7 @@ public class MonthView extends View {
 
 	// This Time object is used to set the time for the other Month view.
 	private final Time mOtherViewCalendar = new Time();
-	private final HistoryMonthActivity mParentActivity;
+	private final HistoryMonthFragment mParentActivity;
 
 	// Pre-allocate and reuse
 	private final Rect mRect = new Rect();
@@ -147,8 +147,8 @@ public class MonthView extends View {
 
 	private Time mViewCalendar;
 
-	public MonthView(HistoryMonthActivity historyMonthActivity) {
-		super(historyMonthActivity);
+	public MonthView(HistoryMonthFragment historyMonthActivity) {
+		super(historyMonthActivity.getActivity());
 		if (mScale == 0) {
 			mScale = getContext().getResources().getDisplayMetrics().density;
 			if (mScale != 1) {
@@ -928,8 +928,8 @@ public class MonthView extends View {
 					calendar.setTimeInMillis(millis);
 					final String formattedMDY = sdf.format((calendar.getTime()));
 					getContext().startActivity(
-							new Intent(getContext(), HistoryActivity.class).putExtra(
-									HistoryActivity.SEARCH_FOR, formattedMDY));
+							new Intent(getContext(), HistoryListFragment.class).putExtra(
+									HistoryListFragment.SEARCH_FOR, formattedMDY));
 				}
 
 				return null;
