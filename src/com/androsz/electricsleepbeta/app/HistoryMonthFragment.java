@@ -15,9 +15,11 @@ import android.database.StaleDataException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,6 +28,7 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -328,6 +331,7 @@ public class HistoryMonthFragment extends HostFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         HostActivity a = (HostActivity) getActivity();
         sessionsObserver = new SessionsContentObserver();
@@ -383,6 +387,12 @@ public class HistoryMonthFragment extends HostFragment implements
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater mi) {
+        mi.inflate(R.menu.menu_history_calendar, menu);
+        super.onCreateOptionsMenu(menu, mi);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         getActivity().getContentResolver().unregisterContentObserver(
@@ -421,12 +431,12 @@ public class HistoryMonthFragment extends HostFragment implements
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_item_delete_all:
-            // TODO
-            break;
-        case R.id.menu_item_export_all:
-            // TODO
-            break;
+        case R.id.menu_list:
+            ((FragmentActivity) getActivity()).getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new HistoryListFragment())
+                .commit();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

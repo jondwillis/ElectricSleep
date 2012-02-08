@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -74,6 +75,12 @@ public class HistoryListFragment extends HostFragment implements
     */
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
@@ -128,9 +135,8 @@ public class HistoryListFragment extends HostFragment implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater mi) {
-        mi.inflate(R.menu.menu_multiple_history, menu);
-        super.onCreateOptionsMenu(menu, mi);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_history_list, menu);
     }
 
     @Override
@@ -212,6 +218,15 @@ public class HistoryListFragment extends HostFragment implements
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menu_calendar:
+            ((FragmentActivity) getActivity()).getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new HistoryMonthFragment())
+                .commit();
+            return true;
+        }
+
         final Activity a = getActivity();
         switch (item.getItemId()) {
         case R.id.menu_item_delete_all:
