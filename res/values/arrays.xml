@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="review_sleep_actionbar_navigation">
-        <item >Calendar</item>
         <item >List</item>
+        <item >Calendar</item>
     </string-array>
-    
 </resources>

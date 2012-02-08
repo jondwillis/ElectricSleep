@@ -12,6 +12,7 @@ public class HistoryActivity extends HostActivity implements OnNavigationListene
 
     // Please note that the following values are highly dependent upon items held in the list
     // drop-down etc...
+    // Please see arrays.xml @ review_sleep_actionbar_navigation
     private static final int FRAGMENT_LIST = 0;
     private static final int FRAGMENT_MONTH_VIEW = 1;
 
