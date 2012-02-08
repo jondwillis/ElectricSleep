@@ -915,9 +915,13 @@ public class MonthView extends View {
 					getContext().startActivity(reviewSleepIntent);
 				} else if (applicableRowIds.size() > 1) {
 
-					getContext().startActivity(
-							new Intent(getContext(), HistoryActivity.class).putExtra(
-                                HistoryActivity.SEARCH_FOR, millis));
+                    // TODO this probably needs to be smarter in how it attempts to discover sleep
+                    // for a given night. Its quite possible that the night of sleep for the user on
+                    // say a Friday began at say Saturday morning at 3am. We need to handle this
+                    // situation.
+                    getContext().startActivity(
+							new Intent(getContext(), HistoryListFragment.class).putExtra(
+                                HistoryListFragment.SEARCH_FOR, millis));
 				}
 
 				return null;
