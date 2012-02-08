@@ -44,6 +44,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.HistoryActivity;
 import com.androsz.electricsleepbeta.app.HistoryListFragment;
 import com.androsz.electricsleepbeta.app.HistoryMonthFragment;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
@@ -920,8 +921,8 @@ public class MonthView extends View {
                     // say a Friday began at say Saturday morning at 3am. We need to handle this
                     // situation.
                     getContext().startActivity(
-							new Intent(getContext(), HistoryListFragment.class).putExtra(
-                                HistoryListFragment.SEARCH_FOR, millis));
+                        new Intent(getContext(), HistoryActivity.class).putExtra(
+                            HistoryListFragment.SEARCH_FOR, millis));
 				}
 
 				return null;

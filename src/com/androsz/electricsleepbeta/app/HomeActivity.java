@@ -102,7 +102,7 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 	}
 
 	public void onHistoryClick(final View v) {
-		startActivity(new Intent(this, HistoryMonthFragment.class));
+		startActivity(new Intent(this, HistoryActivity.class));
 	}
 
 	@Override
