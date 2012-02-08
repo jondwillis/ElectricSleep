@@ -72,38 +72,33 @@ public class HistoryListFragment extends HostFragment implements
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Activity a = getActivity();
-        progress = new ProgressDialog(a);
-
-        mTextView = (TextView) a.findViewById(R.id.text);
-        mListView = (ListView) a.findViewById(R.id.list);
-
-        mListView.setVerticalFadingEdgeEnabled(false);
-        mListView.setScrollbarFadingEnabled(false);
-
-        sleepHistoryAdapter = new SleepHistoryCursorAdapter(a, null);
-
-        mListView.setAdapter(sleepHistoryAdapter);
-
-        final Intent intent = a.getIntent();
-
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            final Intent reviewIntent = new Intent(a, ReviewSleepActivity.class);
-            reviewIntent.setData(intent.getData());
-            startActivity(reviewIntent);
-            a.finish();
-        } else {
-            ((HostActivity) a).getSupportLoaderManager().initLoader(0,
-                    getLoaderArgs(intent, true), this);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
+        final Activity activity = getActivity();
+
+        progress = new ProgressDialog(activity);
+
+        mTextView = (TextView) root.findViewById(R.id.text);
+        mListView = (ListView) root.findViewById(R.id.list);
+        mListView.setVerticalFadingEdgeEnabled(false);
+        mListView.setScrollbarFadingEnabled(false);
+
+        sleepHistoryAdapter = new SleepHistoryCursorAdapter(activity, null);
+        mListView.setAdapter(sleepHistoryAdapter);
+
+        final Intent intent = activity.getIntent();
+
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            final Intent reviewIntent = new Intent(activity, ReviewSleepActivity.class);
+            reviewIntent.setData(intent.getData());
+            startActivity(reviewIntent);
+            activity.finish();
+        } else {
+            ((HostActivity) activity).getSupportLoaderManager().initLoader(
+                0, getLoaderArgs(intent, true), this);
+        }
+
         return root;
     }
 
