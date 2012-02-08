@@ -28,9 +28,12 @@ public class HistoryActivity extends HostActivity implements OnNavigationListene
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment newActiveFragment = null;
 
+        // TODO
+        /*
 		if (itemPosition == 0) {
 		} else {
 		}
+        */
 
 		ft.replace(R.id.frags, newActiveFragment).commit();
 		return true;
