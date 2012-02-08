@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.SparseArray;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -51,6 +52,8 @@ import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
 import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class MonthView extends View {
+
+    private static final String TAG = MonthView.class.getSimpleName();
 
     private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
@@ -385,8 +388,17 @@ public class MonthView extends View {
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
+        Log.d(TAG, "date: " + date);
         Paint paint = new Paint();
         paint.setColor(mEventOffColor);
+        for (Long[] session : mSessions) {
+            // TODO we need to perform the 6pm to 6am check when determining whether or not sleep
+            // was for this day. We can do this by either making the check here or by adding data to
+            // the Long[] structure.
+            if (date == session[2]) {
+                paint.setColor(mEventOnColor);
+            }
+        }
         final int height = Math.abs(rect.bottom - rect.top);
         final int width = Math.abs(rect.right - rect.left);
         int cy = (int) (rect.top + (height / 1.4));
