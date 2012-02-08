@@ -14,7 +14,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -57,6 +56,8 @@ public class HistoryListFragment extends HostFragment implements
     ProgressDialog progress;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
+    /*
+      TODO temporarily disabled.
     private Bundle getLoaderArgs(final Intent intent, boolean init) {
         final Bundle args = new Bundle();
 
@@ -70,6 +71,7 @@ public class HistoryListFragment extends HostFragment implements
         }
         return args;
     }
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +90,8 @@ public class HistoryListFragment extends HostFragment implements
         mListView.setAdapter(sleepHistoryAdapter);
 
         final Intent intent = activity.getIntent();
-
+        /*
+          TODO temporarily disabled.
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             final Intent reviewIntent = new Intent(activity, ReviewSleepActivity.class);
             reviewIntent.setData(intent.getData());
@@ -98,7 +101,9 @@ public class HistoryListFragment extends HostFragment implements
             ((HostActivity) activity).getSupportLoaderManager().initLoader(
                 0, getLoaderArgs(intent, true), this);
         }
+        */
 
+        ((HostActivity) activity).getSupportLoaderManager().initLoader(0, null, this);
         return root;
     }
 
@@ -107,13 +112,19 @@ public class HistoryListFragment extends HostFragment implements
 
         progress.setMessage(getString(R.string.querying_sleep_database));
         progress.show();
-        return new CursorLoader(
-            getActivity(), SleepSession.CONTENT_URI, null,
-            SleepSession.START_TIMESTAMP + " <=? " +
-            SleepSession.END_TIMESTAMP + " >=? ",
-            new String[] {Long.toString(args.getLong(SEARCH_FOR)),
-                          Long.toString(args.getLong(SEARCH_FOR))},
-            null);
+        if (args != null) {
+            return new CursorLoader(
+                getActivity(), SleepSession.CONTENT_URI, null,
+                SleepSession.START_TIMESTAMP + " <=? AND " +
+                SleepSession.END_TIMESTAMP + " >=? ",
+                new String[] {Long.toString(args.getLong(SEARCH_FOR)),
+                              Long.toString(args.getLong(SEARCH_FOR))},
+                null);
+        } else {
+            return new CursorLoader(
+                getActivity(), SleepSession.CONTENT_URI, null,
+                null, null, SleepSession.SORT_ORDER);
+        }
     }
 
     @Override
