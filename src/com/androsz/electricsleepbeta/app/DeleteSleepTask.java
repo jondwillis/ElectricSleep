@@ -6,12 +6,12 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class DeleteSleepTask extends AsyncTask<Long[], Void, Void> {
 
 	/**
-	 * 
+	 *
 	 */
 	private final Context context;
 	private ProgressDialog progress;
@@ -34,8 +34,11 @@ public class DeleteSleepTask extends AsyncTask<Long[], Void, Void> {
 			throw new IllegalArgumentException("Only use one Long[] parameter.");
 		}*/
 		for (int i = 0; i < params[0].length; i++) {
-			SleepSessions.deleteSession(this.context, params[0][i]);
-		}
+            context.getContentResolver().delete(
+                SleepSession.CONTENT_URI,
+                SleepSession._ID + " =? ",
+                new String[] {Long.toString(params[0][i])});
+        }
 		return null;
 	}
 

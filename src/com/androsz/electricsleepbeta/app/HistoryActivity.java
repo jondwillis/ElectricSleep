@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBar.OnNavigationListener;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
 
@@ -21,18 +22,27 @@ public class HistoryActivity extends HostActivity implements OnNavigationListene
 				R.array.review_sleep_actionbar_navigation, R.layout.abs__simple_spinner_item);
 		list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		bar.setListNavigationCallbacks(list, this);
-	}
+
+        // Set the default navigation mode as the history month fragment
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager.findFragmentById(android.R.id.content) == null) {
+            HistoryMonthFragment fragment = new HistoryMonthFragment();
+            manager.beginTransaction().add(android.R.id.content, fragment).commit();
+        }
+    }
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		Fragment newActiveFragment = null;
 
+        // TODO
+        /*
 		if (itemPosition == 0) {
 		} else {
 		}
-
-		ft.replace(R.id.frags, newActiveFragment).commit();
+        */
+        //ft.replace(R.id.frags, newActiveFragment).commit();
 		return true;
 	}
 

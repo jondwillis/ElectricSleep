@@ -1,5 +1,6 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -17,7 +18,6 @@ import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,12 +25,14 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.calendar.MonthView;
 import com.androsz.electricsleepbeta.widget.calendar.Utils;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -232,14 +234,15 @@ public class HistoryMonthFragment extends HostFragment implements
     private static final int DAY_OF_WEEK_KINDS[] = { Calendar.SUNDAY,
             Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
             Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY };
-    private static final int DAY_OF_WEEK_LABEL_IDS[] = { R.id.day0, R.id.day1,
-            R.id.day2, R.id.day3, R.id.day4, R.id.day5, R.id.day6 };
+    private static final int DAY_OF_WEEK_LABEL_IDS[] = {
+        R.id.day0, R.id.day1, R.id.day2, R.id.day3, R.id.day4, R.id.day5, R.id.day6
+    };
     private ViewPager monthPager;
     private MonthPagerAdapter monthAdapter;
 
     private int startDay;
 
-    ArrayList<Long[]> mSessions = new ArrayList<Long[]>(0);
+    List<Long[]> mSessions = new ArrayList<Long[]>(0);
 
     private int focusedPage = 0;
 
@@ -281,11 +284,6 @@ public class HistoryMonthFragment extends HostFragment implements
                 // }
             }
         });
-    }
-
-    @Override
-    protected int getContentAreaLayoutId() {
-        return R.layout.activity_history_month;
     }
 
     public ArrayList<Long[]> getSessionsInInterval(long startMillis, int days) {
@@ -330,13 +328,20 @@ public class HistoryMonthFragment extends HostFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         HostActivity a = (HostActivity) getActivity();
         sessionsObserver = new SessionsContentObserver();
         a.getContentResolver().registerContentObserver(
-                SleepSessions.MainTable.CONTENT_URI, true, sessionsObserver);
+                SleepSession.CONTENT_URI, true, sessionsObserver);
 
-        final Time now = new Time();
-        now.setToNow();
+        a.getSupportLoaderManager().initLoader(0, null,
+                HistoryMonthFragment.this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_history_month, container, false);
 
         // Get first day of week based on locale and populate the day headers
         startDay = Calendar.getInstance().getFirstDayOfWeek();
@@ -348,7 +353,7 @@ public class HistoryMonthFragment extends HostFragment implements
             final String dayString = DateUtils.getDayOfWeekString(
                     (DAY_OF_WEEK_KINDS[day] + diff) % 7 + 1,
                     DateUtils.LENGTH_MEDIUM);
-            final TextView label = (TextView) a.findViewById(DAY_OF_WEEK_LABEL_IDS[day]);
+            final TextView label = (TextView) root.findViewById(DAY_OF_WEEK_LABEL_IDS[day]);
             label.setText(dayString);
             if (Utils.isSunday(day, startDay)
                     || Utils.isSaturday(day, startDay)) {
@@ -357,25 +362,24 @@ public class HistoryMonthFragment extends HostFragment implements
         }
 
         monthAdapter = new MonthPagerAdapter();
-        monthPager = (ViewPager) a.findViewById(R.id.monthpager);
+        monthPager = (ViewPager) root.findViewById(R.id.monthpager);
         monthPager.setAdapter(monthAdapter);
 
-        final TitlePageIndicator indicator = (TitlePageIndicator) a.findViewById(R.id.indicator);
+        final TitlePageIndicator indicator = (TitlePageIndicator) root.findViewById(R.id.indicator);
         indicator.setFooterColor(getResources().getColor(R.color.primary1));
         indicator.setViewPager(monthPager, 1);
         indicator.setOnPageChangeListener(new IndicatorPageChangeListener(
                 indicator));
 
-        a.getSupportLoaderManager().initLoader(0, null,
-                HistoryMonthFragment.this);
+        return root;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
-                SleepSessions.MainTable.CONTENT_URI,
-                SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null,
-                null);
+				SleepSession.CONTENT_URI,
+				null, null, null,
+				null);
     }
 
     @Override
@@ -398,8 +402,7 @@ public class HistoryMonthFragment extends HostFragment implements
                 // android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
                 try {
                     mSessions = new ArrayList<Long[]>(0);
-                    mSessions = SleepSessions.getStartAndEndTimesFromCursor(
-                            getActivity(), data);
+                    mSessions = SleepSession.getStartEndTimestamps(data);
                 } catch (IllegalArgumentException ex) {
                     Log.d(TAG,
                             "Failure to provide proper arguments when accessing session data.",

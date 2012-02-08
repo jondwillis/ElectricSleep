@@ -17,9 +17,9 @@
 package com.androsz.electricsleepbeta.widget.calendar;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.SparseArray;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -44,12 +45,15 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.HistoryActivity;
 import com.androsz.electricsleepbeta.app.HistoryListFragment;
 import com.androsz.electricsleepbeta.app.HistoryMonthFragment;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class MonthView extends View {
+
+    private static final String TAG = MonthView.class.getSimpleName();
 
     private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
@@ -103,7 +107,7 @@ public class MonthView extends View {
 	// width/height.
 	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(4);
 
-	private ArrayList<Long[]> mSessions = new ArrayList<Long[]>(0);
+	private List<Long[]> mSessions = new ArrayList<Long[]>(0);
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -384,8 +388,17 @@ public class MonthView extends View {
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
+        Log.d(TAG, "date: " + date);
         Paint paint = new Paint();
         paint.setColor(mEventOffColor);
+        for (Long[] session : mSessions) {
+            // TODO we need to perform the 6pm to 6am check when determining whether or not sleep
+            // was for this day. We can do this by either making the check here or by adding data to
+            // the Long[] structure.
+            if (date == session[2]) {
+                paint.setColor(mEventOnColor);
+            }
+        }
         final int height = Math.abs(rect.bottom - rect.top);
         final int width = Math.abs(rect.right - rect.left);
         int cy = (int) (rect.top + (height / 1.4));
@@ -443,7 +456,7 @@ public class MonthView extends View {
 		mBitmapRect.right = width;
 	}
 
-	public void forceReloadEvents(final ArrayList<Long[]> sessions) {
+	public void forceReloadEvents(final List<Long[]> sessions) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -891,7 +904,7 @@ public class MonthView extends View {
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
-				ArrayList<Long> applicableRowIds = new ArrayList<Long>();
+				List<Long> applicableRowIds = new ArrayList<Long>();
 				for (final Long[] session : mSessions) {
 					if (julianDay >= session[2] && julianDay <= session[3]) {
 						applicableRowIds.add(session[4]);
@@ -909,20 +922,19 @@ public class MonthView extends View {
 				if (applicableRowIds.size() == 1) {
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
-					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+					final Uri data = Uri.withAppendedPath(SleepSession.CONTENT_URI,
 							String.valueOf(applicableRowIds.get(0)));
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
 				} else if (applicableRowIds.size() > 1) {
 
-					final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
-							java.text.DateFormat.SHORT, Locale.getDefault());
-					final Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(millis);
-					final String formattedMDY = sdf.format((calendar.getTime()));
-					getContext().startActivity(
-							new Intent(getContext(), HistoryListFragment.class).putExtra(
-									HistoryListFragment.SEARCH_FOR, formattedMDY));
+                    // TODO this probably needs to be smarter in how it attempts to discover sleep
+                    // for a given night. Its quite possible that the night of sleep for the user on
+                    // say a Friday began at say Saturday morning at 3am. We need to handle this
+                    // situation.
+                    getContext().startActivity(
+                        new Intent(getContext(), HistoryActivity.class).putExtra(
+                            HistoryListFragment.SEARCH_FOR, millis));
 				}
 
 				return null;

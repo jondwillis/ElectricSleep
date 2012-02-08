@@ -2,6 +2,7 @@ package com.androsz.electricsleepbeta.app;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,7 +28,6 @@ import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
-import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
 import java.io.File;
@@ -45,8 +45,10 @@ public class ReviewSleepActivity extends HostActivity implements
 		protected Void doInBackground(final Void... params) {
 			if (getIntent().getData() != null) {
 
-				SleepSessions.deleteSession(ReviewSleepActivity.this,
-						Long.parseLong(getIntent().getData().getLastPathSegment()));
+                ReviewSleepActivity.this.getContentResolver().delete(
+                    SleepSession.CONTENT_URI,
+                    SleepSession._ID + " =? ",
+                    new String[] {Long.toString(ContentUris.parseId(getIntent().getData()))});
 			} else {
 				Toast.makeText(ReviewSleepActivity.this, "Wait for the sleep session to load.",
 						Toast.LENGTH_LONG).show();
@@ -111,7 +113,7 @@ public class ReviewSleepActivity extends HostActivity implements
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		return new CursorLoader(this, getIntent().getData(),
-				SleepSessions.MainTable.ALL_COLUMNS_PROJECTION, null, null, null);
+				null, null, null, null);
 	}
 
 	@Override
@@ -129,10 +131,8 @@ public class ReviewSleepActivity extends HostActivity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		if (data.moveToLast()) {
-			this.getIntent().setData(
-					Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_ID_URI_BASE,
-							"" + data.getLong(0)));
-
+			this.getIntent().setData(ContentUris.withAppendedId(SleepSession.CONTENT_URI,
+                                                                data.getLong(0)));
             mSleepRecord = new SleepSession(data);
             chartFragment.setSleepRecord(mSleepRecord);
 			analysisFragment.setSleepRecord(mSleepRecord);
@@ -179,7 +179,7 @@ public class ReviewSleepActivity extends HostActivity implements
             Intent intent = new Intent(Intent.ACTION_SEND);
             final String dateString =
                 DateUtils.formatDateTime(this,
-                                         mSleepRecord.getStartTime(),
+                                         mSleepRecord.getStartTimestamp(),
                                          DateUtils.FORMAT_NO_YEAR |
                                          DateUtils.FORMAT_SHOW_DATE |
                                          DateUtils.FORMAT_ABBREV_ALL);

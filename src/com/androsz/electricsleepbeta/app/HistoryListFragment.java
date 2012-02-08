@@ -3,6 +3,7 @@ package com.androsz.electricsleepbeta.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,8 +14,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -22,7 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
 public class HistoryListFragment extends HostFragment implements
@@ -36,14 +40,15 @@ public class HistoryListFragment extends HostFragment implements
             final Intent reviewSleepIntent = new Intent(getActivity(),
                     ReviewSleepActivity.class);
 
-            final Uri data = Uri.withAppendedPath(
-                    SleepSessions.MainTable.CONTENT_URI, String.valueOf(id));
+            final Uri data = ContentUris.withAppendedId(SleepSession.CONTENT_URI, id);
             reviewSleepIntent.setData(data);
             startActivity(reviewSleepIntent);
         }
     }
 
     public static final String SEARCH_FOR = "searchFor";
+
+    private static final long TIMESTAMP_INVALID = -1;
 
     private ListView mListView;
 
@@ -52,26 +57,17 @@ public class HistoryListFragment extends HostFragment implements
     ProgressDialog progress;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
-    @Override
-    protected int getContentAreaLayoutId() {
-        return R.layout.fragment_history_list;
-    }
-
     private Bundle getLoaderArgs(final Intent intent, boolean init) {
-        // set searchFor parameter if it exists
-        String searchFor = intent.getStringExtra(SEARCH_FOR);
-        if (searchFor != null) {
-            if (init) {
-                getActivity().setTitle(
-                        getActivity().getTitle() + " " + searchFor);
-            }
-            // do exact searches only.
-            searchFor = "\"" + searchFor + "\"";
-        } else {
-            searchFor = getString(R.string.to);
-        }
         final Bundle args = new Bundle();
-        args.putString(SEARCH_FOR, searchFor);
+
+        if (intent.hasExtra(SEARCH_FOR)) {
+            final long timestamp = intent.getLongExtra(SEARCH_FOR, TIMESTAMP_INVALID);
+            getActivity().setTitle(getActivity().getTitle() + " " +
+                                   DateUtils.formatDateTime(getActivity(),
+                                                            timestamp,
+                                                            DateUtils.LENGTH_SHORTEST));
+            args.putLong(SEARCH_FOR, timestamp);
+        }
         return args;
     }
 
@@ -105,15 +101,24 @@ public class HistoryListFragment extends HostFragment implements
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
+        return root;
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         progress.setMessage(getString(R.string.querying_sleep_database));
         progress.show();
-        return new CursorLoader(getActivity(),
-                SleepSessions.MainTable.CONTENT_URI,
-                SleepSessions.MainTable.ALL_COLUMNS_PROJECTION,
-                SleepSessions.MainTable.KEY_TITLE + " MATCH ?",
-                new String[] { args.getString(SEARCH_FOR) + "*" }, null);
+        return new CursorLoader(
+            getActivity(), SleepSession.CONTENT_URI, null,
+            SleepSession.START_TIMESTAMP + " <=? " +
+            SleepSession.END_TIMESTAMP + " >=? ",
+            new String[] {Long.toString(args.getLong(SEARCH_FOR)),
+                          Long.toString(args.getLong(SEARCH_FOR))},
+            null);
     }
 
     @Override
@@ -139,7 +144,7 @@ public class HistoryListFragment extends HostFragment implements
                         ReviewSleepActivity.class);
 
                 final Uri uri = Uri.withAppendedPath(
-                        SleepSessions.MainTable.CONTENT_URI,
+                        SleepSession.CONTENT_URI,
                         String.valueOf(data.getLong(0)));
                 reviewSleepIntent.setData(uri);
                 reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
