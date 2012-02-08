@@ -15,8 +15,10 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -54,11 +56,6 @@ public class HistoryListFragment extends HostFragment implements
 
     ProgressDialog progress;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
-
-    @Override
-    protected int getContentAreaLayoutId() {
-        return R.layout.fragment_history_list;
-    }
 
     private Bundle getLoaderArgs(final Intent intent, boolean init) {
         final Bundle args = new Bundle();
@@ -101,6 +98,13 @@ public class HistoryListFragment extends HostFragment implements
             ((HostActivity) a).getSupportLoaderManager().initLoader(0,
                     getLoaderArgs(intent, true), this);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
+        return root;
     }
 
     @Override

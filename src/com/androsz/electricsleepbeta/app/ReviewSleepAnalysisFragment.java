@@ -19,17 +19,13 @@ public class ReviewSleepAnalysisFragment extends HostFragment {
 	SleepSession sleepRecord;
 
 	@Override
-	protected int getContentAreaLayoutId() {
-		return R.layout.fragment_review_sleep_analysis;
-	}
-
-	@Override
 	public void onClick(View v) {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final View view = super.onCreateView(inflater, container, savedInstanceState);
+        final View view = inflater.inflate(R.layout.fragment_review_sleep_analysis, container,
+                                           false);
 		scoreTV = (TextView) view.findViewById(R.id.value_score_text);
 		durationTV = (TextView) view.findViewById(R.id.value_duration_text);
 		spikesTV = (TextView) view.findViewById(R.id.value_spikes_text);
