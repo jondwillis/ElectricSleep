@@ -12,8 +12,8 @@ public class HistoryActivity extends HostActivity implements OnNavigationListene
 
     // Please note that the following values are highly dependent upon items held in the list
     // drop-down etc...
-    private static final int FRAGMENT_MONTH_VIEW = 0;
-    private static final int FRAGMENT_LIST = 1;
+    private static final int FRAGMENT_LIST = 0;
+    private static final int FRAGMENT_MONTH_VIEW = 1;
 
     /** The fragment currently selected. */
     private int mSelectedFragment;
@@ -32,8 +32,8 @@ public class HistoryActivity extends HostActivity implements OnNavigationListene
         // Set the default navigation mode as the history month fragment
         FragmentManager manager = getSupportFragmentManager();
         if (manager.findFragmentById(android.R.id.content) == null) {
-            manager.beginTransaction().add(android.R.id.content, new HistoryMonthFragment()).commit();
-            mSelectedFragment = FRAGMENT_MONTH_VIEW;
+            manager.beginTransaction().add(android.R.id.content, new HistoryListFragment()).commit();
+            mSelectedFragment = FRAGMENT_LIST;
         }
     }
 
@@ -46,16 +46,16 @@ public class HistoryActivity extends HostActivity implements OnNavigationListene
         }
 
         switch (itemPosition) {
-        case FRAGMENT_MONTH_VIEW:
-            getSupportFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, new HistoryMonthFragment())
-                .commit();
-            break;
         case FRAGMENT_LIST:
             getSupportFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content, new HistoryListFragment())
+                .commit();
+            break;
+        case FRAGMENT_MONTH_VIEW:
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new HistoryMonthFragment())
                 .commit();
             break;
         }
