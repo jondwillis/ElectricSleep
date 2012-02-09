@@ -153,6 +153,7 @@
         <item name="com.androsz.electricsleepbeta:movementBorderColor">@color/sleepchart_movement_border_light</item>
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_light</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_light</item>
+        <item name="android:textColor">@color/text_dark</item>
     </style>
     
     <style name="SleepChart_Dark" >
@@ -161,6 +162,7 @@
         <item name="com.androsz.electricsleepbeta:movementBorderColor">@color/sleepchart_movement_border_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_dark</item>
+        <item name="android:textColor">@color/text_light</item>
     </style>
 
 </resources>
