@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -18,36 +19,38 @@
             android:id="@+id/text_sleep_no_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:animateLayoutChanges="true"
             android:drawableLeft="@drawable/exclamation"
             android:gravity="left"
             android:padding="5dp"
-            android:layout_margin="0dp"
             android:text="@string/sleep_no_alarm" />
 
         <Button
             android:id="@+id/text_sleep_plugged_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:animateLayoutChanges="true"
             android:drawableLeft="@drawable/exclamation"
             android:gravity="left"
             android:padding="5dp"
-            android:layout_margin="0dp"
             android:text="@string/sleep_plugged_in" />
 
         <Button
             android:id="@+id/text_sleep_dim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:animateLayoutChanges="true"
             android:drawableLeft="@drawable/exclamation"
             android:gravity="left"
             android:padding="5dp"
-            android:layout_margin="0dp"
             android:text="@string/sleep_dim" />
     </LinearLayout>
+
     <!-- </ScrollView> -->
+
     <com.androsz.electricsleepbeta.widget.SleepChart
         android:id="@+id/sleep_movement_chart"
         android:layout_width="match_parent"
@@ -55,8 +58,9 @@
         android:layout_gravity="bottom"
         android:layout_margin="4dip"
         android:animateLayoutChanges="true"
-        android:visibility="gone" />
-
+        android:visibility="gone"
+        electricsleepbeta:setScroll="true"
+        style="@style/SleepChart_Dark" />
 
     <LinearLayout
         android:id="@+id/wait_for_sleep_data"
@@ -86,6 +90,5 @@
             </TextView>
         </LinearLayout>
     </LinearLayout>
-    
 
 </LinearLayout>

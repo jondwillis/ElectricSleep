@@ -13,7 +13,8 @@
         android:layout_width="800dp"
         android:orientation="horizontal"
         android:padding="8dip"
-        electricsleep:setScroll="false" />
+        electricsleep:setScroll="false" 
+        style="@style/SleepChart_Light"/>
 
     <TableLayout
       android:layout_height="wrap_content"
