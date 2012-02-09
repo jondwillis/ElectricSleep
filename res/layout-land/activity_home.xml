@@ -219,7 +219,6 @@
                         android:layout_marginTop="5dip"
                         android:animateLayoutChanges="true"
                         electricsleepbeta:setScroll="true"
-                        android:textColor="@color/text_dark"
                         style="@style/SleepChart_Light" />
                 </RelativeLayout>
             </ScrollView>
