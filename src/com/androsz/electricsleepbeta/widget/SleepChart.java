@@ -37,6 +37,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     public int rating;
 
+    public TimeChart mChart;
+
     public XYMultipleSeriesDataset xyMultipleSeriesDataset;
 
     public XYMultipleSeriesRenderer xyMultipleSeriesRenderer;
@@ -50,6 +52,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     private boolean mSetScroll;
     private int mBackgroundColor;
+
+    private String mAxisFormat;
 
     public SleepChart(final Context context) {
         this(context, null);
@@ -204,18 +208,18 @@ public class SleepChart extends GraphicalView implements Parcelable {
             xyMultipleSeriesRenderer.setLegendTextSize(textSize);
             xyMultipleSeriesRenderer.setShowLegend(true);
             xyMultipleSeriesRenderer.setShowLabels(true);
-            xyMultipleSeriesRenderer.setXLabels(6);
+            xyMultipleSeriesRenderer.setXLabels(5);
             xyMultipleSeriesRenderer.setYLabels(8);
             xyMultipleSeriesRenderer.setYLabelsAlign(Align.RIGHT);
             xyMultipleSeriesRenderer.setShowGrid(true);
 
-            final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
-                    xyMultipleSeriesRenderer);
+            mChart = new TimeChart(xyMultipleSeriesDataset, xyMultipleSeriesRenderer);
             // TODO determine what to do here. Ideally the date format would
             // change as the total
             // duration increased.
-            timeChart.setDateFormat("h");
-            return timeChart;
+            mAxisFormat = "h:mm";
+            mChart.setDateFormat(mAxisFormat);
+            return mChart;
         }
         return null;
     }
@@ -259,6 +263,21 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
             xyMultipleSeriesRenderer.setXAxisMin(firstX);
             xyMultipleSeriesRenderer.setXAxisMax(lastX);
+            final long duration = (long) (lastX - firstX);
+            String axisFormat;
+            if (duration < MINUTE_IN_MS) {
+                axisFormat = "s's'";
+            } else if (duration < (15 * MINUTE_IN_MS)) {
+                axisFormat = "m'm's's'";
+            } else if (duration < (HOUR_IN_MS * 2)) {
+                axisFormat = "h:m";
+            } else {
+                axisFormat = "h'h'";
+            }
+            if (!axisFormat.equals(mAxisFormat)) {
+                mAxisFormat = axisFormat;
+                mChart.setDateFormat(mAxisFormat);
+            }
 
             xyMultipleSeriesRenderer.setYAxisMin(0);
             xyMultipleSeriesRenderer
