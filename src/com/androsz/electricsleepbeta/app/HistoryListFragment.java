@@ -15,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -40,7 +41,8 @@ public class HistoryListFragment extends HostFragment implements
             final Intent reviewSleepIntent = new Intent(getActivity(),
                     ReviewSleepActivity.class);
 
-            final Uri data = ContentUris.withAppendedId(SleepSession.CONTENT_URI, id);
+            final Uri data = ContentUris.withAppendedId(
+                    SleepSession.CONTENT_URI, id);
             reviewSleepIntent.setData(data);
             startActivity(reviewSleepIntent);
         }
@@ -58,21 +60,16 @@ public class HistoryListFragment extends HostFragment implements
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
     /*
-      TODO temporarily disabled.
-    private Bundle getLoaderArgs(final Intent intent, boolean init) {
-        final Bundle args = new Bundle();
-
-        if (intent.hasExtra(SEARCH_FOR)) {
-            final long timestamp = intent.getLongExtra(SEARCH_FOR, TIMESTAMP_INVALID);
-            getActivity().setTitle(getActivity().getTitle() + " " +
-                                   DateUtils.formatDateTime(getActivity(),
-                                                            timestamp,
-                                                            DateUtils.LENGTH_SHORTEST));
-            args.putLong(SEARCH_FOR, timestamp);
-        }
-        return args;
-    }
-    */
+     * TODO temporarily disabled. private Bundle getLoaderArgs(final Intent
+     * intent, boolean init) { final Bundle args = new Bundle();
+     * 
+     * if (intent.hasExtra(SEARCH_FOR)) { final long timestamp =
+     * intent.getLongExtra(SEARCH_FOR, TIMESTAMP_INVALID);
+     * getActivity().setTitle(getActivity().getTitle() + " " +
+     * DateUtils.formatDateTime(getActivity(), timestamp,
+     * DateUtils.LENGTH_SHORTEST)); args.putLong(SEARCH_FOR, timestamp); }
+     * return args; }
+     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,10 +79,14 @@ public class HistoryListFragment extends HostFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
+            Bundle savedInstanceState) {
+        
         final Activity activity = getActivity();
-
+        
+        //TODO doesn't seem possible without recreating the activity first.
+        final View root = LayoutInflater.from( new ContextThemeWrapper(activity, R.style.Theme_SleepMate_Light)).inflate(R.layout.fragment_history_list,
+                container, false);
+        
         progress = new ProgressDialog(activity);
 
         mTextView = (TextView) root.findViewById(R.id.text);
@@ -98,19 +99,17 @@ public class HistoryListFragment extends HostFragment implements
 
         final Intent intent = activity.getIntent();
         /*
-          TODO temporarily disabled.
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            final Intent reviewIntent = new Intent(activity, ReviewSleepActivity.class);
-            reviewIntent.setData(intent.getData());
-            startActivity(reviewIntent);
-            activity.finish();
-        } else {
-            ((HostActivity) activity).getSupportLoaderManager().initLoader(
-                0, getLoaderArgs(intent, true), this);
-        }
-        */
+         * TODO temporarily disabled. if
+         * (Intent.ACTION_VIEW.equals(intent.getAction())) { final Intent
+         * reviewIntent = new Intent(activity, ReviewSleepActivity.class);
+         * reviewIntent.setData(intent.getData()); startActivity(reviewIntent);
+         * activity.finish(); } else { ((HostActivity)
+         * activity).getSupportLoaderManager().initLoader( 0,
+         * getLoaderArgs(intent, true), this); }
+         */
 
-        ((HostActivity) activity).getSupportLoaderManager().initLoader(0, null, this);
+        ((HostActivity) activity).getSupportLoaderManager().initLoader(0, null,
+                this);
         return root;
     }
 
@@ -120,17 +119,14 @@ public class HistoryListFragment extends HostFragment implements
         progress.setMessage(getString(R.string.querying_sleep_database));
         progress.show();
         if (args != null) {
-            return new CursorLoader(
-                getActivity(), SleepSession.CONTENT_URI, null,
-                SleepSession.START_TIMESTAMP + " <=? AND " +
-                SleepSession.END_TIMESTAMP + " >=? ",
-                new String[] {Long.toString(args.getLong(SEARCH_FOR)),
-                              Long.toString(args.getLong(SEARCH_FOR))},
-                null);
+            return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
+                    null, SleepSession.START_TIMESTAMP + " <=? AND "
+                            + SleepSession.END_TIMESTAMP + " >=? ",
+                    new String[] { Long.toString(args.getLong(SEARCH_FOR)),
+                            Long.toString(args.getLong(SEARCH_FOR)) }, null);
         } else {
-            return new CursorLoader(
-                getActivity(), SleepSession.CONTENT_URI, null,
-                null, null, SleepSession.SORT_ORDER);
+            return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
+                    null, null, null, SleepSession.SORT_ORDER);
         }
     }
 
@@ -155,8 +151,7 @@ public class HistoryListFragment extends HostFragment implements
                 final Intent reviewSleepIntent = new Intent(a,
                         ReviewSleepActivity.class);
 
-                final Uri uri = Uri.withAppendedPath(
-                        SleepSession.CONTENT_URI,
+                final Uri uri = Uri.withAppendedPath(SleepSession.CONTENT_URI,
                         String.valueOf(data.getLong(0)));
                 reviewSleepIntent.setData(uri);
                 reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -221,52 +216,12 @@ public class HistoryListFragment extends HostFragment implements
         switch (item.getItemId()) {
         case R.id.menu_calendar:
             ((FragmentActivity) getActivity()).getSupportFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, new HistoryMonthFragment())
-                .commit();
+                    .beginTransaction()
+                    .replace(android.R.id.content, new HistoryMonthFragment())
+                    .commit();
             return true;
         }
 
-        final Activity a = getActivity();
-        switch (item.getItemId()) {
-        case R.id.menu_item_delete_all:
-            final AlertDialog.Builder dialog = new AlertDialog.Builder(a)
-                    .setMessage(getString(R.string.delete_sleep_record))
-                    .setPositiveButton(getString(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(
-                                        final DialogInterface dialog,
-                                        final int id) {
-
-                                    Long[] rowIds = new Long[sleepHistoryAdapter
-                                            .getCount()];
-                                    Cursor c = sleepHistoryAdapter.getCursor();
-                                    c.moveToFirst();
-                                    int i = 0;
-                                    do {
-                                        rowIds[i++] = c.getLong(0);
-                                    } while (c.moveToNext());
-
-                                    new DeleteSleepTask(a, progress).execute(
-                                            rowIds, null, null);
-                                }
-                            })
-                    .setNegativeButton(getString(R.string.cancel),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(
-                                        final DialogInterface dialog,
-                                        final int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            dialog.show();
-            break;
-        case R.id.menu_item_export_all:
-            // TODO
-            break;
-        }
         return super.onOptionsItemSelected(item);
     }
 
