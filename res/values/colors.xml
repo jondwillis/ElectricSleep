@@ -17,8 +17,8 @@
     <!-- TODO This is almost same color as month_other_month_day_number -->
     <color name="faded_grey">#ffb5b5b5</color>
     <color name="sleepchart_axis">#33888888</color>
-    <color name="sleepchart_calibration_dark">#33888888</color>
-    <color name="sleepchart_calibration_border_dark">#33888888</color>
+    <color name="sleepchart_calibration_dark">#55AAAAAA</color>
+    <color name="sleepchart_calibration_border_dark">#FFCCCCCC</color>
     <color name="sleepchart_movement_dark">#fff45501</color>
     <color name="sleepchart_movement_border_dark">#88f45600</color>
     <color name="sleepchart_calibration_light">#55888888</color>
