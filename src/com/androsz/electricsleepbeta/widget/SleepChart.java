@@ -98,9 +98,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
             xyMultipleSeriesRenderer.setInScroll(true);
         }
 
-        if (array.hasValue(R.styleable.SleepChart_gridColor)) {
+        if (array.hasValue(R.styleable.SleepChart_gridAxisColor)) {
             xyMultipleSeriesRenderer.setGridColor(
-                array.getColor(R.styleable.SleepChart_gridColor, R.color.text_dark));
+                array.getColor(R.styleable.SleepChart_gridAxisColor, R.color.text_dark));
         }
     }
 
@@ -114,9 +114,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
 			xySeriesMovementRenderer.setFillBelowLine(true);
 			xySeriesMovementRenderer.setFillBelowLineColor(
-                context.getResources().getColor(R.color.primary_dark_transparent));
+                context.getResources().getColor(R.color.sleepchart_movement_light));
 			xySeriesMovementRenderer.setColor(
-                context.getResources().getColor(R.color.primary_dark));
+                context.getResources().getColor(R.color.sleepchart_movement_light));
 
             // set up calibration line series/renderer
 			xySeriesCalibration = new XYSeries(
@@ -124,9 +124,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 			xySeriesCalibrationRenderer = new XYSeriesRenderer();
 			xySeriesCalibrationRenderer.setFillBelowLine(true);
 			xySeriesCalibrationRenderer.setFillBelowLineColor(
-				context.getResources().getColor(R.color.text_dark));
+				context.getResources().getColor(R.color.sleepchart_calibration_light));
 			xySeriesCalibrationRenderer.setColor(
-				context.getResources().getColor(R.color.text_dark));
+				context.getResources().getColor(R.color.sleepchart_calibration_border_light));
 
 			// add series to the dataset
 			xyMultipleSeriesDataset = new XYMultipleSeriesDataset();

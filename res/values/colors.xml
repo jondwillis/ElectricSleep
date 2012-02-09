@@ -16,7 +16,15 @@
     <color name="background_transparent_lighten">#44ffffff</color>
     <!-- TODO This is almost same color as month_other_month_day_number -->
     <color name="faded_grey">#ffb5b5b5</color>
-    <color name="grid_color">#33888888</color>
+    <color name="sleepchart_axis">#33888888</color>
+    <color name="sleepchart_calibration_dark">#33888888</color>
+    <color name="sleepchart_calibration_border_dark">#33888888</color>
+    <color name="sleepchart_movement_dark">#fff45600</color>
+    <color name="sleepchart_movement_border_dark">#88f45600</color>
+    <color name="sleepchart_calibration_light">#33888888</color>
+    <color name="sleepchart_calibration_border_light">#33888888</color>
+    <color name="sleepchart_movement_light">#fff45600</color>
+    <color name="sleepchart_movement_border_light">#88f45600</color>
 
     <!-- calendar -->
     <color name="month_day_number">#ffCCCCCC</color>

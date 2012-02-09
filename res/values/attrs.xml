@@ -1,6 +1,10 @@
 <resources>
   <declare-styleable name="SleepChart">
-      <attr name="gridColor" format="color" />
+      <attr name="gridAxisColor" format="color" />
+      <attr name="movementColor" format="color" />
+      <attr name="movementBorderColor" format="color" />
+      <attr name="calibrationColor" format="color" />
+      <attr name="calibrationBorderColor" format="color" />
       <attr name="setScroll" format="boolean" />
       <attr name="android:background" />
       <attr name="android:textColor" />
