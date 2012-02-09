@@ -19,11 +19,11 @@
     <color name="sleepchart_axis">#33888888</color>
     <color name="sleepchart_calibration_dark">#33888888</color>
     <color name="sleepchart_calibration_border_dark">#33888888</color>
-    <color name="sleepchart_movement_dark">#fff45600</color>
+    <color name="sleepchart_movement_dark">#fff45501</color>
     <color name="sleepchart_movement_border_dark">#88f45600</color>
-    <color name="sleepchart_calibration_light">#33888888</color>
-    <color name="sleepchart_calibration_border_light">#33888888</color>
-    <color name="sleepchart_movement_light">#fff45600</color>
+    <color name="sleepchart_calibration_light">#55888888</color>
+    <color name="sleepchart_calibration_border_light">#FF888888</color>
+    <color name="sleepchart_movement_light">#fff45501</color>
     <color name="sleepchart_movement_border_light">#88f45600</color>
 
     <!-- calendar -->
