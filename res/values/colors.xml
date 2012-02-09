@@ -25,6 +25,8 @@
     <color name="sleepchart_calibration_border_light">#FF888888</color>
     <color name="sleepchart_movement_light">#fff45501</color>
     <color name="sleepchart_movement_border_light">#88f45600</color>
+    <color name="background_suggestions">#FFCCCCCC</color>
+    <color name="border_suggestions">#FFAAAAAA</color>
 
     <!-- calendar -->
     <color name="month_day_number">#ffCCCCCC</color>
