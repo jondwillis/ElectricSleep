@@ -28,14 +28,15 @@
         <com.androsz.electricsleepbeta.widget.VerticalSeekBar
             android:id="@+id/calibration_level_seekbar"
             android:layout_width="50dip"
-            android:layout_height="match_parent" android:layout_marginBottom="34dip"/>
-        
+            android:layout_height="match_parent"
+            android:layout_marginBottom="34dip" />
+
         <com.androsz.electricsleepbeta.widget.SleepChart
             android:id="@+id/calibration_sleep_chart"
+            style="@style/SleepChart_Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dip"/>
-
+            android:layout_margin="4dip" />
     </LinearLayout>
 
 </LinearLayout>
