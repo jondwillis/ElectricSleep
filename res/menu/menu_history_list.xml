@@ -3,7 +3,7 @@
     <item
       android:id="@+id/menu_calendar"
       android:icon="@drawable/ic_menu_calendar"
-      android:showAsAction="ifRoom|withText"
+      android:showAsAction="always|withText"
       android:title="@string/calendar"
       />
 </menu>
