@@ -143,9 +143,7 @@ public class HistoryListFragment extends HostFragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         final Activity a = getActivity();
-        if (data == null) {
-            a.finish();
-        } else {
+        if (data != null) {
             if (data.getCount() == 1) {
                 data.moveToFirst();
                 final Intent reviewSleepIntent = new Intent(a,
@@ -156,11 +154,10 @@ public class HistoryListFragment extends HostFragment implements
                 reviewSleepIntent.setData(uri);
                 reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(reviewSleepIntent);
-                a.finish();
+                //startActivity(reviewSleepIntent);
 
             } else if (data.getCount() == 0) {
-                a.finish();
+                
                 return;
             }
             sleepHistoryAdapter.swapCursor(data);

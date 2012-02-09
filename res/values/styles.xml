@@ -7,7 +7,7 @@
         <item name="android:textColor">@color/text_light</item>
         <item name="android:drawablePadding">0dp</item>
         <item name="android:textStyle">bold</item>
-		<item name="android:background">@null</item>
+        <item name="android:background">@null</item>
     </style>
 
     <style name="TextHeader" parent="@android:style/TextAppearance.Large">
@@ -80,7 +80,7 @@
         <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
         <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
     </style>
-    
+
     <style name="Theme.SleepMate.Dark" parent="Theme.Sherlock">
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="android:windowBackground">@color/background_dark</item>
@@ -132,19 +132,37 @@
     </style>
 
     <style name="SleepMateButton.Primary" parent="@android:style/Widget.Button">
-    	<item name="android:background">@drawable/btn_primary</item>
+        <item name="android:background">@drawable/btn_primary</item>
     </style>
 
     <style name="SleepMateButton.Secondary" parent="@android:style/Widget.Button">
-    	<item name="android:background">@drawable/btn_secondary</item>
+        <item name="android:background">@drawable/btn_secondary</item>
     </style>
 
     <style name="SleepMateButton.Primary.Chevron" parent="@android:style/Widget.Button">
-    	<item name="android:background">@drawable/btn_primary_chevron</item>
+        <item name="android:background">@drawable/btn_primary_chevron</item>
     </style>
 
     <style name="SleepMateButton.Secondary.Chevron" parent="@android:style/Widget.Button">
-    	<item name="android:background">@drawable/btn_secondary_chevron</item>
+        <item name="android:background">@drawable/btn_secondary_chevron</item>
+    </style>
+
+    <style name="SleepChart_Light">
+        <item name="com.androsz.electricsleepbeta:gridAxisColor">@color/sleepchart_axis</item>
+        <item name="com.androsz.electricsleepbeta:movementColor">@color/sleepchart_movement_light</item>
+        <item name="com.androsz.electricsleepbeta:movementBorderColor">@color/sleepchart_movement_border_light</item>
+        <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_light</item>
+        <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_light</item>
+        <item name="android:textColor">@color/text_dark</item>
+    </style>
+    
+    <style name="SleepChart_Dark" >
+        <item name="com.androsz.electricsleepbeta:gridAxisColor">@color/sleepchart_axis</item>
+        <item name="com.androsz.electricsleepbeta:movementColor">@color/sleepchart_movement_dark</item>
+        <item name="com.androsz.electricsleepbeta:movementBorderColor">@color/sleepchart_movement_border_dark</item>
+        <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_dark</item>
+        <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_dark</item>
+        <item name="android:textColor">@color/text_light</item>
     </style>
 
 </resources>

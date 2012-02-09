@@ -112,10 +112,10 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, final Cursor cursor) {
-		final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
-		final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
+		//final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
+		//final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
 
-		final ViewGroup statsContainer = (ViewGroup) findViewById(R.id.home_statistics_dashboard);
+		//final ViewGroup statsContainer = (ViewGroup) findViewById(R.id.home_statistics_dashboard);
 		if (cursor == null || cursor.getCount() == 0) {
             ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
             flipper.setDisplayedChild(FLIP_NO_RECORDS);

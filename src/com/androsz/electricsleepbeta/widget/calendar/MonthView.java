@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.SparseArray;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -52,8 +51,6 @@ import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
 import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class MonthView extends View {
-
-    private static final String TAG = MonthView.class.getSimpleName();
 
     private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
@@ -388,14 +385,32 @@ public class MonthView extends View {
 		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
 		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
-        Log.d(TAG, "date: " + date);
         Paint paint = new Paint();
         paint.setColor(mEventOffColor);
         for (Long[] session : mSessions) {
-            // TODO we need to perform the 6pm to 6am check when determining whether or not sleep
-            // was for this day. We can do this by either making the check here or by adding data to
-            // the Long[] structure.
-            if (date == session[2]) {
+            long julianDay = session[2];
+
+            // Check if this recording occurred between a 12am and 6am window and if so then
+            // consider it to be for the previous day of sleep.
+            final Time startTime = new Time();
+            startTime.set(session[0]);
+            startTime.normalize(true);
+            final Time midnight = new Time();
+            midnight.set(startTime);
+            midnight.hour = 0;
+            midnight.minute = 0;
+            midnight.second = 0;
+            midnight.normalize(true);
+            final Time morning = new Time();
+            morning.set(midnight);
+            morning.hour = 6;
+            morning.normalize(true);
+            if (Time.compare(startTime, midnight) >= 0 && Time.compare(startTime, morning) <= 0) {
+                --julianDay;
+            }
+
+            // Now determine if this session occurred on this date.
+            if (date == julianDay) {
                 paint.setColor(mEventOnColor);
             }
         }

@@ -60,7 +60,8 @@
         android:layout_margin="4dip"
         android:layout_weight="1"
         android:animateLayoutChanges="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        style="@style/SleepChart_Dark" />
 
     <LinearLayout
         android:id="@+id/wait_for_sleep_data"
