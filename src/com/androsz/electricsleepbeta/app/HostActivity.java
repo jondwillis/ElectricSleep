@@ -1,22 +1,15 @@
 package com.androsz.electricsleepbeta.app;
 
-import java.lang.reflect.Field;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.view.View;
-import android.util.Log;
 
-import com.actionbarsherlock.internal.view.menu.MenuItemImpl;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
