@@ -227,46 +227,6 @@ public class HistoryListFragment extends HostFragment implements
             return true;
         }
 
-        final Activity a = getActivity();
-        switch (item.getItemId()) {
-        case R.id.menu_item_delete_all:
-            final AlertDialog.Builder dialog = new AlertDialog.Builder(a)
-                    .setMessage(getString(R.string.delete_sleep_record))
-                    .setPositiveButton(getString(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(
-                                        final DialogInterface dialog,
-                                        final int id) {
-
-                                    Long[] rowIds = new Long[sleepHistoryAdapter
-                                            .getCount()];
-                                    Cursor c = sleepHistoryAdapter.getCursor();
-                                    c.moveToFirst();
-                                    int i = 0;
-                                    do {
-                                        rowIds[i++] = c.getLong(0);
-                                    } while (c.moveToNext());
-
-                                    new DeleteSleepTask(a, progress).execute(
-                                            rowIds, null, null);
-                                }
-                            })
-                    .setNegativeButton(getString(R.string.cancel),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(
-                                        final DialogInterface dialog,
-                                        final int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            dialog.show();
-            break;
-        case R.id.menu_item_export_all:
-            // TODO
-            break;
-        }
         return super.onOptionsItemSelected(item);
     }
 
