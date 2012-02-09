@@ -31,6 +31,9 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
 
     private static final String TAG = SleepSession.class.getSimpleName();
 
+    /** Value that marks whether or not the database row id is valid. */
+    private static final long ROW_INVALID = 0;
+
     /**
      * Path used to access sleep session both via the provider as well as the table name.
      */
@@ -239,7 +242,9 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
 
     public ContentValues toContentValues() {
         final ContentValues values = new ContentValues(11);
-        values.put(_ID, mId);
+        if (mId != ROW_INVALID) {
+            values.put(_ID, mId);
+        }
         values.put(START_TIMESTAMP, mStartTimestamp);
         values.put(END_TIMESTAMP, mEndTimestamp);
         values.put(TIMEZONE, mTimezone.getID());
