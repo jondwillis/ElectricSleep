@@ -19,7 +19,6 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.format.DateUtils;
 import android.util.AttributeSet;
 
 import com.androsz.electricsleepbeta.R;
@@ -246,11 +245,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 		rating = sleepRecord.getRating();
 
         // TODO this need to take into account timezone information.
-        xyMultipleSeriesRenderer.setChartTitle(
-            DateUtils.formatDateTime(mContext, sleepRecord.getStartTimestamp(), 0) +
-            " to " +
-            DateUtils.formatDateTime(mContext, sleepRecord.getEndTimestamp(), 0));
-		reconfigure();
+        xyMultipleSeriesRenderer.setChartTitle(sleepRecord.getTitle(mContext));
+        reconfigure();
 		repaint();
 	}
 

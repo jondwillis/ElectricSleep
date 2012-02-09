@@ -7,12 +7,14 @@ import static com.androsz.electricsleepbeta.db.ElectricSleepProvider.TimestampCo
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build;
 import android.provider.BaseColumns;
+import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -238,6 +240,22 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
 
     public TimeZone getTimeZone() {
         return mTimezone;
+    }
+
+    /**
+     * Return a title for the night of sleep similar to the form:
+     * M/D/Y HH:MM - HH:MM
+     * but of course using the user's Android settings.
+     *
+     * WARNING: timezone is not properly handled here.
+     */
+    public String getTitle(final Context context) {
+        return DateUtils.formatDateTime(context, mStartTimestamp,
+                                        DateUtils.FORMAT_ABBREV_ALL |
+                                        DateUtils.FORMAT_NUMERIC_DATE) + " " +
+            DateUtils.formatDateTime(context, mStartTimestamp, DateUtils.FORMAT_SHOW_TIME) +
+            " - " +
+            DateUtils.formatDateTime(context, mEndTimestamp, DateUtils.FORMAT_SHOW_TIME);
     }
 
     public ContentValues toContentValues() {
