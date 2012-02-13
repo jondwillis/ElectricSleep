@@ -130,20 +130,28 @@
     <style name="FiveStarRatingBar.Dark" parent="FiveStarRatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_dark</item>
     </style>
-
-    <style name="SleepMateButton.Primary" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/btn_primary</item>
+    
+    <style name="SleepMateButton.Common" parent="@android:style/Widget.Holo.Light.Button">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">8dip</item>
     </style>
 
-    <style name="SleepMateButton.Secondary" parent="@android:style/Widget.Button">
+    <style name="SleepMateButton.Primary" parent="SleepMateButton.Common">
+        <item name="android:background">@drawable/btn_primary</item>
+        <item name="android:textColor">@color/text_light</item>
+    </style>
+
+    <style name="SleepMateButton.Secondary" parent="SleepMateButton.Common">
         <item name="android:background">@drawable/btn_secondary</item>
     </style>
 
-    <style name="SleepMateButton.Primary.Chevron" parent="@android:style/Widget.Button">
+    <style name="SleepMateButton.Primary.Chevron" parent="SleepMateButton.Common">
         <item name="android:background">@drawable/btn_primary_chevron</item>
+        <item name="android:textColor">@color/text_light</item>
     </style>
 
-    <style name="SleepMateButton.Secondary.Chevron" parent="@android:style/Widget.Button">
+    <style name="SleepMateButton.Secondary.Chevron" parent="SleepMateButton.Common">
         <item name="android:background">@drawable/btn_secondary_chevron</item>
     </style>
 
