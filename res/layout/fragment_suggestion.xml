@@ -23,6 +23,7 @@
             android:layout_marginRight="1dp"
             android:layout_weight="50"
             android:background="@color/background_suggestions"
+            android:padding="0dip"
             android:drawableTop="@drawable/btn_sleep_aids"
             android:onClick="onClick"
             android:text="@string/sleep_aids" />
@@ -34,6 +35,7 @@
             android:layout_marginRight="1dp"
             android:layout_weight="50"
             android:background="@color/background_suggestions"
+            android:padding="0dip"
             android:drawableTop="@drawable/btn_advice"
             android:onClick="onClick"
             android:text="@string/advice" />
@@ -44,6 +46,7 @@
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:background="@color/background_suggestions"
+            android:padding="0dip"
             android:drawableTop="@drawable/btn_consultation"
             android:onClick="onClick"
             android:text="@string/consultation"
