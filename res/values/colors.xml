@@ -28,6 +28,11 @@
     <color name="background_suggestions">#FFCCCCCC</color>
     <color name="border_suggestions">#FFAAAAAA</color>
 
+    <!-- TODO these colors must be removed prior to release. -->
+    <color name="red">#FFFF0000</color>
+    <color name="green">#FF00FF00</color>
+    <color name="blue">#FF0000FF</color>
+
     <!-- calendar -->
     <color name="month_day_number">#ffCCCCCC</color>
     <color name="month_saturday">#ffCCCCCC</color>
