@@ -21,6 +21,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -36,6 +37,8 @@ import java.io.IOException;
 
 public class ReviewSleepActivity extends HostActivity
     implements LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
+
+    private static final String TAG = ReviewSleepActivity.class.getSimpleName();
 
     private static final int LOADER_SLEEP = 0;
 
@@ -78,6 +81,7 @@ public class ReviewSleepActivity extends HostActivity
 		}
 	}
 
+    // TODO the following is to be removed.
 	//ReviewSleepAnalysisFragment analysisFragment;
     //ReviewSleepChartFragment chartFragment;
 
@@ -92,12 +96,13 @@ public class ReviewSleepActivity extends HostActivity
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "Creating sleep fragment.");
         mSleepFragment = new ReviewSleepFragment();
         getSupportFragmentManager().beginTransaction()
             .replace(android.R.id.content, mSleepFragment)
             .commit();
 
-        /*
+        /* TODO remove the following.
         FragmentTransaction
 		setContentView(R.layout.activity_review_sleep);
 		progress = new ProgressDialog(this);
@@ -122,8 +127,9 @@ public class ReviewSleepActivity extends HostActivity
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, getIntent().getData(),
-				null, null, null, null);
+        final Uri uri = getIntent().getData();
+        Log.d(TAG, "Creating loader: " + uri);
+        return new CursorLoader(this, uri, null, null, null, null);
 	}
 
 	@Override
@@ -134,21 +140,24 @@ public class ReviewSleepActivity extends HostActivity
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+        Log.d(TAG, "Loader reset.");
 		loader.stopLoading();
 		finish();
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (data.moveToLast()) {
-			this.getIntent().setData(ContentUris.withAppendedId(SleepSession.CONTENT_URI,
-                                                                data.getLong(0)));
+        Log.d(TAG, "Load finished.");
+        if (data.moveToLast()) {
+            // WARNING - there is assumption here that the cursor's first column is its primary key.
+			getIntent().setData(ContentUris.withAppendedId(SleepSession.CONTENT_URI,
+                                                           data.getLong(0)));
             mSleepRecord = new SleepSession(data);
             mSleepFragment.setSleepRecord(mSleepRecord);
+            // TODO this is to be removed.
             //chartFragment.setSleepRecord(mSleepRecord);
 			//analysisFragment.setSleepRecord(mSleepRecord);
-
-		} else {
+        } else {
 			Toast.makeText(this,
 					"Could not display the correct Sleep record. This error has been reported.",
 					Toast.LENGTH_LONG).show();
@@ -269,19 +278,22 @@ public class ReviewSleepActivity extends HostActivity
 		}
 	}
 
-	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-		final ActionBar bar = getSupportActionBar();
-		final int selectedTab = bar.getSelectedTab().getPosition();
-		outState.putInt("selectedTab", selectedTab);
-	}
+    // TODO The following is to be removed.
+// 	@Override
+// 	protected void onSaveInstanceState(final Bundle outState) {
+// 		super.onSaveInstanceState(outState);
+// 		final ActionBar bar = getSupportActionBar();
+// 		final int selectedTab = bar.getSelectedTab().getPosition();
+// 		outState.putInt("selectedTab", selectedTab);
+// 	}
 
+    // TODO the following is to be removed.
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 
 	}
 
+    // TODO the following is to be removed.
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// ft passed here is always null... (not sure why, but its in the docs)
@@ -297,6 +309,7 @@ public class ReviewSleepActivity extends HostActivity
         */
 	}
 
+    // TODO the following is to be removed.
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
