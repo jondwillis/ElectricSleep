@@ -752,4 +752,6 @@
 	<string name="advice">Advice</string>
 	<string name="consultation">Consultation</string>
 	<string name="share">Share</string>
+	<string name="returning_users_paragraph_one">Welcome to SleepMate, powered by Zeo. SleepMate was formerly ElectricSleep, but it works the same and all your data is still in place.</string>
+	<string name="returning_users_paragraph_two">We’re continuing to make improvements and aim to provide  you with the best sleep experience.</string>
 </resources>

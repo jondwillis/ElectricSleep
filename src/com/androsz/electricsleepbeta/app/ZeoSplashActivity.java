@@ -15,65 +15,54 @@ import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
 
 public class ZeoSplashActivity extends HostActivity {
 
-	@Override
-	protected int getContentAreaLayoutId() {
-		return R.layout.activity_zeo_splash;
-	}
+    @Override
+    protected int getContentAreaLayoutId() {
+        return R.layout.activity_returning_zeo_splash;
+    }
 
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.button_get_started:
-			getStarted();
-			break;
-		}
-	}
+    public void onClick(View v) {
+        switch (v.getId()) {
+        }
+    }
 
-	@Override
-	protected void onCreate(final Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		final ActionBar bar = getSupportActionBar();
-		bar.setDisplayHomeAsUpEnabled(false);
+        final ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(false);
 
-		PreferenceManager.setDefaultValues(ZeoSplashActivity.this, R.xml.settings, false);
-		final SharedPreferences userPrefs = getSharedPreferences(
-				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
-		final int prefsVersion = userPrefs.getInt(SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
-		if (prefsVersion == 0) {
-			finishAndStartHome();
-			startActivity(new Intent(ZeoSplashActivity.this, WelcomeTutorialWizardActivity.class)
-					.putExtra("required", true));
-		} else {
-			final boolean dontShowZeoMessage = userPrefs.getBoolean(
-					SettingsActivity.PREFERENCES_KEY_DONT_SHOW_ZEO, false);
-			if (dontShowZeoMessage) {
-				finishAndStartHome();
-			}
-		}
+        PreferenceManager.setDefaultValues(ZeoSplashActivity.this,
+                R.xml.settings, false);
+        final SharedPreferences userPrefs = getSharedPreferences(
+                SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
+        final int prefsVersion = userPrefs.getInt(
+                SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
+        if (prefsVersion == 0) {
+            finishAndStartHome();
+            startActivity(new Intent(ZeoSplashActivity.this,
+                    WelcomeTutorialWizardActivity.class).putExtra("required",
+                    true));
+        } else if (prefsVersion < getResources().getInteger(
+                R.integer.prefs_version_electricsleep_renamed)) {
+            // the first time a user who used ElectricSleep before it was
+            // renamed revisits the app, this will catch them, display this
+            // activity, and then do some maintenance of
+            // preferences.
+            userPrefs
+                    .edit()
+                    .remove(SettingsActivity.PREFERENCES_KEY_DONT_SHOW_ZEO)
+                    .putInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
+                            getResources().getInteger(R.integer.prefs_version))
+                    .commit();
+        } else {
+            finishAndStartHome();
+        }
+    }
 
-		// because this layout is also used in Welcome Tutorial, where these are
-		// GONE
-		findViewById(R.id.button_get_started).setVisibility(View.VISIBLE);
-		findViewById(R.id.checkbox_dont_show_again).setVisibility(View.VISIBLE);
-	}
-
-	public void getStarted() {
-		CheckBox cbxDontShowAgain = (CheckBox) findViewById(R.id.checkbox_dont_show_again);
-		final SharedPreferences.Editor ed = getSharedPreferences(
-				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
-		ed.putBoolean(SettingsActivity.PREFERENCES_KEY_DONT_SHOW_ZEO, cbxDontShowAgain.isChecked());
-		ed.commit();
-
-		finishAndStartHome();
-	}
-
-	public void finishAndStartHome() {
-		startActivity(new Intent(ZeoSplashActivity.this, HomeActivity.class));
-		finish();
-	}
-
-	public static void learnMore(Context c) {
-		c.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.myzeo.com/mobile")));
-	}
+    public void finishAndStartHome() {
+        startActivity(new Intent(ZeoSplashActivity.this, HomeActivity.class));
+        finish();
+    }
 }

@@ -88,9 +88,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button_learn_more:
-			ZeoSplashActivity.learnMore(this);
-			break;
+		
 		}
 	}
 
@@ -161,7 +159,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 
 	private class WizardPagerAdapter extends PagerAdapter implements TitleProvider {
 
-		private String[] titles = new String[] { "Zeo", "Welcome", "How It Works" };
+		private String[] titles = new String[] { "Welcome", "How It Works" };
 
 		@Override
 		public String getTitle(int position) {
@@ -185,12 +183,9 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 			LayoutInflater inflater = getLayoutInflater();
 			switch (position) {
 			case 0:
-				instantiatedItem = inflater.inflate(R.layout.activity_zeo_splash, null);
-				break;
-			case 1:
 				instantiatedItem = inflater.inflate(R.layout.wizard_welcome_welcome, null);
 				break;
-			case 2:
+			case 1:
 				instantiatedItem = inflater.inflate(R.layout.wizard_welcome_how, null);
 				break;
 			}
