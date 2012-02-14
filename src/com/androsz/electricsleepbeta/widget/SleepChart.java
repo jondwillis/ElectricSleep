@@ -53,6 +53,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     public XYSeriesRenderer xySeriesMovementRenderer;
 
+    /** Flag that indicates sleep chart needs a clear prior to insertion of new data. */
+    private boolean mNeedsClear;
+
     private boolean mSetScroll;
     private int mBackgroundColor;
 
@@ -176,6 +179,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
                     context.getString(R.string.legend_movement));
             // WARNING - the movement must be populated with some initial data in order for this
             // view to properly render.
+            mNeedsClear = true;
             xySeriesMovement.add(0, 0);
             xySeriesMovementRenderer = new XYSeriesRenderer();
             xySeriesMovementRenderer.setFillBelowLine(true);
@@ -326,6 +330,11 @@ public class SleepChart extends GraphicalView implements Parcelable {
               " x=" + x +
               " y=" + y +
               " calibrationLevel=" + calibrationLevel);
+        if (mNeedsClear) {
+            // Erase the current data if chart needs clearing.
+            xySeriesMovement.clear();
+            mNeedsClear = false;
+        }
         if (xySeriesMovement.getItemCount() >= SleepMonitoringService.MAX_POINTS_IN_A_GRAPH) {
             xySeriesMovement.add(x, y);
             xySeriesMovement.remove(0);
