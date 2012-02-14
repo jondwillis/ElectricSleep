@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="fling_animation_duration">200</integer>
-    <integer name="prefs_version">6</integer>
+    <integer name="prefs_version">7</integer>
+    <integer name="prefs_version_electricsleep_renamed">7</integer>
 
 </resources>
