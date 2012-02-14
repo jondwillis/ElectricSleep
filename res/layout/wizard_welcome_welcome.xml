@@ -11,22 +11,31 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/welcomeTitle"
             style="@style/TextHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="@string/title_welcome" >
+            android:text="@string/title_welcome" />
+        
+        <TextView
+            style="@style/TextBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:text="@string/welcome_paragraph_one" />
 
-        </TextView>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:src="@drawable/img_phone_placement" />
 
         <TextView
             style="@style/TextBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/welcomeTitle"
-            android:text="@string/electricsleep_description" >
-        </TextView>
+            android:layout_margin="10dip"
+            android:text="@string/welcome_paragraph_two" />
     </LinearLayout>
 
 </ScrollView>
