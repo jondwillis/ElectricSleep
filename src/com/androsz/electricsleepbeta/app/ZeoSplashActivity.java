@@ -3,12 +3,10 @@ package com.androsz.electricsleepbeta.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBar;
 import android.view.View;
-import android.widget.CheckBox;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
