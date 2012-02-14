@@ -104,10 +104,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onPrepareLastSlide() {
-		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
-		textViewAlarm.setText(String.format("%.2f", lightSleepTrigger));
-		final TextView textViewScreen = (TextView) findViewById(R.id.screenResult);
-		textViewScreen.setText(isScreenBugPresent + "");
 	}
 
 	@Override

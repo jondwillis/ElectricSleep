@@ -6,11 +6,17 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        style="@style/TextBulleted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_" />
+
+    
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/when_you_are_lying_still_the_orange_line_should_be_below_the_white_line_" />
 
     <TextView
         android:id="@+id/warming_up_text"

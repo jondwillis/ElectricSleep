@@ -22,6 +22,24 @@
             android:layout_height="wrap_content"
             android:text="@string/calibrate_description_welcome" >
         </TextView>
+        <TextView
+            style="@style/TextBulleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/calibrate_description_welcome_b1" >
+        </TextView>
+        <TextView
+            style="@style/TextBulleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/calibrate_description_welcome_b2" >
+        </TextView>
+        <TextView
+            style="@style/TextBulleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/calibrate_description_welcome_b3" >
+        </TextView>
     </LinearLayout>
 
 </ScrollView>
