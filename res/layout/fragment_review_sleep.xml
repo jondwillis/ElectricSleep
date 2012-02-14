@@ -23,20 +23,27 @@
         <TableLayout
           android:layout_height="wrap_content"
           android:layout_width="match_parent"
-          android:stretchColumns="1">
+          android:stretchColumns="0">
 
-            <TableRow>
+            <TableRow android:background="@color/red">
                 <TextView
-                  android:layout_gravity="left|center_vertical"
+                  android:background="@color/green"
+                  android:layout_gravity="center_vertical"
                   android:layout_height="wrap_content"
                   android:layout_width="wrap_content"
                   android:text="@string/morning_feel" />
                 <RatingBar
+                  android:background="@color/blue"
                   android:id="@+id/morning_feel"
                   android:isIndicator="true"
-                  android:layout_gravity="center_horizontal"
+                  android:layout_gravity="center_vertical"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="0dp"
+                  android:layout_marginTop="0dp"
                   android:layout_width="wrap_content"
+                  android:padding="0dp"
+                  android:paddingBottom="0dp"
+                  android:paddingTop="0dp"
                   style="@style/FiveStarRatingBar.Light" />
             </TableRow>
 
