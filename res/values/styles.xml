@@ -14,17 +14,16 @@
     <style name="TextHeader" parent="@android:style/TextAppearance.Large">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/primary1</item>
+        <item name="android:layout_margin">8dip</item>
     </style>
 
     <style name="TextHeaderTwo" parent="@android:style/TextAppearance.Large">
-        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_light</item>
+        <item name="android:layout_margin">6dip</item>
     </style>
 
     <style name="TextBody" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textSize">15sp</item>
-        <item name="android:lineSpacingMultiplier">1.1</item>
         <item name="android:textColor">@color/text_light</item>
     </style>
 

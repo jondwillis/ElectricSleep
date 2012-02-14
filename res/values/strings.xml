@@ -756,4 +756,8 @@
 	<string name="returning_users_paragraph_two">We’re continuing to make improvements and aim to provide  you with the best sleep experience.</string>
 	<string name="welcome_paragraph_one">Place your Android device within a foot or two of you on your bed and start tracking.</string>
 	<string name="welcome_paragraph_two">SleepMate will provide analysis and insight into your sleep patterns. You can also set a SmartWake Lite alarm to help wake you up feeling more refreshed.</string>
+	<string name="welcome_how_track"><b>Track:</b> Press the Track icon and put your Android device about a foot from you on your bed to track your sleep.</string>
+	<string name="welcome_how_alarm"><b>Alarm:</b> Set a regular alarm, or try SmartWake Lite for a better morning.</string>
+	<string name="welcome_how_history"><b>History:</b> Your sleep movement graph and summary info is saved for you to review.</string>
+	<string name="welcome_how_settings">Adjust settings such as the SmartWake Lite alarm and tracking sensitivity by selecting \"Settings\" from the menu.</string>
 </resources>
