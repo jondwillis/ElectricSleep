@@ -125,12 +125,14 @@
 
     <style name="FiveStarRatingBar.Light" parent="FiveStarRatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_light</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:maxHeight">30dp</item>
     </style>
 
     <style name="FiveStarRatingBar.Dark" parent="FiveStarRatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_dark</item>
     </style>
-    
+
     <style name="SleepMateButton.Common" parent="@android:style/Widget.Holo.Light.Button">
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:gravity">center</item>
@@ -163,7 +165,7 @@
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_light</item>
         <item name="android:textColor">@color/text_dark</item>
     </style>
-    
+
     <style name="SleepChart_Dark" >
         <item name="com.androsz.electricsleepbeta:gridAxisColor">@color/sleepchart_axis</item>
         <item name="com.androsz.electricsleepbeta:movementColor">@color/sleepchart_movement_dark</item>
