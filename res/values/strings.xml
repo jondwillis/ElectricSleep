@@ -56,6 +56,7 @@
     <string name="title_sleep_switches">Sleep Switches</string>
     <string name="time_to_fall_asleep">Time to Fall Asleep</string>
     <string name="note">Note</string>
+    <string name="notes">Notes</string>
     <string name="spikes">Spikes</string>
     <string name="duration">Duration</string>
     <string name="analysis">Analysis</string>

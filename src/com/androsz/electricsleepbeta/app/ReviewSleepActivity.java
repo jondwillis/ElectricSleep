@@ -34,9 +34,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ReviewSleepActivity extends HostActivity implements
-		LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
+public class ReviewSleepActivity extends HostActivity
+    implements LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
 
+    private static final int LOADER_SLEEP = 0;
+
+    private ReviewSleepFragment mSleepFragment;
     private SleepSession mSleepRecord;
 
     private class DeleteSleepTask extends AsyncTask<Void, Void, Void> {
@@ -75,9 +78,8 @@ public class ReviewSleepActivity extends HostActivity implements
 		}
 	}
 
-	ReviewSleepAnalysisFragment analysisFragment;
-
-	ReviewSleepChartFragment chartFragment;
+	//ReviewSleepAnalysisFragment analysisFragment;
+    //ReviewSleepChartFragment chartFragment;
 
 	ProgressDialog progress;
 
@@ -89,6 +91,14 @@ public class ReviewSleepActivity extends HostActivity implements
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        mSleepFragment = new ReviewSleepFragment();
+        getSupportFragmentManager().beginTransaction()
+            .replace(android.R.id.content, mSleepFragment)
+            .commit();
+
+        /*
+        FragmentTransaction
 		setContentView(R.layout.activity_review_sleep);
 		progress = new ProgressDialog(this);
 
@@ -106,8 +116,8 @@ public class ReviewSleepActivity extends HostActivity implements
 			final int selectedTab = savedInstanceState.getInt("selectedTab");
 			bar.setSelectedNavigationItem(selectedTab);
 		}
-
-		getSupportLoaderManager().initLoader(0, null, this);
+        */
+		getSupportLoaderManager().initLoader(LOADER_SLEEP, null, this);
 	}
 
 	@Override
@@ -134,8 +144,9 @@ public class ReviewSleepActivity extends HostActivity implements
 			this.getIntent().setData(ContentUris.withAppendedId(SleepSession.CONTENT_URI,
                                                                 data.getLong(0)));
             mSleepRecord = new SleepSession(data);
-            chartFragment.setSleepRecord(mSleepRecord);
-			analysisFragment.setSleepRecord(mSleepRecord);
+            mSleepFragment.setSleepRecord(mSleepRecord);
+            //chartFragment.setSleepRecord(mSleepRecord);
+			//analysisFragment.setSleepRecord(mSleepRecord);
 
 		} else {
 			Toast.makeText(this,
@@ -275,6 +286,7 @@ public class ReviewSleepActivity extends HostActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// ft passed here is always null... (not sure why, but its in the docs)
 
+        /*
 		ft = getSupportFragmentManager().beginTransaction();
 		if (tab.getPosition() == 0) {
 			ft.replace(R.id.frags, chartFragment);
@@ -282,6 +294,7 @@ public class ReviewSleepActivity extends HostActivity implements
 			ft.replace(R.id.frags, analysisFragment);
 		}
 		ft.commit();
+        */
 	}
 
 	@Override

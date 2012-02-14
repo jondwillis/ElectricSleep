@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="8dp"
+  android:orientation="vertical" >
+
+    <LinearLayout
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:orientation="vertical">
+
+        <com.androsz.electricsleepbeta.widget.SleepChart
+          android:id="@+id/sleep_movement_chart"
+          android:layout_width="match_parent"
+          android:layout_height="200dp"
+          android:orientation="horizontal"
+          electricsleepbeta:setScroll="true"
+          style="@style/SleepChart_Light" />
+
+        <TableLayout
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:stretchColumns="1">
+
+            <TableRow>
+                <TextView
+                  android:layout_gravity="left|center_vertical"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="@string/morning_feel" />
+                <RatingBar
+                  android:id="@+id/morning_feel"
+                  android:isIndicator="true"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  style="@style/FiveStarRatingBar.Light" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="@string/sleep_efficiency" />
+                <TextView
+                  android:id="@+id/sleep_efficiency"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="@string/total_recording_time" />
+                <TextView
+                  android:id="@+id/total_recording_time"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="@string/times_disrupted" />
+                <TextView
+                  android:id="@+id/times_disrupted"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:text="@string/time_to_fall_asleep" />
+                <TextView
+                  android:id="@+id/time_to_fall_asleep"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content" />
+            </TableRow>
+        </TableLayout>
+
+
+        <TextView
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:text="@string/notes"
+          android:textStyle="bold" />
+        <TextView
+          android:id="@+id/notes"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent" />
+
+    </LinearLayout>
+
+</ScrollView>
+

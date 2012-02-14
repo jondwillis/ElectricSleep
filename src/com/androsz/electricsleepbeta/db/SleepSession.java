@@ -152,8 +152,13 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         return mDuration;
     }
 
+    @Deprecated
     public CharSequence getDurationText(final Resources res) {
         return getTimespanText(mDuration, res);
+    }
+
+    public String getEfficiency() {
+        return Integer.toString(getSleepScore());
     }
 
     public int getEndJulianDay() {
@@ -185,7 +190,12 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         return mEndTimestamp + mTimezone.getOffset(mEndTimestamp);
     }
 
+    @Deprecated
     public String getNote() {
+        return mNote;
+    }
+
+    public String getNotes() {
         return mNote;
     }
 
@@ -235,7 +245,23 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
     }
 
     public long getTimeToFallAsleep() {
-        return mFellAsleepTimestamp - getStartTimestamp();
+        if (mFellAsleepTimestamp > mStartTimestamp) {
+            return mFellAsleepTimestamp - getStartTimestamp();
+        } else {
+            return mStartTimestamp;
+        }
+    }
+
+    public CharSequence getTimeToFallAsleepText(final Resources res) {
+        return getTimespanText(getTimeToFallAsleep(), res);
+    }
+
+    public CharSequence getTotalRecordTime(final Resources res) {
+        return getTimespanText(mDuration, res);
+    }
+
+    public String getTimesDisrupted() {
+        return Integer.toString(mSpikes);
     }
 
     public TimeZone getTimeZone() {
