@@ -20,6 +20,15 @@
           electricsleepbeta:setScroll="true"
           style="@style/SleepChart_Light" />
 
+        <ImageView
+          android:gravity="fill_horizontal"
+          android:layout_height="1dip"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
+          android:layout_width="match_parent"
+          android:scaleType="fitXY"
+          android:src="@drawable/divider_horizontal_holo_light" />
+
         <TableLayout
           android:layout_height="wrap_content"
           android:layout_width="match_parent"
