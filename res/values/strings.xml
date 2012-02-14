@@ -22,25 +22,11 @@
     <string name="legend_movement">Movement</string>
     <string name="warming_up">Warming up sensors, please wait.</string>
     <string name="go_into_standy">Press your device\'s standby button</string>
-    <string name="calibrate_directions_force_screen_on"><li>
-			A bug exists on some devices that prevents the accelerometer from
-			reporting changes while the screen is off.
-		</li>
-		\n
-		<li>
-			When prompted, put your device in standby and wait up to 10
-			seconds.
-		</li>
-		\n
-		<li>
-			Your screen will be automatically turned back on. Unlock your
-			phone if necessary.
-		</li>
-		\n
-		<li>Press next to begin.</li></string>
-    <string name="calibrate_description_force_screen_on"><b>Goal:</b>
-		Make sure that Force Screen On is enabled for devices that need it.
-	</string>
+    <string name="calibrate_directions_force_screen_on"><li>			A bug exists on some devices that prevents the accelerometer from
+			reporting changes while the screen is off.</li>		\n<li>			When prompted, put your device in standby and wait up to 10
+			seconds.</li>		\n<li>			Your screen will be automatically turned back on. Unlock your
+			phone if necessary.</li>		\n<li>Press next to begin.</li></string>
+    <string name="calibrate_description_force_screen_on"><b>Goal:</b>		Make sure that Force Screen On is enabled for devices that need it.</string>
     <string name="calibrate_title_force_screen_on">Force Screen On Calibration</string>
     <string name="analysis_y_axis_values">Y Axis Values</string>
     <string name="analysis_x_axis_values">X Axis Values</string>
@@ -72,14 +58,10 @@
     <string name="how_review">Your sleep movement graph is saved for later
 		review. Analysis of sleep will be available for all records.</string>
     <string name="how_wake">Wake up! (With help of smart alarm or naturally.)</string>
-    <string name="how_sleep">
-		Place your Android device within a foot or two of you on your bed and
-		press sleep.
-		<br />
+    <string name="how_sleep">		Place your Android device within a foot or two of you on your bed and
+		press sleep.<br />
 <br />
-
-		Go to sleep!
-	</string>
+		Go to sleep!</string>
     <string name="how_configure">Configure: set an optional smart alarm, adjust
 		sensitivity of accelerometer and more.</string>
     <string name="title_report">Email Developer</string>
@@ -97,8 +79,7 @@
     <string name="account_creation">SleepMate Account Creation</string>
     <string name="skip_tutorial">Skip Tutorial</string>
     <string name="electricsleep_about">How SleepMate Works</string>
-    <string name="electricsleep_description">
-		\tSleepMate is a new way to sleep. After you
+    <string name="electricsleep_description">		\tSleepMate is a new way to sleep. After you
 		place your Android device within a foot or two of you on your
 		bed,
 		press sleep and
@@ -116,8 +97,7 @@
 		an alarm to wake you during light sleep, so you
 		wake more easily
 		than
-		with a traditional alarm.
-	</string>
+		with a traditional alarm.</string>
     <string name="title_review_sleep">Review Sleep</string>
     <string name="title_welcome">Welcome to SleepMate!</string>
     <string name="no">No</string>
@@ -176,8 +156,7 @@
     <string name="search">Search</string>
     <string name="invalid_settings">Your calibration settings are invalid. Please
 		manually configure settings or run the Calibration Wizard.</string>
-    <string name="message_recommend_calibration">
-		\n\nIt is required that you run the Calibration
+    <string name="message_recommend_calibration">		\n\nIt is required that you run the Calibration
 		Wizard or manually
 		configure your Settings now.</string>
     <string name="message_prefs_not_compatible">Your preferences are not compatible with this
@@ -191,71 +170,35 @@
     <string name="remain_still">Remain still.</string>
     <string name="calibration_failed">Calibration failed. Try again.</string>
     <string name="starting_in">Starting in 5 seconds</string>
-    <string name="calibrate_title_results">Calibration Results</string>
+    <string name="calibrate_title_results">Calibration Complete</string>
     <string name="calibrate_directions_alarm"><li>
-
-			A window will appear with a
-			            <b>graph that
+			A window will appear with a            <b>graph that
 				shows your movement</b>
-
-			, and a
-			            <b>slider that controls a white threshold line</b>
-
-			.
-		</li>
-		\n
-		<li>
-
-			Adjust the slider so that when you
-			            <b>move gently</b>
-
-			, the
-			            <b>green line goes just above the white line</b>
-
-			.
-		</li>
-		\n
-		<li>
-
-			Also ensure that when you
-			            <b>are still</b>
-
-			, the
-			            <b>green line is significantly below the white line.</b>
-        </li>
-		\n
-		<li>Press next to begin.</li></string>
-    <string name="calibrate_description_alarm"><b>Goal:</b>
-		identify the amount of
+			, and a            <b>slider that controls a white threshold line</b>
+			.</li>		\n<li>
+			Adjust the slider so that when you            <b>move gently</b>
+			, the            <b>green line goes just above the white line</b>
+			.</li>		\n<li>
+			Also ensure that when you            <b>are still</b>
+			, the            <b>green line is significantly below the white line.</b>
+        </li>		\n<li>Press next to begin.</li></string>
+    <string name="calibrate_description_alarm"><b>Goal:</b>		identify the amount of
 		movement that signifies that you are in light
-		sleep and set off alarms if enabled.
-	</string>
+		sleep and set off alarms if enabled.</string>
     <string name="calibrate_title_alarm">Calibrate Light Sleep Sensitivity</string>
-    <string name="calibrate_description_placement">
-		SleepMate uses your device\'s accelerometer to record movement
+    <string name="calibrate_description_placement">		SleepMate uses your device\'s accelerometer to record movement
 		during sleep. As such, your device must move slightly when you move
 		during the
-		night.\n\n
-		<li>
+		night.\n\n<li>
             <b>DO</b>
-
 			place your device on within a foot or two of your body on your bed,
-			couch, etc. where it will absorb vibrations as you move...
-		</li>
-		\n
-		<li>
+			couch, etc. where it will absorb vibrations as you move...</li>		\n<li>
             <b>DO NOT</b>
-
 			place your device near edges, very far your body, or
 			cover
 			it if it is
-			charging.
-		</li>
-		\n
-		<li>
-
-			At this time,
-			            <b>situate yourself and your device exactly as you would when
+			charging.</li>		\n<li>
+			At this time,            <b>situate yourself and your device exactly as you would when
 				sleeping.</b>
         </li></string>
     <string name="calibrate_title_placement">Device Placement</string>
@@ -272,7 +215,7 @@
     <string name="description_share">Share</string>
     <string name="description_export">Export</string>
     <string name="description_star">Star</string>
-	<string name="tracking">Tracking</string>
+    <string name="tracking">Tracking</string>
     <string name="track_sleep">Track Sleep</string>
     <string name="title_calibrate">Calibration</string>
     <string name="title_settings">Settings</string>
@@ -293,34 +236,10 @@
 		trigger alarm
 		to go off.</string>
     <string name="exit">Exit</string>
-    <string name="calibrate_description_welcome">
-		This wizard will calibrate SleepMate. The process takes less than
-		a
-		minute and requires that you briefly simulate your sleeping
-		conditions.\nWhy?\n
-		<li>
-
-			There are many
-			            <b>different</b>
-
-			Android devices.
-		</li>
-		\n
-		<li>
-
-			There are even more
-			            <b>places to
-				sleep.</b>
-        </li>
-		\n
-		<li>
-
-			SleepMate needs to
-			            <b>tune itself</b>
-
-			on your unique device so it can
-			            <b>function correctly.</b>
-        </li></string>
+    <string name="calibrate_description_welcome">This wizard helps you calibrate SleepMate to your unique sleeping conditions. The process takes less than a minute and is recommended because:</string>
+    <string name="calibrate_description_welcome_b1">There are many different Android devices.</string>
+    <string name="calibrate_description_welcome_b2">There are even more places to sleep.</string>
+    <string name="calibrate_description_welcome_b3">SleepMate works best when calibrated to your unique situation.</string>
     <string name="calibrating">Calibrating...</string>
     <string name="settings_description">Sleep results</string>
     <string name="search_instructions">Tap search to search for previous sleep results</string>
@@ -436,11 +355,7 @@
          Alarm Alert screen: this message is shown after an alarm rung unattended
 		for a number of minutes. It tells the user that the alarm has been silenced.
     -->
-    <string name="alarm_alert_alert_silenced">
-		Alarm silenced after
-		<xliff:g id="minutes">%d</xliff:g>
-		minutes
-	</string>
+    <string name="alarm_alert_alert_silenced">		Alarm silenced after<xliff:g id="minutes">%d</xliff:g>		minutes</string>
 
     <!-- Button labels on the alarm dialog: Snooze -->
     <string name="alarm_alert_snooze_text">Snooze</string>
@@ -449,11 +364,7 @@
          Toast that appears after Alarm is snoozed from the Alarm dialog. Says
 		the alarm will snooze for xxx minutes.
     -->
-    <string name="alarm_alert_snooze_set">
-		Snoozing for
-		<xliff:g id="minutes">%d</xliff:g>
-		minutes.
-	</string>
+    <string name="alarm_alert_snooze_set">		Snoozing for<xliff:g id="minutes">%d</xliff:g>		minutes.</string>
 
     <!--
          0: nothing 1: days 2: hours 3: days hours 4: minutes 5: days minutes
@@ -464,80 +375,32 @@
     <!-- Alarm confirmation toast: Describes how long from now until alarm fires -->
     <string-array name="alarm_set">
         <item>This alarm is set for less than 1 minute from now.</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			and
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			and
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			and
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			,
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			, and
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
+        <item>			This alarm is set for<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>			from now.</item>
+        <item>			This alarm is set for<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>			from now.</item>
+        <item>			This alarm is set for<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>			and<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>			from now.</item>
+        <item>			This alarm is set for<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>			from now.</item>
+        <item>			This alarm is set for<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>			and<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>			from now.</item>
+        <item>			This alarm is set for<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>			and<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>			from now.</item>
+        <item>			This alarm is set for<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>			,<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>			, and<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>			from now.</item>
     </string-array>
 
     <!-- Alarm confirmation toast: singular day -->
     <string name="day">"1 day"</string>
 
     <!-- Alarm confirmation toast: plural days -->
-    <string name="days">
-		"
-		<xliff:g id="days">%s</xliff:g>
-		days"
-	</string>
+    <string name="days">		"<xliff:g id="days">%s</xliff:g>		days"</string>
 
     <!-- Alarm confirmation toast: singular hour -->
     <string name="hour">1 hour</string>
 
     <!-- Alarm confirmation toast: plural hours -->
-    <string name="hours"><xliff:g id="hours">%s</xliff:g>
-		hours
-	</string>
+    <string name="hours"><xliff:g id="hours">%s</xliff:g>		hours</string>
 
     <!-- Alarm confirmation toast: singular minute -->
     <string name="minute">"1 minute"</string>
 
     <!-- Alarm confirmation toast: plural minutes -->
-    <string name="minutes">
-		"
-		<xliff:g id="minutes">%s</xliff:g>
-		minutes"
-	</string>
+    <string name="minutes">		"<xliff:g id="minutes">%s</xliff:g>		minutes"</string>
 
     <!--
          Repeat options that appear under an alarm on main Alarm Clock screen
@@ -633,16 +496,10 @@
     <string name="alarm_notify_text">Select to snooze or dismiss this alarm.</string>
 
     <!-- Text to display in the notification ticker and label -->
-    <string name="alarm_notify_snooze_label"><xliff:g id="label">%s</xliff:g>
-		(snoozed)
-	</string>
+    <string name="alarm_notify_snooze_label"><xliff:g id="label">%s</xliff:g>		(snoozed)</string>
 
     <!-- Text to display in the notification when the alarm has been snoozed -->
-    <string name="alarm_notify_snooze_text">
-		Alarm set for
-		<xliff:g id="time">%s</xliff:g>
-		. Select to cancel.
-	</string>
+    <string name="alarm_notify_snooze_text">		Alarm set for<xliff:g id="time">%s</xliff:g>		. Select to cancel.</string>
 
     <!-- Title of the setting to change the volume/camera button behavior. -->
     <string name="volume_button_setting_title">Volume and Camera</string>
@@ -680,7 +537,7 @@
 		we show nothing at all.
     -->
     <string name="weather_fetch_failure">Weather information currently unavailable.</string>
-    <string msgid="9161438664257429372" name="menu_item_dock_settings">Dock settings</string>
+    <string name="menu_item_dock_settings" msgid="9161438664257429372">Dock settings</string>
     <!-- alarmclock end -->
     <plurals name="hour">
         <item quantity="one">%d hour</item>
@@ -712,11 +569,7 @@
 		to indicate that there are two more events that we could not display because
 		of lack of room.
     -->
-    <string name="plus_N_more">
-		(plus
-		<xliff:g id="more_count">%d</xliff:g>
-		more \u2026)
-	</string>
+    <string name="plus_N_more">		(plus<xliff:g id="more_count">%d</xliff:g>		more \u2026)</string>
     <string name="sleep_dim">Your device does not support turning its screen
 		off
 		during sleep. The screen must stay on but will be dimmed.</string>
@@ -724,11 +577,7 @@
 		recommended to plug in, or elsewise enter airplane mode to conserve
 		energy.</string>
     <string name="not_bound_to_any_alarms">Not bound to any alarms.</string>
-    <string name="you_will_be_awoken_before">
-		Smart alarm will go off between
-		<xliff:g id="pre">%s</xliff:g>
-		and
-		<xliff:g id="post">%s</xliff:g></string>
+    <string name="you_will_be_awoken_before">		Smart alarm will go off between<xliff:g id="pre">%s</xliff:g>		and<xliff:g id="post">%s</xliff:g></string>
     <string name="sleep_no_alarm">No alarm has been set. SleepMate will not wake
 		you up.</string>
     <string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
@@ -746,19 +595,28 @@
     <string name="notification_screenbug_ticker">Waiting for the phone to enter standby.</string>
     <string name="welcome_to_electricsleep">Welcome to SleepMate</string>
     <string name="development_is_now_supported_by">Development of SleepMate is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
-	<string name="rate_in_market">Rate SleepMate on the Android Market</string>
-	<string name="track">Track</string>
-	<string name="alarms">Alarms</string>
-	<string name="sleep_aids">Sleep Aids</string>
-	<string name="advice">Advice</string>
-	<string name="consultation">Consultation</string>
-	<string name="share">Share</string>
-	<string name="returning_users_paragraph_one">Welcome to SleepMate, powered by Zeo. SleepMate was formerly ElectricSleep, but it works the same and all your data is still in place.</string>
-	<string name="returning_users_paragraph_two">We’re continuing to make improvements and aim to provide  you with the best sleep experience.</string>
-	<string name="welcome_paragraph_one">Place your Android device within a foot or two of you on your bed and start tracking.</string>
-	<string name="welcome_paragraph_two">SleepMate will provide analysis and insight into your sleep patterns. You can also set a SmartWake Lite alarm to help wake you up feeling more refreshed.</string>
-	<string name="welcome_how_track"><b>Track:</b> Press the Track icon and put your Android device about a foot from you on your bed to track your sleep.</string>
-	<string name="welcome_how_alarm"><b>Alarm:</b> Set a regular alarm, or try SmartWake Lite for a better morning.</string>
-	<string name="welcome_how_history"><b>History:</b> Your sleep movement graph and summary info is saved for you to review.</string>
-	<string name="welcome_how_settings">Adjust settings such as the SmartWake Lite alarm and tracking sensitivity by selecting \"Settings\" from the menu.</string>
+    <string name="rate_in_market">Rate SleepMate on the Android Market</string>
+    <string name="track">Track</string>
+    <string name="alarms">Alarms</string>
+    <string name="sleep_aids">Sleep Aids</string>
+    <string name="advice">Advice</string>
+    <string name="consultation">Consultation</string>
+    <string name="share">Share</string>
+    <string name="returning_users_paragraph_one">Welcome to SleepMate, powered by Zeo. SleepMate was formerly ElectricSleep, but it works the same and all your data is still in place.</string>
+    <string name="returning_users_paragraph_two">We’re continuing to make improvements and aim to provide  you with the best sleep experience.</string>
+    <string name="welcome_paragraph_one">Place your Android device within a foot or two of you on your bed and start tracking.</string>
+    <string name="welcome_paragraph_two">SleepMate will provide analysis and insight into your sleep patterns. You can also set a SmartWake Lite alarm to help wake you up feeling more refreshed.</string>
+    <string name="welcome_how_track"><b>Track:</b> Press the Track icon and put your Android device about a foot from you on your bed to track your sleep.</string>
+    <string name="welcome_how_alarm"><b>Alarm:</b> Set a regular alarm, or try SmartWake Lite for a better morning.</string>
+    <string name="welcome_how_history"><b>History:</b> Your sleep movement graph and summary info is saved for you to review.</string>
+    <string name="welcome_how_settings">Adjust settings such as the SmartWake Lite alarm and tracking sensitivity by selecting \"Settings\" from the menu.</string>
+    <string name="adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_">Adjust the slider so that when you move, the movement line (orange) goes just above the white calibration line.</string>
+    <string name="when_you_are_lying_still_the_orange_line_should_be_below_the_white_line_">When you are lying still, the orange line should be below the white line.</string>
+    <string name="check_your_screen_settings">Check Your Screen Settings</string>
+    <string name="some_android_devices_will_prevent_this_app_from_working_while_the_screen_is_off_">Some Android devices will prevent this app from working while the screen is off.</string>
+    <string name="to_detect_if_this_occurs_on_your_device_put_your_device_in_standby_mode_usually_by_quickly_pressing_the_power_button_">To detect if this occurs on your device, put your device in standby mode (usually by quickly pressing the power button).</string>
+    <string name="wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_">Wait up to 10 seconds for your screen to automatically turn back on. Then you may need to unlock your device to continue.</string>
+    <string name="you_have_successfully_calibrated_sleepmate_to_track_your_sleep_">You have successfully calibrated SleepMate to track your sleep.</string>
+    <string name="you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_">You may always re-calibrate if your sleep environment changes by choosing \'Calibrate\' from the menu.</string>
+
 </resources>

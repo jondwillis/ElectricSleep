@@ -166,13 +166,22 @@
         <item name="android:textColor">@color/text_dark</item>
     </style>
 
-    <style name="SleepChart_Dark" >
+    <style name="SleepChart_Dark">
         <item name="com.androsz.electricsleepbeta:gridAxisColor">@color/sleepchart_axis</item>
         <item name="com.androsz.electricsleepbeta:movementColor">@color/sleepchart_movement_dark</item>
         <item name="com.androsz.electricsleepbeta:movementBorderColor">@color/sleepchart_movement_border_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_dark</item>
         <item name="android:textColor">@color/text_light</item>
+    </style>
+
+    <style name="TextBulleted" parent="@style/TextBody">
+        <item name="android:drawableLeft">@drawable/ic_bullet</item>
+        <item name="android:drawablePadding">10dip</item>
+        <item name="android:layout_marginLeft">25dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginBottom">10dip</item>
     </style>
 
 </resources>

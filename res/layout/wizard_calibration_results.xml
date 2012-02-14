@@ -17,34 +17,21 @@
         </TextView>
 
         <TextView
-            style="@style/TextHeaderTwo"
+            style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/calibrate_title_alarm" >
+            android:text="@string/you_have_successfully_calibrated_sleepmate_to_track_your_sleep_"
+            android:layout_margin="10dip" >
         </TextView>
 
         <TextView
-            android:id="@+id/alarmResult"
             style="@style/TextBody"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dip" >
-        </TextView>
-
-        <TextView
-            style="@style/TextHeaderTwo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/calibrate_title_force_screen_on" >
+            android:text="@string/you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_"
+            android:layout_margin="10dip" >
         </TextView>
 
-        <TextView
-            android:id="@+id/screenResult"
-            style="@style/TextBody"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="12dip" >
-        </TextView>
     </LinearLayout>
 
 </ScrollView>
