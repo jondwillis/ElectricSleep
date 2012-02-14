@@ -20,6 +20,7 @@ import android.graphics.Paint.Align;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
@@ -29,6 +30,8 @@ import com.androsz.electricsleepbeta.util.MathUtils;
 import com.androsz.electricsleepbeta.util.PointD;
 
 public class SleepChart extends GraphicalView implements Parcelable {
+
+    private static final String TAG = SleepChart.class.getSimpleName();
 
     Context mContext;
 
@@ -66,6 +69,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
     public SleepChart(final Context context, final AttributeSet attrs,
             int defStyle) {
         super(context, attrs);
+
+        Log.d(TAG, "Building sleep chart.");
 
         mContext = context;
 
@@ -161,12 +166,17 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     @Override
     protected AbstractChart buildChart() {
+        Log.d(TAG, "Attempting to build chart.");
         if (xySeriesMovement == null) {
+            Log.d(TAG, "xySeriesMovement was null.");
             Context context = getContext();
 
             // set up sleep movement series/renderer
             xySeriesMovement = new XYSeries(
                     context.getString(R.string.legend_movement));
+            // WARNING - the movement must be populated with some initial data in order for this
+            // view to properly render.
+            xySeriesMovement.add(0, 0);
             xySeriesMovementRenderer = new XYSeriesRenderer();
             xySeriesMovementRenderer.setFillBelowLine(true);
             xySeriesMovementRenderer.setLineWidth(3);
@@ -219,13 +229,19 @@ public class SleepChart extends GraphicalView implements Parcelable {
             // duration increased.
             mAxisFormat = "h:mm";
             mChart.setDateFormat(mAxisFormat);
+            Log.d(TAG, "Returning built chart.");
             return mChart;
+        } else {
+            Log.w(TAG, "xySeriesMovement was NOT null.");
         }
+
+        Log.d(TAG, "Returning null.");
         return null;
     }
 
     @Override
     public int describeContents() {
+        Log.d(TAG, "Describing contents as 0.");
         return 0;
     }
 
@@ -234,11 +250,13 @@ public class SleepChart extends GraphicalView implements Parcelable {
     }
 
     public boolean makesSenseToDisplay() {
+        Log.d(TAG, "Make sense to display is: " + (xySeriesMovement.getItemCount() > 1));
         return xySeriesMovement.getItemCount() > 1;
     }
 
     public void reconfigure() {
         if (makesSenseToDisplay()) {
+            Log.d(TAG, "Executing reconfigure after it made sense to display.");
             final double firstX = xySeriesMovement.getX(0);
             final double lastX = xySeriesMovement.getX(xySeriesMovement
                     .getItemCount() - 1);
@@ -282,7 +300,10 @@ public class SleepChart extends GraphicalView implements Parcelable {
             xyMultipleSeriesRenderer.setYAxisMin(0);
             xyMultipleSeriesRenderer
                     .setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
+        } else {
+            Log.w(TAG, "Asked to reconfigure but it did not make sense to display.");
         }
+
     }
 
     public void setCalibrationLevel(final double calibrationLevel) {
@@ -293,13 +314,18 @@ public class SleepChart extends GraphicalView implements Parcelable {
         mSetScroll = scroll;
     }
 
-    public void sync(final Cursor cursor) throws StreamCorruptedException,
-            IllegalArgumentException, IOException, ClassNotFoundException {
+    public void sync(final Cursor cursor)
+        throws StreamCorruptedException, IllegalArgumentException,
+               IOException, ClassNotFoundException {
+        Log.d(TAG, "Attempting to sync with cursor: " + cursor);
         sync(new SleepSession(cursor));
     }
 
-    public void sync(final Double x, final Double y,
-            final double calibrationLevel) {
+    public void sync(final Double x, final Double y, final double calibrationLevel) {
+        Log.d(TAG, "Attempting to sync with values: " +
+              " x=" + x +
+              " y=" + y +
+              " calibrationLevel=" + calibrationLevel);
         if (xySeriesMovement.getItemCount() >= SleepMonitoringService.MAX_POINTS_IN_A_GRAPH) {
             xySeriesMovement.add(x, y);
             xySeriesMovement.remove(0);
@@ -311,6 +337,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
     }
 
     public void sync(final SleepSession sleepRecord) {
+        Log.d(TAG, "Attempting to sync with sleep record: " + sleepRecord);
         xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.getData()));
         calibrationLevel = sleepRecord.getCalibrationLevel();
 
@@ -324,6 +351,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        Log.d(TAG, "Writing sleep chart to parcel.");
         dest.writeSerializable(xyMultipleSeriesDataset);
         dest.writeSerializable(xyMultipleSeriesRenderer);
         dest.writeSerializable(xySeriesMovement);
@@ -335,6 +363,7 @@ public class SleepChart extends GraphicalView implements Parcelable {
     }
 
     public void clear() {
+        Log.d(TAG, "Clearing sleep chart.");
         xySeriesMovement.clear();
         xySeriesCalibration.clear();
     }
