@@ -125,6 +125,8 @@
 
     <style name="FiveStarRatingBar.Light" parent="FiveStarRatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_light</item>
+        <item name="android:minHeight">30dp</item>
+        <item name="android:maxHeight">30dp</item>
     </style>
 
     <style name="FiveStarRatingBar.Dark" parent="FiveStarRatingBar">

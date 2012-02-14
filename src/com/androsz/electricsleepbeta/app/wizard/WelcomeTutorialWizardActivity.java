@@ -20,7 +20,6 @@ import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
-import com.androsz.electricsleepbeta.app.ZeoSplashActivity;
 import com.viewpagerindicator.TitleProvider;
 
 public class WelcomeTutorialWizardActivity extends WizardActivity {
@@ -88,7 +87,7 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		
+
 		}
 	}
 
