@@ -1,0 +1,71 @@
+<TableLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:stretchColumns="0">
+
+    <TableRow>
+        <TextView
+          android:layout_gravity="center_vertical"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="@string/morning_feel" />
+        <RatingBar
+          android:id="@+id/morning_feel"
+          android:isIndicator="true"
+          android:layout_gravity="center_vertical"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="0dp"
+          android:layout_marginTop="0dp"
+          android:layout_width="wrap_content"
+          android:numStars="5"
+          android:padding="0dp"
+          android:paddingBottom="0dp"
+          android:paddingTop="0dp"
+          style="@style/FiveStarRatingBar.Light" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="@string/sleep_efficiency" />
+        <TextView
+          android:id="@+id/sleep_efficiency"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content" />
+    </TableRow>
+
+    <TableRow android:layout_marginTop="8dp">
+        <TextView
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="@string/total_recording_time" />
+        <TextView
+          android:id="@+id/total_recording_time"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content" />
+    </TableRow>
+
+    <TableRow android:layout_marginTop="8dp">
+        <TextView
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="@string/times_disrupted" />
+        <TextView
+          android:id="@+id/times_disrupted"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content" />
+    </TableRow>
+
+    <TableRow android:layout_marginTop="8dp">
+        <TextView
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="@string/time_to_fall_asleep" />
+        <TextView
+          android:id="@+id/time_to_fall_asleep"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content" />
+    </TableRow>
+</TableLayout>

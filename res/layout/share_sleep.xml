@@ -2,10 +2,35 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:electricsleep="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
-  android:id="@+id/frags"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical">
+
+    <TextView
+      android:background="@color/actionbar_background"
+      android:drawableLeft="@drawable/logo_white"
+      android:drawablePadding="15dp"
+      android:gravity="center_vertical"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+      android:layout_width="fill_parent"
+      android:padding="5dp"
+      android:paddingLeft="10dp"
+      android:text="@string/app_name"
+      android:textColor="@color/actionbar_text_light"
+      android:textSize="24sp"
+      />
+
+    <TextView
+      android:background="@color/background_dark"
+      android:gravity="center"
+      android:id="@+id/share_date"
+      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:padding="8dp"
+      android:textColor="@color/actionbar_text_light"
+      android:textSize="20sp"
+      />
 
     <com.androsz.electricsleepbeta.widget.SleepChart
         android:id="@+id/sleep_movement_chart"
@@ -13,40 +38,37 @@
         android:layout_width="800dp"
         android:orientation="horizontal"
         android:padding="8dip"
-        electricsleep:setScroll="false" 
+        electricsleep:setScroll="false"
         style="@style/SleepChart_Light"/>
 
-    <TableLayout
-      android:layout_height="wrap_content"
+    <ImageView
+      android:gravity="fill_horizontal"
+      android:layout_height="1dip"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="8dp"
       android:layout_width="match_parent"
-      android:stretchColumns="1">
-        <TableRow>
-            <TextView
-              android:layout_gravity="left|center_vertical"
-              android:layout_height="wrap_content"
-              android:layout_width="wrap_content"
-              android:text="@string/morning_feel" />
-            <RatingBar
-              android:id="@+id/morning_feel"
-              android:isIndicator="true"
-              android:layout_gravity="right|center_vertical"
-              android:layout_height="wrap_content"
-              android:layout_width="wrap_content"
-              style="@style/FiveStarRatingBar.Light" />
-        </TableRow>
-        <TableRow>
-            <TextView
-              android:layout_gravity="left|center_vertical"
-              android:layout_height="wrap_content"
-              android:layout_width="wrap_content"
-              android:text="@string/sleep_efficiency" />
-            <TextView
-              android:id="@+id/sleep_efficiency"
-              android:layout_gravity="right|center_vertical"
-              android:layout_height="wrap_content"
-              android:layout_width="wrap_content" />
-        </TableRow>
-    </TableLayout>
+      android:scaleType="fitXY"
+      android:src="@drawable/divider_horizontal_holo_light" />
+
+    <include layout="@layout/table_sleep_stats" />
+
+    <ImageView
+      android:gravity="fill_horizontal"
+      android:layout_height="1dip"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_width="match_parent"
+      android:scaleType="fitXY"
+      android:src="@drawable/divider_horizontal_holo_light" />
+
+    <ImageView
+      android:gravity="fill_horizontal"
+      android:layout_height="1dip"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_width="match_parent"
+      android:scaleType="fitXY"
+      android:src="@drawable/divider_horizontal_holo_light" />
 
     <TextView
       android:layout_height="wrap_content"
