@@ -148,6 +148,21 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         return mData;
     }
 
+    /**
+     * Return annotation of date / time text such as:
+     * Thu, Jan 14
+     *
+     * WARNING: the following does not follow the 6pm to 6am convention.
+     */
+    public String getDayText(final Context context) {
+        // TODO The following must follow the 6pm to 6am rule.
+        return DateUtils.formatDateTime(context,
+                                        mStartTimestamp,
+                                        DateUtils.FORMAT_SHOW_WEEKDAY |
+                                        DateUtils.FORMAT_SHOW_DATE |
+                                        DateUtils.FORMAT_ABBREV_ALL);
+    }
+
     public long getDuration() {
         return mDuration;
     }
