@@ -8,9 +8,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
-import android.support.v4.app.ActionBar.Tab;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -22,7 +19,7 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class ReviewSleepActivity extends HostActivity
-    implements LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
+    implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = ReviewSleepActivity.class.getSimpleName();
 
@@ -67,10 +64,6 @@ public class ReviewSleepActivity extends HostActivity
 		}
 	}
 
-    // TODO the following is to be removed.
-	//ReviewSleepAnalysisFragment analysisFragment;
-    //ReviewSleepChartFragment chartFragment;
-
 	ProgressDialog progress;
 
 	@Override
@@ -87,27 +80,6 @@ public class ReviewSleepActivity extends HostActivity
         getSupportFragmentManager().beginTransaction()
             .replace(android.R.id.content, mSleepFragment)
             .commit();
-
-        /* TODO remove the following.
-        FragmentTransaction
-		setContentView(R.layout.activity_review_sleep);
-		progress = new ProgressDialog(this);
-
-		chartFragment = new ReviewSleepChartFragment();
-		analysisFragment = new ReviewSleepAnalysisFragment();
-
-		final ActionBar bar = getSupportActionBar();
-		bar.addTab(bar.newTab().setText(R.string.sleep_chart).setTabListener(this));
-		bar.addTab(bar.newTab().setText(R.string.analysis).setTabListener(this));
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		// If selectedTab is not saved to the savedInstanceState,
-		// 0 is returned by default.
-		if (savedInstanceState != null) {
-			final int selectedTab = savedInstanceState.getInt("selectedTab");
-			bar.setSelectedNavigationItem(selectedTab);
-		}
-        */
 		getSupportLoaderManager().initLoader(LOADER_SLEEP, null, this);
 	}
 
@@ -134,9 +106,6 @@ public class ReviewSleepActivity extends HostActivity
                                                            data.getLong(0)));
             mSleepRecord = new SleepSession(data);
             mSleepFragment.setSleepRecord(mSleepRecord);
-            // TODO this is to be removed.
-            //chartFragment.setSleepRecord(mSleepRecord);
-			//analysisFragment.setSleepRecord(mSleepRecord);
         } else {
 			Toast.makeText(this,
 					"Could not display the correct Sleep record. This error has been reported.",
@@ -178,41 +147,5 @@ public class ReviewSleepActivity extends HostActivity
 		if (progress != null && progress.isShowing()) {
 			progress.dismiss();
 		}
-	}
-
-    // TODO The following is to be removed.
-// 	@Override
-// 	protected void onSaveInstanceState(final Bundle outState) {
-// 		super.onSaveInstanceState(outState);
-// 		final ActionBar bar = getSupportActionBar();
-// 		final int selectedTab = bar.getSelectedTab().getPosition();
-// 		outState.putInt("selectedTab", selectedTab);
-// 	}
-
-    // TODO the following is to be removed.
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-
-	}
-
-    // TODO the following is to be removed.
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// ft passed here is always null... (not sure why, but its in the docs)
-
-        /*
-		ft = getSupportFragmentManager().beginTransaction();
-		if (tab.getPosition() == 0) {
-			ft.replace(R.id.frags, chartFragment);
-		} else {
-			ft.replace(R.id.frags, analysisFragment);
-		}
-		ft.commit();
-        */
-	}
-
-    // TODO the following is to be removed.
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
 }
