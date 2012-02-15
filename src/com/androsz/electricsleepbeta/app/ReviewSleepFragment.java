@@ -157,14 +157,14 @@ public class ReviewSleepFragment extends Fragment {
                         .setText(mSleepRecord.getTimeToFallAsleepText(
                                      getActivity().getResources()));
 
-                    view.setLayoutParams(new LinearLayout.LayoutParams(800, 800));
+                    view.setLayoutParams(new LinearLayout.LayoutParams(600, 900));
 
                     // Begin process of drawing night sharing to bitmap.
                     view.measure(
-                        View.MeasureSpec.makeMeasureSpec(800, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(800, View.MeasureSpec.EXACTLY));
-                    view.layout(0, 0, 800, 800);
-                    //view.setBackgroundColor(getResources().getColor(R.color.share_background));
+                        View.MeasureSpec.makeMeasureSpec(600, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(900, View.MeasureSpec.EXACTLY));
+                    view.layout(0, 0, 600, 900);
+                    view.setBackgroundColor(getResources().getColor(R.color.background_light));
                     Bitmap bitmap =
                         Bitmap.createBitmap(view.getWidth(), view.getHeight(),
                                             Bitmap.Config.ARGB_8888);
@@ -209,6 +209,5 @@ public class ReviewSleepFragment extends Fragment {
 
 		mSleepRecord = sleepRecord;
     }
-
 }
 
