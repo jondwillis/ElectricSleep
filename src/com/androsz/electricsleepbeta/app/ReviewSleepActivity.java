@@ -4,36 +4,22 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActionBar;
 import android.support.v4.app.ActionBar.Tab;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
-import com.androsz.electricsleepbeta.widget.SleepChart;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ReviewSleepActivity extends HostActivity
     implements LoaderManager.LoaderCallbacks<Cursor>, ActionBar.TabListener {
@@ -133,12 +119,6 @@ public class ReviewSleepActivity extends HostActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_review_sleep, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
         Log.d(TAG, "Loader reset.");
 		loader.stopLoading();
@@ -187,84 +167,6 @@ public class ReviewSleepActivity extends HostActivity
 							});
 			dialog.show();
 			break;
-		case R.id.menu_item_share_sleep_record:
-            if (mSleepRecord == null) {
-                // Emit error if user attempts to share when no record is loaded.
-                Toast.makeText(this,
-                               R.string.unfortunately_no_sleep_record_was_available_for_sharing,
-                               Toast.LENGTH_SHORT).show();
-                return true;
-            }
-
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            final String dateString =
-                DateUtils.formatDateTime(this,
-                                         mSleepRecord.getStartTimestamp(),
-                                         DateUtils.FORMAT_NO_YEAR |
-                                         DateUtils.FORMAT_SHOW_DATE |
-                                         DateUtils.FORMAT_ABBREV_ALL);
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.see_how_i_slept_on) +
-                            " " + dateString);
-            StringBuilder builder = new StringBuilder();
-            builder.append(getString(R.string.see_how_i_slept_on) + " " + dateString + ".\n");
-            builder.append(getString(R.string.try_out_zeo));
-            intent.putExtra(Intent.EXTRA_TEXT, builder.toString());
-            intent.setType("text/plain");
-            try {
-                final String filename = "zeo_actigraphy_detail.png";
-                File screenshotFile;
-                String storageState = Environment.getExternalStorageState();
-                if (Environment.MEDIA_MOUNTED.equals(storageState) &&
-                    !Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState)) {
-                    // We only attempt to use external storage if its mounted and NOT read only as
-                    // we must write our screenshots there.
-                    File screenshotDirectory =
-                        new File(Environment.getExternalStorageDirectory(),
-                                 "/Android/data/com.androsz.electricsleepbeta/tmp/");
-                    screenshotDirectory.mkdirs();
-                    // Attempt to store the night detail screenshot on the SD card if possible.
-                    screenshotFile = new File(screenshotDirectory, filename);
-                    FileOutputStream os = new FileOutputStream(screenshotFile);
-                    // Inflate the layout used for sharing night details with others.
-                    LayoutInflater inflater = getLayoutInflater();
-                    View shareView = inflater.inflate(R.layout.share_sleep, null);
-                    SleepChart chart =
-                        (SleepChart) shareView.findViewById(R.id.sleep_movement_chart);
-                    chart.sync(mSleepRecord);
-                    shareView.setLayoutParams(
-                        new LinearLayout.LayoutParams(800, 800));
-                    //shareView.setMinimumHeight(800);
-
-                    // Begin process of drawing night sharing to bitmap.
-                    shareView.measure(
-                        View.MeasureSpec.makeMeasureSpec(800, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(800, View.MeasureSpec.EXACTLY));
-                    shareView.layout(0, 0, 800, 800);
-                    //shareView.setBackgroundColor(getResources().getColor(R.color.share_background));
-                    Bitmap bitmap =
-                        Bitmap.createBitmap(shareView.getWidth(), shareView.getHeight(),
-                                            Bitmap.Config.ARGB_8888);
-                    shareView.draw(new Canvas(bitmap));
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-                    os.close();
-                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(screenshotFile));
-                    intent.setType("image/png");
-                } else {
-                    // Warn user that sharing with other apps is not possible without external
-                    // storage.
-                    Toast.makeText(this,
-                                   R.string.i_am_sorry_but_cannot_share_zeo_sleep_without_sdcard,
-                                   Toast.LENGTH_LONG).show();
-                    return true;
-                }
-            } catch (IOException e) {
-                Toast.makeText(
-                    this,
-                    R.string.oops_there_was_error_while_generating_image_for_sharing,
-                    Toast.LENGTH_LONG).show();
-            }
-            startActivity(Intent.createChooser(intent, "Share Night of Sleep"));
-            return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
