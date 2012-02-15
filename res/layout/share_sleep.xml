@@ -29,50 +29,49 @@
       android:layout_width="fill_parent"
       android:padding="8dp"
       android:textColor="@color/actionbar_text_light"
-      android:textSize="20sp"
+      android:textSize="16sp"
       />
 
-    <com.androsz.electricsleepbeta.widget.SleepChart
-        android:id="@+id/sleep_movement_chart"
-        android:layout_height="300dp"
-        android:layout_width="800dp"
-        android:orientation="horizontal"
-        android:padding="8dip"
-        electricsleep:setScroll="false"
-        style="@style/SleepChart_Light"/>
 
-    <ImageView
-      android:gravity="fill_horizontal"
-      android:layout_height="1dip"
-      android:layout_marginBottom="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_width="match_parent"
-      android:scaleType="fitXY"
-      android:src="@drawable/divider_horizontal_holo_light" />
-
-    <include layout="@layout/table_sleep_stats" />
-
-    <ImageView
-      android:gravity="fill_horizontal"
-      android:layout_height="1dip"
-      android:layout_marginBottom="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_width="match_parent"
-      android:scaleType="fitXY"
-      android:src="@drawable/divider_horizontal_holo_light" />
-
-    <ImageView
-      android:gravity="fill_horizontal"
-      android:layout_height="1dip"
-      android:layout_marginBottom="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_width="match_parent"
-      android:scaleType="fitXY"
-      android:src="@drawable/divider_horizontal_holo_light" />
-
-    <TextView
+    <LinearLayout
       android:layout_height="wrap_content"
       android:layout_width="wrap_content"
-      android:text="@string/try_out_zeo" />
+      android:orientation="vertical"
+      android:padding="8dp">
+
+        <com.androsz.electricsleepbeta.widget.SleepChart
+          android:id="@+id/sleep_movement_chart"
+          android:layout_height="300dp"
+          android:layout_width="800dp"
+          android:orientation="horizontal"
+          electricsleep:setScroll="false"
+          style="@style/SleepChart_Light"/>
+
+
+        <ImageView
+          android:gravity="fill_horizontal"
+          android:layout_height="1dip"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
+          android:layout_width="match_parent"
+          android:scaleType="fitXY"
+          android:src="@drawable/divider_horizontal_holo_light" />
+
+        <include layout="@layout/table_sleep_stats" />
+
+        <ImageView
+          android:gravity="fill_horizontal"
+          android:layout_height="1dip"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
+          android:layout_width="match_parent"
+          android:scaleType="fitXY"
+          android:src="@drawable/divider_horizontal_holo_light" />
+
+        <TextView
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="@string/try_out_zeo" />
+    </LinearLayout>
 
 </LinearLayout>
