@@ -171,8 +171,8 @@ public class SleepActivity extends HostActivity {
         }
     };
 
-    private Button buttonSleepDim;
-    private Button buttonSleepPluggedIn;
+    private TextView buttonSleepDim;
+    private TextView buttonSleepPluggedIn;
     private TextView textAlarmStatus;
     private TextView textAlarmStatusSub;
 
@@ -302,8 +302,8 @@ public class SleepActivity extends HostActivity {
         sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
         textAlarmStatus = (TextView) findViewById(R.id.text_alarm_status);
         textAlarmStatusSub = (TextView) findViewById(R.id.text_alarm_status_sub);
-        buttonSleepDim = (Button) findViewById(R.id.text_sleep_dim);
-        buttonSleepPluggedIn = (Button) findViewById(R.id.text_sleep_plugged_in);
+        buttonSleepDim = (TextView) findViewById(R.id.text_sleep_dim);
+        buttonSleepPluggedIn = (TextView) findViewById(R.id.text_sleep_plugged_in);
 
         registerReceiver(airplaneModeChangedReceiver, new IntentFilter(
                 Intent.ACTION_AIRPLANE_MODE_CHANGED));

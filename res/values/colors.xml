@@ -27,7 +27,7 @@
     <color name="sleepchart_movement_border_light">#88f45600</color>
     <color name="background_suggestions">#FFCCCCCC</color>
     <color name="border_suggestions">#FFAAAAAA</color>
-
+	<color name="warning_tint">#FF8888FF</color>
     <!-- TODO these colors must be removed prior to release. -->
     <color name="red">#FFFF0000</color>
     <color name="green">#FF00FF00</color>

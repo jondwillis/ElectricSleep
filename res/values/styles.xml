@@ -71,7 +71,6 @@
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
-        <item name="actionBarTabStyle">@style/ZeoActionBarTabStyle</item>
         <item name="actionBarTabBarStyle">@style/ZeoActionBarTabBarStyle</item>
         <item name="actionBarTabTextStyle">@style/ZeoActionBarTabTextStyle</item>
         <item name="actionMenuTextColor">@color/actionbar_text_light</item>
@@ -88,17 +87,12 @@
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
-        <item name="actionBarTabStyle">@style/ZeoActionBarTabStyle</item>
         <item name="actionBarTabBarStyle">@style/ZeoActionBarTabBarStyle</item>
         <item name="actionBarTabTextStyle">@style/ZeoActionBarTabTextStyle</item>
         <item name="actionMenuTextColor">@color/actionbar_text_light</item>
         <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
         <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
         <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
-    </style>
-
-    <style name="ZeoActionBarTabStyle" parent="Widget.Sherlock.ActionBar.TabView">
-        <item name="android:background">@drawable/zeo_tab_indicator_holo</item>
     </style>
 
     <style name="ZeoActionBarTabBarStyle" parent="@style/Widget.Sherlock.ActionBar.TabBar">
@@ -148,15 +142,6 @@
         <item name="android:background">@drawable/btn_secondary</item>
     </style>
 
-    <style name="SleepMateButton.Primary.Chevron" parent="SleepMateButton.Common">
-        <item name="android:background">@drawable/btn_primary_chevron</item>
-        <item name="android:textColor">@color/text_light</item>
-    </style>
-
-    <style name="SleepMateButton.Secondary.Chevron" parent="SleepMateButton.Common">
-        <item name="android:background">@drawable/btn_secondary_chevron</item>
-    </style>
-
     <style name="SleepChart_Light">
         <item name="com.androsz.electricsleepbeta:gridAxisColor">@color/sleepchart_axis</item>
         <item name="com.androsz.electricsleepbeta:movementColor">@color/sleepchart_movement_light</item>
@@ -195,6 +180,13 @@
         <item name="android:padding">10dip</item>
         <item name="android:paddingLeft">25dip</item>
         <item name="android:paddingRight">25dip</item>
+    </style>
+
+    <style name="WarningButton">
+        <item name="com.androsz.electricsleepbeta:porterDuffTint">@color/warning_tint</item>
+        <item name="android:drawableLeft">@drawable/ic_unplugged_bang</item>
+        <item name="android:drawablePadding">10dip</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
     </style>
 
 </resources>
