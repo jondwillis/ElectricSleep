@@ -53,42 +53,37 @@
 
     <com.androsz.electricsleepbeta.widget.SleepChart
         android:id="@+id/sleep_movement_chart"
+        style="@style/SleepChart_Dark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="4dip"
         android:animateLayoutChanges="true"
-        android:visibility="gone"
         electricsleepbeta:setScroll="true"
-        style="@style/SleepChart_Dark" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/wait_for_sleep_data"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/wait_for_sleep_data"
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/TrackingProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_gravity="center"
+            android:indeterminate="true" >
+        </ProgressBar>
 
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" >
-            </ProgressBar>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dialog_wait_for_sleep_data_message" >
-            </TextView>
-        </LinearLayout>
+        <TextView
+            style="@style/TextBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/currently_tracking_sleep_activity_" >
+        </TextView>
     </LinearLayout>
 
 </LinearLayout>

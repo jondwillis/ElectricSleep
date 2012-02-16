@@ -184,4 +184,8 @@
         <item name="android:layout_marginBottom">10dip</item>
     </style>
 
+    <style name="TrackingProgressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/tracking_indeterminate_progressbar</item>
+    </style>
+
 </resources>
