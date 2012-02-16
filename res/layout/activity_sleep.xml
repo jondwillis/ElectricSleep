@@ -16,23 +16,13 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/text_sleep_no_alarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:animateLayoutChanges="true"
-            android:drawableLeft="@drawable/exclamation"
-            android:gravity="left"
-            android:padding="5dp"
-            android:text="@string/sleep_no_alarm" />
-
-        <Button
             android:id="@+id/text_sleep_plugged_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
             android:animateLayoutChanges="true"
             android:drawableLeft="@drawable/exclamation"
+            android:background="@null"
             android:gravity="left"
             android:padding="5dp"
             android:text="@string/sleep_plugged_in" />
@@ -110,7 +100,8 @@
         android:id="@+id/wait_for_sleep_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <ProgressBar
@@ -119,16 +110,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminate="true" >
-        </ProgressBar>
+            android:indeterminate="true" />
 
         <TextView
             style="@style/TextBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/currently_tracking_sleep_activity_" >
-        </TextView>
+            android:text="@string/currently_tracking_sleep_activity_" />
     </LinearLayout>
+
+    <com.androsz.electricsleepbeta.widget.SleepChart
+        android:id="@+id/sleep_movement_chart"
+        style="@style/SleepChart_Dark"
+        android:layout_width="match_parent"
+        android:layout_height="250dip"
+        android:layout_gravity="bottom"
+        android:layout_margin="4dip"
+        android:animateLayoutChanges="true"
+        electricsleepbeta:setScroll="false"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/button_tracking_stop"

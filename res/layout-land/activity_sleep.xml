@@ -3,32 +3,21 @@
     xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:weightSum="5" >
 
     <ScrollView
         android:id="@+id/sleep_landscape_warnings"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
+        android:layout_gravity="top|left"
         android:layout_weight="2"
         android:padding="4dip" >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/text_sleep_no_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:animateLayoutChanges="true"
-                android:drawableLeft="@drawable/exclamation"
-                android:gravity="left"
-                android:padding="5dp"
-                android:text="@string/sleep_no_alarm" />
-
             <Button
                 android:id="@+id/text_sleep_plugged_in"
                 android:layout_width="wrap_content"
@@ -55,7 +44,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1" >
 
         <LinearLayout
             android:id="@+id/layout_alarm_status"
@@ -108,6 +99,7 @@
             android:layout_height="400dip"
             android:layout_gravity="bottom"
             android:layout_margin="4dip"
+            android:layout_weight="1"
             android:animateLayoutChanges="true"
             electricsleepbeta:setScroll="true"
             android:visibility="gone" />

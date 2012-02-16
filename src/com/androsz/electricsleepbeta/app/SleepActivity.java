@@ -106,85 +106,75 @@ public class SleepActivity extends HostActivity {
             final boolean forceScreenOn = intent.getBooleanExtra(
                     StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, false);
 
-            // Shows the bound to alarm toast if useAlarm is enabled
-            if (useAlarm) {
-                new AsyncTask<Void, Void, String[]>() {
-                    @Override
-                    protected String[] doInBackground(Void... params) {
-                        String[] result = null;
-                        final Alarm alarm = Alarms.calculateNextAlert(context);
-                        // try {
-                        if (alarm != null) {
-                            final Calendar alarmTime = Calendar.getInstance();
-                            alarmTime.setTimeInMillis(alarm.time);
+            new AsyncTask<Void, Void, String[]>() {
+                @Override
+                protected String[] doInBackground(Void... params) {
+                    String[] result = null;
+                    final Alarm alarm = Alarms.calculateNextAlert(context);
+                    if (alarm != null) {
+                        final Calendar alarmTime = Calendar.getInstance();
+                        alarmTime.setTimeInMillis(alarm.time);
 
-                            java.text.DateFormat df = DateFormat
-                                    .getDateFormat(context);
-                            df = DateFormat.getTimeFormat(context);
-                            final String dateTime = df.format(alarmTime
-                                    .getTime());
-                            final int alarmWindow = intent.getIntExtra(
-                                    StartSleepReceiver.EXTRA_ALARM_WINDOW, 30);
-                            alarmTime.add(Calendar.MINUTE, -1 * alarmWindow);
-                            final String dateTimePre = df.format(alarmTime
-                                    .getTime());
-                            result = new String[] { dateTimePre, dateTime };
+                        java.text.DateFormat df = DateFormat
+                                .getDateFormat(context);
+                        df = DateFormat.getTimeFormat(context);
+                        final String dateTime = df.format(alarmTime.getTime());
+                        final int alarmWindow = intent.getIntExtra(
+                                StartSleepReceiver.EXTRA_ALARM_WINDOW, 30);
+                        alarmTime.add(Calendar.MINUTE, -1 * alarmWindow);
+                        final String dateTimePre = df.format(alarmTime
+                                .getTime());
+                        result = new String[] { dateTimePre, dateTime };
+                    }
+                    return result;
+                }
+
+                @Override
+                protected void onPostExecute(String[] result) {
+                    if (result != null) {
+
+                        // Shows the bound to alarm toast if useAlarm is enabled
+                        if (useAlarm) {
+                            textAlarmStatus.setText(context.getString(
+                                    R.string.alarm_status_range, result[0],
+                                    result[1]));
+                        } else {
+                            textAlarmStatus.setText(result[0]);
                         }
-                        // } catch (final Exception e) {
-                        // Log.d(TAG, "");
-                        // }
-                        return result;
+                        textAlarmStatusSub.setVisibility(View.GONE);
+                    } else {
+                        textAlarmStatus.setText(getString(R.string.no_alarm));
+                        textAlarmStatusSub.setVisibility(View.GONE);
+                    }
+                    // dims the screen while in this activity and
+                    // forceScreenOn is
+                    // enabled
+                    if (forceScreenOn) {
+                        buttonSleepDim.setVisibility(View.VISIBLE);
+
+                        cancelDimScreenTask();
+                        dimScreenTask = new DimScreenTask();
+                        dimScreenTask.execute();
+
+                    } else {
+                        buttonSleepDim.setVisibility(View.GONE);
                     }
 
-                    @Override
-                    protected void onPostExecute(String[] result) {
-                        if (result != null) {
-                            
-                            ((TextView)findViewById(R.id.text_alarm_status)).setText(context.getString(
-                                            R.string.you_will_be_awoken_before,
-                                            result[0], result[1]));
-                            findViewById(R.id.text_alarm_status_sub).setVisibility(View.GONE);
-                        } else {
-                            sleepChart.xyMultipleSeriesRenderer
-                                    .setChartTitle("");
-                            findViewById(R.id.text_alarm_status_sub).setVisibility(View.VISIBLE);
-                        }
-                        // dims the screen while in this activity and
-                        // forceScreenOn is
-                        // enabled
-                        if (forceScreenOn) {
-                            buttonSleepDim.setVisibility(View.VISIBLE);
-
-                            cancelDimScreenTask();
-                            dimScreenTask = new DimScreenTask();
-                            dimScreenTask.execute();
-
-                        } else {
-                            buttonSleepDim.setVisibility(View.GONE);
-                        }
-
-                        if (sleepChart.makesSenseToDisplay()) {
-                            sleepChart.setVisibility(View.VISIBLE);
-                            waitForSleepData.setVisibility(View.GONE);
-                        } else {
-                            showWaitForSeriesDataIfNeeded();
-                        }
-                        showOrHideWarnings();
+                    if (sleepChart.makesSenseToDisplay()) {
+                        sleepChart.setVisibility(View.VISIBLE);
+                    } else {
+                        showWaitForSeriesDataIfNeeded();
                     }
-                }.execute();
-            } else {
-                sleepChart.xyMultipleSeriesRenderer.setChartTitle("");
-                buttonSleepNoAlarm.setVisibility(View.VISIBLE);
-                showOrHideWarnings();
-            }
+                    showOrHideWarnings();
+                }
+            }.execute();
         }
     };
 
     private Button buttonSleepDim;
-
-    private Button buttonSleepNoAlarm;
-
     private Button buttonSleepPluggedIn;
+    private TextView textAlarmStatus;
+    private TextView textAlarmStatusSub;
 
     private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
         @Override
@@ -197,15 +187,11 @@ public class SleepActivity extends HostActivity {
 
             if (sleepChart.makesSenseToDisplay()) {
                 sleepChart.setVisibility(View.VISIBLE);
-                waitForSleepData.setVisibility(View.GONE);
             } else {
                 sleepChart.setVisibility(View.GONE);
-                waitForSleepData.setVisibility(View.VISIBLE);
             }
         }
     };
-
-    private ViewGroup waitForSleepData;
 
     @Override
     protected int getContentAreaLayoutId() {
@@ -314,8 +300,8 @@ public class SleepActivity extends HostActivity {
     @Override
     protected void onResume() {
         sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
-        waitForSleepData = (ViewGroup) findViewById(R.id.wait_for_sleep_data);
-        buttonSleepNoAlarm = (Button) findViewById(R.id.text_sleep_no_alarm);
+        textAlarmStatus = (TextView) findViewById(R.id.text_alarm_status);
+        textAlarmStatusSub = (TextView) findViewById(R.id.text_alarm_status_sub);
         buttonSleepDim = (Button) findViewById(R.id.text_sleep_dim);
         buttonSleepPluggedIn = (Button) findViewById(R.id.text_sleep_plugged_in);
 
@@ -342,11 +328,10 @@ public class SleepActivity extends HostActivity {
         // make sure we're in landscape. portrait doesn't have this problem.
         if (landscapeWarnings != null) {
             int visibility = buttonSleepPluggedIn.getVisibility()
-                    + buttonSleepDim.getVisibility()
-                    + buttonSleepNoAlarm.getVisibility();
+                    + buttonSleepDim.getVisibility();
 
             // if all are gone...
-            visibility = (visibility == (View.GONE * 3)) ? View.GONE
+            visibility = (visibility == (View.GONE * 2)) ? View.GONE
                     : View.VISIBLE;
             landscapeWarnings.setVisibility(visibility);
         }
@@ -355,7 +340,6 @@ public class SleepActivity extends HostActivity {
     private void showWaitForSeriesDataIfNeeded() {
         if (sleepChart == null || !sleepChart.makesSenseToDisplay()) {
             sleepChart.setVisibility(View.GONE);
-            waitForSleepData.setVisibility(View.VISIBLE);
         }
     }
 }

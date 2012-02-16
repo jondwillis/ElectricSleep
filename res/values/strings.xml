@@ -577,7 +577,7 @@
 		recommended to plug in, or elsewise enter airplane mode to conserve
 		energy.</string>
     <string name="not_bound_to_any_alarms">Not bound to any alarms.</string>
-    <string name="you_will_be_awoken_before">		Smart alarm will go off between<xliff:g id="pre">%s</xliff:g>		and<xliff:g id="post">%s</xliff:g></string>
+    <string name="alarm_status_range"><xliff:g id="pre">%s</xliff:g> - <xliff:g id="post">%s</xliff:g></string>
     <string name="sleep_no_alarm">No alarm has been set. SleepMate will not wake
 		you up.</string>
     <string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
