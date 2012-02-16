@@ -39,8 +39,7 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
     private static final String TAG = ElectricSleepDatabase.class.getSimpleName();
 
     private static final String DB_NAME = "sleephistory";
-    private static final int DB_VERSION = 6;
-
+    private static final int DB_VERSION = 7;
 
     public ElectricSleepDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -57,6 +56,11 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
             upgradeToVersion6(db);
             ++oldVersion;
         }
+
+        if (oldVersion == 6) {
+            upgradeToVersion7(db);
+            ++oldVersion;
+        }
     }
 
     private void createSleepSessionTable(SQLiteDatabase db) {
@@ -67,6 +71,7 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
             SleepSession.UPDATED_ON + " INTEGER NOT NULL," +
             SleepSession.TIMEZONE + " TEXT NOT NULL," +
             SleepSession.START_TIMESTAMP + " INTEGER NOT NULL," +
+            SleepSession.START_JULIAN_DAY + " INTEGER NOT NULL," +
             SleepSession.END_TIMESTAMP + " INTEGER NOT NULL," +
             SleepSession.DATA + " BLOB," +
             SleepSession.RATING + " INTEGER," +
@@ -138,6 +143,32 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
                 db.insert(SleepSession.PATH, null, values);
             } while (cursor.moveToNext());
         }
+    }
+
+    /**
+     * Upgrade to version 7 includes adding start julian day.
+     */
+    private void upgradeToVersion7(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + SleepSession.PATH + " ADD COLUMN " +
+                   SleepSession.START_JULIAN_DAY + " INTEGER;");
+
+        final Cursor cursor = db.query(
+            SleepSession.PATH,
+            new String[] {
+                SleepSession._ID,
+                SleepSession.START_TIMESTAMP,
+            }, null, null, null, null, null);
+
+        // Update all existing sleep sessions with a start julian day.
+        cursor.moveToFirst();
+        do {
+            final ContentValues values = new ContentValues(1);
+            final long id = cursor.getLong(0);
+            values.put(SleepSession.START_JULIAN_DAY,
+                       SleepSession.getZeoJulianDay(cursor.getLong(1)));
+            db.update(SleepSession.PATH, values,
+                      SleepSession._ID + " =? ", new String[] {Long.toString(id)});
+        } while (cursor.moveToNext());
     }
 }
 
