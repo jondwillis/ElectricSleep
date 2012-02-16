@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/menu_item_alarms"
-        android:icon="@drawable/ic_menu_alarm"
+        android:icon="@drawable/ic_alarm_neutral"
         android:showAsAction="always|withText"
         android:title="@string/alarm_list_title"></item>
 
