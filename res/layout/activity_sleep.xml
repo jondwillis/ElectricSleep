@@ -48,6 +48,37 @@
             android:padding="5dp"
             android:text="@string/sleep_dim" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="onClick" >
+
+        <Button
+            android:id="@+id/button_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:animateLayoutChanges="true"
+            android:drawableLeft="@drawable/ic_alarm_none"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="@string/no_alarm"
+            android:background="@null"
+            android:textColor="@color/text_light" />
+
+        <Button
+            android:id="@+id/text_sleep_plugged_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:animateLayoutChanges="true"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="@string/sleepmate_will_not_wake_you_up_"
+            android:background="@null"
+            android:textColor="@color/text_light"  />
+    </LinearLayout>
 
     <!-- </ScrollView> -->
 
@@ -55,7 +86,7 @@
         android:id="@+id/sleep_movement_chart"
         style="@style/SleepChart_Dark"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dip"
         android:layout_gravity="bottom"
         android:layout_margin="4dip"
         android:animateLayoutChanges="true"
@@ -85,5 +116,15 @@
             android:text="@string/currently_tracking_sleep_activity_" >
         </TextView>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_tracking_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center|center_horizontal"
+        android:drawableLeft="@drawable/ic_tracking_stop"
+        android:onClick="onClick"
+        android:text="@string/stop_tracking"
+        android:textAppearance="@android:style/TextAppearance.Large" />
 
 </LinearLayout>
