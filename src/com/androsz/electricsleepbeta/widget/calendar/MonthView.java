@@ -104,7 +104,14 @@ public class MonthView extends View {
 	// width/height.
 	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(4);
 
-	private List<Long[]> mSessions = new ArrayList<Long[]>(0);
+    // Index values into the mSessions array of longs
+    private static final int SESSION_START_TIMESTAMP = 0;
+    private static final int SESSION_END_TIMESTAMP = 1;
+    private static final int SESSION_START_JULIAN = 2;
+    private static final int SESSION_END_JULIAN = 3;
+    private static final int SESSION_ROW_ID = 4;
+
+    private List<Long[]> mSessions = new ArrayList<Long[]>(0);
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -388,32 +395,12 @@ public class MonthView extends View {
         Paint paint = new Paint();
         paint.setColor(mEventOffColor);
         for (Long[] session : mSessions) {
-            long julianDay = session[2];
-
-            // Check if this recording occurred between a 12am and 6am window and if so then
-            // consider it to be for the previous day of sleep.
-            final Time startTime = new Time();
-            startTime.set(session[0]);
-            startTime.normalize(true);
-            final Time midnight = new Time();
-            midnight.set(startTime);
-            midnight.hour = 0;
-            midnight.minute = 0;
-            midnight.second = 0;
-            midnight.normalize(true);
-            final Time morning = new Time();
-            morning.set(midnight);
-            morning.hour = 6;
-            morning.normalize(true);
-            if (Time.compare(startTime, midnight) >= 0 && Time.compare(startTime, morning) <= 0) {
-                --julianDay;
-            }
-
-            // Now determine if this session occurred on this date.
-            if (date == julianDay) {
+            if (date == session[SESSION_START_JULIAN]) {
                 paint.setColor(mEventOnColor);
+                break;
             }
         }
+
         final int height = Math.abs(rect.bottom - rect.top);
         final int width = Math.abs(rect.right - rect.left);
         int cy = (int) (rect.top + (height / 1.4));
@@ -488,8 +475,8 @@ public class MonthView extends View {
 				Arrays.fill(eventDay, false);
 				// Compute the new set of days with events
 				for (final Long[] session : mSessions) {
-					long startDay = session[2] - mFirstJulianDay;
-					long endDay = session[3] - mFirstJulianDay + 1;
+					long startDay = session[SESSION_START_JULIAN] - mFirstJulianDay;
+					long endDay = session[SESSION_END_JULIAN] - mFirstJulianDay + 1;
 					if (startDay < EVENT_NUM_DAYS || endDay >= 0) {
 						if (startDay < 0) {
 							startDay = 0;
@@ -921,8 +908,9 @@ public class MonthView extends View {
 				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
 				List<Long> applicableRowIds = new ArrayList<Long>();
 				for (final Long[] session : mSessions) {
-					if (julianDay >= session[2] && julianDay <= session[3]) {
-						applicableRowIds.add(session[4]);
+					if (julianDay >= session[SESSION_START_JULIAN] &&
+                        julianDay <= session[SESSION_END_JULIAN]) {
+						applicableRowIds.add(session[SESSION_ROW_ID]);
 					}
 					/*
 					 * final long startTime = session[0] - thismillis; final

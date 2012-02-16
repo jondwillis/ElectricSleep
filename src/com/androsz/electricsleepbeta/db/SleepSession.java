@@ -242,11 +242,41 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         return mSpikes;
     }
 
+    /**
+     * Return the julian day for this sleep session while taking into account Zeo's 6pm to 6am rule
+     * for determining what date this sleep applies to.
+     *
+     * The Zeo 6pm to 6am rule states that any sleep that occurs from 12am to 6am is actually sleep
+     * representing the day prior.
+     */
     public int getStartJulianDay() {
-        final Time local = new Time();
-        local.set(getStartTimestamp());
-        final long millis = local.normalize(true /* ignore DST */);
-        return Time.getJulianDay(millis, local.gmtoff);
+        final Time startTime = new Time();
+        startTime.set(mStartTimestamp);
+        final long tmpTimestamp = startTime.normalize(true);
+        int julianDay = Time.getJulianDay(tmpTimestamp, startTime.gmtoff);
+
+        // Begin process of determining if this record was from 12am to 6am.
+        final Time midnight = new Time();
+        midnight.set(startTime);
+        midnight.hour = 0;
+        midnight.minute = 0;
+        midnight.second = 0;
+        midnight.normalize(true);
+
+        final Time morning = new Time();
+        morning.set(midnight);
+        morning.hour = 6;
+        morning.normalize(true);
+
+        Log.d(TAG, "startTime was: " + startTime +
+              "midnight was: " + midnight +
+              "morning was: " + morning);
+        if (Time.compare(startTime, midnight) >= 0 && Time.compare(startTime, morning) <= 0) {
+            Log.v(TAG, "Determined that this day: " + startTime + " falls in 12am to 6am.");
+            --julianDay;
+        }
+
+        return julianDay;
     }
 
     public long getStartTimestamp() {
@@ -374,20 +404,16 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         List<Long[]> result = new ArrayList<Long[]>();
         if (cursor.moveToFirst()) {
             do {
+                // TODO this is convoluted
                 final long id = cursor.getLong(0);
                 final long startTimestamp = cursor.getLong(1);
                 final long endTimestamp = cursor.getLong(2);
-                final String timezone = cursor.getString(3);
-                // TODO this appears convoluted
-                final Time startTime = new Time(timezone);
-                startTime.set(startTimestamp);
-                final Time endTime = new Time(timezone);
-                endTime.set(endTimestamp);
-
+                final SleepSession session = new SleepSession(cursor);
                 result.add(new Long[] {
-                        startTimestamp, endTimestamp,
-                        (long) Time.getJulianDay(startTime.normalize(true), startTime.gmtoff),
-                        (long) Time.getJulianDay(endTime.normalize(true), endTime.gmtoff),
+                        startTimestamp,
+                        endTimestamp,
+                        (long) session.getStartJulianDay(),
+                        (long) session.getEndJulianDay(),
                         id
                     });
             } while (cursor.moveToNext());
