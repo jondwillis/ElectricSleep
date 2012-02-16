@@ -19,6 +19,7 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -138,15 +139,15 @@ public class SleepActivity extends HostActivity {
                     @Override
                     protected void onPostExecute(String[] result) {
                         if (result != null) {
-                            sleepChart.xyMultipleSeriesRenderer
-                                    .setChartTitle(context.getString(
+                            
+                            ((TextView)findViewById(R.id.text_alarm_status)).setText(context.getString(
                                             R.string.you_will_be_awoken_before,
                                             result[0], result[1]));
-                            buttonSleepNoAlarm.setVisibility(View.GONE);
+                            findViewById(R.id.text_alarm_status_sub).setVisibility(View.GONE);
                         } else {
                             sleepChart.xyMultipleSeriesRenderer
                                     .setChartTitle("");
-                            buttonSleepNoAlarm.setVisibility(View.VISIBLE);
+                            findViewById(R.id.text_alarm_status_sub).setVisibility(View.VISIBLE);
                         }
                         // dims the screen while in this activity and
                         // forceScreenOn is
@@ -240,10 +241,14 @@ public class SleepActivity extends HostActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_item_alarms:
-            startActivity(new Intent(this, AlarmClock.class));
+            openAlarms();
             break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openAlarms() {
+        startActivity(new Intent(this, AlarmClock.class));
     }
 
     public void onClick(View v) {
@@ -251,6 +256,11 @@ public class SleepActivity extends HostActivity {
         case R.id.button_tracking_stop:
             sendBroadcast(new Intent(SleepMonitoringService.STOP_AND_SAVE_SLEEP));
             finish();
+            break;
+        case R.id.text_alarm_status:
+        case R.id.text_alarm_status_sub:
+        case R.id.layout_alarm_status:
+            openAlarms();
             break;
         }
     }
