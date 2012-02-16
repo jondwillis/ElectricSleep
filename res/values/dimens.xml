@@ -5,5 +5,6 @@
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">17sp</dimen>
     <dimen name="text_size_large">20sp</dimen>
+    <dimen name="sleep_track_chart_height">250dp</dimen>
 
 </resources>

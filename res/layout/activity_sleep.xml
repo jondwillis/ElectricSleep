@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <!--
-         <ScrollView android:layout_gravity="top" android:layout_width="match_parent" 
+         <ScrollView android:layout_gravity="top" android:layout_width="match_parent"
 		android:padding="4dip" android:layout_height="wrap_content" android:layout_weight="1">
     -->
 
@@ -99,7 +99,7 @@
         android:id="@+id/sleep_movement_chart"
         style="@style/SleepChart_Dark"
         android:layout_width="match_parent"
-        android:layout_height="400dip"
+        android:layout_height="@dimen/sleep_track_chart_height"
         android:layout_gravity="bottom"
         android:layout_margin="4dip"
         android:animateLayoutChanges="true"
