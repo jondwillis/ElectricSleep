@@ -1,6 +1,5 @@
 package com.androsz.electricsleepbeta.app;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentUris;
@@ -48,9 +47,16 @@ public class HistoryListFragment extends HostFragment implements
         }
     }
 
-    public static final String SEARCH_FOR = "searchFor";
+    /** Key used to mark what julian day to load a list for. Used by both the intent as well as the
+     * cursor loader bundle.
+     */
+    public static final String EXTRA_JULIAN_DAY = "julian_day";
 
-    private static final long TIMESTAMP_INVALID = -1;
+    /** Load all sleep sessions. */
+    private static final int LOADER_ALL = 0;
+
+    /** Load sleep sessions for a given julian day. */
+    private static final int LOADER_JULIAN = 1;
 
     private ListView mListView;
 
@@ -58,18 +64,6 @@ public class HistoryListFragment extends HostFragment implements
 
     ProgressDialog progress;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
-
-    /*
-     * TODO temporarily disabled. private Bundle getLoaderArgs(final Intent
-     * intent, boolean init) { final Bundle args = new Bundle();
-     * 
-     * if (intent.hasExtra(SEARCH_FOR)) { final long timestamp =
-     * intent.getLongExtra(SEARCH_FOR, TIMESTAMP_INVALID);
-     * getActivity().setTitle(getActivity().getTitle() + " " +
-     * DateUtils.formatDateTime(getActivity(), timestamp,
-     * DateUtils.LENGTH_SHORTEST)); args.putLong(SEARCH_FOR, timestamp); }
-     * return args; }
-     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,36 +74,40 @@ public class HistoryListFragment extends HostFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        
-        final Activity activity = getActivity();
-        
-        //TODO doesn't seem possible without recreating the activity first.
-        final View root = LayoutInflater.from( new ContextThemeWrapper(activity, R.style.Theme_SleepMate_Light)).inflate(R.layout.fragment_history_list,
-                container, false);
-        
-        progress = new ProgressDialog(activity);
 
+        //TODO doesn't seem possible without recreating the activity first.
+        final View root =
+            LayoutInflater
+            .from(new ContextThemeWrapper(getActivity(), R.style.Theme_SleepMate_Light))
+            .inflate(R.layout.fragment_history_list, container, false);
+        progress = new ProgressDialog(getActivity());
         mTextView = (TextView) root.findViewById(R.id.text);
         mListView = (ListView) root.findViewById(R.id.list);
         mListView.setVerticalFadingEdgeEnabled(false);
         mListView.setScrollbarFadingEnabled(false);
 
-        sleepHistoryAdapter = new SleepHistoryCursorAdapter(activity, null);
+        sleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
         mListView.setAdapter(sleepHistoryAdapter);
 
-        final Intent intent = activity.getIntent();
-        /*
-         * TODO temporarily disabled. if
-         * (Intent.ACTION_VIEW.equals(intent.getAction())) { final Intent
-         * reviewIntent = new Intent(activity, ReviewSleepActivity.class);
-         * reviewIntent.setData(intent.getData()); startActivity(reviewIntent);
-         * activity.finish(); } else { ((HostActivity)
-         * activity).getSupportLoaderManager().initLoader( 0,
-         * getLoaderArgs(intent, true), this); }
-         */
 
-        ((HostActivity) activity).getSupportLoaderManager().initLoader(0, null,
-                this);
+        final Intent intent = getActivity().getIntent();
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            // A single sleep session requested. Load review sleep activity and exit list view.
+            final Intent reviewIntent = new Intent(getActivity(), ReviewSleepActivity.class);
+            reviewIntent.setData(intent.getData());
+            startActivity(reviewIntent);
+            getActivity().finish();
+        } else if (intent.hasExtra(EXTRA_JULIAN_DAY)) {
+            // Loading all records for a julian day.
+            final int julianDay = intent.getIntExtra(EXTRA_JULIAN_DAY, 0);
+            final Bundle args = new Bundle(1);
+            args.putInt(EXTRA_JULIAN_DAY, julianDay);
+            getLoaderManager().initLoader(LOADER_JULIAN, args, this);
+        } else {
+            // Loading all known records.
+            getLoaderManager().initLoader(LOADER_ALL, null, this);
+        }
+
         return root;
     }
 
@@ -118,16 +116,25 @@ public class HistoryListFragment extends HostFragment implements
 
         progress.setMessage(getString(R.string.querying_sleep_database));
         progress.show();
-        if (args != null) {
+
+        switch (id) {
+        case LOADER_ALL:
             return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
-                    null, SleepSession.START_TIMESTAMP + " <=? AND "
-                            + SleepSession.END_TIMESTAMP + " >=? ",
-                    new String[] { Long.toString(args.getLong(SEARCH_FOR)),
-                            Long.toString(args.getLong(SEARCH_FOR)) }, null);
-        } else {
+                                    null, null, null, SleepSession.SORT_ORDER);
+
+        case LOADER_JULIAN:
+            final int julianDay = args.getInt(EXTRA_JULIAN_DAY);
+            if (julianDay == 0) {
+                return null;
+            }
             return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
-                    null, null, null, SleepSession.SORT_ORDER);
+                                    null,
+                                    SleepSession.START_JULIAN_DAY + " =? ",
+                                    new String[] {Integer.toString(julianDay)},
+                                    SleepSession.SORT_ORDER);
         }
+
+        return null;
     }
 
     @Override
@@ -142,24 +149,22 @@ public class HistoryListFragment extends HostFragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        final Activity a = getActivity();
         if (data != null) {
-            if (data.getCount() == 1) {
-                data.moveToFirst();
-                final Intent reviewSleepIntent = new Intent(a,
-                        ReviewSleepActivity.class);
-
-                final Uri uri = Uri.withAppendedPath(SleepSession.CONTENT_URI,
-                        String.valueOf(data.getLong(0)));
-                reviewSleepIntent.setData(uri);
-                reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //startActivity(reviewSleepIntent);
-
-            } else if (data.getCount() == 0) {
-                
+            if (data.getCount() == 0) {
                 return;
+            } else if (data.getCount() == 1) {
+                data.moveToFirst();
+                final Intent reviewSleepIntent = new Intent(getActivity(),
+                                                            ReviewSleepActivity.class);
+
+                // WARNING: there is an assumption here that cursor index 0 is the primary key.
+                final Uri uri = Uri.withAppendedPath(SleepSession.CONTENT_URI,
+                                                     String.valueOf(data.getLong(0)));
+                reviewSleepIntent.setData(uri);
+                reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                           Intent.FLAG_ACTIVITY_NEW_TASK);
             }
+
             sleepHistoryAdapter.swapCursor(data);
             mTextView.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
@@ -169,8 +174,7 @@ public class HistoryListFragment extends HostFragment implements
                 @Override
                 public boolean onItemLongClick(final AdapterView<?> parent,
                         final View view, final int position, final long rowId) {
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(
-                            a)
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity())
                             .setMessage(getString(R.string.delete_sleep_record))
                             .setPositiveButton(getString(R.string.ok),
                                     new DialogInterface.OnClickListener() {
@@ -179,7 +183,7 @@ public class HistoryListFragment extends HostFragment implements
                                                 final DialogInterface dialog,
                                                 final int id) {
 
-                                            new DeleteSleepTask(a, progress)
+                                            new DeleteSleepTask(getActivity(), progress)
                                                     .execute(
                                                             new Long[] { rowId },
                                                             null, null);

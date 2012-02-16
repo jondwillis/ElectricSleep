@@ -42,6 +42,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HistoryActivity;
@@ -51,6 +52,8 @@ import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
 import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class MonthView extends View {
+
+    private static final String TAG = MonthView.class.getSimpleName();
 
     private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
@@ -682,7 +685,8 @@ public class MonthView extends View {
 							final int y = (int) e.getY();
 							final long millis = getSelectedMillisFor(x, y);
 
-							reviewSleepIfNecessary(millis);
+                            Log.d(TAG, "Possibly reviewing sleep at: " + millis);
+                            reviewSleepIfNecessary(millis);
 						}
 
 						return true;
@@ -897,6 +901,10 @@ public class MonthView extends View {
 
 	}
 
+    /**
+     * Method determines what activity to load when user presses a date square in the calendar view.
+     * Either loads a list view of a collection of nights (naps) OR a single night to review.
+     */
 	private void reviewSleepIfNecessary(final long millis) {
 		new AsyncTask<Void, Void, Void>() {
 
@@ -905,12 +913,13 @@ public class MonthView extends View {
 				//final ArrayList<Long[]> applicableEvents = new ArrayList<Long[]>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
+				final int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
 				List<Long> applicableRowIds = new ArrayList<Long>();
 				for (final Long[] session : mSessions) {
-					if (julianDay >= session[SESSION_START_JULIAN] &&
-                        julianDay <= session[SESSION_END_JULIAN]) {
-						applicableRowIds.add(session[SESSION_ROW_ID]);
+                    if (julianDay == session[SESSION_START_JULIAN]) {
+                        Log.d(TAG, "Adding session: " + session[SESSION_ROW_ID] +
+                              " to date: " + julianDay);
+                        applicableRowIds.add(session[SESSION_ROW_ID]);
 					}
 					/*
 					 * final long startTime = session[0] - thismillis; final
@@ -923,6 +932,7 @@ public class MonthView extends View {
 				}
 
 				if (applicableRowIds.size() == 1) {
+                    // Only one session so load night review.
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
 					final Uri data = Uri.withAppendedPath(SleepSession.CONTENT_URI,
@@ -930,14 +940,13 @@ public class MonthView extends View {
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
 				} else if (applicableRowIds.size() > 1) {
-
                     // TODO this probably needs to be smarter in how it attempts to discover sleep
                     // for a given night. Its quite possible that the night of sleep for the user on
                     // say a Friday began at say Saturday morning at 3am. We need to handle this
                     // situation.
                     getContext().startActivity(
                         new Intent(getContext(), HistoryActivity.class).putExtra(
-                            HistoryListFragment.SEARCH_FOR, millis));
+                            HistoryListFragment.EXTRA_JULIAN_DAY, julianDay));
 				}
 
 				return null;

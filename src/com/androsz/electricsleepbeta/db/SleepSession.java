@@ -62,6 +62,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
     static String[] PROJECTION = new String[] {
         _ID,
         START_TIMESTAMP,
+        START_JULIAN_DAY,
         END_TIMESTAMP,
         TIMEZONE,
         DATA,
@@ -88,6 +89,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
     long mDuration;
     long mFellAsleepTimestamp;
     long mStartTimestamp;
+    int mStartJulianDay;
 
     long mCreatedOn;
     long mUpdatedOn;
@@ -95,6 +97,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
     public SleepSession(final Cursor cursor) {
         mId = cursor.getLong(cursor.getColumnIndex(_ID));
         mStartTimestamp = cursor.getLong(cursor.getColumnIndex(START_TIMESTAMP));
+        mStartJulianDay = cursor.getInt(cursor.getColumnIndex(START_JULIAN_DAY));
         mEndTimestamp = cursor.getLong(cursor.getColumnIndex(END_TIMESTAMP));
         mTimezone = TimeZone.getTimeZone(cursor.getString(cursor.getColumnIndex(TIMEZONE)));
         mCalibrationLevel = cursor.getDouble(cursor.getColumnIndex(CALIBRATION_LEVEL));
@@ -128,6 +131,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
                         final long fellAsleep,
                         final String note) {
         mStartTimestamp = startTimestamp;
+        mStartJulianDay = getZeoJulianDay(startTimestamp);
         mEndTimestamp = endTimestamp;
         mData = data;
         mMin = min;
@@ -243,17 +247,13 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
     }
 
     /**
-     * Return the julian day for this sleep session while taking into account Zeo's 6pm to 6am rule
-     * for determining what date this sleep applies to.
-     *
-     * The Zeo 6pm to 6am rule states that any sleep that occurs from 12am to 6am is actually sleep
-     * representing the day prior.
+     * Computes the julian day for the given timestamp while taking into consideration Zeo's rules
+     * for gauging a night of sleep between the 12am to 6am time window.
      */
-    public int getStartJulianDay() {
+    public static int getZeoJulianDay(final long timestamp) {
         final Time startTime = new Time();
-        startTime.set(mStartTimestamp);
-        final long tmpTimestamp = startTime.normalize(true);
-        int julianDay = Time.getJulianDay(tmpTimestamp, startTime.gmtoff);
+        startTime.set(timestamp);
+        int julianDay = Time.getJulianDay(startTime.normalize(true), startTime.gmtoff);
 
         // Begin process of determining if this record was from 12am to 6am.
         final Time midnight = new Time();
@@ -268,15 +268,22 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         morning.hour = 6;
         morning.normalize(true);
 
-        Log.d(TAG, "startTime was: " + startTime +
-              "midnight was: " + midnight +
-              "morning was: " + morning);
         if (Time.compare(startTime, midnight) >= 0 && Time.compare(startTime, morning) <= 0) {
-            Log.v(TAG, "Determined that this day: " + startTime + " falls in 12am to 6am.");
             --julianDay;
         }
 
         return julianDay;
+    }
+
+    /**
+     * Return the julian day for this sleep session while taking into account Zeo's 6pm to 6am rule
+     * for determining what date this sleep applies to.
+     *
+     * The Zeo 6pm to 6am rule states that any sleep that occurs from 12am to 6am is actually sleep
+     * representing the day prior.
+     */
+    public int getStartJulianDay() {
+        return getZeoJulianDay(mStartTimestamp);
     }
 
     public long getStartTimestamp() {
@@ -335,6 +342,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
             values.put(_ID, mId);
         }
         values.put(START_TIMESTAMP, mStartTimestamp);
+        values.put(START_JULIAN_DAY, mStartJulianDay);
         values.put(END_TIMESTAMP, mEndTimestamp);
         values.put(TIMEZONE, mTimezone.getID());
         values.put(DURATION, mDuration);
@@ -433,6 +441,7 @@ interface SleepSessionKeys {
     String RATING = "rating";
     String SLEEP_DATA = "data";
     String SPIKES = "spikes";
+    String START_JULIAN_DAY = "start_julian_day";
     String START_TIMESTAMP = "start_timestamp";
     String TIMEZONE = "timezone";
 }

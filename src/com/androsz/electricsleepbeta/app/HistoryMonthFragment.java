@@ -303,15 +303,15 @@ public class HistoryMonthFragment extends HostFragment implements
         final int startJulianDay = Time.getJulianDay(startMillis, local.gmtoff);
         local.monthDay += days;
         local.normalize(true);
-        final int endJulianDay = Time.getJulianDay(local.toMillis(true),
-                local.gmtoff);
+        final int endJulianDay = Time.getJulianDay(local.toMillis(true), local.gmtoff);
+        Log.d(TAG, "Getting interval from: " + startJulianDay + " to: " + endJulianDay);
 
         synchronized (mSessions) {
             for (final Long[] session : mSessions) {
                 final long sessionStartJulianDay = session[2];
-                final long sessionEndJulianDay = session[3];
-                if (sessionStartJulianDay >= startJulianDay
-                        && sessionEndJulianDay <= endJulianDay) {
+                if (sessionStartJulianDay >= startJulianDay &&
+                    sessionStartJulianDay < endJulianDay) {
+                    Log.d(TAG, "Adding session: " + session);
                     sessions.add(session);
                 }
             }
