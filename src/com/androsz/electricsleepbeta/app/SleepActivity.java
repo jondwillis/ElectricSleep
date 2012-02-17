@@ -54,9 +54,18 @@ public class SleepActivity extends HostActivity {
         protected void onPreExecute() {
             // notify the user that we've received that they need a dimmed
             // screen
-            Toast.makeText(SleepActivity.this, R.string.screen_will_dim,
-                    Toast.LENGTH_LONG).show();
+            setToast(R.string.screen_will_dim);
         }
+    }
+
+    private Toast currentToast;
+
+    private void setToast(int stringId) {
+        if (currentToast != null) {
+            currentToast.cancel();
+        }
+        currentToast = Toast.makeText(this, stringId, Toast.LENGTH_LONG);
+        currentToast.show();
     }
 
     private static final int DIM_SCREEN_AFTER_MS = 15000;
@@ -133,16 +142,25 @@ public class SleepActivity extends HostActivity {
                 protected void onPostExecute(String[] result) {
                     if (result != null) {
 
-                        // Shows the bound to alarm toast if useAlarm is enabled
                         if (useAlarm) {
                             textAlarmStatus.setText(context.getString(
                                     R.string.alarm_status_range, result[0],
                                     result[1]));
+                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                    .getDrawable(R.drawable.ic_alarm_pressed),
+                                    null, null, null);
                         } else {
+                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                    .getDrawable(R.drawable.ic_alarm_neutral),
+                                    null, null, null);
                             textAlarmStatus.setText(result[0]);
                         }
+
                         textAlarmStatusSub.setVisibility(View.GONE);
                     } else {
+                        textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                .getDrawable(R.drawable.ic_alarm_none),
+                                null, null, null);
                         textAlarmStatus.setText(getString(R.string.no_alarm));
                         textAlarmStatusSub.setVisibility(View.GONE);
                     }
@@ -160,11 +178,6 @@ public class SleepActivity extends HostActivity {
                         buttonSleepDim.setVisibility(View.GONE);
                     }
 
-                    if (sleepChart.makesSenseToDisplay()) {
-                        sleepChart.setVisibility(View.VISIBLE);
-                    } else {
-                        showWaitForSeriesDataIfNeeded();
-                    }
                     showOrHideWarnings();
                 }
             }.execute();
@@ -184,12 +197,6 @@ public class SleepActivity extends HostActivity {
                     SleepMonitoringService.EXTRA_Y, 0), intent.getDoubleExtra(
                     StartSleepReceiver.EXTRA_ALARM,
                     SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
-
-            if (sleepChart.makesSenseToDisplay()) {
-                sleepChart.setVisibility(View.VISIBLE);
-            } else {
-                sleepChart.setVisibility(View.GONE);
-            }
         }
     };
 
@@ -257,6 +264,9 @@ public class SleepActivity extends HostActivity {
         unregisterReceiver(updateChartReceiver);
         unregisterReceiver(syncChartReceiver);
         unregisterReceiver(batteryChangedReceiver);
+        if (currentToast != null) {
+            currentToast.cancel();
+        }
         cancelDimScreenTask();
         super.onPause();
     }
@@ -265,10 +275,7 @@ public class SleepActivity extends HostActivity {
         // cancel the dim screen task if it hasn't completed
         if (dimScreenTask != null) {
             dimScreenTask.cancel(true);
-            Toast.makeText(
-                    this,
-                    "Warning: dim sleep mode can only occur on the Sleep screen.",
-                    Toast.LENGTH_LONG).show();
+            setToast(R.string.warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_);
         }
     }
 
@@ -300,6 +307,7 @@ public class SleepActivity extends HostActivity {
     @Override
     protected void onResume() {
         sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
+        sleepChart.setVisibility(View.VISIBLE);
         textAlarmStatus = (TextView) findViewById(R.id.text_alarm_status);
         textAlarmStatusSub = (TextView) findViewById(R.id.text_alarm_status_sub);
         buttonSleepDim = (TextView) findViewById(R.id.text_sleep_dim);
@@ -334,12 +342,6 @@ public class SleepActivity extends HostActivity {
             visibility = (visibility == (View.GONE * 2)) ? View.GONE
                     : View.VISIBLE;
             landscapeWarnings.setVisibility(visibility);
-        }
-    }
-
-    private void showWaitForSeriesDataIfNeeded() {
-        if (sleepChart == null || !sleepChart.makesSenseToDisplay()) {
-            sleepChart.setVisibility(View.GONE);
         }
     }
 }

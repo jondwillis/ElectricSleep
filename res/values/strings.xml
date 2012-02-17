@@ -622,5 +622,6 @@
     <string name="stop_tracking">Stop Tracking</string>
     <string name="no_alarm">No Alarm</string>
     <string name="sleepmate_will_not_wake_you_up_">SleepMate will not wake you up.</string>
+    <string name="warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_">Warning: dim sleep mode can only occur on the Sleep screen.</string>
 
 </resources>
