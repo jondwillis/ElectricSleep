@@ -84,7 +84,7 @@ public class ReviewSleepActivity extends HostActivity implements
         Log.d(TAG, "Creating sleep fragment.");
         mSleepFragment = new ReviewSleepFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, mSleepFragment).commit();
+                .replace(R.id.fragment_review_sleep, mSleepFragment).commit();
         getSupportLoaderManager().initLoader(LOADER_SLEEP, null, this);
     }
 

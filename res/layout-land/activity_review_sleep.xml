@@ -6,9 +6,9 @@
 
     <fragment
         android:id="@+id/fragment_suggestion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
         class="com.androsz.electricsleepbeta.app.SuggestionFragment" >
 
         <!-- Preview: layout=@layout/fragment_suggestion -->
@@ -18,6 +18,6 @@
         android:id="@+id/fragment_review_sleep"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/fragment_suggestion" />
+        android:layout_toLeftOf="@id/fragment_suggestion" />
 
 </RelativeLayout>
