@@ -6,11 +6,15 @@
       <attr name="movementBorderColor" format="color" />
       <attr name="calibrationColor" format="color" />
       <attr name="calibrationBorderColor" format="color" />
+      <attr name="showGrid" format="boolean" />
+      <attr name="showLabels" format="boolean" />
+      <attr name="showLegend" format="boolean" />
+      <attr name="showTitle" format="boolean" />
       <attr name="setScroll" format="boolean" />
       <attr name="android:background" />
       <attr name="android:textColor" />
   </declare-styleable>
-  
+
    <declare-styleable name="TintableButton">
       <attr name="lightingTint" format="color" />
       <attr name="porterDuffTint" format="color" />

@@ -61,6 +61,8 @@ public class SleepChart extends GraphicalView implements Parcelable {
 
     private String mAxisFormat;
 
+    private boolean mShowTitle = true;
+
     public SleepChart(final Context context) {
         this(context, null);
     }
@@ -165,6 +167,21 @@ public class SleepChart extends GraphicalView implements Parcelable {
                     R.styleable.SleepChart_calibrationBorderColor,
                     R.color.sleepchart_calibration_border_light));
         }
+
+        // SleepChart_showGrid
+        xyMultipleSeriesRenderer.setShowGrid(
+            array.getBoolean(R.styleable.SleepChart_showGrid, true));
+
+        // SleepChart_showLabels
+        xyMultipleSeriesRenderer.setShowLabels(
+            array.getBoolean(R.styleable.SleepChart_showLabels, true));
+
+        // SleepChart_showLegend
+        xyMultipleSeriesRenderer.setShowLegend(
+            array.getBoolean(R.styleable.SleepChart_showLegend, true));
+
+        // SleepChart_showTitle
+        mShowTitle = array.getBoolean(R.styleable.SleepChart_showTitle, true);
     }
 
     @Override
@@ -220,12 +237,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
             margins[2] += 20; // increase bottom margin
             xyMultipleSeriesRenderer.setMargins(margins);
             xyMultipleSeriesRenderer.setLegendTextSize(textSize);
-            xyMultipleSeriesRenderer.setShowLegend(true);
-            xyMultipleSeriesRenderer.setShowLabels(true);
             xyMultipleSeriesRenderer.setXLabels(5);
             xyMultipleSeriesRenderer.setYLabels(8);
             xyMultipleSeriesRenderer.setYLabelsAlign(Align.RIGHT);
-            xyMultipleSeriesRenderer.setShowGrid(true);
 
             mChart = new TimeChart(xyMultipleSeriesDataset, xyMultipleSeriesRenderer);
             // TODO determine what to do here. Ideally the date format would
@@ -353,7 +367,9 @@ public class SleepChart extends GraphicalView implements Parcelable {
         rating = sleepRecord.getRating();
 
         // TODO this need to take into account timezone information.
-        xyMultipleSeriesRenderer.setChartTitle(sleepRecord.getTitle(mContext));
+        if (mShowTitle) {
+            xyMultipleSeriesRenderer.setChartTitle(sleepRecord.getTitle(mContext));
+        }
         reconfigure();
         repaint();
     }
