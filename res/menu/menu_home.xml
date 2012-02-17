@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/menu_item_share_sleep_record"
-        android:icon="@android:drawable/ic_menu_share"
+        android:icon="@drawable/ic_menu_share"
         android:showAsAction="ifRoom|withText"
         android:title="@string/share"/>
 

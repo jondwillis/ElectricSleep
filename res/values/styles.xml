@@ -75,7 +75,7 @@
         <item name="actionBarTabTextStyle">@style/ZeoActionBarTabTextStyle</item>
         <item name="actionMenuTextColor">@color/actionbar_text_light</item>
         <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
-        <item name="android:buttonStyle">@style/SleepMateButton.Secondary</item>
+        <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
         <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
         <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
     </style>
@@ -136,10 +136,6 @@
     <style name="SleepMateButton.Primary" parent="SleepMateButton.Common">
         <item name="android:background">@drawable/btn_primary</item>
         <item name="android:textColor">@color/text_light</item>
-    </style>
-
-    <style name="SleepMateButton.Secondary" parent="SleepMateButton.Common">
-        <item name="android:background">@drawable/btn_secondary</item>
     </style>
 
     <style name="SleepChart_Light">
