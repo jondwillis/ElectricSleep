@@ -27,7 +27,7 @@ import java.util.TimeZone;
 
 /**
  * Provider for electric sleep data.
- *
+ * 
  * @author Jon Willis
  * @author Brandon Edens
  * @version $Revision$
@@ -36,7 +36,8 @@ public class ElectricSleepProvider extends ContentProvider {
 
     public static final String CONTENT_AUTHORITY = "com.androsz.electricsleepbeta.db.electric_sleep_provider";
 
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://"
+            + CONTENT_AUTHORITY);
 
     public interface TimestampColumns {
         String CREATED_ON = "created_on";
@@ -55,8 +56,12 @@ public class ElectricSleepProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final SelectionBuilder builder = buildSimpleSelection(uri, "");
         final int count = builder.where(selection, selectionArgs).delete(db);
-        getContext().getContentResolver().notifyChange(BASE_CONTENT_URI, null);
+        notifyChange(uri);
         return count;
+    }
+
+    private void notifyChange(Uri uri) {
+        getContext().getContentResolver().notifyChange(uri, null);
     }
 
     @Override
@@ -85,8 +90,6 @@ public class ElectricSleepProvider extends ContentProvider {
         final ContentResolver resolver = getContext().getContentResolver();
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = URI_MATCHER.match(uri);
-        String table;
-        Uri contentUri;
         switch (match) {
         case SLEEP_SESSIONS:
             values.put(SleepSession.TIMEZONE, TimeZone.getDefault().getID());
@@ -94,7 +97,7 @@ public class ElectricSleepProvider extends ContentProvider {
             if (id == -1) {
                 return null;
             }
-            resolver.notifyChange(SleepSession.CONTENT_URI, null);
+            resolver.notifyChange(uri, null);
             return ContentUris.withAppendedId(SleepSession.CONTENT_URI, id);
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -109,12 +112,12 @@ public class ElectricSleepProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
+            String[] selectionArgs, String sortOrder) {
         final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
         final int match = URI_MATCHER.match(uri);
 
-        final SelectionBuilder builder =
-            buildSimpleSelection(uri, " as query_tmp");
+        final SelectionBuilder builder = buildSimpleSelection(uri,
+                " as query_tmp");
 
         switch (match) {
         case SLEEP_SESSIONS:
@@ -125,15 +128,17 @@ public class ElectricSleepProvider extends ContentProvider {
             if (sortOrder == null) {
                 sortOrder = SleepSession.SORT_ORDER;
             }
-            return builder.where(selection, selectionArgs)
-                .query(db, projection, sortOrder);
+            Cursor c = builder.where(selection, selectionArgs).query(db,
+                    projection, sortOrder);
+            c.setNotificationUri(getContext().getContentResolver(), uri);
+            return c;
         }
         return null;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values,
-                      String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection,
+            String[] selectionArgs) {
         final ContentResolver resolver = getContext().getContentResolver();
 
         final long updateTimestamp = System.currentTimeMillis();
@@ -141,13 +146,14 @@ public class ElectricSleepProvider extends ContentProvider {
 
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final SelectionBuilder builder = buildSimpleSelection(uri, "");
-        final int count = builder.where(selection, selectionArgs).update(db, values);
+        final int count = builder.where(selection, selectionArgs).update(db,
+                values);
 
         final int match = URI_MATCHER.match(uri);
         switch (match) {
         case SLEEP_SESSIONS:
         case SLEEP_SESSIONS_ID:
-            resolver.notifyChange(SleepSession.CONTENT_URI, null);
+            resolver.notifyChange(uri, null);
         }
         return count;
     }
@@ -161,8 +167,9 @@ public class ElectricSleepProvider extends ContentProvider {
         case SLEEP_SESSIONS:
             return builder.table(SleepSession.PATH);
         case SLEEP_SESSIONS_ID:
-            return builder.table(SleepSession.PATH)
-                .where(SleepSession._ID + "=?", Long.toString(ContentUris.parseId(uri)));
+            return builder.table(SleepSession.PATH).where(
+                    SleepSession._ID + "=?",
+                    Long.toString(ContentUris.parseId(uri)));
         }
         throw new UnsupportedOperationException("Unkown uri: " + uri);
     }
@@ -176,4 +183,3 @@ public class ElectricSleepProvider extends ContentProvider {
         return matcher;
     }
 }
-
