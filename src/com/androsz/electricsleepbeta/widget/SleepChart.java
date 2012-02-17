@@ -172,16 +172,25 @@ public class SleepChart extends GraphicalView implements Parcelable {
         xyMultipleSeriesRenderer.setShowGrid(
             array.getBoolean(R.styleable.SleepChart_showGrid, true));
 
+        int[] margins = xyMultipleSeriesRenderer.getMargins();
         // SleepChart_showLabels
         xyMultipleSeriesRenderer.setShowLabels(
             array.getBoolean(R.styleable.SleepChart_showLabels, true));
-
+        if (array.getBoolean(R.styleable.SleepChart_showLabels, true)) {
+            margins[1] += 25; // increase left margin
+        }
         // SleepChart_showLegend
         xyMultipleSeriesRenderer.setShowLegend(
             array.getBoolean(R.styleable.SleepChart_showLegend, true));
-
+        if (array.getBoolean(R.styleable.SleepChart_showLegend, true)) {
+            margins[2] += 20; // increase bottom margin
+        }
         // SleepChart_showTitle
         mShowTitle = array.getBoolean(R.styleable.SleepChart_showTitle, true);
+        if (array.getBoolean(R.styleable.SleepChart_showTitle, true)) {
+            margins[0] += 20; // increase top margin
+        }
+        xyMultipleSeriesRenderer.setMargins(margins);
     }
 
     @Override
@@ -231,11 +240,6 @@ public class SleepChart extends GraphicalView implements Parcelable {
             // .calculatePxFromDp(context, 30) + textSize*3));
             xyMultipleSeriesRenderer.setAntialiasing(true);
             xyMultipleSeriesRenderer.setFitLegend(true);
-            int[] margins = xyMultipleSeriesRenderer.getMargins();
-            margins[0] += 20; // increase top margin
-            margins[1] += 25; // increase left margin
-            margins[2] += 20; // increase bottom margin
-            xyMultipleSeriesRenderer.setMargins(margins);
             xyMultipleSeriesRenderer.setLegendTextSize(textSize);
             xyMultipleSeriesRenderer.setXLabels(5);
             xyMultipleSeriesRenderer.setYLabels(8);
