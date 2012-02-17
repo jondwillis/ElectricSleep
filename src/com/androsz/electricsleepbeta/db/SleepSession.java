@@ -308,6 +308,10 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         return getTimespanText(getTimeToFallAsleep(), res);
     }
 
+    public CharSequence getTotalRecordAbbrevTime(final Resources res) {
+        return getTimespanAbbrevText(mDuration, res);
+    }
+
     public CharSequence getTotalRecordTime(final Resources res) {
         return getTimespanText(mDuration, res);
     }
@@ -378,6 +382,30 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
                 .getAvailableIDs(0)[0]));
         timeDiffCalendar.setTimeInMillis(time);
         return timeDiffCalendar;
+    }
+
+    public static CharSequence getTimespanAbbrevText(long timespanMs, final Resources res) {
+        final Calendar timespan = getTimeDiffCalendar(timespanMs);
+        final int hours = Math.min(24, timespan.get(Calendar.HOUR_OF_DAY));
+        final int minutes = timespan.get(Calendar.MINUTE);
+        final int seconds = timespan.get(Calendar.SECOND);
+        StringBuilder builder = new StringBuilder();
+        if (hours > 0) {
+            builder.append(Integer.toString(hours) + "h");
+        }
+        if (minutes > 0) {
+            if (hours > 0) {
+                builder.append(" ");
+            }
+            builder.append(Integer.toString(minutes) + "m");
+        }
+        if (seconds > 0 && hours == 0) {
+            if (hours > 0 || minutes > 0) {
+                builder.append(" ");
+            }
+            builder.append(Integer.toString(seconds) + "s");
+        }
+        return builder.toString();
     }
 
     public static CharSequence getTimespanText(long timespanMs, final Resources res) {

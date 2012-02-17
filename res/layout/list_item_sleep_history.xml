@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<com.androsz.electricsleepbeta.widget.SleepChart xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
-    android:id="@+id/sleep_history_list_item_sleepchartview"
-    style="@style/SleepChart_Light"
-    android:background="@color/background_light"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp"
-    electricsleepbeta:setScroll="true" />
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+  android:background="@color/background_light"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:paddingLeft="8dp"
+  android:paddingRight="8dp">
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+        <TextView
+          android:id="@+id/date"
+          android:layout_alignParentLeft="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/text_dark" />
+
+        <TextView
+          android:id="@+id/duration"
+          android:layout_alignParentRight="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/text_dark" />
+    </RelativeLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+        <TextView
+          android:id="@+id/efficiency"
+          android:layout_gravity="center_vertical"
+          android:gravity="center_vertical"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/text_dark"
+          style="?android:attr/textAppearanceLarge" />
+
+        <com.androsz.electricsleepbeta.widget.SleepChart
+          android:id="@+id/sleep_history_list_item_sleepchartview"
+          android:background="@color/background_light"
+          android:layout_width="match_parent"
+          android:layout_height="100dp"
+          electricsleepbeta:setScroll="true"
+          electricsleepbeta:showLabels="false"
+          electricsleepbeta:showLegend="false"
+          electricsleepbeta:showTitle="false"
+          style="@style/SleepChart_Light" />
+
+    </LinearLayout>
+</LinearLayout>

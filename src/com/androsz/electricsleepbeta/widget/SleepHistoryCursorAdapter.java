@@ -9,8 +9,10 @@ import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 
@@ -25,7 +27,13 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 	@Override
 	public void bindView(final View view, final Context context, final Cursor cursor) {
 
-		final SleepChart sleepChart =
+        final SleepSession session = new SleepSession(cursor);
+        ((TextView) view.findViewById(R.id.date)).setText(session.getDayText(context));
+        ((TextView) view.findViewById(R.id.duration)).setText(
+            "Recording time " + session.getTotalRecordAbbrevTime(context.getResources()));
+        ((TextView) view.findViewById(R.id.efficiency)).setText(session.getEfficiency() + "%");
+
+        final SleepChart sleepChart =
             (SleepChart) view.findViewById(R.id.sleep_history_list_item_sleepchartview);
         sleepChart.setScroll(true);
 
