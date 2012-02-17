@@ -17,8 +17,6 @@ import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import android.widget.Toast;
