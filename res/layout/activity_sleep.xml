@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_alarm_status"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <ProgressBar
