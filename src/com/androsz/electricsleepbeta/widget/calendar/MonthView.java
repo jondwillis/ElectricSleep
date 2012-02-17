@@ -406,10 +406,22 @@ public class MonthView extends View {
 
         final int height = Math.abs(rect.bottom - rect.top);
         final int width = Math.abs(rect.right - rect.left);
-        int cy = (int) (rect.top + (height / 1.4));
-        int cx = (int) (rect.left + (width / 2));
-        int r = (int) (width / 4);
-        canvas.drawCircle(cx, cy, r, paint);
+        Log.d(TAG, "width = " + width + " height = " + height);
+        int rx;
+        if (width < height) {
+            rx = (int) (width / 4);
+        } else {
+            rx = (int) (height / 4);
+        }
+
+        // TODO the following places the indicator in the bottom center of the month marking but
+        //this does not work well if there is only enough space for the numbering.
+        //int cy = (int) (height / 1.4));
+        //int cx = (int) (rect.left + (width / 2));
+
+        int cy = (int) (rect.bottom - rx - (rx / 4));
+        int cx = (int) (rect.right - rx - (rx / 4));
+        canvas.drawCircle(cx, cy, rx, paint);
     }
 
 	/**
