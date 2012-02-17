@@ -137,6 +137,13 @@
         <item name="android:background">@drawable/btn_primary</item>
         <item name="android:textColor">@color/text_light</item>
     </style>
+    
+    <style name="SuggestionButton" parent="@style/SleepMateButton.Primary">
+        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:background">@color/background_suggestions</item>
+        <item name="android:padding">0dip</item>
+        <item name="android:onClick">onClick</item>
+    </style>
 
     <style name="SleepChart_Light">
         <item name="com.androsz.electricsleepbeta:gridAxisColor">@color/sleepchart_axis</item>
