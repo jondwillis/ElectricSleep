@@ -87,7 +87,6 @@ public class ElectricSleepProvider extends ContentProvider {
         values.put(TimestampColumns.CREATED_ON, currentTimestamp);
         values.put(TimestampColumns.UPDATED_ON, currentTimestamp);
 
-        final ContentResolver resolver = getContext().getContentResolver();
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = URI_MATCHER.match(uri);
         switch (match) {
@@ -97,7 +96,7 @@ public class ElectricSleepProvider extends ContentProvider {
             if (id == -1) {
                 return null;
             }
-            resolver.notifyChange(uri, null);
+            notifyChange(uri);
             return ContentUris.withAppendedId(SleepSession.CONTENT_URI, id);
         default:
             throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -128,8 +127,10 @@ public class ElectricSleepProvider extends ContentProvider {
             if (sortOrder == null) {
                 sortOrder = SleepSession.SORT_ORDER;
             }
+
             Cursor c = builder.where(selection, selectionArgs).query(db,
                     projection, sortOrder);
+
             c.setNotificationUri(getContext().getContentResolver(), uri);
             return c;
         }
@@ -139,7 +140,6 @@ public class ElectricSleepProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
             String[] selectionArgs) {
-        final ContentResolver resolver = getContext().getContentResolver();
 
         final long updateTimestamp = System.currentTimeMillis();
         values.put(TimestampColumns.UPDATED_ON, updateTimestamp);
@@ -153,7 +153,7 @@ public class ElectricSleepProvider extends ContentProvider {
         switch (match) {
         case SLEEP_SESSIONS:
         case SLEEP_SESSIONS_ID:
-            resolver.notifyChange(uri, null);
+            notifyChange(uri);
         }
         return count;
     }
