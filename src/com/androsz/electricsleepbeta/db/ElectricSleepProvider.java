@@ -148,6 +148,7 @@ public class ElectricSleepProvider extends ContentProvider {
         case SLEEP_SESSIONS:
         case SLEEP_SESSIONS_ID:
             resolver.notifyChange(SleepSession.CONTENT_URI, null);
+            resolver.notifyChange(uri, null);
         }
         return count;
     }
