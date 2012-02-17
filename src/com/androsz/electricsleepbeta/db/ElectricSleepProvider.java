@@ -15,7 +15,6 @@ package com.androsz.electricsleepbeta.db;
 import com.google.android.apps.iosched.util.SelectionBuilder;
 
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -27,7 +26,7 @@ import java.util.TimeZone;
 
 /**
  * Provider for electric sleep data.
- * 
+ *
  * @author Jon Willis
  * @author Brandon Edens
  * @version $Revision$
