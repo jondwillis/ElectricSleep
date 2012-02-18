@@ -620,5 +620,6 @@ of lack of room.
     <string name="recording_time">Recording time <b>
             <xliff:g id="time">%s</xliff:g>
         </b></string>
+            <string name="sleep_LINEBREAK_efficiency">Sleep\nEfficiency</string>
 
 </resources>
