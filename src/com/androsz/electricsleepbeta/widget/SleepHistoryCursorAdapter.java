@@ -16,50 +16,55 @@ import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
 
-	private static int LAYOUT = R.layout.list_item_sleep_history;
+    private static int LAYOUT = R.layout.list_item_sleep_history;
 
-	private ViewGroup parent;
+    private ViewGroup parent;
 
-	public SleepHistoryCursorAdapter(final Context context, final Cursor cursor) {
-		super(context, LAYOUT, cursor, true);
-	}
+    public SleepHistoryCursorAdapter(final Context context, final Cursor cursor) {
+        super(context, LAYOUT, cursor, true);
+    }
 
-	@Override
-	public void bindView(final View view, final Context context, final Cursor cursor) {
+    @Override
+    public void bindView(final View view, final Context context,
+            final Cursor cursor) {
 
         final SleepSession session = new SleepSession(cursor);
-        ((TextView) view.findViewById(R.id.date)).setText(session.getDayText(context));
-        ((TextView) view.findViewById(R.id.duration)).setText(
-            "Recording time " + session.getTotalRecordAbbrevTime(context.getResources()));
-        ((TextView) view.findViewById(R.id.efficiency)).setText(session.getEfficiency() + "%");
+        ((TextView) view.findViewById(R.id.date)).setText(session
+                .getDayText(context));
+        ((TextView) view.findViewById(R.id.duration)).setText(context
+                .getString(R.string.recording_time, session
+                        .getTotalRecordAbbrevTime(context.getResources())));
+        ((TextView) view.findViewById(R.id.efficiency)).setText(session
+                .getEfficiency() + "%");
 
-        final SleepChart sleepChart =
-            (SleepChart) view.findViewById(R.id.sleep_history_list_item_sleepchartview);
+        final SleepChart sleepChart = (SleepChart) view
+                .findViewById(R.id.sleep_history_list_item_sleepchartview);
         sleepChart.setScroll(true);
 
-		try {
-			sleepChart.sync(cursor);
-		} catch (final StreamCorruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		sleepChart.setMinimumHeight(parent.getHeight() / 2);
-	}
+        try {
+            sleepChart.sync(cursor);
+        } catch (final StreamCorruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (final IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (final ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        sleepChart.setMinimumHeight(parent.getHeight() / 2);
+    }
 
-	@Override
-	public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-		final LayoutInflater li = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.parent = parent;
-		return li.inflate(LAYOUT, parent, false);
-	}
+    @Override
+    public View newView(final Context context, final Cursor cursor,
+            final ViewGroup parent) {
+        final LayoutInflater li = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.parent = parent;
+        return li.inflate(LAYOUT, parent, false);
+    }
 }
