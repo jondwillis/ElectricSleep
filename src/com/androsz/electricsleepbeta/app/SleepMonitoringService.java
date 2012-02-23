@@ -135,7 +135,6 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				i.putExtra(EXTRA_ALARM_WINDOW, alarmWindow);
 				i.putExtra(StartSleepReceiver.EXTRA_USE_ALARM, useAlarm);
 				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
-				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
 				sendBroadcast(i);
 			} else if (action.equals(STOP_AND_SAVE_SLEEP)) {
 				final Intent saveIntent = addExtrasToSaveSleepIntent(new Intent(
