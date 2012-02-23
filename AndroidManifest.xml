@@ -28,7 +28,7 @@
 
         <activity android:label="@string/history" android:name="com.androsz.electricsleepbeta.app.HistoryActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.HomeActivity" />
-        <activity android:label="@string/tracking" android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:label="@string/tracking" android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:screenOrientation="portrait" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity" android:theme="@style/Theme.SleepMate.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
