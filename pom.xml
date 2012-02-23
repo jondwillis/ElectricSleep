@@ -6,7 +6,7 @@
 	<groupId>com.androsz</groupId>
 	<artifactId>electricsleepbeta</artifactId>
 	<packaging>apk</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.0-rc1</version>
 
 	<name>ElectricSleep</name>
 	<description>Improving Sleep With Android</description>
@@ -50,7 +50,7 @@
 			<id>github-project-site</id>
 			<name>GitHub Project Pages</name>
 			<url>gitsite:git@github.com/jondwillis/ElectricSleep/</url>
-			<!-- YOU MUST PUT THE FOLLOWING IN ~/.m2/settings.xml <servers> <server> 
+			<!-- YOU MUST PUT THE FOLLOWING IN ~/.m2/settings.xml <servers> <server>
 				<id>github-project-site</id> <username>git</username> </server> </servers> -->
 		</site>
 	</distributionManagement>
@@ -159,7 +159,7 @@
 					</configuration>
 					<extensions>true</extensions>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -329,7 +329,7 @@
 	<profiles>
 		<profile>
 			<id>development</id>
-			<!-- using this since activeByDefault does not work well with multiple 
+			<!-- using this since activeByDefault does not work well with multiple
 				profiles -->
 			<activation>
 				<property>
@@ -349,7 +349,7 @@
 		</profile>
 		<profile>
 			<id>release</id>
-			<!-- via this activation the profile is automatically used when the release 
+			<!-- via this activation the profile is automatically used when the release
 				is done with the maven release plugin -->
 			<activation>
 				<property>
@@ -386,7 +386,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- the signed apk then needs to be zipaligned and we activate proguard 
+					<!-- the signed apk then needs to be zipaligned and we activate proguard
 						and we run the manifest update -->
 					<plugin>
 						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
