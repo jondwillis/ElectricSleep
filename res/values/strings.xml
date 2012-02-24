@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
+    <string name="title_rate">Rate</string>
+    <string name="title_version">Version</string>
     <string name="calendar">Calendar</string>
     <string name="times_disrupted">Times Disrupted</string>
     <string name="total_averages">Total Averages</string>
@@ -131,9 +132,7 @@ sleeping</string>
 feel:</string>
     <string name="save">Save</string>
     <string name="discard">Discard</string>
-    <string name="home_last_sleep_title_text_empty">...</string>
     <string name="most_recent">Most Recent</string>
-    <string name="home_review_title_text_empty">No sleep to review...</string>
     <string name="home_review_title_text">Sleep Averages</string>
     <string name="to">to</string>
     <string name="summary_pref_calibration">Tap to calibrate movement sensitivities
@@ -238,7 +237,6 @@ to go off.</string>
     <string name="calibrate_description_welcome_b1">There are many different Android devices.</string>
     <string name="calibrate_description_welcome_b2">There are even more places to sleep.</string>
     <string name="calibrate_description_welcome_b3">Sleep101 works best when calibrated to your unique situation.</string>
-    <string name="calibrating">Calibrating...</string>
     <string name="settings_description">Sleep results</string>
     <string name="no_results">There is no saved sleep.</string>
 
