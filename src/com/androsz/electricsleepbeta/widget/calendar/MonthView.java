@@ -17,9 +17,9 @@
 package com.androsz.electricsleepbeta.widget.calendar;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,18 +31,17 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HistoryActivity;
@@ -58,9 +57,6 @@ public class MonthView extends View {
     private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
 	private static int EVENT_NUM_DAYS = 31;
-	private static int HORIZONTAL_FLING_THRESHOLD = 33;
-	private static float HOUR_GAP = 0f;
-	private static float MIN_EVENT_HEIGHT = 1f;
 	private static int MONTH_DAY_GAP = 1;
 	private static int MONTH_DAY_TEXT_SIZE = 20;
 	private static float mScale = 0; // Used for supporting different screen
@@ -91,7 +87,6 @@ public class MonthView extends View {
 	private Drawable mBoxPressed;
 
 	private Drawable mBoxSelected;
-	private int mBusybitsColor;
 	private Canvas mCanvas;
 	private int mCellHeight;
 
@@ -130,6 +125,7 @@ public class MonthView extends View {
 	private int mMonthOtherMonthDayNumberColor;
 
 	private int mMonthSaturdayColor;
+	private int mMonthWeekdayColor;
 	private int mMonthSundayColor;
 
 	private int mMonthTodayNumberColor;
@@ -143,8 +139,6 @@ public class MonthView extends View {
 
 	// Pre-allocate and reuse
 	private final Rect mRect = new Rect();
-
-	private final RectF mRectF = new RectF();
 
 	private boolean mRedrawScreen = true;
 
@@ -170,12 +164,9 @@ public class MonthView extends View {
 			if (mScale != 1) {
 				WEEK_GAP *= mScale;
 				MONTH_DAY_GAP *= mScale;
-				HOUR_GAP *= mScale;
 
 				MONTH_DAY_TEXT_SIZE *= mScale;
 				TEXT_TOP_MARGIN *= mScale;
-				HORIZONTAL_FLING_THRESHOLD *= mScale;
-				MIN_EVENT_HEIGHT *= mScale;
 				BUSY_BITS_WIDTH *= mScale;
 				BUSY_BITS_MARGIN *= mScale;
 			}
@@ -350,7 +341,7 @@ public class MonthView extends View {
 			} else if (Utils.isSaturday(column, mStartDay)) {
 				p.setColor(mMonthSaturdayColor);
 			} else {
-				p.setColor(mMonthDayNumberColor);
+				p.setColor(mMonthWeekdayColor);
 			}
 			// bolds the day if there's an event that day
 			p.setFakeBoldText(eventDay[day - mFirstJulianDay]);
@@ -368,32 +359,10 @@ public class MonthView extends View {
 		canvas.drawText(String.valueOf(mCursor.getDayAt(row, column)), textX, textY, p);
 	}
 
-	// Draw busybits for a single event
-	private RectF drawEventRect(Rect rect, SessionGeometry session, Canvas canvas, Paint p) {
-
-		p.setColor(mBusybitsColor);
-
-		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
-		final int bottom = rect.bottom - BUSY_BITS_MARGIN;
-
-		final RectF rf = mRectF;
-		rf.top = session.top;
-		// Make sure we don't go below the bottom of the bb bar
-		rf.bottom = Math.min(session.bottom, bottom);
-		rf.left = left;
-		rf.right = left + BUSY_BITS_WIDTH;
-
-		canvas.drawRect(rf, p);
-
-		return rf;
-	}
-
 	// /Create and draw the event busybits for this day
 	private void drawEvents(int date, Canvas canvas, Rect rect, Paint p, boolean drawBg) {
 		// The top of the busybits section lines up with the top of the day
 		// number
-		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
-		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
         Paint paint = new Paint();
         paint.setColor(mEventOffColor);
@@ -620,16 +589,16 @@ public class MonthView extends View {
 
 		// Cache color lookups
 		final Resources res = getResources();
-        mMonthBackgroundColor = res.getColor(R.color.month_background);
-		mMonthOtherMonthColor = res.getColor(R.color.month_other_month);
-		mMonthOtherMonthDayNumberColor = res.getColor(R.color.month_other_month_day_number);
-		mMonthDayNumberColor = res.getColor(R.color.month_day_number);
-		mMonthTodayNumberColor = res.getColor(R.color.month_today_number);
-		mMonthSaturdayColor = res.getColor(R.color.month_saturday);
-		mMonthSundayColor = res.getColor(R.color.month_sunday);
-		mBusybitsColor = res.getColor(R.color.primary1);
+        mMonthBackgroundColor = res.getColor(R.color.faded_grey);
+		mMonthOtherMonthColor = res.getColor(R.color.background_dark);
+		mMonthOtherMonthDayNumberColor = res.getColor(R.color.faded_grey);
+		mMonthDayNumberColor = res.getColor(R.color.text_light);
+		mMonthTodayNumberColor = res.getColor(R.color.primary1_transparent);
+		mMonthSaturdayColor = res.getColor(R.color.text_light);
+		mMonthWeekdayColor = res.getColor(R.color.text_light);
+		mMonthSundayColor = res.getColor(R.color.text_light);
         mEventOnColor = res.getColor(R.color.primary_dark);
-        mEventOffColor = res.getColor(R.color.month_day_event_off);
+        mEventOffColor = res.getColor(R.color.less_faded_grey);
 
         mGestureDetector = new GestureDetector(getContext(),
 				new GestureDetector.SimpleOnGestureListener() {
