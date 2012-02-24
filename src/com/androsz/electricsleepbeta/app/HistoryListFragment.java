@@ -14,7 +14,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,8 +61,8 @@ public class HistoryListFragment extends HostFragment implements
     private ListView mListView;
 
     private TextView mTextView;
-
-    ProgressDialog progress;
+    
+    ProgressDialog progressDialog;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
     @Override
@@ -76,19 +76,16 @@ public class HistoryListFragment extends HostFragment implements
             Bundle savedInstanceState) {
 
         //TODO doesn't seem possible without recreating the activity first.
-        final View root =
-            LayoutInflater
-            .from(new ContextThemeWrapper(getActivity(), R.style.Theme_SleepMate_Light))
-            .inflate(R.layout.fragment_history_list, container, false);
-        progress = new ProgressDialog(getActivity());
-        mTextView = (TextView) root.findViewById(R.id.text);
+        final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
+        progressDialog = new ProgressDialog(getActivity());
+        
+        mTextView = (TextView) root.findViewById(R.id.text_no_history);
         mListView = (ListView) root.findViewById(R.id.list);
-        mListView.setVerticalFadingEdgeEnabled(false);
-        mListView.setScrollbarFadingEnabled(false);
 
         sleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
         mListView.setAdapter(sleepHistoryAdapter);
 
+       // mListView.setBackgroundColor(getActivity().getResources().getColor(R.color.background_light));
 
         final Intent intent = getActivity().getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -114,8 +111,8 @@ public class HistoryListFragment extends HostFragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        progress.setMessage(getString(R.string.querying_sleep_database));
-        progress.show();
+        progressDialog.setMessage(getString(R.string.querying_sleep_database));
+        progressDialog.show();
 
         switch (id) {
         case LOADER_ALL:
@@ -150,7 +147,10 @@ public class HistoryListFragment extends HostFragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null) {
+            dismissProgressDialogIfShowing();
             if (data.getCount() == 0) {
+                mTextView.setVisibility(View.VISIBLE);
+                mListView.setVisibility(View.GONE);
                 return;
             } else if (data.getCount() == 1) {
                 data.moveToFirst();
@@ -183,7 +183,7 @@ public class HistoryListFragment extends HostFragment implements
                                                 final DialogInterface dialog,
                                                 final int id) {
 
-                                            new DeleteSleepTask(getActivity(), progress)
+                                            new DeleteSleepTask(getActivity(), progressDialog)
                                                     .execute(
                                                             new Long[] { rowId },
                                                             null, null);
@@ -207,9 +207,7 @@ public class HistoryListFragment extends HostFragment implements
             // Define the on-click listener for the list items
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
-        if (progress != null && progress.isShowing()) {
-            progress.dismiss();
-        }
+        
     }
 
     @Override
@@ -230,9 +228,13 @@ public class HistoryListFragment extends HostFragment implements
     public void onPause() {
         super.onPause();
 
-        if (progress != null && progress.isShowing()) {
-            progress.dismiss();
-        }
+        dismissProgressDialogIfShowing();
     }
+
+	private void dismissProgressDialogIfShowing() {
+		if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+	}
 
 }

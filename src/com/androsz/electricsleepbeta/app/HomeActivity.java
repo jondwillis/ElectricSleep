@@ -3,6 +3,7 @@ package com.androsz.electricsleepbeta.app;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
 
+import static com.androsz.electricsleepbeta.util.IntentUtil.shareSleep;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
@@ -31,16 +32,17 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
  * Front-door {@link Activity} that displays high-level features the application
  * offers to users.
  */
-public class HomeActivity extends HostActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends HostActivity implements
+		LoaderManager.LoaderCallbacks<Cursor> {
 
-    /* Warning - these values must remain consistent with activity_home. */
-    private static final int FLIP_INVISIBLE = 0;
-    private static final int FLIP_NO_RECORDS = 1;
-    private static final int FLIP_RECENT_RECORD = 2;
+	/* Warning - these values must remain consistent with activity_home. */
+	private static final int FLIP_INVISIBLE = 0;
+	private static final int FLIP_NO_RECORDS = 1;
+	private static final int FLIP_RECENT_RECORD = 2;
 
 	private SleepChart sleepChart;
 
-    @Override
+	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_home;
 	}
@@ -51,37 +53,34 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 
 		final ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
-		/*new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				final SharedPreferences userPrefs = getSharedPreferences(
-						SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
-				final int prefsVersion = userPrefs.getInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
-						0);
-				if (prefsVersion == 0) {
-					startActivity(new Intent(HomeActivity.this, WelcomeTutorialWizardActivity.class)
-							.putExtra("required", true));
-				} else if (WelcomeTutorialWizardActivity
-						.enforceCalibrationBeforeStartingSleep(HomeActivity.this)) {
-				}
-				return null;
-			}
-		}.execute();*/
+		/*
+		 * new AsyncTask<Void, Void, Void>() {
+		 * 
+		 * @Override protected Void doInBackground(Void... params) { final
+		 * SharedPreferences userPrefs = getSharedPreferences(
+		 * SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
+		 * final int prefsVersion =
+		 * userPrefs.getInt(SettingsActivity.PREFERENCES_ENVIRONMENT, 0); if
+		 * (prefsVersion == 0) { startActivity(new Intent(HomeActivity.this,
+		 * WelcomeTutorialWizardActivity.class) .putExtra("required", true)); }
+		 * else if (WelcomeTutorialWizardActivity
+		 * .enforceCalibrationBeforeStartingSleep(HomeActivity.this)) { } return
+		 * null; } }.execute();
+		 */
 
 		sleepChart = (SleepChart) findViewById(R.id.home_sleep_chart);
 
 		getSupportLoaderManager().initLoader(0, null, this);
-    }
+	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(this, SleepSession.CONTENT_URI,
-                                null, null, null,
-                                SleepSession.START_TIMESTAMP + " DESC");
+		return new CursorLoader(this, SleepSession.CONTENT_URI, null, null,
+				null, SleepSession.START_TIMESTAMP + " DESC");
 	}
 
 	@Override
@@ -92,8 +91,14 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-		// cancel home as up
-		if (item.getItemId() == android.R.id.home) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_share_sleep_record:
+			if (mSleepSession != null) {
+				shareSleep(mSleepSession, this);
+				return true;
+			}
+			break;
+		case android.R.id.home:
 			return true;
 		}
 
@@ -109,32 +114,31 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 
 	}
 
+	private SleepSession mSleepSession;
+
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, final Cursor cursor) {
-		//final TextView lastSleepTitleText = (TextView) findViewById(R.id.home_last_sleep_title_text);
-		//final TextView reviewTitleText = (TextView) findViewById(R.id.home_review_title_text);
+		// final TextView lastSleepTitleText = (TextView)
+		// findViewById(R.id.home_last_sleep_title_text);
+		// final TextView reviewTitleText = (TextView)
+		// findViewById(R.id.home_review_title_text);
 
-		//final ViewGroup statsContainer = (ViewGroup) findViewById(R.id.home_statistics_dashboard);
+		// final ViewGroup statsContainer = (ViewGroup)
+		// findViewById(R.id.home_statistics_dashboard);
 		if (cursor == null || cursor.getCount() == 0) {
-            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
-            flipper.setDisplayedChild(FLIP_NO_RECORDS);
+			ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
+			flipper.setDisplayedChild(FLIP_NO_RECORDS);
 
 		} else {
-            final TextView avgScoreText = (TextView) findViewById(R.id.value_score_text);
+			final TextView avgScoreText = (TextView) findViewById(R.id.value_score_text);
 			final TextView avgDurationText = (TextView) findViewById(R.id.value_duration_text);
 			final TextView avgSpikesText = (TextView) findViewById(R.id.value_spikes_text);
 			final TextView avgFellAsleepText = (TextView) findViewById(R.id.value_fell_asleep_text);
 			cursor.moveToFirst();
-
+			mSleepSession = new SleepSession(cursor);
 			try {
-				sleepChart.sync(cursor);
-			} catch (StreamCorruptedException e) {
-				e.printStackTrace();
+				sleepChart.sync(mSleepSession);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 
@@ -142,18 +146,19 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 			sleepChart.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					final Intent reviewSleepIntent = new Intent(HomeActivity.this,
-							ReviewSleepActivity.class);
+					final Intent reviewSleepIntent = new Intent(
+							HomeActivity.this, ReviewSleepActivity.class);
 
-					final Uri data = Uri.withAppendedPath(SleepSession.CONTENT_URI,
-                                                          String.valueOf(sleepChartRowId));
+					final Uri data = Uri.withAppendedPath(
+							SleepSession.CONTENT_URI,
+							String.valueOf(sleepChartRowId));
 					reviewSleepIntent.setData(data);
 					startActivity(reviewSleepIntent);
 				}
 			});
 
-			sleepChart.setMinimumHeight(
-                MathUtils.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
+			sleepChart.setMinimumHeight(MathUtils
+					.getAbsoluteScreenHeightPx(HomeActivity.this) / 2 - 30);
 
 			new AsyncTask<Void, Void, Void>() {
 				int avgSleepScore = 0;
@@ -191,18 +196,18 @@ public class HomeActivity extends HostActivity implements LoaderManager.LoaderCa
 				@Override
 				protected void onPostExecute(Void result) {
 					avgScoreText.setText(avgSleepScore + "%");
-					avgDurationText.setText(SleepSession.getTimespanText(avgDuration,
-							getResources()));
+					avgDurationText.setText(SleepSession.getTimespanText(
+							avgDuration, getResources()));
 					avgSpikesText.setText(avgSpikes + "");
-					avgFellAsleepText.setText(SleepSession.getTimespanText(avgFellAsleep,
-							getResources()));
+					avgFellAsleepText.setText(SleepSession.getTimespanText(
+							avgFellAsleep, getResources()));
 					super.onPostExecute(result);
 				}
 			}.execute();
 
-            ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
-            flipper.setDisplayedChild(FLIP_RECENT_RECORD);
-        }
+			ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
+			flipper.setDisplayedChild(FLIP_RECENT_RECORD);
+		}
 	}
 
 	public void onSleepClick(final View v) throws Exception {
