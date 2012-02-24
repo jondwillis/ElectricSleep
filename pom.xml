@@ -124,6 +124,11 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-jarsigner-plugin</artifactId>
 					<version>1.2</version>
 				</plugin>
@@ -151,7 +156,7 @@
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.1.1</version>
 					<configuration>
 						<sdk>
 							<platform>${android.platform}</platform>
