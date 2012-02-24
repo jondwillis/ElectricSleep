@@ -1,8 +1,5 @@
 package com.androsz.electricsleepbeta.app;
 
-import java.io.IOException;
-import java.io.StreamCorruptedException;
-
 import static com.androsz.electricsleepbeta.util.IntentUtil.shareSleep;
 import android.content.Intent;
 import android.database.Cursor;
@@ -59,7 +56,7 @@ public class HomeActivity extends HostActivity implements
 		bar.setDisplayHomeAsUpEnabled(false);
 		/*
 		 * new AsyncTask<Void, Void, Void>() {
-		 * 
+		 *
 		 * @Override protected Void doInBackground(Void... params) { final
 		 * SharedPreferences userPrefs = getSharedPreferences(
 		 * SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
