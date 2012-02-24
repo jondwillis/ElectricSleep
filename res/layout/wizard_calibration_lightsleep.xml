@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_" />
 
-    
+
     <TextView
         style="@style/TextBulleted"
         android:layout_width="wrap_content"
@@ -29,20 +30,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dip"
         android:orientation="horizontal" >
 
         <com.androsz.electricsleepbeta.widget.VerticalSeekBar
-            android:id="@+id/calibration_level_seekbar"
-            android:layout_width="50dip"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="34dip" />
+          android:id="@+id/calibration_level_seekbar"
+          android:layout_height="match_parent"
+          android:layout_width="wrap_content"
+          android:layout_marginLeft="4dp"
+          android:layout_marginRight="4dp"
+            />
 
         <com.androsz.electricsleepbeta.widget.SleepChart
             android:id="@+id/calibration_sleep_chart"
             style="@style/SleepChart_Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dip" />
+            electricsleepbeta:showTitle="false"
+            electricsleepbeta:showLabels="false"
+            electricsleepbeta:showLegend="false"
+            />
     </LinearLayout>
 
 </LinearLayout>
