@@ -40,7 +40,6 @@
         <activity android:label="@string/title_calibrate" android:name=".app.wizard.CalibrationWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/welcome_tutorial" android:name=".app.wizard.WelcomeTutorialWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/title_calibrate" android:name="com.androsz.electricsleepbeta.app.HelloWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
-        <activity android:label="@string/calibrating" android:name="com.androsz.electricsleepbeta.app.CalibrateAlarmActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/go_into_standy" android:name="com.androsz.electricsleepbeta.app.CheckForScreenBugActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Light"/>
         <activity android:excludeFromRecents="true" android:label="@string/title_save_sleep" android:name="com.androsz.electricsleepbeta.app.SaveSleepActivity" android:theme="@style/Theme.SleepMate.Dark" android:windowSoftInputMode="stateUnchanged"/>

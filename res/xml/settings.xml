@@ -110,5 +110,6 @@
             android:title="@string/title_pref_analytics" >
         </CheckBoxPreference>
     </PreferenceCategory>
+    <Preference android:enabled="false" android:title="@string/title_version" android:key="@string/title_version"/>
 
 </PreferenceScreen>
