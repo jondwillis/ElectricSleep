@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="internalOnly" android:versionCode="19" android:versionName="1.1.0-SNAPSHOT" package="com.androsz.electricsleepbeta">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="internalOnly" android:versionCode="19" android:versionName="1.1.0-rc1" package="com.androsz.electricsleepbeta">
 
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="true"/>
 
@@ -27,8 +27,8 @@
         </receiver>
 
         <activity android:label="@string/history" android:name="com.androsz.electricsleepbeta.app.HistoryActivity" android:theme="@style/Theme.SleepMate.Dark"/>
-        <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.HomeActivity" />
-        <activity android:label="@string/tracking" android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:screenOrientation="portrait" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.HomeActivity"/>
+        <activity android:label="@string/tracking" android:name="com.androsz.electricsleepbeta.app.SleepActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/app_name" android:name="com.androsz.electricsleepbeta.app.ZeoSplashActivity" android:theme="@style/Theme.SleepMate.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -43,7 +43,7 @@
         <activity android:label="@string/calibrating" android:name="com.androsz.electricsleepbeta.app.CalibrateAlarmActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/go_into_standy" android:name="com.androsz.electricsleepbeta.app.CheckForScreenBugActivity" android:theme="@android:style/Theme.Dialog"/>
         <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Light"/>
-        <activity android:excludeFromRecents="true" android:label="@string/title_save_sleep" android:name="com.androsz.electricsleepbeta.app.SaveSleepActivity" android:windowSoftInputMode="stateUnchanged" android:theme="@style/Theme.SleepMate.Dark"/>
+        <activity android:excludeFromRecents="true" android:label="@string/title_save_sleep" android:name="com.androsz.electricsleepbeta.app.SaveSleepActivity" android:theme="@style/Theme.SleepMate.Dark" android:windowSoftInputMode="stateUnchanged"/>
         <activity android:label="@string/title_settings" android:name="com.androsz.electricsleepbeta.app.SettingsActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:exported="true" android:label="@string/alarm_list_title" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmClock" android:taskAffinity="" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:excludeFromRecents="true" android:label="@string/alarmclock_settings" android:name="com.androsz.electricsleepbeta.alarmclock.SettingsActivity" android:taskAffinity="" android:theme="@style/Theme.SleepMate.Dark">
