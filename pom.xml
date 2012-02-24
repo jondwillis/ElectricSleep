@@ -71,7 +71,7 @@
 
 		<java.version>1.6</java.version>
 		<android.version>3.2_r1</android.version>
-		<android.platform>15</android.platform>
+		<android.platform>13</android.platform>
 		<actionbarsherlock.version>3.5.1</actionbarsherlock.version>
 		<viewpagerindicator.version>2.0.0-electricsleep</viewpagerindicator.version>
 		<googleanalytics.version>1.4.2</googleanalytics.version>
