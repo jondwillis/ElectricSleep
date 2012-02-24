@@ -62,7 +62,7 @@ public class HistoryListFragment extends HostFragment implements
 
     private TextView mTextView;
 
-    ProgressDialog progress;
+    ProgressDialog progressDialog;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
     @Override
@@ -80,7 +80,7 @@ public class HistoryListFragment extends HostFragment implements
             LayoutInflater
             .from(new ContextThemeWrapper(getActivity(), R.style.Theme_SleepMate_Light))
             .inflate(R.layout.fragment_history_list, container, false);
-        progress = new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(getActivity());
         mTextView = (TextView) root.findViewById(R.id.text);
         mListView = (ListView) root.findViewById(R.id.list);
         mListView.setVerticalFadingEdgeEnabled(false);
@@ -114,8 +114,8 @@ public class HistoryListFragment extends HostFragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        progress.setMessage(getString(R.string.querying_sleep_database));
-        progress.show();
+        progressDialog.setMessage(getString(R.string.querying_sleep_database));
+        progressDialog.show();
 
         switch (id) {
         case LOADER_ALL:
@@ -183,7 +183,7 @@ public class HistoryListFragment extends HostFragment implements
                                                 final DialogInterface dialog,
                                                 final int id) {
 
-                                            new DeleteSleepTask(getActivity(), progress)
+                                            new DeleteSleepTask(getActivity(), progressDialog)
                                                     .execute(
                                                             new Long[] { rowId },
                                                             null, null);
@@ -207,9 +207,8 @@ public class HistoryListFragment extends HostFragment implements
             // Define the on-click listener for the list items
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
-        if (progress != null && progress.isShowing()) {
-            progress.dismiss();
-        }
+        
+        dismissProgressDialogIfShowing();
     }
 
     @Override
@@ -230,9 +229,13 @@ public class HistoryListFragment extends HostFragment implements
     public void onPause() {
         super.onPause();
 
-        if (progress != null && progress.isShowing()) {
-            progress.dismiss();
-        }
+        dismissProgressDialogIfShowing();
     }
+
+	private void dismissProgressDialogIfShowing() {
+		if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+	}
 
 }
