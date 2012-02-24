@@ -101,7 +101,7 @@
             style="@style/TextBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/currently_tracking_sleep_activity_" />
+            android:text="@string/currently_tracking_sleep" />
     </LinearLayout>
 
     <com.androsz.electricsleepbeta.widget.SleepChart

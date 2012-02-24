@@ -607,7 +607,7 @@ of lack of room.
     <string name="wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_">Wait up to 10 seconds for your screen to automatically turn back on. Then you may need to unlock your device to continue.</string>
     <string name="you_have_successfully_calibrated_sleepmate_to_track_your_sleep_">You have successfully calibrated Sleep101 to track your sleep.</string>
     <string name="you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_">You may always re-calibrate if your sleep environment changes by choosing \'Calibrate\' from the menu.</string>
-    <string name="currently_tracking_sleep_activity_">Currently tracking sleep activity...</string>
+    <string name="currently_tracking_sleep">Currently tracking sleep...</string>
     <string name="stop_tracking">Stop Tracking</string>
     <string name="no_alarm">No Alarm</string>
     <string name="sleepmate_will_not_wake_you_up_">Sleep101 will not wake you up.</string>
