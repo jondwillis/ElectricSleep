@@ -99,11 +99,12 @@ public class SleepActivity extends HostActivity {
         @SuppressWarnings("unchecked")
         @Override
         public void onReceive(final Context context, final Intent intent) {
-
-            List<PointD> points = (List<PointD>) intent
-                    .getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
-            for (PointD point : points) {
-                sleepChart.mData.xySeriesMovement.add(point.x, point.y);
+            if (sleepChart.mData != null) {
+                List<PointD> points =
+                    (List<PointD>) intent.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
+                for (PointD point : points) {
+                    sleepChart.mData.xySeriesMovement.add(point.x, point.y);
+                }
             }
 
             final double alarmTriggerSensitivity = intent.getDoubleExtra(
@@ -293,8 +294,6 @@ public class SleepActivity extends HostActivity {
             sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
         }
         sleepChart.setData(data);
-        //sleepChart = new SleepChart(data);
-        //sleepChart = (SleepChart) savedState.getParcelable(SLEEP_CHART);
         super.onRestoreInstanceState(savedState);
     }
 
@@ -331,7 +330,6 @@ public class SleepActivity extends HostActivity {
         registerReceiver(batteryChangedReceiver, new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
         sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
-
         super.onResume();
     }
 
