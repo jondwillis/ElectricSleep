@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
@@ -27,8 +28,12 @@ import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.widget.SleepChart;
+import com.androsz.electricsleepbeta.widget.SleepChartData;
 
 public class SleepActivity extends HostActivity {
+
+    private static final String TAG = SleepActivity.class.getSimpleName();
+
     private class DimScreenTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -98,7 +103,7 @@ public class SleepActivity extends HostActivity {
             List<PointD> points = (List<PointD>) intent
                     .getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
             for (PointD point : points) {
-                sleepChart.xySeriesMovement.add(point.x, point.y);
+                sleepChart.mData.xySeriesMovement.add(point.x, point.y);
             }
 
             final double alarmTriggerSensitivity = intent.getDoubleExtra(
@@ -214,6 +219,9 @@ public class SleepActivity extends HostActivity {
 
         registerReceiver(sleepStoppedReceiver, new IntentFilter(
                 SleepMonitoringService.SLEEP_STOPPED));
+
+        sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
+        sleepChart.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -279,7 +287,14 @@ public class SleepActivity extends HostActivity {
 
     @Override
     protected void onRestoreInstanceState(final Bundle savedState) {
-        sleepChart = (SleepChart) savedState.getParcelable(SLEEP_CHART);
+        SleepChartData data = (SleepChartData) savedState.getParcelable(SLEEP_CHART);
+        if (sleepChart != null) {
+            Log.d(TAG, "finding sleep chart from layout by id.");
+            sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
+        }
+        sleepChart.setData(data);
+        //sleepChart = new SleepChart(data);
+        //sleepChart = (SleepChart) savedState.getParcelable(SLEEP_CHART);
         super.onRestoreInstanceState(savedState);
     }
 
@@ -304,8 +319,6 @@ public class SleepActivity extends HostActivity {
 
     @Override
     protected void onResume() {
-        sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
-        sleepChart.setVisibility(View.VISIBLE);
         textAlarmStatus = (TextView) findViewById(R.id.text_alarm_status);
         textAlarmStatusSub = (TextView) findViewById(R.id.text_alarm_status_sub);
         buttonSleepDim = (TextView) findViewById(R.id.text_sleep_dim);
@@ -325,7 +338,7 @@ public class SleepActivity extends HostActivity {
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(SLEEP_CHART, sleepChart);
+        outState.putParcelable(SLEEP_CHART, sleepChart.mData);
     }
 
     private void showOrHideWarnings() {

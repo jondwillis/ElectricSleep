@@ -40,7 +40,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 		seekBar.setMax((int) SettingsActivity.MAX_ALARM_SENSITIVITY);
 		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-			
+
 			@Override
 			public void onProgressChanged(final SeekBar seekBar, final int progress,
 					final boolean fromUser) {
@@ -78,9 +78,9 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements Calib
 			List<PointD> points = (List<PointD>) intent
 					.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
 			for (PointD point : points) {
-				sleepChart.xySeriesMovement.add(point.x, point.y);
+                sleepChart.addPoint(point.x, point.y);
 			}
-			
+
 			sleepChart.reconfigure();
 			sleepChart.repaint();
 		}
