@@ -240,7 +240,6 @@ to go off.</string>
     <string name="calibrate_description_welcome_b3">Sleep101 works best when calibrated to your unique situation.</string>
     <string name="calibrating">Calibrating...</string>
     <string name="settings_description">Sleep results</string>
-    <string name="search_instructions">Tap search to search for previous sleep results</string>
     <string name="no_results">There is no saved sleep.</string>
 
     <string-array name="array_prefs_sensor_delay_friendly">
@@ -617,5 +616,6 @@ of lack of room.
             <xliff:g id="time">%s</xliff:g>
         </b></string>
             <string name="sleep_LINEBREAK_efficiency">Sleep\nEfficiency</string>
+            <string name="there_s_nothing_here_to_get_started_track_some_sleep_">There\'s nothing here! To get started, track some sleep.</string>
 
 </resources>

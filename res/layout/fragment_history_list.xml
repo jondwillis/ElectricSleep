@@ -5,18 +5,24 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
+        android:id="@+id/text_no_history"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/search_instructions"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="17dp" />
+        android:drawableBottom="@drawable/ic_track_howto"
+        android:drawablePadding="16dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/there_s_nothing_here_to_get_started_track_some_sleep_"
+        android:textAppearance="@style/TextHeader"
+        android:textColor="@color/faded_grey" />
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:cacheColorHint="#00000000" />
+        android:cacheColorHint="#00000000"
+        android:visibility="gone" />
 
 </LinearLayout>

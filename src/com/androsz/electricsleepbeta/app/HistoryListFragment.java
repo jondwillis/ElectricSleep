@@ -14,7 +14,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,7 +61,7 @@ public class HistoryListFragment extends HostFragment implements
     private ListView mListView;
 
     private TextView mTextView;
-
+    
     ProgressDialog progressDialog;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
@@ -78,14 +78,14 @@ public class HistoryListFragment extends HostFragment implements
         //TODO doesn't seem possible without recreating the activity first.
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
         progressDialog = new ProgressDialog(getActivity());
-        mTextView = (TextView) root.findViewById(R.id.text);
+        
+        mTextView = (TextView) root.findViewById(R.id.text_no_history);
         mListView = (ListView) root.findViewById(R.id.list);
-        mListView.setVerticalFadingEdgeEnabled(false);
-        mListView.setScrollbarFadingEnabled(false);
 
         sleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
         mListView.setAdapter(sleepHistoryAdapter);
 
+       // mListView.setBackgroundColor(getActivity().getResources().getColor(R.color.background_light));
 
         final Intent intent = getActivity().getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
@@ -147,7 +147,10 @@ public class HistoryListFragment extends HostFragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null) {
+            dismissProgressDialogIfShowing();
             if (data.getCount() == 0) {
+                mTextView.setVisibility(View.VISIBLE);
+                mListView.setVisibility(View.GONE);
                 return;
             } else if (data.getCount() == 1) {
                 data.moveToFirst();
@@ -205,7 +208,6 @@ public class HistoryListFragment extends HostFragment implements
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
         
-        dismissProgressDialogIfShowing();
     }
 
     @Override
