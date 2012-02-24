@@ -15,7 +15,7 @@
         android:id="@+id/day_names"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/daynames_background"
+        android:background="@color/background_light"
         android:orientation="horizontal" >
 
         <TextView

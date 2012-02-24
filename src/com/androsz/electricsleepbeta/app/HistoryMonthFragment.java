@@ -351,7 +351,6 @@ public class HistoryMonthFragment extends HostFragment implements
         startDay = Calendar.getInstance().getFirstDayOfWeek();
         final int diff = startDay - Calendar.SUNDAY - 1;
         final int startDay = Utils.getFirstDayOfWeek();
-        final int weekendColor = getResources().getColor(R.color.primary1);
 
         for (int day = 0; day < 7; day++) {
             final String dayString = DateUtils.getDayOfWeekString(
@@ -359,10 +358,6 @@ public class HistoryMonthFragment extends HostFragment implements
                     DateUtils.LENGTH_MEDIUM);
             final TextView label = (TextView) root.findViewById(DAY_OF_WEEK_LABEL_IDS[day]);
             label.setText(dayString);
-            if (Utils.isSunday(day, startDay)
-                    || Utils.isSaturday(day, startDay)) {
-                label.setTextColor(weekendColor);
-            }
         }
 
         monthAdapter = new MonthPagerAdapter();
