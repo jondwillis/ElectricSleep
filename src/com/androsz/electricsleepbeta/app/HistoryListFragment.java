@@ -76,10 +76,7 @@ public class HistoryListFragment extends HostFragment implements
             Bundle savedInstanceState) {
 
         //TODO doesn't seem possible without recreating the activity first.
-        final View root =
-            LayoutInflater
-            .from(new ContextThemeWrapper(getActivity(), R.style.Theme_SleepMate_Light))
-            .inflate(R.layout.fragment_history_list, container, false);
+        final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
         progressDialog = new ProgressDialog(getActivity());
         mTextView = (TextView) root.findViewById(R.id.text);
         mListView = (ListView) root.findViewById(R.id.list);
