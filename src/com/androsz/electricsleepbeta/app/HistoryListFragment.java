@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,7 +60,7 @@ public class HistoryListFragment extends HostFragment implements
     private ListView mListView;
 
     private TextView mTextView;
-    
+
     ProgressDialog progressDialog;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
@@ -78,7 +77,7 @@ public class HistoryListFragment extends HostFragment implements
         //TODO doesn't seem possible without recreating the activity first.
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
         progressDialog = new ProgressDialog(getActivity());
-        
+
         mTextView = (TextView) root.findViewById(R.id.text_no_history);
         mListView = (ListView) root.findViewById(R.id.list);
 
@@ -207,7 +206,7 @@ public class HistoryListFragment extends HostFragment implements
             // Define the on-click listener for the list items
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
-        
+
     }
 
     @Override

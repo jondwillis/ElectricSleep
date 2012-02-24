@@ -102,6 +102,30 @@
             electricsleepbeta:setScroll="true"
             android:visibility="gone" />
 
+        <LinearLayout
+            android:id="@+id/wait_for_sleep_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/TrackingProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true" >
+            </ProgressBar>
+
+            <TextView
+                style="@style/TextBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currently_tracking_sleep" >
+            </TextView>
+        </LinearLayout>
+
         <Button
             android:id="@+id/button_tracking_stop"
             style="@style/StopTrackingButton"

@@ -141,8 +141,10 @@ public class SleepChart extends GraphicalView {
         mRenderer.setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
         mRenderer.setXAxisMin(System.currentTimeMillis());
         mRenderer.setXAxisMax(System.currentTimeMillis());
+        mRenderer.setPanEnabled(false, false);
+        mRenderer.setZoomEnabled(false, false);
         mChart = new TimeChart(mDataset, mRenderer);
-        mChart.setDateFormat("h");
+        mChart.setDateFormat("h:mm:ss");
         return mChart;
     }
 
@@ -151,7 +153,12 @@ public class SleepChart extends GraphicalView {
     }
 
     public double getCalibrationLevel() {
-        return mData.calibrationLevel;
+        if (mData != null) {
+            return mData.calibrationLevel;
+        } else if (mCalibrationLevel != INVALID_CALIBRATION) {
+            return mCalibrationLevel;
+        }
+        return INVALID_CALIBRATION;
     }
 
     public boolean makesSenseToDisplay() {
@@ -251,7 +258,9 @@ public class SleepChart extends GraphicalView {
     }
 
     public void clear() {
-        mData.clear();
+        if (mData != null) {
+            mData.clear();
+        }
     }
 
     /**
@@ -278,14 +287,10 @@ public class SleepChart extends GraphicalView {
         final int MSEC_PER_MINUTE = 1000 * 60;
         final int MSEC_PER_HOUR = MSEC_PER_MINUTE * 60;
 
-        if (duration < MSEC_PER_MINUTE) {
-            axisFormat = "h:m.s'";
-        } else if (duration < (15 * MSEC_PER_MINUTE)) {
-            axisFormat = "h:m.s";
-        } else if (duration < (3 * MSEC_PER_HOUR)) {
-            axisFormat = "h:m";
+        if (duration > (15 * MSEC_PER_MINUTE)) {
+            axisFormat = "h:mm";
         } else {
-            axisFormat = "h";
+            axisFormat = "h:mm:ss";
         }
         if (!axisFormat.equals(mAxisFormat)) {
             mAxisFormat = axisFormat;
@@ -318,8 +323,6 @@ public class SleepChart extends GraphicalView {
         mRenderer.addSeriesRenderer(mData.xySeriesMovementRenderer);
         mRenderer.addSeriesRenderer(mData.xySeriesCalibrationRenderer);
 
-        mRenderer.setPanEnabled(false, false);
-        mRenderer.setZoomEnabled(false, false);
         final float textSize = MathUtils.calculatePxFromSp(mContext, 14);
         mRenderer.setChartTitleTextSize(textSize);
         mRenderer.setAxisTitleTextSize(textSize);
