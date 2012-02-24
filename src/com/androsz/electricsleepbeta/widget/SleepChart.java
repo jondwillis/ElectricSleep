@@ -158,6 +158,7 @@ public class SleepChart extends GraphicalView {
         } else if (mCalibrationLevel != INVALID_CALIBRATION) {
             return mCalibrationLevel;
         }
+        return INVALID_CALIBRATION;
     }
 
     public boolean makesSenseToDisplay() {
