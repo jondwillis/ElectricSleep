@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:padding="8dp"
-  android:orientation="vertical" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-    <LinearLayout
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
-      android:orientation="vertical">
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+id/indicator"
+        style="@style/Widget.ZeoTitlePageIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dip" />
 
-        <com.androsz.electricsleepbeta.widget.SleepChart
-          android:id="@+id/sleep_movement_chart"
-          android:layout_width="match_parent"
-          android:layout_height="200dp"
-          android:orientation="horizontal"
-          electricsleepbeta:setScroll="true"
-          style="@style/SleepChart_Light" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dip" >
 
-        <ImageView
-          android:gravity="fill_horizontal"
-          android:layout_height="1dip"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="8dp"
-          android:layout_width="match_parent"
-          android:scaleType="fitXY"
-          android:src="@drawable/divider_horizontal_holo_light" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-        <include layout="@layout/table_sleep_stats" />
+            <com.androsz.electricsleepbeta.widget.SleepChart
+                android:id="@+id/sleep_movement_chart"
+                style="@style/SleepChart_Light"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="horizontal"
+                electricsleepbeta:setScroll="true" />
 
-        <TextView
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:layout_width="match_parent"
-          android:text="@string/notes"
-          android:textStyle="bold" />
-        <TextView
-          android:id="@+id/notes"
-          android:layout_height="wrap_content"
-          android:layout_width="match_parent" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="fill_horizontal"
+                android:scaleType="fitXY"
+                android:src="@drawable/divider_horizontal_holo_light" />
 
-    </LinearLayout>
+            <include layout="@layout/table_sleep_stats" />
 
-</ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/notes"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
