@@ -47,23 +47,6 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createSleepSessionTable(db);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion == 5) {
-            upgradeToVersion6(db);
-            ++oldVersion;
-        }
-
-        if (oldVersion == 6) {
-            upgradeToVersion7(db);
-            ++oldVersion;
-        }
-    }
-
-    private void createSleepSessionTable(SQLiteDatabase db) {
         db.execSQL(
             "CREATE TABLE " + SleepSession.PATH + " (" +
             SleepSession._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -84,9 +67,38 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
             ")");
     }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == 5) {
+            upgradeToVersion6(db);
+            ++oldVersion;
+        }
+
+        if (oldVersion == 6) {
+            upgradeToVersion7(db);
+            ++oldVersion;
+        }
+    }
+
     private void upgradeToVersion6(SQLiteDatabase db) {
         // create the sleep session table
-        createSleepSessionTable(db);
+        db.execSQL(
+            "CREATE TABLE " + SleepSession.PATH + " (" +
+            SleepSession._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            SleepSession.CREATED_ON + " INTEGER NOT NULL," +
+            SleepSession.UPDATED_ON + " INTEGER NOT NULL," +
+            SleepSession.TIMEZONE + " TEXT NOT NULL," +
+            SleepSession.START_TIMESTAMP + " INTEGER NOT NULL," +
+            SleepSession.END_TIMESTAMP + " INTEGER NOT NULL," +
+            SleepSession.DATA + " BLOB," +
+            SleepSession.RATING + " INTEGER," +
+            SleepSession.SPIKES + " INTEGER," +
+            SleepSession.FELL_ASLEEP_TIMESTAMP + " INTEGER," +
+            SleepSession.DURATION + " INTEGER," +
+            SleepSession.CALIBRATION_LEVEL + " REAL," +
+            SleepSession.MIN + " REAL," +
+            SleepSession.NOTE + " TEXT" +
+            ")");
 
         final String DURATION = "KEY_SLEEP_DATA_DURATION";
         final String ALARM = "sleep_data_alarm";
@@ -102,8 +114,7 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
             new String[] {
                 DATA, SPIKES, RATING, NOTE, MIN, DURATION, ALARM
             },
-            null, null,
-            null, null, null);
+            null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 ContentValues values = new ContentValues(8);
@@ -139,7 +150,6 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
                 values.put(SleepSession.CREATED_ON, now);
                 values.put(SleepSession.UPDATED_ON, now);
                 values.put(SleepSession.TIMEZONE, TimeZone.getDefault().getID());
-
                 db.insert(SleepSession.PATH, null, values);
             } while (cursor.moveToNext());
         }
