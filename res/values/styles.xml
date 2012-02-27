@@ -177,9 +177,15 @@
     <style name="StopTrackingButton" parent="@style/SleepMateButton.Primary">
         <item name="android:drawableLeft">@drawable/ic_tracking_stop</item>
         <item name="android:drawablePadding">10dip</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textAppearance">@style/StopTrackingTextAppearance</item>
         <item name="android:paddingLeft">25dip</item>
         <item name="android:paddingRight">25dip</item>
+        <item name="android:paddingTop">12dip</item>
+        <item name="android:paddingBottom">12dip</item>
+    </style>
+    
+    <style name="StopTrackingTextAppearance" parent="@android:style/TextAppearance.Large">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="WarningButton">

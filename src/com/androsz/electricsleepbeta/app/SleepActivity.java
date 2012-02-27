@@ -160,13 +160,13 @@ public class SleepActivity extends HostActivity {
                             textAlarmStatus.setText(result[0]);
                         }
 
-                        textAlarmStatusSub.setVisibility(View.GONE);
+                        textAlarmStatusSub.setVisibility(View.INVISIBLE);
                     } else {
                         textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
                                 .getDrawable(R.drawable.ic_alarm_none),
                                 null, null, null);
                         textAlarmStatus.setText(getString(R.string.no_alarm));
-                        textAlarmStatusSub.setVisibility(View.GONE);
+                        textAlarmStatusSub.setVisibility(View.VISIBLE);
                     }
                     // dims the screen while in this activity and
                     // forceScreenOn is
