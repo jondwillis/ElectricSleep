@@ -170,15 +170,16 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
             }, null, null, null, null, null);
 
         // Update all existing sleep sessions with a start julian day.
-        cursor.moveToFirst();
-        do {
-            final ContentValues values = new ContentValues(1);
-            final long id = cursor.getLong(0);
-            values.put(SleepSession.START_JULIAN_DAY,
-                       SleepSession.getZeoJulianDay(cursor.getLong(1)));
-            db.update(SleepSession.PATH, values,
-                      SleepSession._ID + " =? ", new String[] {Long.toString(id)});
-        } while (cursor.moveToNext());
+        if (cursor.moveToFirst()) {
+            do {
+                final ContentValues values = new ContentValues(1);
+                final long id = cursor.getLong(0);
+                values.put(SleepSession.START_JULIAN_DAY,
+                           SleepSession.getZeoJulianDay(cursor.getLong(1)));
+                db.update(SleepSession.PATH, values,
+                          SleepSession._ID + " =? ", new String[] {Long.toString(id)});
+            } while (cursor.moveToNext());
+        }
     }
 }
 
