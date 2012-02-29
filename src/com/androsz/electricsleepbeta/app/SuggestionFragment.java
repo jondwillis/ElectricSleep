@@ -16,14 +16,14 @@ public class SuggestionFragment extends LayoutFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		Activity a = getActivity();
-		a.findViewById(R.id.btn_sleep_aids).setOnClickListener(
+		a.findViewById(R.id.btn_sleep_store).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-					    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://myzeo.com/")));
+					    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.myzeo.com/sleep/shop/zeo-recommended.html")));
 					}
 				});
-		a.findViewById(R.id.btn_advice).setOnClickListener(
+		a.findViewById(R.id.btn_expert_advice).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {

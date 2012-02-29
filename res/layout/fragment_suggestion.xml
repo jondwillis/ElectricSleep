@@ -17,24 +17,24 @@
         android:weightSum="100" >
 
         <Button
-            android:id="@+id/btn_sleep_aids"
+            android:id="@+id/btn_sleep_store"
             style="@style/SuggestionButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="1dp"
             android:layout_weight="50"
-            android:drawableTop="@drawable/btn_sleep_aids"
-            android:text="@string/sleep_aids" />
+            android:drawableTop="@drawable/btn_sleep_store"
+            android:text="@string/sleep_store" />
 
         <Button
-            android:id="@+id/btn_advice"
+            android:id="@+id/btn_expert_advice"
             style="@style/SuggestionButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="1dp"
             android:layout_weight="50"
-            android:drawableTop="@drawable/btn_advice"
-            android:text="@string/advice" />
+            android:drawableTop="@drawable/btn_expert_advice"
+            android:text="@string/expert_advice" />
 
         <Button
             android:id="@+id/btn_consultation"

@@ -585,8 +585,8 @@ of lack of room.
     <string name="welcome_to_electricsleep">Welcome to Sleep101</string>
     <string name="development_is_now_supported_by">Development of Sleep101 is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
     <string name="rate_in_market">Rate Sleep101 on the Android Market</string>
-    <string name="sleep_aids">Sleep Aids</string>
-    <string name="advice">Advice</string>
+    <string name="sleep_store">Sleep Store</string>
+    <string name="expert_advice">Expert Advice</string>
     <string name="consultation">Consultation</string>
     <string name="share">Share</string>
     <string name="returning_users_paragraph_one">Welcome to Sleep101, powered by Zeo. Sleep101 was formerly ElectricSleep, but it works the same and all your data is still in place.</string>
