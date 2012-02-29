@@ -39,8 +39,8 @@ public class CalibrationWizardActivity extends WizardActivity {
 			checkForScreenBugFragment = new CheckForScreenBugFragment();
 		}
 
-		private String[] titles = new String[] { "Why", "Instructions", "Light Sleep",
-				"Screen Test", "Done" };
+		private String[] titles = new String[] { "Start", "Test 1",
+				"Test 2", "Done" };
 
 		@Override
 		public String getTitle(int position) {
@@ -59,12 +59,10 @@ public class CalibrationWizardActivity extends WizardActivity {
 			case 0:
 				return new CalibrationAboutFragment();
 			case 1:
-				return new CalibrationInstructionsFragment();
-			case 2:
 				return calibrateLightSleepFragment;
-			case 3:
+			case 2:
 				return checkForScreenBugFragment;
-			case 4:
+			case 3:
 				return new CalibrationResultsFragment();
 
 			default:
@@ -129,12 +127,12 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onPerformWizardAction(int index) {
-		if (index == 2) {
+		if (index == 1) {
 			calibrateLightSleepFragment.startCalibration(this);
 
 			checkForScreenBugFragment.stopCalibration(this);
 
-		} else if (index == 3) {
+		} else if (index == 2) {
 
 			checkForScreenBugFragment.startCalibration(this);
 
