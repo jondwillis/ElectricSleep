@@ -26,6 +26,11 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	double lightSleepTrigger;
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
 	private boolean isScreenBugPresent;
 
 	// hack-ish but necessary because lockscreens can differ
@@ -101,6 +106,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onPrepareLastSlide() {
+		findViewById(R.id.rightButton).setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -127,6 +133,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onPerformWizardAction(int index) {
+		findViewById(R.id.rightButton).setVisibility(View.INVISIBLE);
 		if (index == 1) {
 			calibrateLightSleepFragment.startCalibration(this);
 

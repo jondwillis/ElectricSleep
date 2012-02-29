@@ -1,53 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="0dip"
     android:layout_gravity="center"
+    android:fillViewport="true"
     android:orientation="vertical" >
-
-    <TextView
-        style="@style/TextBulleted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_" />
-
-    <TextView
-        style="@style/TextBulleted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/when_you_are_lying_still_the_orange_line_should_be_below_the_white_line_" />
-
-    <TextView
-        android:id="@+id/warming_up_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal|center"
-        android:text="@string/warming_up" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dip"
-        android:orientation="horizontal" >
+        android:layout_height="0dip"
+        android:orientation="vertical" >
 
-        <com.androsz.electricsleepbeta.widget.VerticalSeekBar
-          android:id="@+id/calibration_level_seekbar"
-          android:layout_height="match_parent"
-          android:layout_width="wrap_content"
-          android:layout_marginLeft="4dp"
-          android:layout_marginRight="4dp"
-            />
-
-        <com.androsz.electricsleepbeta.widget.SleepChart
-            android:id="@+id/calibration_sleep_chart"
-            style="@style/SleepChart_Dark"
+        <TextView
+            style="@style/TextBulleted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            electricsleepbeta:showTitle="false"
-            electricsleepbeta:showLabels="false"
-            electricsleepbeta:showLegend="false"
-            />
+            android:text="IMPORTANT: place your device so it will move slightly when you - and your mattress - move." />
+
+        <TextView
+            style="@style/TextBulleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_" />
+        
+        <TextView
+            style="@style/TextBulleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/when_you_are_lying_still_the_orange_line_should_be_below_the_white_line_" />
+
+        <TextView
+            android:id="@+id/warming_up_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal|center"
+            android:text="@string/warming_up" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sleep_track_chart_height"
+            android:layout_margin="4dip"
+            android:orientation="horizontal" >
+
+            <com.androsz.electricsleepbeta.widget.VerticalSeekBar
+                android:id="@+id/calibration_level_seekbar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp" />
+
+            <com.androsz.electricsleepbeta.widget.SleepChart
+                android:id="@+id/calibration_sleep_chart"
+                style="@style/SleepChart_Dark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                electricsleepbeta:showLabels="false"
+                electricsleepbeta:showLegend="false"
+                electricsleepbeta:showTitle="false"
+                electricsleepbeta:setScroll="true" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

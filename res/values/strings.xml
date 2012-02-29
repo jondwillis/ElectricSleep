@@ -597,6 +597,7 @@ of lack of room.
     <string name="welcome_how_alarm"><b>Alarm:</b> Set a regular alarm, or try SmartWake Lite for a better morning.</string>
     <string name="welcome_how_history"><b>History:</b> Your sleep movement graph and summary info is saved for you to review.</string>
     <string name="welcome_how_settings">Adjust settings such as the SmartWake Lite alarm and tracking sensitivity by selecting \"Settings\" from the menu.</string>
+    
     <string name="adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_">Adjust the slider so that when you move, the movement line (orange) goes just above the white calibration line.</string>
     <string name="when_you_are_lying_still_the_orange_line_should_be_below_the_white_line_">When you are lying still, the orange line should be below the white line.</string>
     <string name="check_your_screen_settings">Check Your Screen Settings</string>
