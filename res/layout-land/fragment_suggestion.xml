@@ -10,32 +10,57 @@
         android:background="@color/border_suggestions" />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/border_suggestions"
         android:orientation="vertical"
         android:weightSum="100" >
 
-        <Button
+        <LinearLayout
             android:id="@+id/btn_sleep_store"
             style="@style/SuggestionButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
             android:layout_weight="50"
-            android:drawableTop="@drawable/btn_sleep_store"
-            android:text="@string/sleep_store" ></Button>
+            android:orientation="vertical"
+            android:layout_marginBottom="1dip" >
 
-        <Button
+            <ImageButton
+            style="@style/SuggestionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_sleep_store" />
+
+            <TextView
+                style="@style/SuggestionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:text="@string/sleep_store" />
+        </LinearLayout>
+        
+        <LinearLayout
             android:id="@+id/btn_expert_advice"
             style="@style/SuggestionButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
             android:layout_weight="50"
-            android:drawableTop="@drawable/btn_expert_advice"
-            android:text="@string/expert_advice" />
+            android:orientation="vertical"
+            android:layout_marginBottom="1dip" >
+
+            <ImageButton
+            style="@style/SuggestionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_expert_advice" />
+
+            <TextView
+                style="@style/SuggestionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:text="@string/expert_advice" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_consultation"
