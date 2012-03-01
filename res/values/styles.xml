@@ -17,14 +17,14 @@
         <item name="android:layout_margin">8dip</item>
     </style>
 
-    <style name="TextHeaderTwo" parent="@android:style/TextAppearance.Large">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_light</item>
-        <item name="android:layout_margin">6dip</item>
-    </style>
-
     <style name="TextBody" parent="@android:style/TextAppearance.Medium">
         <item name="android:textColor">@color/text_light</item>
+        <item name="android:layout_margin">8dip</item>
+    </style>
+    
+    <style name="TextBulleted" parent="@style/TextBody">
+        <item name="android:drawableLeft">@drawable/ic_bullet</item>
+        <item name="android:drawablePadding">10dip</item>
     </style>
 
     <!-- alarmclock -->
@@ -158,15 +158,6 @@
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_dark</item>
         <item name="android:textColor">@color/text_light</item>
-    </style>
-
-    <style name="TextBulleted" parent="@style/TextBody">
-        <item name="android:drawableLeft">@drawable/ic_bullet</item>
-        <item name="android:drawablePadding">10dip</item>
-        <item name="android:layout_marginLeft">25dip</item>
-        <item name="android:layout_marginRight">10dip</item>
-        <item name="android:layout_marginTop">10dip</item>
-        <item name="android:layout_marginBottom">10dip</item>
     </style>
 
     <style name="TrackingProgressBar" parent="@android:style/Widget.ProgressBar">

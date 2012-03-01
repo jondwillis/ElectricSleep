@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dip" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +13,6 @@
             style="@style/TextHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="@string/calibrate_title_results" >
         </TextView>
 
@@ -20,18 +20,17 @@
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/you_have_successfully_calibrated_sleepmate_to_track_your_sleep_"
-            android:layout_margin="10dip" >
+            android:layout_margin="10dip"
+            android:text="@string/you_have_successfully_calibrated_sleepmate_to_track_your_sleep_" >
         </TextView>
 
         <TextView
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_"
-            android:layout_margin="10dip" >
+            android:layout_margin="10dip"
+            android:text="@string/you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_" >
         </TextView>
-
     </LinearLayout>
 
 </ScrollView>
