@@ -2,16 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="8dip" >
 
     <TextView
         style="@style/TextHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/check_your_screen_settings" >
-    </TextView>
+        android:text="@string/check_your_screen_settings" />
 
     <TextView
         style="@style/TextBulleted"
@@ -30,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_" />
-    
+
     <TextView
         android:id="@+id/warming_up_text"
         android:layout_width="wrap_content"

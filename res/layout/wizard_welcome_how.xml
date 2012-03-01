@@ -2,13 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true" >
+    android:padding="8dip" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="vertical"
-        android:padding="8dip">
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/how_it_works"
@@ -22,9 +21,9 @@
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
             android:drawableLeft="@drawable/home_btn_sleep"
             android:drawablePadding="15dip"
-            android:layout_marginBottom="25dip"
             android:text="@string/welcome_how_track" >
         </TextView>
 
@@ -33,9 +32,9 @@
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
             android:drawableLeft="@drawable/home_btn_alarms"
             android:drawablePadding="15dip"
-            android:layout_marginBottom="25dip"
             android:text="@string/welcome_how_alarm" >
         </TextView>
 
@@ -44,9 +43,9 @@
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="25dip"
             android:drawableLeft="@drawable/home_btn_history"
             android:drawablePadding="15dip"
-            android:layout_marginBottom="25dip"
             android:text="@string/welcome_how_history" >
         </TextView>
 
