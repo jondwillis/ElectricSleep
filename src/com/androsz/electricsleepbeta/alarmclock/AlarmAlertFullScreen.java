@@ -259,7 +259,7 @@ public class AlarmAlertFullScreen extends Activity {
 				final PendingIntent broadcast = PendingIntent.getBroadcast(
 						AlarmAlertFullScreen.this, mAlarm.id, cancelSnooze, 0);
 				final NotificationManager nm = getNotificationManager();
-				final Notification n = new Notification(R.drawable.stat_notify_alarm, label, 0);
+				final Notification n = new Notification(R.drawable.ic_alarm_neutral, label, 0);
 				n.setLatestEventInfo(
 						AlarmAlertFullScreen.this,
 						label,
