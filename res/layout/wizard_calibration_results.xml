@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dip"
-            android:text="@string/you_have_successfully_calibrated_sleepmate_to_track_your_sleep_" >
+            android:text="@string/you_have_successfully_calibrated_sleep101_to_track_your_sleep_" >
         </TextView>
 
         <TextView
