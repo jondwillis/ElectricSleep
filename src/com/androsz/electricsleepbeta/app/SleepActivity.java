@@ -18,7 +18,6 @@ import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 import android.util.Log;
 
