@@ -3,7 +3,6 @@
     xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -227,7 +226,7 @@
 
     <fragment
         android:id="@+id/fragment_suggestion"
-        android:layout_width="wrap_content"
+        android:layout_width="70dip"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         class="com.androsz.electricsleepbeta.app.SuggestionFragment" >
