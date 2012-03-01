@@ -206,8 +206,10 @@ public class SleepChart extends GraphicalView {
      * Set this sleep chart to the given data.
      */
     public void setData(SleepChartData data) {
-        mData = data;
-        setupData();
+        synchronized (this) {
+            mData = data;
+            setupData();
+        }
     }
 
     public void setCalibrationLevel(final double calibrationLevel) {
@@ -226,8 +228,7 @@ public class SleepChart extends GraphicalView {
         throws StreamCorruptedException, IllegalArgumentException,
                IOException, ClassNotFoundException {
         Log.d(TAG, "Attempting to sync with cursor: " + cursor);
-        initCheckData();
-        sync(new SleepSession(cursor));
+        this.sync(new SleepSession(cursor));
     }
 
     public void sync(final Double x, final Double y, final double calibrationLevel) {
@@ -235,8 +236,10 @@ public class SleepChart extends GraphicalView {
               " x=" + x +
               " y=" + y +
               " calibrationLevel=" + calibrationLevel);
-        initCheckData();
-        mData.add(x, y, calibrationLevel);
+        synchronized (this) {
+            initCheckData();
+            mData.add(x, y, calibrationLevel);
+        }
         reconfigure();
         repaint();
     }
@@ -244,10 +247,11 @@ public class SleepChart extends GraphicalView {
     public void sync(final SleepSession sleepRecord) {
         Log.d(TAG, "Attempting to sync with sleep record: " + sleepRecord);
 
-        initCheckData();
-
-        mData.set(PointD.convertToNew(sleepRecord.getData()), sleepRecord.getCalibrationLevel());
-        //mData.rating = sleepRecord.getRating();
+        synchronized (this) {
+            initCheckData();
+            mData.set(PointD.convertToNew(sleepRecord.getData()),
+                      sleepRecord.getCalibrationLevel());
+        }
 
         // TODO this need to take into account timezone information.
         if (mShowTitle) {
@@ -258,8 +262,10 @@ public class SleepChart extends GraphicalView {
     }
 
     public void clear() {
-        if (mData != null) {
-            mData.clear();
+        synchronized (this) {
+            if (mData != null) {
+                mData.clear();
+            }
         }
     }
 
