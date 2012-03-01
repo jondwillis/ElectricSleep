@@ -153,20 +153,21 @@ public class SleepActivity extends HostActivity {
                             textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
                                     .getDrawable(R.drawable.ic_alarm_pressed),
                                     null, null, null);
+                            textAlarmStatusSub.setText(R.string.attempt_to_use_smartwake_);
                         } else {
                             textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
                                     .getDrawable(R.drawable.ic_alarm_neutral),
                                     null, null, null);
                             textAlarmStatus.setText(result[0]);
+                            textAlarmStatusSub.setText(R.string.not_using_smartwake_);
                         }
 
-                        textAlarmStatusSub.setVisibility(View.INVISIBLE);
                     } else {
                         textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
                                 .getDrawable(R.drawable.ic_alarm_none),
                                 null, null, null);
-                        textAlarmStatus.setText(getString(R.string.no_alarm));
-                        textAlarmStatusSub.setVisibility(View.VISIBLE);
+                        textAlarmStatus.setText(R.string.no_alarm);
+                        textAlarmStatusSub.setText(R.string.sleep_no_alarm);
                     }
                     // dims the screen while in this activity and
                     // forceScreenOn is
@@ -181,8 +182,6 @@ public class SleepActivity extends HostActivity {
                     } else {
                         buttonSleepDim.setVisibility(View.GONE);
                     }
-
-                    showOrHideWarnings();
                 }
             }.execute();
         }
@@ -312,8 +311,6 @@ public class SleepActivity extends HostActivity {
                 : View.VISIBLE);
 
         buttonSleepPluggedIn.setVisibility(visibility);
-
-        showOrHideWarnings();
     }
 
     @Override
@@ -337,20 +334,5 @@ public class SleepActivity extends HostActivity {
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(SLEEP_CHART, sleepChart.mData);
-    }
-
-    private void showOrHideWarnings() {
-        // hide warnings panel if there's no warnings.
-        final ScrollView landscapeWarnings = (ScrollView) findViewById(R.id.sleep_landscape_warnings);
-        // make sure we're in landscape. portrait doesn't have this problem.
-        if (landscapeWarnings != null) {
-            int visibility = buttonSleepPluggedIn.getVisibility()
-                    + buttonSleepDim.getVisibility();
-
-            // if all are gone...
-            visibility = (visibility == (View.GONE * 2)) ? View.GONE
-                    : View.VISIBLE;
-            landscapeWarnings.setVisibility(visibility);
-        }
     }
 }

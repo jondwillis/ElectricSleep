@@ -19,7 +19,7 @@
     <string name="try_out_zeo">Try out Zeo: www.myZeo.com</string>
     <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS
 ANYTHING.</string>
-    <string name="legend_light_sleep_trigger">Light Sleep Trigger</string>
+    <string name="legend_light_sleep_trigger">SmartWake Lite Trigger</string>
     <string name="legend_movement">Movement</string>
     <string name="warming_up">Warming up sensors, please wait.</string>
     <string name="go_into_standy">Press your device\'s standby button</string>
@@ -141,7 +141,7 @@ automatically</string>
     <string name="pref_calibration">calibrationWizard</string>
     <string name="summary_pref_alarms">Manage Sleep101\'s built-in alarms - these
 are
-persistent even if Light Sleep Pre-Alarm is disabled.</string>
+persistent even if SmartWake Lite is disabled.</string>
     <string name="preset">Preset:</string>
     <string name="summary_pref_use_alarm_off">Sleep101 will not try to wake you up *before*
 the next enabled alarm in sleep mode</string>
@@ -149,7 +149,7 @@ the next enabled alarm in sleep mode</string>
 *before*
 the next
 enabled alarm in sleep mode</string>
-    <string name="title_pref_use_alarm">Light Sleep Pre-Alarm</string>
+    <string name="title_pref_use_alarm">SmartWake Lite</string>
     <string name="monitoring_sleep">Monitoring Sleep</string>
     <string name="movement_level_during_sleep">"&lt;-deep| Sleep |light->"</string>
     <string name="search">Search</string>
@@ -271,11 +271,8 @@ to go off.</string>
         <item>2 hours</item>
     </string-array>
 
-    <string name="title_pref_alarm_window">Pre-Alarm Window</string>
-    <string name="summary_pref_alarm_window">The window of time before the next enabled alarm
-is
-set to go
-off during which Sleep101 will try to wake you.</string>
+    <string name="title_pref_alarm_window">SmartWake Lite Window</string>
+    <string name="summary_pref_alarm_window">The window of time before the next enabled alarm which SmartWake Lite will be active</string>
     <string name="stop">Stop</string>
     <string name="donate">Donate</string>
     <string name="notification_save_sleep_title">Save sleep</string>
@@ -564,11 +561,10 @@ to indicate that there are two more events that we could not display because
 of lack of room.
     -->
     <string name="plus_N_more">(plus<xliff:g id="more_count">%d</xliff:g> more \u2026)</string>
-    <string name="sleep_dim">Your device does not support turning its screen off during sleep. The screen must stay on but will be dimmed.</string>
-    <string name="sleep_plugged_in">You are not connected to a charger. It is highly recommended to plug in, or elsewise enter airplane mode to conserve energy.</string>
-    <string name="not_bound_to_any_alarms">Not bound to any alarms.</string>
+    <string name="sleep_dim">Do not turn the screen off.</string>
+    <string name="sleep_plugged_in">You are not connected to a charger.</string>
     <string name="alarm_status_range"><xliff:g id="pre">%s</xliff:g> - <xliff:g id="post">%s</xliff:g></string>
-    <string name="sleep_no_alarm">No alarm has been set. Sleep101 will not wake you up.</string>
+    <string name="sleep_no_alarm">Sleep101 will not wake you up.</string>
     <string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
     <string name="export">Export</string>
     <string name="export_all">Export All</string>
@@ -606,7 +602,7 @@ of lack of room.
     <string name="wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_">Wait up to 10 seconds for your screen to automatically turn back on. Then you may need to unlock your device to continue.</string>
     <string name="you_have_successfully_calibrated_sleepmate_to_track_your_sleep_">You have successfully calibrated Sleep101 to track your sleep.</string>
     <string name="you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_">You may always re-calibrate if your sleep environment changes by choosing \'Calibrate\' from the menu.</string>
-    <string name="currently_tracking_sleep">Currently tracking sleep...</string>
+    <string name="tracking_sleep">Tracking sleep...</string>
     <string name="stop_tracking">Stop Tracking</string>
     <string name="no_alarm">No Alarm</string>
     <string name="sleepmate_will_not_wake_you_up_">Sleep101 will not wake you up.</string>
@@ -616,5 +612,7 @@ of lack of room.
         </b></string>
             <string name="sleep_LINEBREAK_efficiency">Sleep\nEfficiency</string>
             <string name="there_s_nothing_here_to_get_started_track_some_sleep_">There\'s nothing here! To get started, track some sleep.</string>
+            <string name="not_using_smartwake_">Sleep101 is not using SmartWake Lite.</string>
+            <string name="attempt_to_use_smartwake_">Sleep101 will attempt to use SmartWake Lite.</string>
 
 </resources>

@@ -3,6 +3,7 @@
     xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:padding="10dip" >
 
     <LinearLayout
@@ -10,28 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:animateLayoutChanges="true"
         android:orientation="vertical" >
 
         <com.androsz.electricsleepbeta.widget.TintableButton
             android:id="@+id/text_sleep_plugged_in"
             style="@style/WarningButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:animateLayoutChanges="true"
-            android:gravity="left"
-            android:padding="5dp"
+            android:gravity="left|center_vertical"
             android:text="@string/sleep_plugged_in" />
 
         <com.androsz.electricsleepbeta.widget.TintableButton
             android:id="@+id/text_sleep_dim"
             style="@style/WarningButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:animateLayoutChanges="true"
-            android:gravity="left"
-            android:padding="5dp"
+            android:gravity="left|center_vertical"
             android:text="@string/sleep_dim" />
     </LinearLayout>
 
@@ -40,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_warnings"
+        android:gravity="center"
         android:onClick="onClick"
         android:orientation="vertical" >
 
@@ -48,12 +47,12 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="6dip"
             android:animateLayoutChanges="true"
             android:background="@null"
             android:drawableLeft="@drawable/ic_alarm_none"
             android:drawablePadding="6dip"
+            android:gravity="center"
             android:onClick="onClick"
             android:padding="2dip"
             android:text="@string/no_alarm"
@@ -64,10 +63,10 @@
             style="@android:style/TextAppearance.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_margin="2dip"
             android:animateLayoutChanges="true"
             android:background="@null"
+            android:gravity="center"
             android:onClick="onClick"
             android:padding="2dip"
             android:text="@string/sleepmate_will_not_wake_you_up_"
@@ -101,7 +100,7 @@
             style="@style/TextBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/currently_tracking_sleep" />
+            android:text="@string/tracking_sleep" />
     </LinearLayout>
 
     <com.androsz.electricsleepbeta.widget.SleepChart
