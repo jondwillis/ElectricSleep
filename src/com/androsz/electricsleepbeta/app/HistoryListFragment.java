@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
 public class HistoryListFragment extends HostFragment implements
@@ -57,6 +58,12 @@ public class HistoryListFragment extends HostFragment implements
     /** Load sleep sessions for a given julian day. */
     private static final int LOADER_JULIAN = 1;
 
+    private static final int FLIPPER_NO_RECORDS = 1;
+    private static final int FLIPPER_LIST_RECORDS = 2;
+
+    /** Flipper used to switch between what content is displayed in UI. */
+    private SafeViewFlipper mFlipper;
+
     private ListView mListView;
 
     private TextView mTextView;
@@ -78,6 +85,7 @@ public class HistoryListFragment extends HostFragment implements
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
         progressDialog = new ProgressDialog(getActivity());
 
+        mFlipper = (SafeViewFlipper) root.findViewById(R.id.content_flipper);
         mTextView = (TextView) root.findViewById(R.id.text_no_history);
         mListView = (ListView) root.findViewById(R.id.list);
 
@@ -148,8 +156,7 @@ public class HistoryListFragment extends HostFragment implements
         if (data != null) {
             dismissProgressDialogIfShowing();
             if (data.getCount() == 0) {
-                mTextView.setVisibility(View.VISIBLE);
-                mListView.setVisibility(View.GONE);
+                mFlipper.setDisplayedChild(FLIPPER_NO_RECORDS);
                 return;
             } else if (data.getCount() == 1) {
                 data.moveToFirst();
@@ -165,8 +172,7 @@ public class HistoryListFragment extends HostFragment implements
             }
 
             sleepHistoryAdapter.swapCursor(data);
-            mTextView.setVisibility(View.GONE);
-            mListView.setVisibility(View.VISIBLE);
+            mFlipper.setDisplayedChild(FLIPPER_LIST_RECORDS);
 
             mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
