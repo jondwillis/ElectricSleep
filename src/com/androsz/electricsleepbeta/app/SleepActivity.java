@@ -287,7 +287,7 @@ public class SleepActivity extends HostActivity {
     @Override
     protected void onRestoreInstanceState(final Bundle savedState) {
         SleepChartData data = (SleepChartData) savedState.getParcelable(SLEEP_CHART);
-        if (sleepChart != null) {
+        if (sleepChart == null) {
             Log.d(TAG, "finding sleep chart from layout by id.");
             sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
         }
