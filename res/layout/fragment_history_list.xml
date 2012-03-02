@@ -6,7 +6,7 @@
 
     <com.androsz.electricsleepbeta.widget.SafeViewFlipper
       android:id="@+id/content_flipper"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
       android:inAnimation="@android:anim/fade_in"
@@ -27,6 +27,7 @@
           android:paddingLeft="30dp"
           android:paddingRight="16dp"
           android:paddingTop="8dp"
+          android:gravity="center_horizontal"
           android:text="@string/there_s_nothing_here_to_get_started_track_some_sleep_"
           android:textAppearance="@style/TextHeader"
           android:textColor="@color/faded_grey" />

@@ -213,7 +213,6 @@
                         android:id="@+id/home_sleep_chart"
                         style="@style/SleepChart_Light"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:layout_below="@+id/home_last_sleep_title_text"
                         android:layout_marginLeft="-4dip"
                         android:layout_marginRight="4dip"
