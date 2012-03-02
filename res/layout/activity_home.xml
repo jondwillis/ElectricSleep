@@ -200,7 +200,6 @@
                         android:id="@+id/home_sleep_chart"
                         style="@style/SleepChart_Light"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:layout_marginLeft="-4dip"
                         android:layout_marginRight="4dip"
                         android:layout_marginTop="5dip"

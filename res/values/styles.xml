@@ -8,7 +8,8 @@
         <item name="android:drawablePadding">0dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@null</item>
-        <item name="android:padding">4dip</item>
+        <item name="android:padding">0dip</item>
+        <item name="android:layout_margin">0dip</item>
     </style>
 
     <style name="TextHeader" parent="@android:style/TextAppearance.Large">
@@ -149,6 +150,7 @@
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_light</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_light</item>
         <item name="android:textColor">@color/text_dark</item>
+        <item name="android:layout_height">@dimen/sleep_track_chart_height</item>
     </style>
 
     <style name="SleepChart_Dark">
@@ -158,6 +160,7 @@
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_dark</item>
         <item name="android:textColor">@color/text_light</item>
+        <item name="android:layout_height">@dimen/sleep_track_chart_height</item>
     </style>
 
     <style name="TrackingProgressBar" parent="@android:style/Widget.ProgressBar">
