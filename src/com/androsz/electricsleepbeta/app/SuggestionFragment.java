@@ -46,7 +46,7 @@ public class SuggestionFragment extends LayoutFragment {
 					public void onClick(View v) {
 						super.onClick(v);
 						startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri
-								.parse("http://www.myzeo.com/sleep/shop/zeo-recommended.html")));
+								.parse("http://myzeo.com/sleep/shop/zeo-recommended.html")));
 					}
 				});
 		setOnClickForEntireViewGroup(a.findViewById(R.id.btn_expert_advice),
@@ -54,6 +54,8 @@ public class SuggestionFragment extends LayoutFragment {
 					@Override
 					public void onClick(View v) {
 						super.onClick(v);
+						startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri
+								.parse("http://m.myzeo.com/expert_advice.html")));
 					}
 				});
 		setOnClickForEntireViewGroup(a.findViewById(R.id.btn_consultation),
