@@ -600,12 +600,12 @@ of lack of room.
     <string name="some_android_devices_will_prevent_this_app_from_working_while_the_screen_is_off_">Some Android devices will prevent this app from working while the screen is off.</string>
     <string name="to_detect_if_this_occurs_on_your_device_put_your_device_in_standby_mode_usually_by_quickly_pressing_the_power_button_">To detect if this occurs on your device, put your device in standby mode (usually by quickly pressing the power button).</string>
     <string name="wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_">Wait up to 10 seconds for your screen to automatically turn back on. Then you may need to unlock your device to continue.</string>
-    <string name="you_have_successfully_calibrated_sleepmate_to_track_your_sleep_">You have successfully calibrated Sleep101 to track your sleep.</string>
+    <string name="you_have_successfully_calibrated_sleep101_to_track_your_sleep_">You have successfully calibrated Sleep101 to track your sleep.</string>
     <string name="you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_">You may always re-calibrate if your sleep environment changes by choosing \'Calibrate\' from the menu.</string>
     <string name="tracking_sleep">Tracking sleep...</string>
     <string name="stop_tracking">Stop Tracking</string>
     <string name="no_alarm">No Alarm</string>
-    <string name="sleepmate_will_not_wake_you_up_">Sleep101 will not wake you up.</string>
+    <string name="sleep101_will_not_wake_you_up_">Sleep101 will not wake you up.</string>
     <string name="warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_">Warning: dim sleep mode can only occur on the Sleep screen.</string>
     <string name="recording_time">Recording time <b>
             <xliff:g id="time">%s</xliff:g>

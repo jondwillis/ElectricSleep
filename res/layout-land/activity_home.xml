@@ -3,23 +3,24 @@
     xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="left"
+        android:layout_margin="0dip"
         android:layout_toLeftOf="@id/fragment_suggestion"
-        android:orientation="horizontal" >
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:padding="0dip" >
 
         <LinearLayout
             android:id="@+id/home_button_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
+            android:layout_margin="0dip"
             android:background="@color/background_dark"
             android:orientation="vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp" >
+            android:padding="0dip" >
 
             <Button
                 android:id="@+id/home_btn_sleep"
@@ -210,15 +211,14 @@
 
                     <com.androsz.electricsleepbeta.widget.SleepChart
                         android:id="@+id/home_sleep_chart"
+                        style="@style/SleepChart_Light"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:layout_below="@+id/home_last_sleep_title_text"
                         android:layout_marginLeft="-4dip"
                         android:layout_marginRight="4dip"
                         android:layout_marginTop="5dip"
                         android:animateLayoutChanges="true"
-                        electricsleepbeta:setScroll="true"
-                        style="@style/SleepChart_Light" />
+                        electricsleepbeta:setScroll="true" />
                 </RelativeLayout>
             </ScrollView>
         </com.androsz.electricsleepbeta.widget.SafeViewFlipper>
@@ -226,7 +226,7 @@
 
     <fragment
         android:id="@+id/fragment_suggestion"
-        android:layout_width="70dip"
+        android:layout_width="@dimen/fragment_suggestion_landscape_width"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         class="com.androsz.electricsleepbeta.app.SuggestionFragment" >

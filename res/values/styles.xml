@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="HomeButton">
+    <style name="HomeButton.Common" parent="@android:style/TextAppearance.Large" />
+
+    <style name="HomeButton" parent="@style/HomeButton.Common">
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/text_light</item>
         <item name="android:drawablePadding">0dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@null</item>
-        <item name="android:padding">4dip</item>
+        <item name="android:padding">0dip</item>
+        <item name="android:layout_margin">0dip</item>
     </style>
 
     <style name="TextHeader" parent="@android:style/TextAppearance.Large">
@@ -21,7 +24,7 @@
         <item name="android:textColor">@color/text_light</item>
         <item name="android:layout_margin">8dip</item>
     </style>
-    
+
     <style name="TextBulleted" parent="@style/TextBody">
         <item name="android:drawableLeft">@drawable/ic_bullet</item>
         <item name="android:drawablePadding">10dip</item>
@@ -59,7 +62,7 @@
         <item name="android:textColor">@color/text_dark</item>
     </style>
 
-    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock.Light">
+    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock">
         <item name="actionBarSize">@dimen/abs__action_bar_default_height</item>
         <item name="android:colorBackground">@color/background_light</item>
         <item name="android:windowBackground">@color/background_light</item>
@@ -123,7 +126,6 @@
     <style name="FiveStarRatingBar.Dark" parent="FiveStarRatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_dark</item>
     </style>
-    
 
     <style name="SleepMateButton.Common" parent="@android:style/Widget.Button" />
 
@@ -135,7 +137,7 @@
         <item name="android:background">@drawable/btn_primary</item>
         <item name="android:textColor">@color/text_light</item>
     </style>
-    
+
     <style name="SuggestionButton" parent="@style/SleepMateButton.Primary">
         <item name="android:textColor">@color/text_dark</item>
         <item name="android:background">@color/background_suggestions</item>
@@ -149,6 +151,7 @@
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_light</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_light</item>
         <item name="android:textColor">@color/text_dark</item>
+        <item name="android:layout_height">@dimen/sleep_track_chart_height</item>
     </style>
 
     <style name="SleepChart_Dark">
@@ -158,6 +161,7 @@
         <item name="com.androsz.electricsleepbeta:calibrationColor">@color/sleepchart_calibration_dark</item>
         <item name="com.androsz.electricsleepbeta:calibrationBorderColor">@color/sleepchart_calibration_border_dark</item>
         <item name="android:textColor">@color/text_light</item>
+        <item name="android:layout_height">@dimen/sleep_track_chart_height</item>
     </style>
 
     <style name="TrackingProgressBar" parent="@android:style/Widget.ProgressBar">
@@ -173,7 +177,7 @@
         <item name="android:paddingTop">12dip</item>
         <item name="android:paddingBottom">12dip</item>
     </style>
-    
+
     <style name="StopTrackingTextAppearance" parent="@android:style/TextAppearance.Large">
         <item name="android:textStyle">bold</item>
     </style>

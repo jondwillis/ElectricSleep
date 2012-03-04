@@ -61,7 +61,6 @@
                 android:id="@+id/calibration_sleep_chart"
                 style="@style/SleepChart_Dark"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 electricsleepbeta:setScroll="true"
                 electricsleepbeta:showLabels="false"
                 electricsleepbeta:showLegend="false"

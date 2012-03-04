@@ -70,7 +70,7 @@
                     android:gravity="center"
                     android:onClick="onClick"
                     android:padding="2dip"
-                    android:text="@string/sleepmate_will_not_wake_you_up_"
+                    android:text="@string/sleep101_will_not_wake_you_up_"
                     android:textColor="@color/text_light" />
             </LinearLayout>
         </LinearLayout>
@@ -116,7 +116,6 @@
             android:id="@+id/sleep_movement_chart"
             style="@style/SleepChart_Dark"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sleep_track_chart_height"
             android:layout_above="@id/button_tracking_stop"
             android:layout_below="@id/layout_tracking_progress"
             android:layout_margin="4dip"
