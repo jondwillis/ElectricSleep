@@ -249,6 +249,7 @@ public class SleepChart extends GraphicalView {
     {
         synchronized (this) {
             initCheckData();
+            clear();
         	for (PointD point : points) {
                 addPoint(point.x, point.y);
             }
