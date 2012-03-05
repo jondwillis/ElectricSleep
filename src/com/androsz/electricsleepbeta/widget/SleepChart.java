@@ -57,7 +57,8 @@ public class SleepChart extends GraphicalView {
     boolean mShowLegend;
     boolean mShowTitle = true;
 
-    private double mCalibrationLevel = INVALID_CALIBRATION;
+    /** Temporary storage for calibration level information prior to mData being initalized. */
+    private double mTempCalibrationLevel = INVALID_CALIBRATION;
 
     private String mAxisFormat;
 
@@ -153,26 +154,39 @@ public class SleepChart extends GraphicalView {
         mData.add(x, y);
     }
 
+    /**
+     * Return the calibration level if one is available; otherwise return INVALID_CALIBRATION.
+     *
+     * Callers of this method could call hasCalibrationLevel first to determine if information
+     * surrounding calibration is available prior to invoking this method.
+     */
     public double getCalibrationLevel() {
         if (mData != null) {
             return mData.calibrationLevel;
-        } else if (mCalibrationLevel != INVALID_CALIBRATION) {
-            return mCalibrationLevel;
+        } else if (mTempCalibrationLevel != INVALID_CALIBRATION) {
+            Log.d(TAG, "Returning the temporary calibration level.");
+            return mTempCalibrationLevel;
         }
         return INVALID_CALIBRATION;
+    }
+
+    /**
+     * Return true or false depending upon whether or not calibration level information is available
+     * either as contained in sleep chart data or in the temporary calibration level information.
+     */
+    public boolean hasCalibrationLevel() {
+        return (mData != null || mTempCalibrationLevel != INVALID_CALIBRATION);
     }
 
     public boolean makesSenseToDisplay() {
         if (mData == null) {
             return false;
         }
-        Log.d(TAG, "Make sense to display is: " + (mData.xySeriesMovement.getItemCount() > 1));
         return mData.xySeriesMovement.getItemCount() > 1;
     }
 
     public void reconfigure() {
         if (makesSenseToDisplay()) {
-            Log.d(TAG, "Executing reconfigure after it made sense to display.");
             final double firstX = mData.xySeriesMovement.getX(0);
             final double lastX =
                 mData.xySeriesMovement.getX(mData.xySeriesMovement.getItemCount() - 1);
@@ -215,9 +229,10 @@ public class SleepChart extends GraphicalView {
 
     public void setCalibrationLevel(final double calibrationLevel) {
         if (mData == null) {
-            mCalibrationLevel = calibrationLevel;
+            mTempCalibrationLevel = calibrationLevel;
         } else {
             mData.calibrationLevel = calibrationLevel;
+            mTempCalibrationLevel = INVALID_CALIBRATION;
         }
     }
 
@@ -233,10 +248,6 @@ public class SleepChart extends GraphicalView {
     }
 
     public void sync(final Double x, final Double y, final double calibrationLevel) {
-        Log.d(TAG, "Attempting to sync with values: " +
-              " x=" + x +
-              " y=" + y +
-              " calibrationLevel=" + calibrationLevel);
         synchronized (this) {
             initCheckData();
             mData.add(x, y, calibrationLevel);
@@ -244,7 +255,7 @@ public class SleepChart extends GraphicalView {
         reconfigure();
         repaint();
     }
-    
+
     public void sync(List<PointD> points)
     {
         synchronized (this) {
@@ -289,7 +300,10 @@ public class SleepChart extends GraphicalView {
     private void initCheckData() {
         if (mData == null) {
             mData = new SleepChartData(mContext);
-            mData.calibrationLevel = mCalibrationLevel;
+            if (mTempCalibrationLevel != INVALID_CALIBRATION) {
+                mData.calibrationLevel = mTempCalibrationLevel;
+                mTempCalibrationLevel = INVALID_CALIBRATION;
+            }
             setupData();
         }
     }
