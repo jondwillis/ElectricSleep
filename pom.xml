@@ -6,7 +6,7 @@
 	<groupId>com.androsz</groupId>
 	<artifactId>electricsleepbeta</artifactId>
 	<packaging>apk</packaging>
-	<version>1.1.0-rc10</version>
+	<version>1.1.0-rc13</version>
 
 	<name>ElectricSleep</name>
 	<description>Improving Sleep With Android</description>
