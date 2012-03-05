@@ -1,14 +1,13 @@
 package com.androsz.electricsleepbeta.widget;
 
-import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.SettingsActivity;
-import com.androsz.electricsleepbeta.db.SleepSession;
-import com.androsz.electricsleepbeta.util.MathUtils;
-import com.androsz.electricsleepbeta.util.PointD;
+import java.io.IOException;
+import java.io.StreamCorruptedException;
+import java.util.List;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.AbstractChart;
 import org.achartengine.chart.TimeChart;
+import org.achartengine.model.PointD;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
@@ -21,8 +20,10 @@ import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.StreamCorruptedException;
+import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
+import com.androsz.electricsleepbeta.db.SleepSession;
+import com.androsz.electricsleepbeta.util.MathUtils;
 
 public class SleepChart extends GraphicalView {
 
@@ -243,13 +244,26 @@ public class SleepChart extends GraphicalView {
         reconfigure();
         repaint();
     }
+    
+    public void sync(List<PointD> points)
+    {
+        synchronized (this) {
+            initCheckData();
+            clear();
+        	for (PointD point : points) {
+                addPoint(point.x, point.y);
+            }
+        }
+        reconfigure();
+        repaint();
+    }
 
     public void sync(final SleepSession sleepRecord) {
         Log.d(TAG, "Attempting to sync with sleep record: " + sleepRecord);
 
         synchronized (this) {
             initCheckData();
-            mData.set(PointD.convertToNew(sleepRecord.getData()),
+            mData.set(com.androsz.electricsleepbeta.util.PointD.convertToNew(sleepRecord.getData()),
                       sleepRecord.getCalibrationLevel());
         }
 
