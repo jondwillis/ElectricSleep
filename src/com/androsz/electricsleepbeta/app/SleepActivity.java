@@ -19,7 +19,6 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
@@ -27,7 +26,6 @@ import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.widget.SleepChart;
-import com.androsz.electricsleepbeta.widget.SleepChartData;
 
 public class SleepActivity extends HostActivity {
 
@@ -98,20 +96,15 @@ public class SleepActivity extends HostActivity {
         @SuppressWarnings("unchecked")
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            if (sleepChart.mData != null) {
-                List<PointD> points =
-                    (List<PointD>) intent.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
-                for (PointD point : points) {
-                    sleepChart.mData.xySeriesMovement.add(point.x, point.y);
-                }
-            }
 
             final double alarmTriggerSensitivity = intent.getDoubleExtra(
                     StartSleepReceiver.EXTRA_ALARM,
                     SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
             sleepChart.setCalibrationLevel(alarmTriggerSensitivity);
-            sleepChart.reconfigure();
-            sleepChart.repaint();
+
+            List<PointD> points =
+                (List<PointD>) intent.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
+            sleepChart.sync(points);
 
             final boolean useAlarm = intent.getBooleanExtra(
                     StartSleepReceiver.EXTRA_USE_ALARM, false);
@@ -284,17 +277,6 @@ public class SleepActivity extends HostActivity {
         }
     }
 
-    @Override
-    protected void onRestoreInstanceState(final Bundle savedState) {
-        SleepChartData data = (SleepChartData) savedState.getParcelable(SLEEP_CHART);
-        if (sleepChart == null) {
-            Log.d(TAG, "finding sleep chart from layout by id.");
-            sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
-        }
-        sleepChart.setData(data);
-        super.onRestoreInstanceState(savedState);
-    }
-
     boolean airplaneModeOn = false;
     BroadcastReceiver airplaneModeChangedReceiver = new BroadcastReceiver() {
         @Override
@@ -321,17 +303,11 @@ public class SleepActivity extends HostActivity {
 
         registerReceiver(airplaneModeChangedReceiver, new IntentFilter(
                 Intent.ACTION_AIRPLANE_MODE_CHANGED));
-        registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
         registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
         registerReceiver(batteryChangedReceiver, new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
         sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
+        registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
         super.onResume();
-    }
-
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(SLEEP_CHART, sleepChart.mData);
     }
 }
