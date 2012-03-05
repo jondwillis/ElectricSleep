@@ -151,7 +151,9 @@ public class SleepChart extends GraphicalView {
     }
 
     public void addPoint(double x, double y) {
-        mData.add(x, y);
+        synchronized (this) {
+            mData.add(x, y);
+        }
     }
 
     /**
