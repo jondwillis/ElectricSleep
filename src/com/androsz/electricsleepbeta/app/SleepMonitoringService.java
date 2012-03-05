@@ -234,7 +234,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	}
 
 	private Notification createServiceNotification() {
-		final int icon = R.drawable.icon_small;
+		final int icon = R.drawable.ic_track_main_pressed;
 		final CharSequence tickerText = getText(R.string.notification_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
