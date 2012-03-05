@@ -71,7 +71,7 @@
         <TextView
           android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:text="@string/try_out_zeo" />
+          android:text="@string/download_sleep_101_for_free" />
     </LinearLayout>
 
 </LinearLayout>

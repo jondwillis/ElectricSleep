@@ -43,6 +43,12 @@ public class VerticalSeekBar extends DecimalSeekBar {
 		super.onDraw(c);
 	}
 
+    @Override
+    public synchronized void setProgress(final float progress) {
+        super.setProgress(progress);
+        onSizeChanged(getWidth(), getHeight(), 0, 0);
+    }
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (!isEnabled()) {
@@ -51,21 +57,24 @@ public class VerticalSeekBar extends DecimalSeekBar {
 
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
+            setPressed(true);
+            setSelected(true);
 			if (myListener != null) {
                 myListener.onStartTrackingTouch(this);
             }
             break;
 		case MotionEvent.ACTION_MOVE:
 			float dx = getFloatMax() - (getFloatMax() * event.getY() / getHeight());
-			setProgress(dx);
-			onSizeChanged(getWidth(), getHeight(), 0, 0);
 			myListener.onProgressChanged(this, (int) (dx*PRECISION), true);
+            setProgress(dx);
 			break;
 		case MotionEvent.ACTION_UP:
+            setPressed(false);
+            setSelected(false);
 			myListener.onStopTrackingTouch(this);
 			break;
-
 		case MotionEvent.ACTION_CANCEL:
+            setPressed(false);
 			break;
 		}
 		return true;

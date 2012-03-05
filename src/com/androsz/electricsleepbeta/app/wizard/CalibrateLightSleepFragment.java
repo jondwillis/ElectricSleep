@@ -114,12 +114,14 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements
 			if (sleepChart != null) {
 				final VerticalSeekBar seekBar = (VerticalSeekBar) getActivity()
 						.findViewById(R.id.calibration_level_seekbar);
-				seekBar.setProgress((float) sleepChart.getCalibrationLevel());
-				sleepChart.sync(intent.getDoubleExtra(
-						SleepMonitoringService.EXTRA_X, 0), intent
-						.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
-						sleepChart.getCalibrationLevel());
-			}
+                if (sleepChart.hasCalibrationLevel()) {
+                    seekBar.setProgress((float) sleepChart.getCalibrationLevel());
+                    sleepChart.sync(intent.getDoubleExtra(
+                                        SleepMonitoringService.EXTRA_X, 0), intent
+                                    .getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+                                    sleepChart.getCalibrationLevel());
+                }
+            }
 		}
 	};
 

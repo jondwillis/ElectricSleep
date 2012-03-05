@@ -33,12 +33,12 @@ public class IntentUtil {
 	 * method queries the package manager for installed packages that can
 	 * respond to an intent with the specified action. If no suitable package is
 	 * found, this method returns false.
-	 * 
+	 *
 	 * @param context
 	 *            The application's environment.
 	 * @param action
 	 *            The Intent action to check for availability.
-	 * 
+	 *
 	 * @return True if an Intent with the specified action can be sent and
 	 *         responded to, false otherwise.
 	 */
@@ -58,7 +58,7 @@ public class IntentUtil {
 			return false;
 		}
 	}
-	
+
 
     /**
      * @param session
@@ -84,7 +84,7 @@ public class IntentUtil {
         StringBuilder builder = new StringBuilder();
         builder.append(activity.getString(R.string.see_how_i_slept_on) + " "
                 + dateString + ".\n");
-        builder.append(activity.getString(R.string.try_out_zeo));
+        builder.append(activity.getString(R.string.download_sleep_101_for_free));
         intent.putExtra(Intent.EXTRA_TEXT, builder.toString());
         intent.setType("text/plain");
         try {
