@@ -62,7 +62,7 @@
         <item name="android:textColor">@color/text_dark</item>
     </style>
 
-    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock">
+    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock.Light">
         <item name="actionBarSize">@dimen/abs__action_bar_default_height</item>
         <item name="android:colorBackground">@color/background_light</item>
         <item name="android:windowBackground">@color/background_light</item>
