@@ -24,7 +24,13 @@ public class CalibrationWizardActivity extends WizardActivity {
 	public CheckForScreenBugFragment checkForScreenBugFragment;// =
 																// instantiateFragment1(R.layout.wizard_calibration_screenbug);
 
-	double lightSleepTrigger;
+    private static final int FRAG_ABOUT = 0;
+    private static final int FRAG_LIGHT_SLEEP_INSTRUCT = 1;
+    private static final int FRAG_LIGHT_SLEEP = 2;
+    private static final int FRAG_SCREEN_BUG = 3;
+    private static final int FRAG_RESULTS = 4;
+
+    double lightSleepTrigger;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,13 @@ public class CalibrationWizardActivity extends WizardActivity {
 			checkForScreenBugFragment = new CheckForScreenBugFragment();
 		}
 
-		private String[] titles = new String[] { "Start", "Test 1",
-				"Test 2", "Done" };
+		private String[] titles = new String[] {
+            "Start",
+            "Accel 1",
+            "Accel 2",
+            "Screen",
+            "Done"
+        };
 
 		@Override
 		public String getTitle(int position) {
@@ -59,18 +70,18 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-
-			switch (position) {
-			case 0:
+            switch (position) {
+			case FRAG_ABOUT:
 				return new CalibrationAboutFragment();
-			case 1:
+			case FRAG_LIGHT_SLEEP_INSTRUCT:
+				return new CalibrateLightSleepInstructionsFragment();
+			case FRAG_LIGHT_SLEEP:
 				return calibrateLightSleepFragment;
-			case 2:
+            case FRAG_SCREEN_BUG:
 				return checkForScreenBugFragment;
-			case 3:
+			case FRAG_RESULTS:
 				return new CalibrationResultsFragment();
-
-			default:
+            default:
 				throw new IllegalStateException("Could not find the correct fragment.");
 			}
 		}
@@ -110,18 +121,15 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedState) {
-
-		super.onRestoreInstanceState(savedState);
-
-		lightSleepTrigger = savedState.getDouble("alarm");
+        super.onRestoreInstanceState(savedState);
+        lightSleepTrigger = savedState.getDouble("alarm");
 		isScreenBugPresent = savedState.getBoolean("screenBug");
 	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-
-		outState.putDouble("alarm", lightSleepTrigger);
+        outState.putDouble("alarm", lightSleepTrigger);
 		outState.putBoolean("screenBug", isScreenBugPresent);
 	}
 
@@ -133,22 +141,17 @@ public class CalibrationWizardActivity extends WizardActivity {
 	@Override
 	protected void onPerformWizardAction(int index) {
 		findViewById(R.id.rightButton).setVisibility(View.INVISIBLE);
-		if (index == 1) {
+		if (index == FRAG_LIGHT_SLEEP) {
 			calibrateLightSleepFragment.startCalibration(this);
+            checkForScreenBugFragment.stopCalibration(this);
 
-			checkForScreenBugFragment.stopCalibration(this);
+        } else if (index == FRAG_SCREEN_BUG) {
+            checkForScreenBugFragment.startCalibration(this);
+            calibrateLightSleepFragment.stopCalibration(this);
 
-		} else if (index == 2) {
-
-			checkForScreenBugFragment.startCalibration(this);
-
-			calibrateLightSleepFragment.stopCalibration(this);
-
-		} else {
-
-			calibrateLightSleepFragment.stopCalibration(this);
-
-			checkForScreenBugFragment.stopCalibration(this);
+        } else {
+            calibrateLightSleepFragment.stopCalibration(this);
+            checkForScreenBugFragment.stopCalibration(this);
 
 		}
 	}
