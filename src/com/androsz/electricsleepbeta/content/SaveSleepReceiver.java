@@ -33,8 +33,9 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 
 			@Override
 			public void run() {
-				final double alarm = intent.getDoubleExtra(StartSleepReceiver.EXTRA_ALARM,
-						SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+				final float alarm =
+                    intent.getFloatExtra(StartSleepReceiver.EXTRA_ALARM,
+                                          SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 				final String name = intent.getStringExtra(SleepMonitoringService.EXTRA_NAME);
 				final int rating = intent.getIntExtra(EXTRA_RATING, 5);

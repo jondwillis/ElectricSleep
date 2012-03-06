@@ -63,7 +63,8 @@ public class StartSleepReceiver extends BroadcastReceiver {
 				final SharedPreferences userPrefs = context.getSharedPreferences(
 						SettingsActivity.PREFERENCES, 0);
 				final double alarmTriggerSensitivity = userPrefs.getFloat(
-						context.getString(R.string.pref_alarm_trigger_sensitivity), -1);
+						context.getString(R.string.pref_alarm_trigger_sensitivity),
+                        SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 				final int sensorDelay = Integer.parseInt(userPrefs.getString(
 						context.getString(R.string.pref_sensor_delay), ""
 								+ SensorManager.SENSOR_DELAY_NORMAL));

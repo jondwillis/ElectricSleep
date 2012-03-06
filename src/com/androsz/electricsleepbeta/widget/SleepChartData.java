@@ -46,8 +46,7 @@ public class SleepChartData implements Parcelable {
     XYSeries xySeriesCalibration;
     XYSeriesRenderer xySeriesCalibrationRenderer;
     XYSeriesRenderer xySeriesMovementRenderer;
-    //int rating;
-    double calibrationLevel;
+    float calibrationLevel;
 
     public static final Parcelable.Creator<SleepChartData> CREATOR =
         new Parcelable.Creator<SleepChartData>() {
@@ -87,8 +86,7 @@ public class SleepChartData implements Parcelable {
         xySeriesMovementRenderer = (XYSeriesRenderer) in.readSerializable();
         xySeriesCalibration = (XYSeries) in.readSerializable();
         xySeriesCalibrationRenderer = (XYSeriesRenderer) in.readSerializable();
-        calibrationLevel = in.readDouble();
-        //rating = in.readInt();
+        calibrationLevel = in.readFloat();
     }
 
     public void add(double x, double y) {
@@ -105,7 +103,7 @@ public class SleepChartData implements Parcelable {
         }
     }
 
-    public void add(double x, double y, double calibrationLevel) {
+    public void add(double x, double y, float calibrationLevel) {
         add(x, y);
     }
 
@@ -120,7 +118,7 @@ public class SleepChartData implements Parcelable {
         return duration;
     }
 
-    public void set(List<PointD> points, double calibrationLevel) {
+    public void set(List<PointD> points, float calibrationLevel) {
         xySeriesMovement.setXY(points);
         this.calibrationLevel = calibrationLevel;
     }
@@ -143,8 +141,7 @@ public class SleepChartData implements Parcelable {
         dest.writeSerializable(xySeriesMovementRenderer);
         dest.writeSerializable(xySeriesCalibration);
         dest.writeSerializable(xySeriesCalibrationRenderer);
-        dest.writeDouble(calibrationLevel);
-        //dest.writeInt(rating);
+        dest.writeFloat(calibrationLevel);
     }
 }
 

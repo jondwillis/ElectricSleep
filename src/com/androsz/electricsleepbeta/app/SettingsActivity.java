@@ -47,8 +47,13 @@ public class SettingsActivity extends HostPreferenceActivity {
 	}
 
 	private static final int ALARM_STREAM_TYPE_BIT = 1 << AudioManager.STREAM_ALARM;
-	public static double DEFAULT_ALARM_SENSITIVITY = 0.33;
-	public static double DEFAULT_MIN_SENSITIVITY = 0;
+
+    /** The default alarm trigger threshold. */
+	public static float DEFAULT_ALARM_SENSITIVITY = 0.33F;
+
+	public static float DEFAULT_MIN_SENSITIVITY = 0.0F;
+
+	public static float MAX_ALARM_SENSITIVITY = 1.0F;
 
 	private static final String KEY_ALARM_IN_SILENT_MODE = "alarm_in_silent_mode";
 
@@ -56,7 +61,6 @@ public class SettingsActivity extends HostPreferenceActivity {
 
 	public static final String KEY_VOLUME_BEHAVIOR = "volume_button_setting";
 
-	public static double MAX_ALARM_SENSITIVITY = 1;
 	// name of the preferences file that holds main preferences
 	// this is actually what android uses as default..
 	public static String PREFERENCES = "com.androsz.electricsleepbeta_preferences";
@@ -201,7 +205,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 			Toast.makeText(this, R.string.changes_made_to_these_settings,
 					Toast.LENGTH_LONG).show();
 		}
-		
+
 		if (getNeedToLoadOldStylePreferences()) {
 			try {
 				// Set the software version shown in the preference header.
