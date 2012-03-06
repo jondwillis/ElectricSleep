@@ -3,6 +3,7 @@ package com.androsz.electricsleepbeta.app;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,11 +105,14 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	public static final String SERVICE_IS_RUNNING = "serviceIsRunning";
 
 	public static final String SLEEP_DATA = "sleepData";
-	public static final String SLEEP_STOPPED = "com.androsz.electricsleepbeta.SLEEP_STOPPED";
+    public static final String SLEEP_START = "com.androsz.electricsleepbeta.SLEEP_START";
+    public static final String SLEEP_STOPPED = "com.androsz.electricsleepbeta.SLEEP_STOPPED";
 	public static final String STOP_AND_SAVE_SLEEP = "com.androsz.electricsleepbeta.STOP_AND_SAVE_SLEEP";
 
     /** Handle that allows others to access the sleep monitoring service. */
     private final IBinder mBinder = new ServiceBinder();
+
+    private AtomicBoolean mRunning;
 
     private boolean airplaneMode = false;
 
@@ -150,7 +154,10 @@ public class SleepMonitoringService extends Service implements SensorEventListen
                     Log.d(TAG, "No enabled alarms.");
                 }
 				createSaveSleepNotification();
-				stopSelf();
+                if (!mRunning.compareAndSet(true, false)) {
+                    Log.d(TAG, "Asked to stop and save sleep when not running.");
+                }
+                stopSelf();
 			} else {
 				if (action.equals(Alarms.CANCEL_SNOOZE)) {
 					final long now = System.currentTimeMillis();
@@ -167,7 +174,10 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 					}
 				}
 				createSaveSleepNotification();
-				stopSelf();
+                if (!mRunning.compareAndSet(true, false)) {
+                    Log.d(TAG, "Asked to cancel snooze when not running.");
+                }
+                stopSelf();
 			}
 		}
 	};
@@ -286,7 +296,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	public void onCreate() {
 		super.onCreate();
 
-		final IntentFilter filter = new IntentFilter(Alarms.ALARM_DISMISSED_BY_USER_ACTION);
+        mRunning = new AtomicBoolean();
+
+        final IntentFilter filter = new IntentFilter(Alarms.ALARM_DISMISSED_BY_USER_ACTION);
 		filter.addAction(Alarms.ALARM_SNOOZE_CANCELED_BY_USER_ACTION);
 		filter.addAction(STOP_AND_SAVE_SLEEP);
 
@@ -300,7 +312,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	@Override
 	public void onDestroy() {
 
-		unregisterAccelerometerListener();
+        Log.d(TAG, "Destroying sleep monitoring service.");
+
+        unregisterAccelerometerListener();
 
 		WakeLockManager.release("sleepMonitoring");
 
@@ -375,8 +389,10 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId) {
-		if (intent != null && startId == 1) {
-			testModeRate = intent.getIntExtra("testModeRate", Integer.MIN_VALUE);
+        if (intent != null && startId == 1 && mRunning.compareAndSet(false, true)) {
+            Log.d(TAG, "Starting sleep monitoring service.");
+
+            testModeRate = intent.getIntExtra("testModeRate", Integer.MIN_VALUE);
 
 			updateInterval = testModeRate == Integer.MIN_VALUE ? intent.getIntExtra("interval",
 					INTERVAL) : testModeRate;
