@@ -152,6 +152,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 					// there are no enabled alarms
                     Log.d(TAG, "No enabled alarms.");
                 }
+				createSaveSleepNotification();
 				stopSelf();
 			} else {
 				if (action.equals(Alarms.CANCEL_SNOOZE)) {
@@ -217,7 +218,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 		final Notification notification = new Notification(icon, tickerText, when);
 
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		//notification.flags = Notification.FLAG_AUTO_CANCEL;
 
 		final Context context = getApplicationContext();
 		final CharSequence contentTitle = getText(R.string.notification_save_sleep_title);
