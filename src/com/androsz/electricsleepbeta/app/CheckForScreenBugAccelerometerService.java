@@ -65,7 +65,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements Se
 
 
 	private Notification createServiceNotification() {
-		final int icon = R.drawable.icon_small;
+		final int icon = R.drawable.ic_stat_notify_track;
 		final CharSequence tickerText = getString(R.string.notification_screenbug_ticker);
 		final long when = System.currentTimeMillis();
 
