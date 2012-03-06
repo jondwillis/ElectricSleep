@@ -229,8 +229,6 @@ public class SleepActivity extends HostActivity {
                 Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 
-        sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
-
         if (mMonitoringService == null) {
             bindService(new Intent(this, SleepMonitoringService.class),
                         serviceConnection, Context.BIND_AUTO_CREATE);
