@@ -84,7 +84,7 @@ public class SleepActivity extends HostActivity {
         }
     };
 
-    private SleepMonitoringService mMonitoringService;
+    private SleepMonitoringService mMonitoringService = null;
 
     AsyncTask<Void, Void, Void> dimScreenTask;
 
@@ -184,9 +184,8 @@ public class SleepActivity extends HostActivity {
         }
         cancelDimScreenTask();
 
-        if (serviceConnection != null) {
+        if (mMonitoringService != null) {
             unbindService(serviceConnection);
-            serviceConnection = null;
         }
 
         super.onPause();
@@ -232,7 +231,7 @@ public class SleepActivity extends HostActivity {
 
         sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
 
-        if (serviceConnection == null) {
+        if (mMonitoringService == null) {
             bindService(new Intent(this, SleepMonitoringService.class),
                         serviceConnection, Context.BIND_AUTO_CREATE);
         }
