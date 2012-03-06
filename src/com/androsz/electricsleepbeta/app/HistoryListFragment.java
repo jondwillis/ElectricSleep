@@ -29,7 +29,7 @@ import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 
-public class HistoryListFragment extends HostFragment implements
+public class HistoryListFragment extends AnalyticFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private final class ListOnItemClickListener implements OnItemClickListener {

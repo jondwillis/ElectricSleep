@@ -9,8 +9,6 @@ import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
 public abstract class AnalyticFragment extends Fragment implements GoogleAnalyticsTrackerHelper {
 
-	public abstract void onClick(View v);
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
