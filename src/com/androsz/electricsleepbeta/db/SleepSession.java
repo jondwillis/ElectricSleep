@@ -143,7 +143,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 
 	/**
 	 * Return annotation of date / time text such as: Thu, Jan 14
-	 * 
+	 *
 	 * WARNING: the following does not follow the 6pm to 6am convention.
 	 */
 	public String getDayText(final Context context) {
@@ -212,7 +212,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 		final float eightHours = 1000 * 60 * 60 * 8;
 		final float diffFrom8HoursPct = 1 - Math.abs((mDuration - eightHours)
 				/ eightHours);
-		
+
 		long timeToFallAsleep = getTimeToFallAsleep();
 		if(timeToFallAsleep == DID_NOT_FALL_ASLEEP)
 		{
@@ -222,8 +222,8 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 		else
 		{
 			final float timeToFallAsleepPct = fifteenMinutes
-					/ Math.max(timeToFallAsleep, fifteenMinutes);		
-			
+					/ Math.max(timeToFallAsleep, fifteenMinutes);
+
 			score = Math
 					.round((ratingPct /* + deepPct */+ diffFrom8HoursPct + timeToFallAsleepPct) / 3 * 100);
 		}
@@ -270,7 +270,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 	/**
 	 * Return the julian day for this sleep session while taking into account
 	 * Zeo's 6pm to 6am rule for determining what date this sleep applies to.
-	 * 
+	 *
 	 * The Zeo 6pm to 6am rule states that any sleep that occurs from 12am to
 	 * 6am is actually sleep representing the day prior.
 	 */
@@ -299,9 +299,10 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 
 	public CharSequence getTimeToFallAsleepText(final Resources res) {
 		long timeToFallAsleep = getTimeToFallAsleep();
-		if (timeToFallAsleep == DID_NOT_FALL_ASLEEP)
-			return "----";
-		return getTimespanText(timeToFallAsleep, res);
+		if (timeToFallAsleep == DID_NOT_FALL_ASLEEP) {
+            return "----";
+        }
+        return getTimespanText(timeToFallAsleep, res);
 	}
 
 	public CharSequence getTotalRecordAbbrevTime(final Resources res) {
@@ -323,7 +324,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 	/**
 	 * Return a title for the night of sleep similar to the form: M/D/Y HH:MM -
 	 * HH:MM but of course using the user's Android settings.
-	 * 
+	 *
 	 * WARNING: timezone is not properly handled here.
 	 */
 	public String getTitle(final Context context) {
@@ -427,7 +428,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 	/**
 	 * Given a cursor generate a List of long values that contain: start
 	 * timestamp end timestamp start julian day end julian day database row id
-	 * 
+	 *
 	 * WARNING We assume that the cursor given to us will have projection in the
 	 * form: new String[] {_ID, START_TIMESTAMP, END_TIMESTAMP, TIMEZONE}
 	 */
