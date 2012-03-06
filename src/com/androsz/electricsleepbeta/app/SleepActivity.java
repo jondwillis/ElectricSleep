@@ -1,6 +1,7 @@
 package com.androsz.electricsleepbeta.app;
 
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -183,11 +184,6 @@ public class SleepActivity extends HostActivity {
             currentToast.cancel();
         }
         cancelDimScreenTask();
-
-        if (mMonitoringService != null) {
-            unbindService(serviceConnection);
-        }
-
         super.onPause();
     }
 
