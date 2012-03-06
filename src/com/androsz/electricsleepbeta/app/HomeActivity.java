@@ -56,7 +56,7 @@ public class HomeActivity extends HostActivity implements
 		bar.setDisplayHomeAsUpEnabled(false);
 		/*
 		 * new AsyncTask<Void, Void, Void>() {
-		 *
+		 * 
 		 * @Override protected Void doInBackground(Void... params) { final
 		 * SharedPreferences userPrefs = getSharedPreferences(
 		 * SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
@@ -166,6 +166,7 @@ public class HomeActivity extends HostActivity implements
 				@Override
 				protected Void doInBackground(Void... params) {
 					int count = 0;
+					int fellAsleepCount = 0;
 					do {
 						count++;
 						SleepSession sleepRecord = null;
@@ -178,15 +179,21 @@ public class HomeActivity extends HostActivity implements
 						avgSleepScore += sleepRecord.getSleepScore();
 						avgDuration += sleepRecord.getDuration();
 						avgSpikes += sleepRecord.getSpikes();
-						avgFellAsleep += sleepRecord.getTimeToFallAsleep();
+						long timeToFallAsleep = sleepRecord
+								.getTimeToFallAsleep();
+						if (timeToFallAsleep != SleepSession.DID_NOT_FALL_ASLEEP) {
+							fellAsleepCount++;
+							avgFellAsleep += sleepRecord.getTimeToFallAsleep();
+						}
 
 					} while (cursor.moveToNext());
 
 					final float invCount = 1.0f / count;
+					final float invFellAsleepCount = 1.0f / fellAsleepCount;
 					avgSleepScore *= invCount;
 					avgDuration *= invCount;
 					avgSpikes *= invCount;
-					avgFellAsleep *= invCount;
+					avgFellAsleep *= invFellAsleepCount;
 					return null;
 				}
 
