@@ -135,8 +135,6 @@ public class CalibrateLightSleepFragment extends LayoutFragment
                 new IntentFilter(SleepActivity.UPDATE_CHART));
         getActivity().registerReceiver(syncChartReceiver,
                 new IntentFilter(SleepActivity.SYNC_CHART));
-        getActivity().sendBroadcast(
-                new Intent(SleepMonitoringService.POKE_SYNC_CHART));
 
         mAlarmTrigger =
             mPrefs.getFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),

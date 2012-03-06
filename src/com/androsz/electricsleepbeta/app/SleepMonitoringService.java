@@ -97,7 +97,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	private final static int INTERVAL = 5000;
 	public static int MAX_POINTS_IN_A_GRAPH = 200;
 	private static final int NOTIFICATION_ID = 0x1337a;
-	public static final String POKE_SYNC_CHART = "com.androsz.electricsleepbeta.POKE_SYNC_CHART";
+
 	// Object for intrinsic lock
 	public static final Object[] DATA_LOCK = new Object[0];
 
@@ -133,15 +133,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			final String action = intent.getAction();
-			if (action.equals(POKE_SYNC_CHART)) {
-				final Intent i = new Intent(SleepActivity.SYNC_CHART);
-				i.putExtra(SLEEP_DATA, sleepData);
-				i.putExtra(StartSleepReceiver.EXTRA_ALARM, alarmTriggerSensitivity);
-				i.putExtra(EXTRA_ALARM_WINDOW, alarmWindow);
-				i.putExtra(StartSleepReceiver.EXTRA_USE_ALARM, useAlarm);
-				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
-				sendBroadcast(i);
-			} else if (action.equals(STOP_AND_SAVE_SLEEP)) {
+            if (action.equals(STOP_AND_SAVE_SLEEP)) {
 				final Intent saveIntent = addExtrasToSaveSleepIntent(new Intent(
 						SleepMonitoringService.this, SaveSleepActivity.class));
 				startActivity(saveIntent);
@@ -297,7 +289,6 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		final IntentFilter filter = new IntentFilter(Alarms.ALARM_DISMISSED_BY_USER_ACTION);
 		filter.addAction(Alarms.ALARM_SNOOZE_CANCELED_BY_USER_ACTION);
 		filter.addAction(STOP_AND_SAVE_SLEEP);
-		filter.addAction(POKE_SYNC_CHART);
 
 		registerReceiver(serviceReceiver, filter);
 
