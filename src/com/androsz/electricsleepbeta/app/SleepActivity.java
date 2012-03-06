@@ -98,6 +98,9 @@ public class SleepActivity extends HostActivity {
         }
     };
 
+    /** Boolean that indicates whether or not the service is bound. */
+    private AtomicBoolean mServiceBound;
+
     private TextView buttonSleepDim;
     private TextView buttonSleepPluggedIn;
     private TextView textAlarmStatus;
@@ -124,6 +127,8 @@ public class SleepActivity extends HostActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mServiceBound = new AtomicBoolean();
+
         setTitle(R.string.monitoring_sleep);
         airplaneModeOn = Settings.System.getInt(getContentResolver(),
                 Settings.System.AIRPLANE_MODE_ON, 0) != 0;
@@ -133,6 +138,9 @@ public class SleepActivity extends HostActivity {
 
         sleepChart = (SleepChart) findViewById(R.id.sleep_movement_chart);
         sleepChart.setVisibility(View.VISIBLE);
+
+        // Start the sleep monitoring service
+        startService(new Intent(this, SleepMonitoringService.class));
     }
 
     @Override
@@ -184,6 +192,9 @@ public class SleepActivity extends HostActivity {
             currentToast.cancel();
         }
         cancelDimScreenTask();
+        if (mServiceBound.compareAndSet(true, false)) {
+            unbindService(serviceConnection);
+        }
         super.onPause();
     }
 
@@ -225,7 +236,7 @@ public class SleepActivity extends HostActivity {
                 Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
 
-        if (mMonitoringService == null) {
+        if (mServiceBound.compareAndSet(false, true)) {
             bindService(new Intent(this, SleepMonitoringService.class),
                         serviceConnection, Context.BIND_AUTO_CREATE);
         }
