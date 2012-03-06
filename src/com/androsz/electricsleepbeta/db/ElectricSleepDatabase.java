@@ -144,7 +144,8 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
                 values.put(SleepSession.MIN, cursor.getDouble(4));
                 values.put(SleepSession.DURATION, cursor.getLong(5));
                 Log.d(TAG, "Original duration: " + cursor.getLong(5));
-                values.put(SleepSession.CALIBRATION_LEVEL, cursor.getDouble(6));
+                float calibrationLevel = (float) cursor.getDouble(6);
+                values.put(SleepSession.CALIBRATION_LEVEL, calibrationLevel);
 
                 final long now = System.currentTimeMillis();
                 values.put(SleepSession.CREATED_ON, now);

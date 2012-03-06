@@ -77,7 +77,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         UPDATED_ON
     };
 
-    double mCalibrationLevel;
+    float mCalibrationLevel;
     List<PointD> mData;
     long mEndTimestamp;
     long mId;
@@ -100,7 +100,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         mStartJulianDay = cursor.getInt(cursor.getColumnIndex(START_JULIAN_DAY));
         mEndTimestamp = cursor.getLong(cursor.getColumnIndex(END_TIMESTAMP));
         mTimezone = TimeZone.getTimeZone(cursor.getString(cursor.getColumnIndex(TIMEZONE)));
-        mCalibrationLevel = cursor.getDouble(cursor.getColumnIndex(CALIBRATION_LEVEL));
+        mCalibrationLevel = cursor.getFloat(cursor.getColumnIndex(CALIBRATION_LEVEL));
         mMin = cursor.getDouble(cursor.getColumnIndex(MIN));
         mRating = cursor.getInt(cursor.getColumnIndex(RATING));
         mSpikes = cursor.getInt(cursor.getColumnIndex(SPIKES));
@@ -124,7 +124,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
                         final long endTimestamp,
                         final List<PointD> data,
                         final double min,
-                        final double calibrationLevel,
+                        final float calibrationLevel,
                         final int rating,
                         final long duration,
                         final int spikes,
@@ -144,7 +144,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys, TimestampCol
         mTimezone = TimeZone.getDefault();
     }
 
-    public double getCalibrationLevel() {
+    public float getCalibrationLevel() {
         return mCalibrationLevel;
     }
 

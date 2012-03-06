@@ -97,9 +97,9 @@ public class SleepActivity extends HostActivity {
         @Override
         public void onReceive(final Context context, final Intent intent) {
 
-            final double alarmTriggerSensitivity = intent.getDoubleExtra(
-                    StartSleepReceiver.EXTRA_ALARM,
-                    SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+            final float alarmTriggerSensitivity =
+                intent.getFloatExtra(StartSleepReceiver.EXTRA_ALARM,
+                                     SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
             sleepChart.setCalibrationLevel(alarmTriggerSensitivity);
 
             List<PointD> points =
@@ -187,11 +187,10 @@ public class SleepActivity extends HostActivity {
     private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            sleepChart.sync(intent.getDoubleExtra(
-                    SleepMonitoringService.EXTRA_X, 0), intent.getDoubleExtra(
-                    SleepMonitoringService.EXTRA_Y, 0), intent.getDoubleExtra(
-                    StartSleepReceiver.EXTRA_ALARM,
-                    SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
+            sleepChart.sync(intent.getDoubleExtra(SleepMonitoringService.EXTRA_X, 0),
+                            intent.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+                            intent.getFloatExtra(StartSleepReceiver.EXTRA_ALARM,
+                                                 SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
         }
     };
 

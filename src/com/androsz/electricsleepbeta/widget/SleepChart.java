@@ -39,7 +39,7 @@ public class SleepChart extends GraphicalView {
 
     public XYMultipleSeriesRenderer mRenderer;
 
-    private static final double INVALID_CALIBRATION = -1;
+    private static final float INVALID_CALIBRATION = -1;
 
     int mBackgroundColor;
     int mTextColor;
@@ -58,7 +58,7 @@ public class SleepChart extends GraphicalView {
     boolean mShowTitle = true;
 
     /** Temporary storage for calibration level information prior to mData being initalized. */
-    private double mTempCalibrationLevel = INVALID_CALIBRATION;
+    private float mTempCalibrationLevel = INVALID_CALIBRATION;
 
     private String mAxisFormat;
 
@@ -151,7 +151,9 @@ public class SleepChart extends GraphicalView {
     }
 
     public void addPoint(double x, double y) {
-        mData.add(x, y);
+        synchronized (this) {
+            mData.add(x, y);
+        }
     }
 
     /**
@@ -160,7 +162,7 @@ public class SleepChart extends GraphicalView {
      * Callers of this method could call hasCalibrationLevel first to determine if information
      * surrounding calibration is available prior to invoking this method.
      */
-    public double getCalibrationLevel() {
+    public float getCalibrationLevel() {
         if (mData != null) {
             return mData.calibrationLevel;
         } else if (mTempCalibrationLevel != INVALID_CALIBRATION) {
@@ -227,7 +229,7 @@ public class SleepChart extends GraphicalView {
         }
     }
 
-    public void setCalibrationLevel(final double calibrationLevel) {
+    public void setCalibrationLevel(final float calibrationLevel) {
         if (mData == null) {
             mTempCalibrationLevel = calibrationLevel;
         } else {
@@ -247,7 +249,7 @@ public class SleepChart extends GraphicalView {
         this.sync(new SleepSession(cursor));
     }
 
-    public void sync(final Double x, final Double y, final double calibrationLevel) {
+    public void sync(final Double x, final Double y, final float calibrationLevel) {
         synchronized (this) {
             initCheckData();
             mData.add(x, y, calibrationLevel);
