@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,20 +24,24 @@ import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.widget.VerticalSeekBar;
 
-public class CalibrateLightSleepFragment extends LayoutFragment implements
-        Calibrator {
+public class CalibrateLightSleepFragment extends LayoutFragment
+    implements Calibrator {
+
+    private float mAlarmTrigger;
+
+    private SharedPreferences mPrefs;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // if (savedInstanceState == null) {
+        mPrefs = getActivity().getSharedPreferences(SettingsActivity.PREFERENCES, 0);
+        mAlarmTrigger =
+            mPrefs.getFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),
+                            SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+
         sleepChart = (SleepChart) getActivity().findViewById(
                 R.id.calibration_sleep_chart);
-        // } else {
-        // sleepChart = (SleepChart)
-        // savedInstanceState.getParcelable(SLEEP_CHART);
-        // }
 
         final VerticalSeekBar seekBar = (VerticalSeekBar) getActivity()
                 .findViewById(R.id.calibration_level_seekbar);
@@ -47,8 +52,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements
             public void onProgressChanged(final SeekBar seekBar,
                     final int progress, final boolean fromUser) {
                 if (fromUser) {
-                    sleepChart.setCalibrationLevel(progress
-                            / DecimalSeekBar.PRECISION);
+                    sleepChart.setCalibrationLevel(progress / DecimalSeekBar.PRECISION);
                 }
             }
 
@@ -67,8 +71,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements
                 .setVisibility(View.INVISIBLE);
         getActivity().findViewById(R.id.warming_up_text).setVisibility(
                 View.VISIBLE);
-        sleepChart
-                .setCalibrationLevel(SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+        sleepChart.setCalibrationLevel(mAlarmTrigger);
 
         getActivity().getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -134,6 +137,10 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements
                 new IntentFilter(SleepActivity.SYNC_CHART));
         getActivity().sendBroadcast(
                 new Intent(SleepMonitoringService.POKE_SYNC_CHART));
+
+        mAlarmTrigger =
+            mPrefs.getFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),
+                            SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
     }
 
     @Override
@@ -142,6 +149,12 @@ public class CalibrateLightSleepFragment extends LayoutFragment implements
         stopCalibration(getActivity());
         getActivity().unregisterReceiver(updateChartReceiver);
         getActivity().unregisterReceiver(syncChartReceiver);
+
+        // Save the trigger sensitivity
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),
+                        mAlarmTrigger);
+        editor.commit();
     }
 
     @Override

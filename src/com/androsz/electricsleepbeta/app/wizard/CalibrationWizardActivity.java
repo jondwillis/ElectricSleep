@@ -85,7 +85,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 	protected void onFinishWizardActivity() throws IllegalStateException {
 		final SharedPreferences.Editor ed = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
 				.edit();
-		ed.putFloat(getString(R.string.pref_alarm_trigger_sensitivity), (float) lightSleepTrigger);
 		ed.putBoolean(getString(R.string.pref_force_screen), isScreenBugPresent);
 		ed.commit();
 
