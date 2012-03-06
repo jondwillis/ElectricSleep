@@ -9,8 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
-import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
 public class SuggestionFragment extends LayoutFragment {
 
