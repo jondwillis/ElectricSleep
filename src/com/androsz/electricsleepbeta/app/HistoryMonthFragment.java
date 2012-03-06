@@ -41,7 +41,7 @@ import com.androsz.electricsleepbeta.widget.calendar.Utils;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 
-public class HistoryMonthFragment extends HostFragment implements
+public class HistoryMonthFragment extends AnalyticFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = HistoryMonthFragment.class
