@@ -438,7 +438,8 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				}
 			}.execute();
 		}
-		return startId;
+
+		return START_STICKY;
 	}
 
     public float getAlarmTriggerSensitivity() {
