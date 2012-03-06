@@ -175,11 +175,11 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 
 					int numberOfSpikes = 0;
 					int numberOfConsecutiveNonSpikes = 0;
-					long timeOfFirstSleep = endTime;
+					long timeOfFirstSleep = 0;
 					for (int i = 0; i < numberOfPointsOriginal; i++) {
 						final double currentY = originalData.get(i).y;
 						if (currentY < alarm) {
-							if (timeOfFirstSleep == endTime && ++numberOfConsecutiveNonSpikes > 4) {
+							if (timeOfFirstSleep == 0 && ++numberOfConsecutiveNonSpikes > 4) {
 								final int lastIndex = originalData.size() - 1;
 
 								timeOfFirstSleep = Math.round(originalData.get(lastIndex).x);
