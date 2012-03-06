@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,6 +30,7 @@ import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -105,9 +107,12 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	public static final String SLEEP_STOPPED = "com.androsz.electricsleepbeta.SLEEP_STOPPED";
 	public static final String STOP_AND_SAVE_SLEEP = "com.androsz.electricsleepbeta.STOP_AND_SAVE_SLEEP";
 
-	private boolean airplaneMode = false;
+    /** Handle that allows others to access the sleep monitoring service. */
+    private final IBinder mBinder = new ServiceBinder();
 
-	private double alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
+    private boolean airplaneMode = false;
+
+	private float alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 	private int alarmWindow = 30;
 
 	final float alpha = 0.8f;
@@ -281,7 +286,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 	@Override
 	public IBinder onBind(final Intent intent) {
-		return null;
+		return mBinder;
 	}
 
 	@Override
@@ -387,8 +392,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 			sensorDelay = intent.getIntExtra(StartSleepReceiver.EXTRA_SENSOR_DELAY,
 					SensorManager.SENSOR_DELAY_FASTEST);
 
-			alarmTriggerSensitivity = intent.getDoubleExtra(StartSleepReceiver.EXTRA_ALARM,
-					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+			alarmTriggerSensitivity = intent.getFloatExtra(
+                StartSleepReceiver.EXTRA_ALARM,
+                SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 			useAlarm = intent.getBooleanExtra(StartSleepReceiver.EXTRA_USE_ALARM, false);
 			alarmWindow = intent.getIntExtra(StartSleepReceiver.EXTRA_ALARM_WINDOW, 0);
@@ -427,7 +433,27 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		return startId;
 	}
 
-	private void registerAccelerometerListener() {
+    public float getAlarmTriggerSensitivity() {
+        return alarmTriggerSensitivity;
+    }
+
+    public int getAlarmWindow() {
+        return alarmWindow;
+    }
+
+    public List<PointD> getData() {
+        return sleepData;
+    }
+
+    public boolean getUseAlarm() {
+        return useAlarm;
+    }
+
+    public boolean getForceScreenOn() {
+        return forceScreenOn;
+    }
+
+    private void registerAccelerometerListener() {
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
 		sensorManager.registerListener(this,
@@ -485,4 +511,14 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		sensorManager.unregisterListener(this);
 	}
+
+    /**
+     * An implementation of a binder that merely hands off the service its running within.
+     */
+    public class ServiceBinder extends Binder {
+        /** Return the service. */
+        public SleepMonitoringService getService() {
+            return SleepMonitoringService.this;
+        }
+    }
 }
