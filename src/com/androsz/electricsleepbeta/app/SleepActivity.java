@@ -123,9 +123,6 @@ public class SleepActivity extends HostActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bindService(new Intent(this, SleepMonitoringService.class),
-                    serviceConnection, Context.BIND_AUTO_CREATE);
-
         setTitle(R.string.monitoring_sleep);
         airplaneModeOn = Settings.System.getInt(getContentResolver(),
                 Settings.System.AIRPLANE_MODE_ON, 0) != 0;
@@ -186,6 +183,12 @@ public class SleepActivity extends HostActivity {
             currentToast.cancel();
         }
         cancelDimScreenTask();
+
+        if (serviceConnection != null) {
+            unbindService(serviceConnection);
+            serviceConnection = null;
+        }
+
         super.onPause();
     }
 
@@ -226,6 +229,13 @@ public class SleepActivity extends HostActivity {
         registerReceiver(batteryChangedReceiver, new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
         registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
+
+        sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
+
+        if (serviceConnection == null) {
+            bindService(new Intent(this, SleepMonitoringService.class),
+                        serviceConnection, Context.BIND_AUTO_CREATE);
+        }
         super.onResume();
     }
 
