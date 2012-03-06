@@ -11,6 +11,7 @@
       <attr name="showLegend" format="boolean" />
       <attr name="showTitle" format="boolean" />
       <attr name="setScroll" format="boolean" />
+      <attr name="xLabelTicks" format="integer" />
       <attr name="android:background" />
       <attr name="android:textColor" />
   </declare-styleable>

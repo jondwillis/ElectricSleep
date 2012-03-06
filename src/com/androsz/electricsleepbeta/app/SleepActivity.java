@@ -1,14 +1,14 @@
 package com.androsz.electricsleepbeta.app;
 
 import java.util.Calendar;
-import java.util.List;
-
-import org.achartengine.model.PointD;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.os.IBinder;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -84,98 +84,16 @@ public class SleepActivity extends HostActivity {
         }
     };
 
+    private SleepMonitoringService mMonitoringService;
+
     AsyncTask<Void, Void, Void> dimScreenTask;
+
     private SleepChart sleepChart;
+
     private final BroadcastReceiver sleepStoppedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             finish();
-        }
-    };
-    private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
-        @SuppressWarnings("unchecked")
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-
-            final float alarmTriggerSensitivity =
-                intent.getFloatExtra(StartSleepReceiver.EXTRA_ALARM,
-                                     SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
-            sleepChart.setCalibrationLevel(alarmTriggerSensitivity);
-
-            List<PointD> points =
-                (List<PointD>) intent.getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
-            sleepChart.sync(points);
-
-            final boolean useAlarm = intent.getBooleanExtra(
-                    StartSleepReceiver.EXTRA_USE_ALARM, false);
-            final boolean forceScreenOn = intent.getBooleanExtra(
-                    StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, false);
-
-            new AsyncTask<Void, Void, String[]>() {
-                @Override
-                protected String[] doInBackground(Void... params) {
-                    String[] result = null;
-                    final Alarm alarm = Alarms.calculateNextAlert(context);
-                    if (alarm != null) {
-                        final Calendar alarmTime = Calendar.getInstance();
-                        alarmTime.setTimeInMillis(alarm.time);
-
-                        java.text.DateFormat df = DateFormat
-                                .getDateFormat(context);
-                        df = DateFormat.getTimeFormat(context);
-                        final String dateTime = df.format(alarmTime.getTime());
-                        final int alarmWindow = intent.getIntExtra(
-                                StartSleepReceiver.EXTRA_ALARM_WINDOW, 30);
-                        alarmTime.add(Calendar.MINUTE, -1 * alarmWindow);
-                        final String dateTimePre = df.format(alarmTime
-                                .getTime());
-                        result = new String[] { dateTimePre, dateTime };
-                    }
-                    return result;
-                }
-
-                @Override
-                protected void onPostExecute(String[] result) {
-                    if (result != null) {
-
-                        if (useAlarm) {
-                            textAlarmStatus.setText(context.getString(
-                                    R.string.alarm_status_range, result[0],
-                                    result[1]));
-                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
-                                    .getDrawable(R.drawable.ic_alarm_pressed),
-                                    null, null, null);
-                            textAlarmStatusSub.setText(R.string.attempt_to_use_smartwake_);
-                        } else {
-                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
-                                    .getDrawable(R.drawable.ic_alarm_neutral),
-                                    null, null, null);
-                            textAlarmStatus.setText(result[0]);
-                            textAlarmStatusSub.setText(R.string.not_using_smartwake_);
-                        }
-
-                    } else {
-                        textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
-                                .getDrawable(R.drawable.ic_alarm_none),
-                                null, null, null);
-                        textAlarmStatus.setText(R.string.no_alarm);
-                        textAlarmStatusSub.setText(R.string.sleep_no_alarm);
-                    }
-                    // dims the screen while in this activity and
-                    // forceScreenOn is
-                    // enabled
-                    if (forceScreenOn) {
-                        buttonSleepDim.setVisibility(View.VISIBLE);
-
-                        cancelDimScreenTask();
-                        dimScreenTask = new DimScreenTask();
-                        dimScreenTask.execute();
-
-                    } else {
-                        buttonSleepDim.setVisibility(View.GONE);
-                    }
-                }
-            }.execute();
         }
     };
 
@@ -204,6 +122,7 @@ public class SleepActivity extends HostActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setTitle(R.string.monitoring_sleep);
         airplaneModeOn = Settings.System.getInt(getContentResolver(),
                 Settings.System.AIRPLANE_MODE_ON, 0) != 0;
@@ -259,12 +178,17 @@ public class SleepActivity extends HostActivity {
     protected void onPause() {
         unregisterReceiver(airplaneModeChangedReceiver);
         unregisterReceiver(updateChartReceiver);
-        unregisterReceiver(syncChartReceiver);
         unregisterReceiver(batteryChangedReceiver);
         if (currentToast != null) {
             currentToast.cancel();
         }
         cancelDimScreenTask();
+
+        if (serviceConnection != null) {
+            unbindService(serviceConnection);
+            serviceConnection = null;
+        }
+
         super.onPause();
     }
 
@@ -302,11 +226,96 @@ public class SleepActivity extends HostActivity {
 
         registerReceiver(airplaneModeChangedReceiver, new IntentFilter(
                 Intent.ACTION_AIRPLANE_MODE_CHANGED));
-        registerReceiver(syncChartReceiver, new IntentFilter(SYNC_CHART));
         registerReceiver(batteryChangedReceiver, new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED));
-        sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
         registerReceiver(updateChartReceiver, new IntentFilter(UPDATE_CHART));
+
+        sendBroadcast(new Intent(SleepMonitoringService.POKE_SYNC_CHART));
+
+        if (serviceConnection == null) {
+            bindService(new Intent(this, SleepMonitoringService.class),
+                        serviceConnection, Context.BIND_AUTO_CREATE);
+        }
         super.onResume();
     }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        public void onServiceConnected(ComponentName className, IBinder iBinder) {
+            SleepMonitoringService.ServiceBinder binder =
+                (SleepMonitoringService.ServiceBinder) iBinder;
+            mMonitoringService = binder.getService();
+
+            sleepChart.setCalibrationLevel(mMonitoringService.getAlarmTriggerSensitivity());
+            sleepChart.sync(mMonitoringService.getData());
+            final boolean useAlarm = mMonitoringService.getUseAlarm();
+            final boolean forceScreenOn = mMonitoringService.getForceScreenOn();
+
+            new AsyncTask<Void, Void, String[]>() {
+                @Override
+                protected String[] doInBackground(Void... params) {
+                    String[] result = null;
+                    final Alarm alarm = Alarms.calculateNextAlert(SleepActivity.this);
+                    if (alarm != null) {
+                        final Calendar alarmTime = Calendar.getInstance();
+                        alarmTime.setTimeInMillis(alarm.time);
+
+                        java.text.DateFormat df = DateFormat.getDateFormat(SleepActivity.this);
+                        df = DateFormat.getTimeFormat(SleepActivity.this);
+                        final String dateTime = df.format(alarmTime.getTime());
+                        final int alarmWindow = mMonitoringService.getAlarmWindow();
+                        alarmTime.add(Calendar.MINUTE, -1 * alarmWindow);
+                        final String dateTimePre = df.format(alarmTime
+                                .getTime());
+                        result = new String[] { dateTimePre, dateTime };
+                    }
+                    return result;
+                }
+
+                @Override
+                protected void onPostExecute(String[] result) {
+                    if (result != null) {
+
+                        if (useAlarm) {
+                            textAlarmStatus.setText(
+                                getString(R.string.alarm_status_range, result[0], result[1]));
+                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                    .getDrawable(R.drawable.ic_alarm_pressed),
+                                    null, null, null);
+                            textAlarmStatusSub.setText(R.string.attempt_to_use_smartwake_);
+                        } else {
+                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                    .getDrawable(R.drawable.ic_alarm_neutral),
+                                    null, null, null);
+                            textAlarmStatus.setText(result[0]);
+                            textAlarmStatusSub.setText(R.string.not_using_smartwake_);
+                        }
+
+                    } else {
+                        textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                .getDrawable(R.drawable.ic_alarm_none),
+                                null, null, null);
+                        textAlarmStatus.setText(R.string.no_alarm);
+                        textAlarmStatusSub.setText(R.string.sleep_no_alarm);
+                    }
+                    // dims the screen while in this activity and
+                    // forceScreenOn is
+                    // enabled
+                    if (forceScreenOn) {
+                        buttonSleepDim.setVisibility(View.VISIBLE);
+
+                        cancelDimScreenTask();
+                        dimScreenTask = new DimScreenTask();
+                        dimScreenTask.execute();
+
+                    } else {
+                        buttonSleepDim.setVisibility(View.GONE);
+                    }
+                }
+            }.execute();
+        }
+        public void onServiceDisconnected(ComponentName className) {
+            mMonitoringService = null;
+        }
+    };
 }

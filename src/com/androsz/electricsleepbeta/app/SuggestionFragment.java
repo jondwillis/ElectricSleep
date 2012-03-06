@@ -59,7 +59,7 @@ public class SuggestionFragment extends LayoutFragment {
 						super.onClick(v);
 						trackPageView("ExpertAdvice");
 						startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri
-								.parse("http://myzeo.com/expert_advice/")));
+								.parse("http://www.myzeo.com/expert_advice/")));
 					}
 				});
 		setOnClickForEntireViewGroup(a.findViewById(R.id.btn_consultation),

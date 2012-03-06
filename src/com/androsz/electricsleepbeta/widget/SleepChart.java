@@ -29,6 +29,9 @@ public class SleepChart extends GraphicalView {
 
     private static final String TAG = SleepChart.class.getSimpleName();
 
+    /** The default number of X label ticks. */
+    private static final int DEFAULT_X_LABEL_TICKS = 5;
+
     Context mContext;
 
     public int rating;
@@ -48,6 +51,7 @@ public class SleepChart extends GraphicalView {
     int mGridColor;
     int mMovementBorderColor;
     int mMovementColor;
+    int mXLabelTicks;
     boolean mSetBackgroundColor;
     boolean mSetGridColor;
     boolean mSetInScroll;
@@ -108,6 +112,9 @@ public class SleepChart extends GraphicalView {
             mGridColor = array.getColor(R.styleable.SleepChart_gridAxisColor,
                                         R.color.sleepchart_axis);
         }
+
+        mXLabelTicks = array.getInteger(R.styleable.SleepChart_xLabelTicks,
+                                        DEFAULT_X_LABEL_TICKS);
 
         mMovementColor = array.getColor(R.styleable.SleepChart_movementColor,
                                         R.color.sleepchart_movement_light);
@@ -368,7 +375,7 @@ public class SleepChart extends GraphicalView {
         mRenderer.setAntialiasing(true);
         mRenderer.setFitLegend(true);
         mRenderer.setLegendTextSize(textSize);
-        mRenderer.setXLabels(5);
+        mRenderer.setXLabels(mXLabelTicks);
         mRenderer.setYLabels(8);
         mRenderer.setYLabelsAlign(Align.RIGHT);
 
