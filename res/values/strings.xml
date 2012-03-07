@@ -24,7 +24,7 @@ ANYTHING.</string>
     <string name="warming_up">Warming up sensors, please wait.</string>
     <string name="go_into_standy">Press your device\'s standby button</string>
     <string name="movement_calibration_instructions">Movement Calibration Instructions</string>
-    <string name="calibrate_your_movement_sensors">Calibrate Your Movement Sensors</string>
+    <string name="calibrate_movement_sensitivity">Calibrate Movement Sensitivity</string>
     <string name="calibrate_directions_force_screen_on"><li>A bug exists on some devices that prevents the accelerometer from
 reporting changes while the screen is off.</li>\n<li>When prompted, put your device in standby and wait up to 10
 seconds.</li>\n<li>Your screen will be automatically turned back on. Unlock your

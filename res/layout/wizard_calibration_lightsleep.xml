@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
-  android:fillViewport="true"
-  android:layout_gravity="center"
-  android:layout_width="match_parent"
-  android:layout_height="0dip"
-  android:orientation="vertical"
-  android:padding="8dip">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+    android:layout_width="match_parent"
+    android:layout_height="0dip"
+    android:layout_gravity="center"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    android:padding="8dip" >
 
     <TextView
-      style="@style/TextHeader"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/calibrate_your_movement_sensors" />
+        style="@style/TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/calibrate_movement_sensitivity" />
 
     <TextView
-      android:id="@+id/warming_up_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical|center_horizontal|center"
-      android:text="@string/warming_up" />
+        android:id="@+id/warming_up_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:text="@string/warming_up" />
 
     <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/sleep_track_chart_height"
-      android:layout_margin="4dip"
-      android:orientation="horizontal" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dip"
+        android:orientation="horizontal" >
 
         <com.androsz.electricsleepbeta.widget.VerticalSeekBar
-          android:id="@+id/calibration_level_seekbar"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:layout_marginLeft="4dp"
-          android:layout_marginRight="4dp" />
+            android:id="@+id/calibration_level_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp" />
 
         <com.androsz.electricsleepbeta.widget.SleepChart
-          android:id="@+id/calibration_sleep_chart"
-          style="@style/SleepChart_Dark"
-          android:layout_width="match_parent"
-          electricsleepbeta:setScroll="true"
-          electricsleepbeta:showLabels="false"
-          electricsleepbeta:showLegend="false"
-          electricsleepbeta:showTitle="false" />
+            android:id="@+id/calibration_sleep_chart"
+            style="@style/SleepChart_Dark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            electricsleepbeta:setScroll="true"
+            electricsleepbeta:showLabels="false"
+            electricsleepbeta:showLegend="false"
+            electricsleepbeta:showTitle="false" />
     </LinearLayout>
+
 </LinearLayout>
