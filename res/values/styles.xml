@@ -166,6 +166,10 @@
 
     <style name="TrackingProgressBar" parent="@android:style/Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/tracking_indeterminate_progressbar</item>
+        <item name="android:minWidth">32dip</item>
+        <item name="android:maxWidth">32dip</item>
+        <item name="android:minHeight">32dip</item>
+        <item name="android:maxHeight">32dip</item>
     </style>
 
     <style name="StopTrackingButton" parent="@style/SleepMateButton.Primary">
