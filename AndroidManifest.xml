@@ -41,7 +41,7 @@
         <activity android:label="@string/welcome_tutorial" android:name=".app.wizard.WelcomeTutorialWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/title_calibrate" android:name="com.androsz.electricsleepbeta.app.HelloWizardActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:label="@string/go_into_standy" android:name="com.androsz.electricsleepbeta.app.CheckForScreenBugActivity" android:theme="@android:style/Theme.Dialog"/>
-        <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Light"/>
+        <activity android:label="@string/title_review_sleep" android:name="com.androsz.electricsleepbeta.app.ReviewSleepActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:excludeFromRecents="true" android:label="@string/title_save_sleep" android:name="com.androsz.electricsleepbeta.app.SaveSleepActivity" android:theme="@style/Theme.SleepMate.Dark" android:windowSoftInputMode="stateUnchanged"/>
         <activity android:label="@string/title_settings" android:name="com.androsz.electricsleepbeta.app.SettingsActivity" android:theme="@style/Theme.SleepMate.Dark"/>
         <activity android:configChanges="orientation|keyboardHidden|keyboard|navigation" android:excludeFromRecents="true" android:exported="true" android:label="@string/alarm_list_title" android:name="com.androsz.electricsleepbeta.alarmclock.AlarmClock" android:taskAffinity="" android:theme="@style/Theme.SleepMate.Dark"/>

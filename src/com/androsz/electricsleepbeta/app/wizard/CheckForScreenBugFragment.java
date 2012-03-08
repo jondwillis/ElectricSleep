@@ -2,13 +2,16 @@ package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
-import com.androsz.electricsleepbeta.app.LayoutFragment;
 
-public class CheckForScreenBugFragment extends LayoutFragment implements
-		Calibrator {
+public class CheckForScreenBugFragment extends Calibrator {
+
+	public CheckForScreenBugFragment() {
+		Log.d("ES", "CheckForScreenBugFragment");
+	}
 
 	@Override
 	public void onResume() {
@@ -24,14 +27,14 @@ public class CheckForScreenBugFragment extends LayoutFragment implements
 			if (CalibrationWizardActivity.BUG_PRESENT_INTENT != null) {
 				getActivity().stopService(i);
 				CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
-				onRightButtonClicked(null);
+				if (calibrationStateListener != null) {
+					calibrationStateListener.onCalibrationComplete(true);
+				}
 			}
 		}
 	}
 
 	private void onRightButtonClicked(Object object) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/*

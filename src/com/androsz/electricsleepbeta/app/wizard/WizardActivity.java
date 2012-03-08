@@ -15,7 +15,8 @@ public abstract class WizardActivity extends HostActivity {
 
 	private ViewPager wizardPager;
 	private TitlePageIndicator indicator;
-
+	private IndicatorPageChangeListener indicatorListener;
+	
 	@Override
 	protected int getContentAreaLayoutId() {
 		return R.layout.activity_wizard;
@@ -28,8 +29,9 @@ public abstract class WizardActivity extends HostActivity {
 
 	private final class IndicatorPageChangeListener implements OnPageChangeListener {
 
-		private int lastSettledPosition = -1;
-		private int lastPosition = -2;
+		
+		private int lastSettledPosition = 0;
+		private int lastPosition = 0;
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -53,10 +55,20 @@ public abstract class WizardActivity extends HostActivity {
 		public void onPageSelected(int position) {
 			lastPosition = position;
 		}
+		
+		public int getLastSettledPosition(){
+			return lastSettledPosition;
+		}
 	}
 
 	protected abstract PagerAdapter getPagerAdapter();
 
+
+	protected static String makeFragmentName(int index)
+	{
+	     return "android:switcher:" + R.id.wizardPager + ":" + index;
+	}
+	
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,7 +84,8 @@ public abstract class WizardActivity extends HostActivity {
 		
 		indicator = (TitlePageIndicator) findViewById(R.id.indicator);
 		indicator.setFooterColor(getResources().getColor(R.color.primary1));
-		indicator.setOnPageChangeListener(new IndicatorPageChangeListener());
+		indicatorListener = new IndicatorPageChangeListener();
+		indicator.setOnPageChangeListener(indicatorListener);
 		indicator.setViewPager(wizardPager, initialPosition);
 
 	}
@@ -81,7 +94,7 @@ public abstract class WizardActivity extends HostActivity {
 	protected void onResume() {
 		super.onResume();
 		setupNavigationButtons();
-		onPerformWizardAction(getCurrentWizardIndex());
+		onPerformWizardAction(wizardPager.getCurrentItem());
 	}
 
 	protected abstract void onFinishWizardActivity() throws IllegalStateException;
@@ -97,7 +110,7 @@ public abstract class WizardActivity extends HostActivity {
 	}
 
 	protected int getCurrentWizardIndex() {
-		return wizardPager.getCurrentItem();
+		return indicatorListener.getLastSettledPosition();
 	}
 
 	protected void setPagingEnabled(boolean enabled) {

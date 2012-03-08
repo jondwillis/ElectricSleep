@@ -1,10 +1,20 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
+import com.androsz.electricsleepbeta.app.LayoutFragment;
+
 import android.app.Activity;
+import android.os.Bundle;
 
-public interface Calibrator {
+public abstract class Calibrator extends LayoutFragment {
 
-	public void startCalibration(Activity context);
-	public void stopCalibration(Activity context);
+	protected CalibratorStateListener calibrationStateListener;
 	
+	public void setCalibratorStateListener(CalibratorStateListener csl)
+	{
+		calibrationStateListener = csl;
+	}
+
+	public abstract void startCalibration(Activity context);
+
+	public abstract void stopCalibration(Activity context);
 }
