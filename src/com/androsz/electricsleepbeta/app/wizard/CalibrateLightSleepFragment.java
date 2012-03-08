@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.achartengine.model.PointD;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
@@ -24,35 +26,64 @@ import com.androsz.electricsleepbeta.widget.DecimalSeekBar;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.widget.VerticalSeekBar;
 
-public class CalibrateLightSleepFragment extends LayoutFragment
-    implements Calibrator {
+public class CalibrateLightSleepFragment extends LayoutFragment implements
+        Calibrator {
 
     private float mAlarmTrigger;
 
-    private SharedPreferences mPrefs;
+    private boolean mHasUserChangedCalibration;
+
+    private VerticalSeekBar mSeekBar;
+    private View mWarmingUp;
+
+    SleepChart mSleepChart;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mPrefs = getActivity().getSharedPreferences(SettingsActivity.PREFERENCES, 0);
-        mAlarmTrigger =
-            mPrefs.getFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),
-                            SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+        Activity a = getActivity();
 
-        sleepChart = (SleepChart) getActivity().findViewById(
-                R.id.calibration_sleep_chart);
+        if (savedInstanceState != null) {
+            mAlarmTrigger = savedInstanceState.getFloat("mAlarmTrigger");
+            mHasUserChangedCalibration = savedInstanceState
+                    .getBoolean("mHasUserChangedCalibration");
+        } else {
+            mAlarmTrigger = a.getSharedPreferences(
+                    SettingsActivity.PREFERENCES, 0).getFloat(
+                    a.getString(R.string.pref_alarm_trigger_sensitivity),
+                    SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+            mHasUserChangedCalibration = false;
+        }
 
-        final VerticalSeekBar seekBar = (VerticalSeekBar) getActivity()
+
+        a.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void resetViews(final Activity a) {
+        mSleepChart = (SleepChart) a.findViewById(R.id.calibration_sleep_chart);
+        mSleepChart.clear();
+        mSeekBar = (VerticalSeekBar) a
                 .findViewById(R.id.calibration_level_seekbar);
-        seekBar.setMax((int) SettingsActivity.MAX_ALARM_SENSITIVITY);
-        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        mWarmingUp = a.findViewById(R.id.warming_up_text);
+
+        mSleepChart.setVisibility(View.INVISIBLE);
+        mSeekBar.setVisibility(View.INVISIBLE);
+        mWarmingUp.setVisibility(View.VISIBLE);
+
+        mSleepChart.setCalibrationLevel(mAlarmTrigger);
+
+        mSeekBar.setMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
+        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(final SeekBar seekBar,
                     final int progress, final boolean fromUser) {
                 if (fromUser) {
-                    sleepChart.setCalibrationLevel(progress / DecimalSeekBar.PRECISION);
+                    //if the user scrolls above the bounds of the SeekBar, progress can be out of bounds. Clamp it.
+                    mAlarmTrigger = Math.min(SettingsActivity.MAX_ALARM_SENSITIVITY, progress / DecimalSeekBar.PRECISION);
+                    Log.d("ES", mAlarmTrigger+"");
+                    mSleepChart.setCalibrationLevel(mAlarmTrigger);
                 }
             }
 
@@ -62,67 +93,27 @@ public class CalibrateLightSleepFragment extends LayoutFragment
 
             @Override
             public void onStopTrackingTouch(final SeekBar seekBar) {
+                mHasUserChangedCalibration = true;
+                saveCalibrationLevel(a);
             }
         });
-
-        sleepChart.clear();
-        sleepChart.setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.calibration_level_seekbar)
-                .setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.warming_up_text).setVisibility(
-                View.VISIBLE);
-        sleepChart.setCalibrationLevel(mAlarmTrigger);
-
-        getActivity().getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mSeekBar.setProgress(mAlarmTrigger);
     }
-
-    private static final String SLEEP_CHART = "sleepChart";
-
-    SleepChart sleepChart;
-
-    private final BroadcastReceiver syncChartReceiver = new BroadcastReceiver() {
-        @SuppressWarnings("unchecked")
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-
-            // throw new Exception("UHHHH");
-            sleepChart = (SleepChart) getActivity().findViewById(
-                    R.id.calibration_sleep_chart);
-
-            List<PointD> points = (List<PointD>) intent
-                    .getSerializableExtra(SleepMonitoringService.SLEEP_DATA);
-            for (PointD point : points) {
-                sleepChart.addPoint(point.x, point.y);
-            }
-
-            sleepChart.reconfigure();
-            sleepChart.repaint();
-        }
-    };
 
     private final BroadcastReceiver updateChartReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            /*
-             * CalibrateAlarmActivity.this .setResult( CALIBRATION_SUCCEEDED,
-             * new Intent().putExtra("y", sleepChart.getCalibrationLevel()));
-             */
-            getActivity().findViewById(R.id.calibration_sleep_chart)
-                    .setVisibility(View.VISIBLE);
-            getActivity().findViewById(R.id.calibration_level_seekbar)
-                    .setVisibility(View.VISIBLE);
-            getActivity().findViewById(R.id.warming_up_text).setVisibility(
-                    View.GONE);
-            if (sleepChart != null) {
-                final VerticalSeekBar seekBar = (VerticalSeekBar) getActivity()
-                        .findViewById(R.id.calibration_level_seekbar);
-                if (sleepChart.hasCalibrationLevel()) {
-                    seekBar.setProgress((float) sleepChart.getCalibrationLevel());
-                    sleepChart.sync(intent.getDoubleExtra(
-                                        SleepMonitoringService.EXTRA_X, 0), intent
-                                    .getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
-                                    sleepChart.getCalibrationLevel());
+            if (mSleepChart != null) {
+
+                mSleepChart.setVisibility(View.VISIBLE);
+                mSeekBar.setVisibility(View.VISIBLE);
+                mWarmingUp.setVisibility(View.GONE);
+
+                if (mSleepChart.hasCalibrationLevel()) {
+                    mSleepChart.sync(intent.getDoubleExtra(
+                            SleepMonitoringService.EXTRA_X, 0), intent
+                            .getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
+                            mAlarmTrigger);
                 }
             }
         }
@@ -131,28 +122,26 @@ public class CalibrateLightSleepFragment extends LayoutFragment
     @Override
     public void onResume() {
         super.onResume();
+        resetViews(getActivity());
         getActivity().registerReceiver(updateChartReceiver,
                 new IntentFilter(SleepActivity.UPDATE_CHART));
-        getActivity().registerReceiver(syncChartReceiver,
-                new IntentFilter(SleepActivity.SYNC_CHART));
 
-        mAlarmTrigger =
-            mPrefs.getFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),
-                            SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        stopCalibration(getActivity());
-        getActivity().unregisterReceiver(updateChartReceiver);
-        getActivity().unregisterReceiver(syncChartReceiver);
+        Activity a = getActivity();
 
-        // Save the trigger sensitivity
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putFloat(getActivity().getString(R.string.pref_alarm_trigger_sensitivity),
-                        mAlarmTrigger);
-        editor.commit();
+        a.unregisterReceiver(updateChartReceiver);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putFloat("mAlarmTrigger", mAlarmTrigger);
+        outState.putBoolean("mHasUserChangedCalibration",
+                mHasUserChangedCalibration);
     }
 
     @Override
@@ -161,7 +150,7 @@ public class CalibrateLightSleepFragment extends LayoutFragment
     }
 
     @Override
-    public void startCalibration(Context context) {
+    public void startCalibration(Activity context) {
         final Intent i = new Intent(context, SleepMonitoringService.class);
         context.stopService(i);
         i.putExtra("testModeRate",
@@ -171,7 +160,27 @@ public class CalibrateLightSleepFragment extends LayoutFragment
     }
 
     @Override
-    public void stopCalibration(Context context) {
-        context.stopService(new Intent(context, SleepMonitoringService.class));
+    public void stopCalibration(Activity context) {
+        if (context.stopService(new Intent(context,
+                SleepMonitoringService.class))) {
+            SleepChart sleepChart = (SleepChart) context
+                    .findViewById(R.id.calibration_sleep_chart);
+            sleepChart.clear();
+            VerticalSeekBar seekBar = (VerticalSeekBar) context
+                    .findViewById(R.id.calibration_level_seekbar);
+            View warmingUp = context.findViewById(R.id.warming_up_text);
+
+            sleepChart.setVisibility(View.INVISIBLE);
+            seekBar.setVisibility(View.INVISIBLE);
+            warmingUp.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void saveCalibrationLevel(Activity a) {
+        // Save the trigger sensitivity
+        a.getSharedPreferences(SettingsActivity.PREFERENCES, 0)
+                .edit()
+                .putFloat(a.getString(R.string.pref_alarm_trigger_sensitivity),
+                        mAlarmTrigger).commit();
     }
 }

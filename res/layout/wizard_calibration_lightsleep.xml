@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="0dip"
     android:layout_gravity="center"
+    android:animateLayoutChanges="true"
     android:fillViewport="true"
     android:orientation="vertical"
     android:padding="8dip" >
@@ -24,22 +25,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dip"
+        android:animateLayoutChanges="true"
         android:orientation="horizontal" >
 
         <com.androsz.electricsleepbeta.widget.VerticalSeekBar
             android:id="@+id/calibration_level_seekbar"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp" />
+            android:layout_height="match_parent" />
 
         <com.androsz.electricsleepbeta.widget.SleepChart
             android:id="@+id/calibration_sleep_chart"
             style="@style/SleepChart_Dark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            electricsleepbeta:setScroll="true"
+            electricsleepbeta:setScroll="false"
             electricsleepbeta:showLabels="false"
             electricsleepbeta:showLegend="false"
             electricsleepbeta:showTitle="false" />

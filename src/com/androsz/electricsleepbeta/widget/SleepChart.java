@@ -243,6 +243,8 @@ public class SleepChart extends GraphicalView {
             mData.calibrationLevel = calibrationLevel;
             mTempCalibrationLevel = INVALID_CALIBRATION;
         }
+        reconfigure();
+        repaint();
     }
 
     public void setScroll(boolean scroll) {
@@ -275,7 +277,6 @@ public class SleepChart extends GraphicalView {
             }
         }
         reconfigure();
-        repaint();
     }
 
     public void sync(final SleepSession sleepRecord) {
@@ -299,6 +300,7 @@ public class SleepChart extends GraphicalView {
         synchronized (this) {
             if (mData != null) {
                 mData.clear();
+                repaint();
             }
         }
     }
