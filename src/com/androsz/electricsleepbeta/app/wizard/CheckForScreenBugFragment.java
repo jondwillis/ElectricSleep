@@ -1,13 +1,14 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
 import com.androsz.electricsleepbeta.app.LayoutFragment;
 
-public class CheckForScreenBugFragment extends LayoutFragment implements Calibrator {
+public class CheckForScreenBugFragment extends LayoutFragment implements
+		Calibrator {
 
 	@Override
 	public void onResume() {
@@ -15,7 +16,8 @@ public class CheckForScreenBugFragment extends LayoutFragment implements Calibra
 
 		if (canBegin) {
 
-			final Intent i = new Intent(getActivity(), CheckForScreenBugAccelerometerService.class);
+			final Intent i = new Intent(getActivity(),
+					CheckForScreenBugAccelerometerService.class);
 			// this replaces the need for broadcast receivers.
 			// the service updates BUG_PRESENT_INTENT, THEN our activity is
 			// alerted.
@@ -34,10 +36,10 @@ public class CheckForScreenBugFragment extends LayoutFragment implements Calibra
 
 	/*
 	 * @Override public void onPause() { super.onPause();
-	 *
+	 * 
 	 * final Intent i = new Intent(getActivity(),
 	 * CheckForScreenBugAccelerometerService.class);
-	 *
+	 * 
 	 * // this replaces the need for broadcast receivers. // the service updates
 	 * BUG_PRESENT_INTENT, THEN our activity is // alerted. if
 	 * (BUG_PRESENT_INTENT != null) { stopService(i); BUG_PRESENT_INTENT = null;
@@ -53,10 +55,11 @@ public class CheckForScreenBugFragment extends LayoutFragment implements Calibra
 	}
 
 	@Override
-	public void startCalibration(Context context) {
+	public void startCalibration(Activity context) {
 		canBegin = true;
 
-		final Intent i = new Intent(context, CheckForScreenBugAccelerometerService.class);
+		final Intent i = new Intent(context,
+				CheckForScreenBugAccelerometerService.class);
 		// this replaces the need for broadcast receivers.
 		// the service updates BUG_PRESENT_INTENT, THEN our activity is
 		// alerted.
@@ -70,9 +73,10 @@ public class CheckForScreenBugFragment extends LayoutFragment implements Calibra
 	}
 
 	@Override
-	public void stopCalibration(Context context) {
+	public void stopCalibration(Activity context) {
 		canBegin = false;
-		final Intent i = new Intent(context, CheckForScreenBugAccelerometerService.class);
+		final Intent i = new Intent(context,
+				CheckForScreenBugAccelerometerService.class);
 
 		context.stopService(i);
 		CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
