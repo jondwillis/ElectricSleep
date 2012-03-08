@@ -1,25 +1,17 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
-import java.util.List;
-
-import org.achartengine.model.PointD;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.LayoutFragment;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;

@@ -2,7 +2,6 @@ package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;

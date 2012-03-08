@@ -1,9 +1,8 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
-import com.androsz.electricsleepbeta.app.LayoutFragment;
-
 import android.app.Activity;
-import android.os.Bundle;
+
+import com.androsz.electricsleepbeta.app.LayoutFragment;
 
 public abstract class Calibrator extends LayoutFragment {
 
