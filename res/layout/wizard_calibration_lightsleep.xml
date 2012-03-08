@@ -31,7 +31,9 @@
         <com.androsz.electricsleepbeta.widget.VerticalSeekBar
             android:id="@+id/calibration_level_seekbar"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:padding="4dip"
+            android:layout_margin="0dip" />
 
         <com.androsz.electricsleepbeta.widget.SleepChart
             android:id="@+id/calibration_sleep_chart"
@@ -41,7 +43,9 @@
             electricsleepbeta:setScroll="false"
             electricsleepbeta:showLabels="false"
             electricsleepbeta:showLegend="false"
-            electricsleepbeta:showTitle="false" />
+            electricsleepbeta:showTitle="false"
+            android:padding="0dip"
+            android:layout_margin="0dip" />
     </LinearLayout>
 
 </LinearLayout>
