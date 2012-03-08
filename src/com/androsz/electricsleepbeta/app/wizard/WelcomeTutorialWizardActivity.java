@@ -148,10 +148,10 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 	}
 
 	@Override
-	protected void setupNavigationButtons() {
-		super.setupNavigationButtons();
+	protected void setupNavigationButtons(int index) {
+		super.setupNavigationButtons(index);
 		final Button leftButton = (Button) findViewById(R.id.leftButton);
-		if (getCurrentWizardIndex() == 0) {
+		if (index == 0) {
 			leftButton.setText(R.string.skip_tutorial);
 		}
 	}

@@ -1,20 +1,14 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
@@ -36,10 +30,30 @@ public class CalibrationWizardActivity extends WizardActivity {
 	private static final int FRAG_SCREEN_BUG = 3;
 	private static final int FRAG_RESULTS = 4;
 
-	private boolean isScreenBugPresent;
+	private boolean mHasUserChangedCalibration;
+	private boolean mHasScreenBugCalibrated;
 
-	// hack-ish but necessary because lockscreens can differ
-	public static Intent BUG_PRESENT_INTENT = null;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			mHasUserChangedCalibration = savedInstanceState
+					.getBoolean("mHasUserChangedCalibration");
+			mHasScreenBugCalibrated = savedInstanceState.getBoolean("mHasScreenBugCalibrated");
+		} else {
+			mHasUserChangedCalibration = false;
+			mHasScreenBugCalibrated = false;
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean("mHasUserChangedCalibration",
+				mHasUserChangedCalibration);
+		outState.putBoolean("mHasScreenBugCalibrated",
+				mHasScreenBugCalibrated);
+	}
 
 	private class WizardPagerAdapter extends FragmentPagerAdapter implements
 			TitleProvider {
@@ -58,6 +72,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 						@Override
 						public void onCalibrationComplete(boolean success) {
 							setForwardNavigationEnabled(success);
+							mHasUserChangedCalibration = true;
 						}
 					});
 
@@ -73,29 +88,13 @@ public class CalibrationWizardActivity extends WizardActivity {
 						@Override
 						public void onCalibrationComplete(boolean success) {
 							setForwardNavigationEnabled(success);
-							if (success) {
-								onRightButtonClick(null);
-							}
+							mHasScreenBugCalibrated = true;
 						}
 					});
 		}
 
 		private String[] titles = new String[] { "Start", "Accel 1", "Accel 2",
 				"Screen", "Done" };
-
-		@Override
-		public void setPrimaryItem(ViewGroup container, int position,
-				Object object) {
-			super.setPrimaryItem(container, position, object);
-			Log.d("ES", "setPrimaryItem");
-		}
-
-		@Override
-		public Object instantiateItem(ViewGroup container, int position) {
-
-			Log.d("ES", "instantiateItem " + position);
-			return super.instantiateItem(container, position);
-		}
 
 		@Override
 		public String getTitle(int position) {
@@ -110,7 +109,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			Log.d("ES", "getItem");
 			switch (position) {
 			case FRAG_ABOUT:
 				return new CalibrationAboutFragment();
@@ -135,7 +133,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 	protected PagerAdapter getPagerAdapter() {
 		// check if we already have a cached copy, create it if not.
 		if (mWizardPagerAdapter == null) {
-			Log.d("ES", "getPagerAdapter");
 			mWizardPagerAdapter = new WizardPagerAdapter(
 					getSupportFragmentManager());
 		}
@@ -144,32 +141,25 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	protected void onFinishWizardActivity() throws IllegalStateException {
-		final SharedPreferences.Editor ed = getSharedPreferences(
-				SettingsActivity.PREFERENCES, 0).edit();
-		ed.putBoolean(getString(R.string.pref_force_screen), isScreenBugPresent);
-		ed.commit();
+		final SharedPreferences.Editor ed2 = getSharedPreferences(
+				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE)
+				.edit();
+		ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT, getResources()
+				.getInteger(R.integer.prefs_version));
+		ed2.commit();
 
-		if (ed.commit()) {
-			final SharedPreferences.Editor ed2 = getSharedPreferences(
-					SettingsActivity.PREFERENCES_ENVIRONMENT,
-					Context.MODE_PRIVATE).edit();
-			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT, getResources()
-					.getInteger(R.integer.prefs_version));
-			ed2.commit();
+		finish();
+	}
 
-			finish();
+	protected void setupNavigationButtons(int index) {
+		super.setupNavigationButtons(index);
+		if (index == FRAG_LIGHT_SLEEP) {
+			setForwardNavigationEnabled(mHasUserChangedCalibration);
+		} else if (index == FRAG_SCREEN_BUG) {
+			setForwardNavigationEnabled(mHasScreenBugCalibrated);
 		} else {
-			trackEvent("calibration-fail", 0);
+			setForwardNavigationEnabled(true);
 		}
-	}
-
-	@Override
-	protected void onPrepareLastSlide() {
-	}
-
-	@Override
-	public void onLeftButtonClick(View v) {
-		super.onLeftButtonClick(v);
 	}
 
 	@Override
@@ -183,8 +173,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 				checkForScreenBugFragment.stopCalibration(this);
 			}
 
-			setForwardNavigationEnabled(false);
-
 		} else if (index == FRAG_SCREEN_BUG) {
 			if (calibrateLightSleepFragment != null) {
 				calibrateLightSleepFragment.stopCalibration(this);
@@ -193,8 +181,6 @@ public class CalibrationWizardActivity extends WizardActivity {
 			if (checkForScreenBugFragment != null) {
 				checkForScreenBugFragment.startCalibration(this);
 			}
-
-			setForwardNavigationEnabled(false);
 
 		} else {
 			// not on a wizard page. stop all.
@@ -206,14 +192,18 @@ public class CalibrationWizardActivity extends WizardActivity {
 				checkForScreenBugFragment.stopCalibration(this);
 			}
 
-			setForwardNavigationEnabled(true);
-
 		}
 	}
 
 	private void setForwardNavigationEnabled(boolean enabled) {
 		findViewById(R.id.rightButton).setEnabled(enabled);
 		setPagingEnabled(enabled);
+	}
+
+	@Override
+	protected void onPrepareLastSlide() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

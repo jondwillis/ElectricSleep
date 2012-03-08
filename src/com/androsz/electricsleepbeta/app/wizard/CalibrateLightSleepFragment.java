@@ -28,14 +28,8 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.widget.VerticalSeekBar;
 
 public class CalibrateLightSleepFragment extends Calibrator {
-
-	public CalibrateLightSleepFragment() {
-		Log.d("ES", "CalibrateLightSleepFragment");
-	}
 	
 	private float mAlarmTrigger;
-
-	private boolean mHasUserChangedCalibration;
 
 	private VerticalSeekBar mSeekBar;
 	private View mWarmingUp;
@@ -50,14 +44,11 @@ public class CalibrateLightSleepFragment extends Calibrator {
 
 		if (savedInstanceState != null) {
 			mAlarmTrigger = savedInstanceState.getFloat("mAlarmTrigger");
-			mHasUserChangedCalibration = savedInstanceState
-					.getBoolean("mHasUserChangedCalibration");
 		} else {
 			mAlarmTrigger = a.getSharedPreferences(
 					SettingsActivity.PREFERENCES, 0).getFloat(
 					a.getString(R.string.pref_alarm_trigger_sensitivity),
 					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
-			mHasUserChangedCalibration = false;
 		}
 
 		a.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -68,11 +59,11 @@ public class CalibrateLightSleepFragment extends Calibrator {
 		mSleepChart.clear();
 		mSeekBar = (VerticalSeekBar) a
 				.findViewById(R.id.calibration_level_seekbar);
+		
 		mWarmingUp = a.findViewById(R.id.warming_up_text);
 
 		mSleepChart.setVisibility(View.INVISIBLE);
 		mSeekBar.setVisibility(View.INVISIBLE);
-		mWarmingUp.setVisibility(View.VISIBLE);
 
 		mSleepChart.setCalibrationLevel(mAlarmTrigger);
 
@@ -98,7 +89,6 @@ public class CalibrateLightSleepFragment extends Calibrator {
 
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar) {
-				mHasUserChangedCalibration = true;
 				saveCalibrationLevel(a);
 				if (calibrationStateListener != null) {
 					calibrationStateListener.onCalibrationComplete(true);
@@ -148,8 +138,6 @@ public class CalibrateLightSleepFragment extends Calibrator {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putFloat("mAlarmTrigger", mAlarmTrigger);
-		outState.putBoolean("mHasUserChangedCalibration",
-				mHasUserChangedCalibration);
 	}
 
 	@Override

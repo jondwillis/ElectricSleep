@@ -3,38 +3,22 @@ package com.androsz.electricsleepbeta.app.wizard;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
 
 public class CheckForScreenBugFragment extends Calibrator {
 
-	public CheckForScreenBugFragment() {
-		Log.d("ES", "CheckForScreenBugFragment");
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();
 
 		if (canBegin) {
-
-			final Intent i = new Intent(getActivity(),
-					CheckForScreenBugAccelerometerService.class);
-			// this replaces the need for broadcast receivers.
-			// the service updates BUG_PRESENT_INTENT, THEN our activity is
-			// alerted.
-			if (CalibrationWizardActivity.BUG_PRESENT_INTENT != null) {
-				getActivity().stopService(i);
-				CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
-				if (calibrationStateListener != null) {
-					calibrationStateListener.onCalibrationComplete(true);
-				}
+			if (calibrationStateListener != null) {
+				calibrationStateListener.onCalibrationComplete(true);
 			}
 		}
-	}
-
-	private void onRightButtonClicked(Object object) {
 	}
 
 	/*
@@ -59,29 +43,29 @@ public class CheckForScreenBugFragment extends Calibrator {
 
 	@Override
 	public void startCalibration(Activity context) {
-		canBegin = true;
+		if (!canBegin) {
+			canBegin = true;
 
-		final Intent i = new Intent(context,
-				CheckForScreenBugAccelerometerService.class);
-		// this replaces the need for broadcast receivers.
-		// the service updates BUG_PRESENT_INTENT, THEN our activity is
-		// alerted.
-		if (CalibrationWizardActivity.BUG_PRESENT_INTENT != null) {
-			context.stopService(i);
-			CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
-		} else {
+			final Intent i = new Intent(context,
+					CheckForScreenBugAccelerometerService.class);
+
 			context.startService(i);
+			((TextView) context.findViewById(R.id.status_text))
+					.setText(R.string.notification_screenbug_ticker);
 		}
-
 	}
 
 	@Override
 	public void stopCalibration(Activity context) {
-		canBegin = false;
-		final Intent i = new Intent(context,
-				CheckForScreenBugAccelerometerService.class);
+		if (canBegin) {
+			canBegin = false;
+			final Intent i = new Intent(context,
+					CheckForScreenBugAccelerometerService.class);
 
-		context.stopService(i);
-		CalibrationWizardActivity.BUG_PRESENT_INTENT = null;
+			if (context.stopService(i)) {
+				((TextView) context.findViewById(R.id.status_text))
+						.setText("Test Complete.");
+			}
+		}
 	}
 }
