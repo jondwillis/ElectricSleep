@@ -44,6 +44,10 @@ public class SleepChart extends GraphicalView {
 
     private static final float INVALID_CALIBRATION = -1;
 
+    private int DEFAULT_BOTTOM_MARGIN = 20;
+    private int DEFAULT_LEFT_MARGIN = 25;
+    private int DEFAULT_TOP_MARGIN = 20;
+
     int mBackgroundColor;
     int mTextColor;
     int mCalibrationBorderColor;
@@ -442,17 +446,30 @@ public class SleepChart extends GraphicalView {
         // SleepChart_showGrid
         mRenderer.setShowGrid(mShowGrid);
 
+        Resources res = mContext.getResources();
         int[] margins = mRenderer.getMargins();
         mRenderer.setShowLabels(mShowLabels);
         if (mShowLabels) {
-            margins[1] += 25; // increase left margin
+            try {
+                margins[1] += res.getDimension(R.dimen.sleep_chart_left_margin);
+            } catch (android.content.res.Resources.NotFoundException e) {
+                margins[1] += DEFAULT_LEFT_MARGIN; // increase left margin
+            }
         }
         mRenderer.setShowLegend(mShowLegend);
         if (mShowLegend) {
-            margins[2] += 20; // increase bottom margin
+            try {
+                margins[2] += res.getDimension(R.dimen.sleep_chart_bottom_margin);
+            } catch (android.content.res.Resources.NotFoundException e) {
+                margins[2] += DEFAULT_BOTTOM_MARGIN; // increase bottom margin
+            }
         }
         if (mShowTitle) {
-            margins[0] += 20; // increase top margin
+            try {
+                margins[0] += res.getDimension(R.dimen.sleep_chart_top_margin);
+            } catch (android.content.res.Resources.NotFoundException e) {
+                margins[0] += DEFAULT_TOP_MARGIN; // increase top margin
+            }
         }
         mRenderer.setMargins(margins);
 
