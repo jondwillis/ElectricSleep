@@ -278,30 +278,36 @@ public class SleepActivity extends HostActivity {
 
                 @Override
                 protected void onPostExecute(String[] result) {
-                    if (result != null) {
+                    if (textAlarmStatus != null) {
+                        if (result != null) {
 
-                        if (useAlarm) {
-                            textAlarmStatus.setText(
-                                getString(R.string.alarm_status_range, result[0], result[1]));
-                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                            if (useAlarm) {
+                                textAlarmStatus.setText(
+                                    getString(R.string.alarm_status_range, result[0], result[1]));
+                                textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(
+                                    getResources()
                                     .getDrawable(R.drawable.ic_alarm_pressed),
                                     null, null, null);
-                            textAlarmStatusSub.setText(R.string.attempt_to_use_smartwake_);
-                        } else {
-                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                                textAlarmStatusSub.setText(R.string.attempt_to_use_smartwake_);
+                            } else {
+                                textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(
+                                    getResources()
                                     .getDrawable(R.drawable.ic_alarm_neutral),
                                     null, null, null);
-                            textAlarmStatus.setText(result[0]);
-                            textAlarmStatusSub.setText(R.string.not_using_smartwake_);
-                        }
+                                textAlarmStatus.setText(result[0]);
+                                textAlarmStatusSub.setText(R.string.not_using_smartwake_);
+                            }
 
-                    } else {
-                        textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(getResources()
+                        } else {
+                            textAlarmStatus.setCompoundDrawablesWithIntrinsicBounds(
+                                getResources()
                                 .getDrawable(R.drawable.ic_alarm_none),
                                 null, null, null);
-                        textAlarmStatus.setText(R.string.no_alarm);
-                        textAlarmStatusSub.setText(R.string.sleep_no_alarm);
+                            textAlarmStatus.setText(R.string.no_alarm);
+                            textAlarmStatusSub.setText(R.string.sleep_no_alarm);
+                        }
                     }
+
                     // dims the screen while in this activity and
                     // forceScreenOn is
                     // enabled
