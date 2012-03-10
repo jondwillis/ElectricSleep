@@ -32,20 +32,20 @@
             android:id="@+id/calibration_level_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="4dip"
-            android:layout_margin="0dip" />
+            android:layout_margin="0dip"
+            android:padding="4dip" />
 
         <com.androsz.electricsleepbeta.widget.SleepChart
             android:id="@+id/calibration_sleep_chart"
             style="@style/SleepChart_Dark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            electricsleepbeta:setScroll="false"
+            android:layout_margin="0dip"
+            android:padding="0dip"
+            electricsleepbeta:setScroll="true"
             electricsleepbeta:showLabels="false"
             electricsleepbeta:showLegend="false"
-            electricsleepbeta:showTitle="false"
-            android:padding="0dip"
-            android:layout_margin="0dip" />
+            electricsleepbeta:showTitle="false" />
     </LinearLayout>
 
 </LinearLayout>
