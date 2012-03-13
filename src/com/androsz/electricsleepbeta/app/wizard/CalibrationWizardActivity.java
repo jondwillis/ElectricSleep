@@ -16,11 +16,9 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	public static final int LIGHT_SLEEP_CALIBRATION_INTERVAL = 500;
 
-	public CalibrateLightSleepFragment calibrateLightSleepFragment;// =
-																	// instantiateFragment2(R.layout.wizard_calibration_lightsleep);
+	public CalibrateLightSleepFragment calibrateLightSleepFragment;
 
-	public CheckForScreenBugFragment checkForScreenBugFragment;// =
-																// instantiateFragment1(R.layout.wizard_calibration_screenbug);
+	public CheckForScreenBugFragment checkForScreenBugFragment;
 
 	private static final int FRAG_ABOUT = 0;
 	private static final int FRAG_LIGHT_SLEEP_INSTRUCT = 1;
@@ -35,8 +33,8 @@ public class CalibrationWizardActivity extends WizardActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState != null) {
-			mHasUserChangedCalibration = savedInstanceState
-					.getBoolean("mHasUserChangedCalibration");
+			mHasUserChangedCalibration =
+                savedInstanceState.getBoolean("mHasUserChangedCalibration");
 			mHasScreenBugCalibrated = savedInstanceState.getBoolean("mHasScreenBugCalibrated");
 		} else {
 			mHasUserChangedCalibration = false;
@@ -47,58 +45,56 @@ public class CalibrationWizardActivity extends WizardActivity {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putBoolean("mHasUserChangedCalibration",
-				mHasUserChangedCalibration);
-		outState.putBoolean("mHasScreenBugCalibrated",
-				mHasScreenBugCalibrated);
+		outState.putBoolean("mHasUserChangedCalibration", mHasUserChangedCalibration);
+		outState.putBoolean("mHasScreenBugCalibrated", mHasScreenBugCalibrated);
 	}
 
 	private class WizardPagerAdapter extends FragmentPagerAdapter implements
 			TitleProvider {
 
-		public WizardPagerAdapter(FragmentManager fm) {
-			super(fm);
-			calibrateLightSleepFragment = (CalibrateLightSleepFragment) fm
-					.findFragmentByTag(makeFragmentName(R.id.wizardPager,
-							FRAG_LIGHT_SLEEP));
+		public WizardPagerAdapter(FragmentManager manager) {
+			super(manager);
+
+			calibrateLightSleepFragment =
+                (CalibrateLightSleepFragment) manager.findFragmentByTag(
+                    makeFragmentName(R.id.wizardPager, FRAG_LIGHT_SLEEP));
+
 			if (calibrateLightSleepFragment == null) {
 				calibrateLightSleepFragment = new CalibrateLightSleepFragment();
 			}
-			calibrateLightSleepFragment
-					.setCalibratorStateListener(new CalibratorStateListener() {
+			calibrateLightSleepFragment.setCalibratorStateListener(
+                new CalibratorStateListener() {
+                    @Override
+                    public void onCalibrationComplete(boolean success) {
+                        setForwardNavigationEnabled(success);
+                        mHasUserChangedCalibration = true;
+                    }
+                });
 
-						@Override
-						public void onCalibrationComplete(boolean success) {
-							setForwardNavigationEnabled(success);
-							mHasUserChangedCalibration = true;
-						}
-					});
-
-			checkForScreenBugFragment = (CheckForScreenBugFragment) fm
-					.findFragmentByTag(makeFragmentName(R.id.wizardPager,
-							FRAG_SCREEN_BUG));
-			if (checkForScreenBugFragment == null) {
+            checkForScreenBugFragment =
+                (CheckForScreenBugFragment) manager.findFragmentByTag(
+                    makeFragmentName(R.id.wizardPager, FRAG_SCREEN_BUG));
+            if (checkForScreenBugFragment == null) {
 				checkForScreenBugFragment = new CheckForScreenBugFragment();
 			}
-			checkForScreenBugFragment
-					.setCalibratorStateListener(new CalibratorStateListener() {
-
-						@Override
-						public void onCalibrationComplete(boolean success) {
-							setForwardNavigationEnabled(success);
-							mHasScreenBugCalibrated = true;
-						}
-					});
+			checkForScreenBugFragment.setCalibratorStateListener(
+                new CalibratorStateListener() {
+                    @Override
+                    public void onCalibrationComplete(boolean success) {
+                        setForwardNavigationEnabled(success);
+                        mHasScreenBugCalibrated = true;
+                    }
+                });
 		}
 
-		private String[] titles = new String[] { "Start", "Accel 1", "Accel 2",
-				"Screen", "Done" };
+		private String[] titles = new String[] {
+            "Start", "Accel 1", "Accel 2", "Screen", "Done"
+        };
 
 		@Override
 		public String getTitle(int position) {
 			return titles[position];
-
-		}
+        }
 
 		@Override
 		public int getCount() {
@@ -201,7 +197,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 	@Override
 	protected void onPrepareLastSlide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
