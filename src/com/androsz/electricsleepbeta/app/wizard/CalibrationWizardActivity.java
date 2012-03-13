@@ -88,7 +88,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 		}
 
 		private String[] titles = new String[] {
-            "Start", "Accel 1", "Accel 2", "Screen", "Done"
+            "Calibration", "Placement", "Sensitivity Test", "Standby Test", "Setup Complete"
         };
 
 		@Override
