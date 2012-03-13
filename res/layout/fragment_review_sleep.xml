@@ -14,7 +14,7 @@
 
         <com.androsz.electricsleepbeta.widget.SleepChart
           android:id="@+id/sleep_movement_chart"
-          style="@style/SleepChart_Light"
+          style="@style/SleepChart_Dark"
           android:layout_width="match_parent"
           android:orientation="horizontal"
           electricsleepbeta:setScroll="true" />
