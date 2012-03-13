@@ -58,7 +58,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.androsz.electricsleepbeta."
 			+ PATH;
 
-	public static final String SORT_ORDER = START_TIMESTAMP + " ASC";
+	public static final String SORT_ORDER = START_TIMESTAMP + " DESC";
 
 	static String[] PROJECTION = new String[] { _ID, START_TIMESTAMP,
 			START_JULIAN_DAY, END_TIMESTAMP, TIMEZONE, DATA, DURATION, NOTE,
