@@ -389,8 +389,8 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        if (intent != null && startId == 1 && mRunning.compareAndSet(false, true)) {
-            Log.d(TAG, "Starting sleep monitoring service.");
+        if (intent != null && mRunning.compareAndSet(false, true)) {
+            Log.d(TAG, "Starting sleep monitoring service: " + startId);
 
             testModeRate = intent.getIntExtra("testModeRate", Integer.MIN_VALUE);
 
