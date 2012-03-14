@@ -202,6 +202,7 @@ public class SleepActivity extends HostActivity {
         // cancel the dim screen task if it hasn't completed
         if (dimScreenTask != null) {
             dimScreenTask.cancel(true);
+            // TODO is this applicable ?
             setToast(R.string.warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_);
         }
     }
