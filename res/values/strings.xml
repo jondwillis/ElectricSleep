@@ -23,6 +23,8 @@ ANYTHING.</string>
     <string name="legend_movement">Movement</string>
     <string name="warming_up">Warming up sensors, please wait.</string>
     <string name="go_into_standy">Press your device\'s standby button</string>
+    <string name="standby_test_results">Standby Test Results</string>
+    <string name="completed_standby_test">Completed Standby Test</string>
     <string name="movement_calibration_instructions">Movement Calibration Instructions</string>
     <string name="calibrate_movement_sensitivity">Calibrate Movement Sensitivity</string>
     <string name="calibrate_directions_force_screen_on"><li>A bug exists on some devices that prevents the accelerometer from
@@ -31,6 +33,7 @@ seconds.</li>\n<li>Your screen will be automatically turned back on. Unlock your
 phone if necessary.</li>\n<li>Press next to begin.</li></string>
     <string name="calibrate_description_force_screen_on"><b>Goal:</b>Make sure that Force Screen On is enabled for devices that need it.</string>
     <string name="calibrate_title_force_screen_on">Force Screen On Calibration</string>
+    <string name="press_next_to_continue">Press next to continue</string>
     <string name="analysis_y_axis_values">Y Axis Values</string>
     <string name="analysis_x_axis_values">X Axis Values</string>
     <string name="list">List</string>
