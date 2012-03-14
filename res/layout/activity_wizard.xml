@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dip"
@@ -9,12 +11,15 @@
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        electricsleepbeta:titlePadding="70dp"
         android:padding="10dip" />
 
     <com.androsz.electricsleepbeta.widget.DisablableViewPager
         android:id="@+id/wizardPager"
         android:layout_width="match_parent"
-        android:layout_height="0dip" android:layout_weight="0.1" />
+        android:layout_height="0dip"
+        android:layout_weight="0.1"
+        />
 
 
     <LinearLayout
