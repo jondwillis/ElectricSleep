@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:padding="10dip" >
+    android:padding="8dip" >
 
     <LinearLayout
         android:id="@+id/layout_warnings"
@@ -19,7 +19,7 @@
             style="@style/WarningButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_marginBottom="2dp"
             android:gravity="left|center_vertical"
             android:text="@string/sleep_plugged_in" />
 
@@ -28,7 +28,7 @@
             style="@style/WarningButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
+            android:layout_marginBottom="2dp"
             android:gravity="left|center_vertical"
             android:text="@string/sleep_dim" />
     </LinearLayout>
@@ -113,6 +113,7 @@
         android:layout_margin="4dip"
         android:animateLayoutChanges="true"
         electricsleepbeta:setScroll="false"
+        electricsleepbeta:showTitle="false"
         android:visibility="gone" />
 
     <Button
