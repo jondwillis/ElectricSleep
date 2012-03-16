@@ -14,7 +14,6 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
@@ -22,7 +21,10 @@ import com.androsz.electricsleepbeta.util.WakeLockManager;
 public class CheckForScreenBugAccelerometerService extends Service implements
 		SensorEventListener {
 
-	private final class ScreenReceiver extends BroadcastReceiver {
+    public static final String ACTION_BUG_PRESENT = "bug_present";
+    public static final String ACTION_BUG_NOT_PRESENT = "bug_not_present";
+
+    private final class ScreenReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
@@ -61,9 +63,10 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 						.edit()
 						.putBoolean(getString(R.string.pref_force_screen),
 								bugPresent).commit();
-				Log.d("ES", "bugg is present");
-			}
-			turnScreenOnAndStopSelf();
+				Log.d("ES", "bug is present");
+                sendBroadcast(new Intent(ACTION_BUG_PRESENT));
+            }
+            turnScreenOnAndStopSelf();
 		}
 	};
 
@@ -131,7 +134,8 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 					.putBoolean(getString(R.string.pref_force_screen), false)
 					.commit();
 			Log.d("ES", "bug not present.");
-			turnScreenOnAndStopSelf();
+            sendBroadcast(new Intent(ACTION_BUG_NOT_PRESENT));
+            turnScreenOnAndStopSelf();
 		}
 	}
 
