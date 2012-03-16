@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HostActivity;
+import com.androsz.electricsleepbeta.app.Log;
 import com.androsz.electricsleepbeta.widget.DisablableTitlePageIndicator;
 import com.androsz.electricsleepbeta.widget.DisablableViewPager;
 
@@ -89,7 +89,7 @@ public abstract class WizardActivity extends HostActivity {
 
 		int initialPosition = 0;
 		indicator.setViewPager(wizardPager, initialPosition);
-		
+
 		Log.d("ES", "this happens");
 		if (savedInstanceState != null) {
 			initialPosition = savedInstanceState.getInt("child");

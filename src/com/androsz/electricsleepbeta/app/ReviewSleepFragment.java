@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.Menu;
 import android.support.v4.view.MenuItem;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -31,7 +30,7 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
 
 /**
  * Fragment used to review a sleep record.
- * 
+ *
  * @author Jon Willis
  * @author Brandon Edens
  * @version $Revision$
