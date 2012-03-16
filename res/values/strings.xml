@@ -576,7 +576,7 @@ of lack of room.
     <string name="export">Export</string>
     <string name="export_all">Export All</string>
     <string name="delete_all">Delete All</string>
-    <string name="failed_to_open_market">Failed to open market. Your Android Market may not be up to date.</string>
+    <string name="failed_to_open_market">Failed to open market. Your Play Market may not be up to date.</string>
     <string name="rate">Rate</string>
     <string name="sensors">Sensors</string>
     <string name="accelerometer">Accelerometer</string>
@@ -587,7 +587,7 @@ of lack of room.
     <string name="notification_screenbug_ticker">Waiting for the device to enter standby.</string>
     <string name="welcome_to_electricsleep">Welcome to Sleep101</string>
     <string name="development_is_now_supported_by">Development of Sleep101 is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
-    <string name="rate_in_market">Rate Sleep101 on the Android Market</string>
+    <string name="rate_in_market">Rate Sleep101 on the Play Market</string>
     <string name="sleep_store">Sleep Store</string>
     <string name="expert_advice">Expert Advice</string>
     <string name="consultation">Consultation</string>
