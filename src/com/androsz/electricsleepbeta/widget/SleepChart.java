@@ -206,10 +206,13 @@ public class SleepChart extends GraphicalView {
 
             // if (makesSenseToDisplay()) {
             // reconfigure the calibration line..
-            mData.xySeriesCalibration.clear();
+            synchronized (this) {
+                mData.xySeriesCalibration.clear();
 
-            mData.xySeriesCalibration.add(firstX, mData.calibrationLevel);
-            mData.xySeriesCalibration.add(lastX, mData.calibrationLevel);
+                mData.xySeriesCalibration.add(firstX, mData.calibrationLevel);
+                mData.xySeriesCalibration.add(lastX, mData.calibrationLevel);
+            }
+
             // }
             /*
              * if (lastX - firstX > HOUR_IN_MS*2) { ((TimeChart)
@@ -244,7 +247,9 @@ public class SleepChart extends GraphicalView {
         if (mData == null) {
             mTempCalibrationLevel = calibrationLevel;
         } else {
-            mData.calibrationLevel = calibrationLevel;
+            synchronized (this) {
+                mData.calibrationLevel = calibrationLevel;
+            }
             mTempCalibrationLevel = INVALID_CALIBRATION;
         }
         reconfigure();
@@ -276,7 +281,7 @@ public class SleepChart extends GraphicalView {
         synchronized (this) {
             initCheckData();
             clear();
-        	for (PointD point : points) {
+            for (PointD point : points) {
                 addPoint(point.x, point.y);
             }
         }
@@ -314,10 +319,12 @@ public class SleepChart extends GraphicalView {
      */
     private void initCheckData() {
         if (mData == null) {
-            mData = new SleepChartData(mContext);
-            if (mTempCalibrationLevel != INVALID_CALIBRATION) {
-                mData.calibrationLevel = mTempCalibrationLevel;
-                mTempCalibrationLevel = INVALID_CALIBRATION;
+            synchronized (this) {
+                mData = new SleepChartData(mContext);
+                if (mTempCalibrationLevel != INVALID_CALIBRATION) {
+                    mData.calibrationLevel = mTempCalibrationLevel;
+                    mTempCalibrationLevel = INVALID_CALIBRATION;
+                }
             }
             setupData();
         }
