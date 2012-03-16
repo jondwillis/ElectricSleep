@@ -16,6 +16,7 @@ public class CheckForScreenBugFragment extends Calibrator {
 
     private static final int FLIPPER_INSTRUCTIONS = 0;
     private static final int FLIPPER_RESULTS = 1;
+    private static final String FLIPPER_STATE = "flipper_state";
 
     private SafeViewFlipper mFlipper;
 
@@ -24,11 +25,14 @@ public class CheckForScreenBugFragment extends Calibrator {
                              Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         mFlipper = (SafeViewFlipper) root.findViewById(R.id.content_flipper);
+        if (savedInstanceState != null) {
+            mFlipper.setDisplayedChild(
+                savedInstanceState.getInt(FLIPPER_STATE, FLIPPER_INSTRUCTIONS));
+        }
         return root;
     }
 
-
-	@Override
+    @Override
 	public void onResume() {
 		super.onResume();
 
@@ -40,7 +44,13 @@ public class CheckForScreenBugFragment extends Calibrator {
 		}
 	}
 
-	/*
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(FLIPPER_STATE, mFlipper.getDisplayedChild());
+    }
+
+    /*
 	 * @Override public void onPause() { super.onPause();
 	 *
 	 * final Intent i = new Intent(getActivity(),
