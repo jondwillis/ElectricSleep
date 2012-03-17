@@ -210,7 +210,8 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 		// final float deepPct = Math.min(1, 15f / spikes);
 		final float fifteenMinutes = 1000 * 60 * 15;
 		final float eightHours = 1000 * 60 * 60 * 8;
-		final float diffFrom8HoursPct = 1 - Math.abs((mDuration - eightHours)
+		
+		final float diffFrom8HoursPct = 1 - Math.max(0, Math.abs((mDuration - eightHours))
 				/ eightHours);
 
 		long timeToFallAsleep = getTimeToFallAsleep();
