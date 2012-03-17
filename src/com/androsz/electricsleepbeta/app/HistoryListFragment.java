@@ -66,9 +66,6 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     private ListView mListView;
 
-    private TextView mTextView;
-
-    ProgressDialog progressDialog;
     private SleepHistoryCursorAdapter sleepHistoryAdapter;
 
     @Override
@@ -80,13 +77,12 @@ public class HistoryListFragment extends AnalyticFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        this.getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
 
         //TODO doesn't seem possible without recreating the activity first.
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
-        progressDialog = new ProgressDialog(getActivity());
 
         mFlipper = (SafeViewFlipper) root.findViewById(R.id.content_flipper);
-        mTextView = (TextView) root.findViewById(R.id.text_no_history);
         mListView = (ListView) root.findViewById(R.id.list);
 
         sleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
@@ -117,9 +113,6 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        progressDialog.setMessage(getString(R.string.querying_sleep_database));
-        progressDialog.show();
 
         switch (id) {
         case LOADER_ALL:
@@ -153,8 +146,8 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
         if (data != null) {
-            dismissProgressDialogIfShowing();
             if (data.getCount() == 0) {
                 mFlipper.setDisplayedChild(FLIPPER_NO_RECORDS);
                 return;
@@ -188,7 +181,7 @@ public class HistoryListFragment extends AnalyticFragment implements
                                                 final DialogInterface dialog,
                                                 final int id) {
 
-                                            new DeleteSleepTask(getActivity(), progressDialog)
+                                            new DeleteSleepTask(getActivity(), new ProgressDialog(getActivity()))
                                                     .execute(
                                                             new Long[] { rowId },
                                                             null, null);
@@ -228,18 +221,5 @@ public class HistoryListFragment extends AnalyticFragment implements
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        dismissProgressDialogIfShowing();
-    }
-
-	private void dismissProgressDialogIfShowing() {
-		if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-	}
 
 }

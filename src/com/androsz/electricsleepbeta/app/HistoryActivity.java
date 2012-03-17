@@ -2,24 +2,28 @@ package com.androsz.electricsleepbeta.app;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.Window;
 
 import com.androsz.electricsleepbeta.R;
 
 public class HistoryActivity extends HostActivity {
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        super.onCreate(savedInstanceState);
 
         // Set the default navigation mode as the history month fragment
         FragmentManager manager = getSupportFragmentManager();
         if (manager.findFragmentById(android.R.id.content) == null) {
-            manager.beginTransaction().add(android.R.id.content, new HistoryListFragment()).commit();
+            manager.beginTransaction()
+                    .add(android.R.id.content, new HistoryListFragment())
+                    .commit();
         }
     }
 
-	@Override
-	protected int getContentAreaLayoutId() {
-		return R.layout.activity_history;
-	}
+    @Override
+    protected int getContentAreaLayoutId() {
+        return R.layout.activity_history;
+    }
 }
