@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light"
-    android:orientation="vertical"
-    android:textColor="@color/text_dark" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,12 +35,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/notes"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/text_dark" />
 
         <TextView
             android:id="@+id/notes"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" android:textColor="@color/text_dark"/>
     </LinearLayout>
 
 </ScrollView>
