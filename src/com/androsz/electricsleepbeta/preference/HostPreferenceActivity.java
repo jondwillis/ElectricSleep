@@ -5,13 +5,12 @@ import java.util.List;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.SherlockPreferenceActivity;
-import android.support.v4.view.MenuItem;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.AnalyticActivity;
-import com.androsz.electricsleepbeta.app.HostActivity;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
@@ -56,7 +55,7 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity
 			//}
 		}
 
-		HostActivity.prepareActionBar(this);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override

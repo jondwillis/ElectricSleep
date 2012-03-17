@@ -12,18 +12,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
@@ -77,7 +76,7 @@ public class HistoryListFragment extends AnalyticFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        this.getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
+        getActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
 
         //TODO doesn't seem possible without recreating the activity first.
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
@@ -146,7 +145,7 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        getSupportActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
+        getActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
         if (data != null) {
             if (data.getCount() == 0) {
                 mFlipper.setDisplayedChild(FLIPPER_NO_RECORDS);

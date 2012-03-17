@@ -2,8 +2,8 @@ package com.androsz.electricsleepbeta.app;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.Window;
 
+import com.actionbarsherlock.view.Window;
 import com.androsz.electricsleepbeta.R;
 
 public class HistoryActivity extends HostActivity {

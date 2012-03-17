@@ -1,12 +1,12 @@
 package com.androsz.electricsleepbeta.app;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
-public abstract class AnalyticFragment extends Fragment implements GoogleAnalyticsTrackerHelper {
+public abstract class AnalyticFragment extends SherlockFragment implements GoogleAnalyticsTrackerHelper {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

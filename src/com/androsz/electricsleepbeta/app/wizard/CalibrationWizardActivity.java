@@ -57,7 +57,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 			calibrateLightSleepFragment =
                 (CalibrateLightSleepFragment) manager.findFragmentByTag(
-                    makeFragmentName(R.id.wizardPager, FRAG_LIGHT_SLEEP));
+                    makeFragmentName(FRAG_LIGHT_SLEEP));
 
 			if (calibrateLightSleepFragment == null) {
 				calibrateLightSleepFragment = new CalibrateLightSleepFragment();
@@ -73,7 +73,7 @@ public class CalibrationWizardActivity extends WizardActivity {
 
             checkForScreenBugFragment =
                 (CheckForScreenBugFragment) manager.findFragmentByTag(
-                    makeFragmentName(R.id.wizardPager, FRAG_SCREEN_BUG));
+                    makeFragmentName(FRAG_SCREEN_BUG));
             if (checkForScreenBugFragment == null) {
 				checkForScreenBugFragment = new CheckForScreenBugFragment();
 			}
