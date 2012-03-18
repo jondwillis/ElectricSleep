@@ -344,6 +344,7 @@ public class HistoryMonthFragment extends AnalyticFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
         View root = inflater.inflate(R.layout.fragment_history_month, container, false);
 
         // Get first day of week based on locale and populate the day headers
@@ -420,6 +421,7 @@ public class HistoryMonthFragment extends AnalyticFragment implements
                 }
             }
         }).start();
+        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
