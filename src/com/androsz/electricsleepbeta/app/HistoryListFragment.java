@@ -23,6 +23,7 @@ import android.widget.ListView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
@@ -76,8 +77,7 @@ public class HistoryListFragment extends AnalyticFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        getActivity().setProgressBarIndeterminateVisibility(Boolean.TRUE);
-
+        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
         //TODO doesn't seem possible without recreating the activity first.
         final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
 
@@ -145,7 +145,6 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        getActivity().setProgressBarIndeterminateVisibility(Boolean.FALSE);
         if (data != null) {
             if (data.getCount() == 0) {
                 mFlipper.setDisplayedChild(FLIPPER_NO_RECORDS);
@@ -204,7 +203,8 @@ public class HistoryListFragment extends AnalyticFragment implements
             // Define the on-click listener for the list items
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
-
+        
+        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
