@@ -23,7 +23,6 @@ import android.widget.ListView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Window;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
@@ -203,7 +202,7 @@ public class HistoryListFragment extends AnalyticFragment implements
             // Define the on-click listener for the list items
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
-        
+
         getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
     }
 
