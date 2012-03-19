@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
-import com.androsz.electricsleepbeta.app.Log;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
 
 import static com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService.ACTION_BUG_PRESENT;
@@ -23,7 +22,12 @@ public class CheckForScreenBugFragment extends Calibrator {
 
     private static final int FLIPPER_INSTRUCTIONS = 0;
     private static final int FLIPPER_RESULTS = 1;
+
+    /** The saved state of the flipper. */
     private static final String FLIPPER_STATE = "flipper_state";
+
+    /** The saved state of the results message. */
+    private static final String RESULTS_TXT = "results_text";
 
     private TextView mResults;
     private SafeViewFlipper mFlipper;
@@ -32,7 +36,6 @@ public class CheckForScreenBugFragment extends Calibrator {
 
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            Log.d("MBE", "Received broadcast.");
             final String action = intent.getAction();
             if (ACTION_BUG_PRESENT.equals(action)) {
                 mResults.setText(
@@ -57,6 +60,9 @@ public class CheckForScreenBugFragment extends Calibrator {
         if (savedInstanceState != null) {
             mFlipper.setDisplayedChild(
                 savedInstanceState.getInt(FLIPPER_STATE, FLIPPER_INSTRUCTIONS));
+            mResults.setText(savedInstanceState.getString(
+                                 RESULTS_TXT,
+                                 getString(R.string.completed_standby_test)));
         }
 
         IntentFilter filter = new IntentFilter(ACTION_BUG_PRESENT);
@@ -81,6 +87,7 @@ public class CheckForScreenBugFragment extends Calibrator {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(FLIPPER_STATE, mFlipper.getDisplayedChild());
+        outState.putString(RESULTS_TXT, (String) mResults.getText());
     }
 
     /*
