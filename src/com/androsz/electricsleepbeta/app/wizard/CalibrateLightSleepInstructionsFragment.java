@@ -15,6 +15,8 @@ package com.androsz.electricsleepbeta.app.wizard;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.LayoutFragment;
 
+import android.os.Bundle;
+
 /**
  * Fragment that displays instructions on how to calibrate for light sleep.
  *
@@ -30,5 +32,9 @@ public class CalibrateLightSleepInstructionsFragment extends LayoutFragment {
         return R.layout.wizard_calibration_lightsleep_instructions;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("DUMMY", "unused");
+    }
 }
 

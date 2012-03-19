@@ -44,11 +44,9 @@ public class CalibrationWizardActivity extends WizardActivity {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-        if (outState != null) {
-            outState.putBoolean("mHasUserChangedCalibration", mHasUserChangedCalibration);
-            outState.putBoolean("mHasScreenBugCalibrated", mHasScreenBugCalibrated);
-        }
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("mHasUserChangedCalibration", mHasUserChangedCalibration);
+        outState.putBoolean("mHasScreenBugCalibrated", mHasScreenBugCalibrated);
     }
 
 	private class WizardPagerAdapter extends FragmentPagerAdapter implements

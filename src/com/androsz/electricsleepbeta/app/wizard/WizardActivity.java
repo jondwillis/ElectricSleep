@@ -15,7 +15,9 @@ import com.androsz.electricsleepbeta.widget.DisablableViewPager;
 
 public abstract class WizardActivity extends HostActivity {
 
-	private DisablableViewPager wizardPager;
+    private static final String TAG = WizardActivity.class.getSimpleName();
+
+    private DisablableViewPager wizardPager;
 	private DisablableTitlePageIndicator indicator;
 	private IndicatorPageChangeListener indicatorListener;
 
@@ -90,12 +92,12 @@ public abstract class WizardActivity extends HostActivity {
 		int initialPosition = 0;
 		indicator.setViewPager(wizardPager, initialPosition);
 
-		Log.d("ES", "this happens");
+		Log.d(TAG, "this happens");
 		if (savedInstanceState != null) {
 			initialPosition = savedInstanceState.getInt("child");
 			setCurrentWizardIndex(initialPosition);
 			indicatorListener.setLastSettledPosition(initialPosition);
-			Log.d("ES", "and that happens");
+			Log.d(TAG, "and that happens");
 		}
 
 	}
@@ -103,7 +105,7 @@ public abstract class WizardActivity extends HostActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.d("ES", "evilonresume");
+		Log.d(TAG, "evilonresume");
 		setupNavigationButtons(wizardPager.getCurrentItem());
 	}
 
@@ -122,7 +124,7 @@ public abstract class WizardActivity extends HostActivity {
 
 	protected void setCurrentWizardIndex(int index) {
 		indicator.setCurrentItem(index, true);
-		Log.d("ES", "setCurrentWizardIndex to " + index);
+		Log.d(TAG, "setCurrentWizardIndex to " + index);
 	}
 
 	protected int getCurrentWizardIndex() {
@@ -149,17 +151,15 @@ public abstract class WizardActivity extends HostActivity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-        if (outState != null) {
-            outState.putInt("child", getCurrentWizardIndex());
-        }
+	protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("child", getCurrentWizardIndex());
     }
 
-	protected abstract void onPerformWizardAction(int focusedIndex);
+    protected abstract void onPerformWizardAction(int focusedIndex);
 
 	protected void setupNavigationButtons(int index) {
-		Log.d("ES", "setupNavigationButtons "+index);
+		Log.d(TAG, "setupNavigationButtons "+index);
 		final Button leftButton = (Button) findViewById(R.id.leftButton);
 		final Button rightButton = (Button) findViewById(R.id.rightButton);
 		final int lastChildIndex = getPagerAdapter().getCount() - 1;
