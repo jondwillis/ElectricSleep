@@ -151,8 +151,10 @@ public abstract class WizardActivity extends HostActivity {
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt("child", getCurrentWizardIndex());
-	}
+        if (outState != null) {
+            outState.putInt("child", getCurrentWizardIndex());
+        }
+    }
 
 	protected abstract void onPerformWizardAction(int focusedIndex);
 
