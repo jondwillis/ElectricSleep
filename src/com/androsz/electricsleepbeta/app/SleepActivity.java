@@ -6,21 +6,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.IBinder;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
@@ -145,7 +145,7 @@ public class SleepActivity extends HostActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_monitoring_sleep, menu);
+        getSupportMenuInflater().inflate(R.menu.menu_monitoring_sleep, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

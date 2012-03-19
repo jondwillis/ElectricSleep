@@ -14,16 +14,15 @@ package com.androsz.electricsleepbeta.app;
 
 import static com.androsz.electricsleepbeta.util.IntentUtil.shareSleep;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SleepChart;
@@ -35,7 +34,7 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
  * @author Brandon Edens
  * @version $Revision$
  */
-public class ReviewSleepFragment extends Fragment {
+public class ReviewSleepFragment extends AnalyticFragment {
 
 	private static final String TAG = ReviewSleepFragment.class.getSimpleName();
 

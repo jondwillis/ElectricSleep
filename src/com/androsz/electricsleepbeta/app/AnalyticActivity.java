@@ -1,11 +1,10 @@
 package com.androsz.electricsleepbeta.app;
 
-import android.support.v4.app.FragmentActivity;
-
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
-public abstract class AnalyticActivity extends FragmentActivity implements GoogleAnalyticsTrackerHelper {
+public abstract class AnalyticActivity extends SherlockFragmentActivity implements GoogleAnalyticsTrackerHelper {
 
 	public static final String KEY = "UA-19363335-1";
 

@@ -9,7 +9,7 @@
           android:layout_gravity="center_vertical"
           android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:text="@string/morning_feel" />
+          android:text="@string/morning_feel"  android:textColor="@color/text_dark"/>
         <RatingBar
           android:id="@+id/morning_feel"
           android:isIndicator="true"
@@ -29,43 +29,43 @@
         <TextView
           android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:text="@string/sleep_efficiency" />
+          android:text="@string/sleep_efficiency" android:textColor="@color/text_dark" />
         <TextView
           android:id="@+id/sleep_efficiency"
           android:layout_height="wrap_content"
-          android:layout_width="wrap_content" />
+          android:layout_width="wrap_content"  android:textColor="@color/text_dark"/>
     </TableRow>
 
     <TableRow android:layout_marginTop="8dp">
         <TextView
           android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:text="@string/total_recording_time" />
+          android:text="@string/total_recording_time" android:textColor="@color/text_dark" />
         <TextView
           android:id="@+id/total_recording_time"
           android:layout_height="wrap_content"
-          android:layout_width="wrap_content" />
+          android:layout_width="wrap_content" android:textColor="@color/text_dark" />
     </TableRow>
 
     <TableRow android:layout_marginTop="8dp">
         <TextView
           android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:text="@string/times_disrupted" />
+          android:text="@string/times_disrupted" android:textColor="@color/text_dark" />
         <TextView
           android:id="@+id/times_disrupted"
           android:layout_height="wrap_content"
-          android:layout_width="wrap_content" />
+          android:layout_width="wrap_content" android:textColor="@color/text_dark" />
     </TableRow>
 
     <TableRow android:layout_marginTop="8dp">
         <TextView
           android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:text="@string/time_to_fall_asleep" />
+          android:text="@string/time_to_fall_asleep" android:textColor="@color/text_dark" />
         <TextView
           android:id="@+id/time_to_fall_asleep"
           android:layout_height="wrap_content"
-          android:layout_width="wrap_content" />
+          android:layout_width="wrap_content"  android:textColor="@color/text_dark"/>
     </TableRow>
 </TableLayout>

@@ -25,8 +25,8 @@ ANYTHING.</string>
     <string name="go_into_standy">Press your device\'s standby button</string>
     <string name="standby_test_results">Standby Test Results</string>
     <string name="completed_standby_test">Completed standby test.</string>
-    <string name="identified_that_android_device_must_be_on">Good news, we\'ve identified that your Android device must be on during the recording of movement so we\'ll employ our screensaver.</string>
-    <string name="identified_screen_can_be_turned_off">Good news, we\'ve identified that its possible to turn off your device and allow recording of movement.</string>
+    <string name="identified_that_android_device_must_be_on">We\'ve identified that your Android device\'s screen must be powered on during the recording of movement. To lower power consumption and to protect your screen, we\'ve enabled a special dim screensaver.</string>
+    <string name="identified_screen_can_be_turned_off">Good news: we\'ve identified that it is possible to power off your Android device\'s screen while recording movement.</string>
     <string name="movement_calibration_instructions">Movement Calibration Instructions</string>
     <string name="calibrate_movement_sensitivity">Calibrate Movement Sensitivity</string>
     <string name="calibrate_directions_force_screen_on"><li>A bug exists on some devices that prevents the accelerometer from
@@ -576,7 +576,7 @@ of lack of room.
     <string name="export">Export</string>
     <string name="export_all">Export All</string>
     <string name="delete_all">Delete All</string>
-    <string name="failed_to_open_market">Failed to open market. Your Android Market may not be up to date.</string>
+    <string name="failed_to_open_market">Failed to open market. Your Play Market may not be up to date.</string>
     <string name="rate">Rate</string>
     <string name="sensors">Sensors</string>
     <string name="accelerometer">Accelerometer</string>
@@ -587,7 +587,7 @@ of lack of room.
     <string name="notification_screenbug_ticker">Waiting for the device to enter standby.</string>
     <string name="welcome_to_electricsleep">Welcome to Sleep101</string>
     <string name="development_is_now_supported_by">Development of Sleep101 is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
-    <string name="rate_in_market">Rate Sleep101 on the Android Market</string>
+    <string name="rate_in_market">Rate Sleep101 on the Play Market</string>
     <string name="sleep_store">Sleep Store</string>
     <string name="expert_advice">Expert Advice</string>
     <string name="consultation">Consultation</string>

@@ -15,13 +15,13 @@
  */
 package com.androsz.electricsleepbeta.app;
 
-import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.content.StartSleepReceiver;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+
+import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life

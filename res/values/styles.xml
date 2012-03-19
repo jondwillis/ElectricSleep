@@ -62,53 +62,92 @@
         <item name="android:textColor">@color/text_dark</item>
     </style>
 
-    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock.Light">
-        <item name="actionBarSize">@dimen/abs__action_bar_default_height</item>
+    <style name="Theme.SleepMate.Light" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="android:colorBackground">@color/background_light</item>
         <item name="android:windowBackground">@color/background_light</item>
-        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
+        
+        <item name="android:actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
+        <item name="actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
+    </style>
+    <!-- 
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
-        <item name="actionBarTabBarStyle">@style/ZeoActionBarTabBarStyle</item>
-        <item name="actionBarTabTextStyle">@style/ZeoActionBarTabTextStyle</item>
-        <item name="actionMenuTextColor">@color/actionbar_text_light</item>
-        <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
-        <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
-        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
-        <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
-    </style>
+        <item name="selectableItemBackground">@drawable/actionbar_item_bg</item> -->
 
     <style name="Theme.SleepMate.Dark" parent="Theme.Sherlock">
-        <item name="actionBarSize">@dimen/abs__action_bar_default_height</item>
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="android:windowBackground">@color/background_dark</item>
-        <item name="android:textColor">@color/text_light</item>
+        <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
+        
+        <item name="android:actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
+        <item name="actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
+        
+    </style>
+    
+    <!-- 
+        <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
-        <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
-        <item name="actionBarTabBarStyle">@style/ZeoActionBarTabBarStyle</item>
-        <item name="actionBarTabTextStyle">@style/ZeoActionBarTabTextStyle</item>
+        <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item> -->
+
+    
+    <style name="Widget.SleepMate.ActionBar.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="titleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
+        <item name="actionBarItemBackground">@drawable/actionbar_item_bg</item>
+        <item name="logo">@drawable/logo_white</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="background">@drawable/actionbar_background</item>
+        <item name="backgroundStacked">@drawable/actionbar_background</item>
+        <item name="backgroundSplit">@drawable/actionbar_background</item>
+        <item name="divider">@drawable/abs__list_divider_holo_dark</item>
+        <item name="progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
+        <item name="indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
+        
+        <item name="android:titleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
+        <item name="android:actionBarItemBackground">@drawable/actionbar_item_bg</item>
+        <item name="android:logo">@drawable/logo_white</item>
+        <item name="android:subtitleTextStyle">@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse</item>
+        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:backgroundStacked">@drawable/actionbar_background</item>
+        <item name="android:backgroundSplit">@drawable/actionbar_background</item>
+        <item name="android:divider">@drawable/abs__list_divider_holo_dark</item>
+        <item name="android:progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
+        <item name="android:indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
+        
         <item name="actionMenuTextColor">@color/actionbar_text_light</item>
-        <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
-        <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
-        <item name="homeAsUpIndicator">@drawable/abs__ic_ab_back_holo_dark</item>
+        <item name="android:actionMenuTextColor">@color/actionbar_text_light</item>
+        
+        <item name="progressBarPadding">32dip</item>
+        <item name="itemPadding">8dip</item>
     </style>
 
+    <style name="ZeoActionBarDropDownStyle" parent="Widget.Sherlock.Spinner.DropDown.ActionBar">
+        <item name="android:textColor">@color/actionbar_text_light</item>
+        <item name="textColor">@color/actionbar_text_light</item>
+        <item name="android:background">@drawable/abs__spinner_ab_holo_light</item>
+        <item name="background">@drawable/abs__spinner_ab_holo_light</item>
+    </style>
+    
+    <style name="ZeoActionBarTitleTextStyle" parent="Widget">
+        <item name="android:textColor">@color/actionbar_text_light</item>
+        <item name="textColor">@color/actionbar_text_light</item>
+    </style>
+    
     <style name="ZeoActionBarTabBarStyle" parent="@style/Widget.Sherlock.ActionBar.TabBar">
         <item name="android:background">@color/actionbar_background</item>
+        <item name="background">@color/actionbar_background</item>
     </style>
 
     <style name="ZeoActionBarTabTextStyle" parent="Widget.Sherlock.Light.ActionBar.TabText">
         <item name="android:textColor">@color/actionbar_text_light</item>
-    </style>
-
-    <style name="ZeoActionBarTitleTextStyle" parent="TextAppearance.Widget.Title">
-        <item name="android:textColor">@color/actionbar_text_light</item>
+        <item name="textColor">@color/actionbar_text_light</item>
     </style>
 
     <style name="Widget.ZeoTitlePageIndicator" parent="Widget.TitlePageIndicator">
         <item name="android:background">@color/background_dark</item>
+        <item name="background">@color/background_dark</item>
         <item name="footerColor">@color/primary1</item>
     </style>
 

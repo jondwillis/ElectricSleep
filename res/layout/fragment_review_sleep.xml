@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:orientation="vertical" >
 
     <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:padding="10dip">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dip" >
 
         <com.androsz.electricsleepbeta.widget.SleepChart
-          android:id="@+id/sleep_movement_chart"
-          style="@style/SleepChart_Dark"
-          android:layout_width="match_parent"
-          android:orientation="horizontal"
-          electricsleepbeta:setScroll="true" />
+            android:id="@+id/sleep_movement_chart"
+            style="@style/SleepChart_Light"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            electricsleepbeta:setScroll="true" />
 
         <ImageView
-          android:layout_width="match_parent"
-          android:layout_height="1dip"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="8dp"
-          android:gravity="fill_horizontal"
-          android:scaleType="fitXY"
-          android:src="@drawable/divider_horizontal_holo_light" />
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="fill_horizontal"
+            android:scaleType="fitXY"
+            android:src="@drawable/divider_horizontal_holo_light" />
 
         <include layout="@layout/table_sleep_stats" />
 
         <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:text="@string/notes"
-          android:textStyle="bold" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notes"
+            android:textStyle="bold" android:textColor="@color/text_dark" />
 
         <TextView
-          android:id="@+id/notes"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:textColor="@color/text_dark"/>
     </LinearLayout>
+
 </ScrollView>

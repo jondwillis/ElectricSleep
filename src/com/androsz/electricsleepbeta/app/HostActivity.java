@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.support.v4.app.ActionBar;
-import android.support.v4.app.SupportActivity;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
 import android.view.View;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
@@ -27,17 +25,12 @@ public abstract class HostActivity extends AnalyticActivity {
 		final View root = getLayoutInflater().inflate(getContentAreaLayoutId(), null, false);
 		setContentView(root);
 
-		prepareActionBar(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
-	public static void prepareActionBar(SupportActivity supportActivity) {
-		final ActionBar bar = supportActivity.getSupportActionBar();
-		bar.setDisplayHomeAsUpEnabled(true);
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_host, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_host, menu);
 		return true;
 	}
 

@@ -30,4 +30,5 @@
     <dimen name="abs__action_bar_subtitle_bottom_margin">4dip</dimen>
     <!-- Bottom margin for action bar subtitles -->
     <dimen name="fragment_suggestion_landscape_width">70dip</dimen>
+    <dimen name="sleep_track_chart_height">150dip</dimen>
 </resources>
