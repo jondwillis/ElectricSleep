@@ -66,11 +66,11 @@
         <item name="android:colorBackground">@color/background_light</item>
         <item name="android:windowBackground">@color/background_light</item>
         <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
-        
+
         <item name="android:actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
         <item name="actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
     </style>
-    <!-- 
+    <!--
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
@@ -80,19 +80,19 @@
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="android:windowBackground">@color/background_dark</item>
         <item name="android:buttonStyle">@style/SleepMateButton.Primary</item>
-        
+
         <item name="android:actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
         <item name="actionBarStyle">@style/Widget.SleepMate.ActionBar.Dark</item>
-        
+
     </style>
-    
-    <!-- 
+
+    <!--
         <item name="selectableItemBackground">@drawable/actionbar_item_bg</item>
         <item name="abBackground">@drawable/actionbar_background</item>
         <item name="abLogo">@drawable/logo_white</item>
         <item name="abTitleTextStyle">@style/ZeoActionBarTitleTextStyle</item> -->
 
-    
+
     <style name="Widget.SleepMate.ActionBar.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="titleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
         <item name="actionBarItemBackground">@drawable/actionbar_item_bg</item>
@@ -104,7 +104,7 @@
         <item name="divider">@drawable/abs__list_divider_holo_dark</item>
         <item name="progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
         <item name="indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
-        
+
         <item name="android:titleTextStyle">@style/ZeoActionBarTitleTextStyle</item>
         <item name="android:actionBarItemBackground">@drawable/actionbar_item_bg</item>
         <item name="android:logo">@drawable/logo_white</item>
@@ -115,10 +115,10 @@
         <item name="android:divider">@drawable/abs__list_divider_holo_dark</item>
         <item name="android:progressBarStyle">@style/Widget.Sherlock.ProgressBar.Horizontal</item>
         <item name="android:indeterminateProgressStyle">@style/Widget.Sherlock.ProgressBar</item>
-        
+
         <item name="actionMenuTextColor">@color/actionbar_text_light</item>
         <item name="android:actionMenuTextColor">@color/actionbar_text_light</item>
-        
+
         <item name="progressBarPadding">32dip</item>
         <item name="itemPadding">8dip</item>
     </style>
@@ -129,12 +129,12 @@
         <item name="android:background">@drawable/abs__spinner_ab_holo_light</item>
         <item name="background">@drawable/abs__spinner_ab_holo_light</item>
     </style>
-    
-    <style name="ZeoActionBarTitleTextStyle" parent="Widget">
+
+    <style name="ZeoActionBarTitleTextStyle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title.Inverse">
         <item name="android:textColor">@color/actionbar_text_light</item>
         <item name="textColor">@color/actionbar_text_light</item>
     </style>
-    
+
     <style name="ZeoActionBarTabBarStyle" parent="@style/Widget.Sherlock.ActionBar.TabBar">
         <item name="android:background">@color/actionbar_background</item>
         <item name="background">@color/actionbar_background</item>
