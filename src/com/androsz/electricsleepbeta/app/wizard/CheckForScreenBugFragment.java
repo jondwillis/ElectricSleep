@@ -125,8 +125,13 @@ public class CheckForScreenBugFragment extends Calibrator {
 	}
 
 	@Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
 	public void stopCalibration(Activity context) {
-        if (canBegin) {
+       // if (canBegin) {
 			canBegin = false;
 			final Intent i = new Intent(context,
 					CheckForScreenBugAccelerometerService.class);
@@ -135,6 +140,6 @@ public class CheckForScreenBugFragment extends Calibrator {
 				((TextView) context.findViewById(R.id.status_text))
 						.setText("Test Complete.");
 			}
-		}
+		//}
 	}
 }
