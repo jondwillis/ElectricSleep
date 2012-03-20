@@ -208,7 +208,6 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
         int score = 0;
         final float rating = (getRating() - 1) / 4f;
         final float deepPct = 1 - ((float)getSpikes() / getData().size());
-        Log.d("ES", ""+deepPct);
         final float fifteenMinutes = 1000 * 60 * 15;
         final float eightHours = 1000 * 60 * 60 * 8;
 
