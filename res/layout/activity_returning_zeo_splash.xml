@@ -47,20 +47,18 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/button_learn_more"
+                android:id="@+id/button_continue_to_tutorial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dip"
-                android:onClick="onClick"
-                android:text="Learn more about Zeo" />
+                android:text="Continue to Tutorial" />
 
             <Button
-                android:id="@+id/button_get_started"
+                android:id="@+id/button_skip_tutorial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dip"
-                android:onClick="onClick"
-                android:text="Get Started" />
+                android:text="Skip Tutorial" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
