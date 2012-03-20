@@ -107,12 +107,13 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
         final String RATING = "sleep_data_rating";
         final String SPIKES = "KEY_SLEEP_DATA_SPIKES";
         final String DATA = "sleep_data";
+        final String FELL_ASLEEP_TIMESTAMP = "KEY_SLEEP_DATA_TIME_FELL_ASLEEP";
 
         // copy over existing data
         Cursor cursor = db.query(
             "FTSsleephistory",
             new String[] {
-                DATA, SPIKES, RATING, NOTE, MIN, DURATION, ALARM
+                DATA, SPIKES, RATING, NOTE, MIN, DURATION, ALARM, FELL_ASLEEP_TIMESTAMP
             },
             null, null, null, null, null);
         if (cursor.moveToFirst()) {
@@ -146,6 +147,7 @@ public class ElectricSleepDatabase extends SQLiteOpenHelper {
                 Log.d(TAG, "Original duration: " + cursor.getLong(5));
                 float calibrationLevel = (float) cursor.getDouble(6);
                 values.put(SleepSession.CALIBRATION_LEVEL, calibrationLevel);
+                values.put(SleepSession.FELL_ASLEEP_TIMESTAMP, cursor.getLong(7));
 
                 final long now = System.currentTimeMillis();
                 values.put(SleepSession.CREATED_ON, now);
