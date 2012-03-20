@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.wizard.WelcomeTutorialWizardActivity;
 
@@ -16,11 +18,6 @@ public class ZeoSplashActivity extends HostActivity {
     @Override
     protected int getContentAreaLayoutId() {
         return R.layout.activity_returning_zeo_splash;
-    }
-
-    public void onClick(View v) {
-        switch (v.getId()) {
-        }
     }
 
     @Override
@@ -57,10 +54,38 @@ public class ZeoSplashActivity extends HostActivity {
         } else {
             finishAndStartHome();
         }
+
+        findViewById(R.id.button_continue_to_tutorial).setOnClickListener(
+                new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        finishAndStartTutorial();
+                    }
+                });
+
+        findViewById(R.id.button_skip_tutorial).setOnClickListener(
+                new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        finishAndStartHome();
+                    }
+                });
+    }
+
+    public void finishAndStartTutorial() {
+        startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
     }
 
     public void finishAndStartHome() {
-        startActivity(new Intent(ZeoSplashActivity.this, HomeActivity.class));
+        startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 }
