@@ -73,11 +73,12 @@ public class ReviewSleepActivity extends HostActivity implements
             mSleepRecord = new SleepSession(data);
             mSleepFragment.setSleepRecord(mSleepRecord);
         } else {
-            Toast.makeText(
+            finish();
+            /*Toast.makeText(
                     this,
                     "Could not display the correct Sleep record. This error has been reported.",
                     Toast.LENGTH_LONG).show();
-            trackEvent("ReviewSleepActivity couldn't data.moveToFirst()", 0);
+            trackEvent("ReviewSleepActivity couldn't data.moveToFirst()", 0);*/
         }
     }
 
