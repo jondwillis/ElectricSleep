@@ -56,7 +56,6 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        sleepChart.setMinimumHeight(parent.getHeight() / 2);
     }
 
     @Override

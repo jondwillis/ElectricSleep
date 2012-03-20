@@ -27,49 +27,7 @@ public class ReviewSleepActivity extends HostActivity implements
     private ReviewSleepFragment mSleepFragment;
     private SleepSession mSleepRecord;
 
-    private class DeleteSleepTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            if (getIntent().getData() != null) {
-
-                ReviewSleepActivity.this.getContentResolver().delete(
-                        SleepSession.CONTENT_URI,
-                        SleepSession._ID + " =? ",
-                        new String[] { Long.toString(ContentUris
-                                .parseId(getIntent().getData())) });
-            } else {
-                Toast.makeText(ReviewSleepActivity.this,
-                        "Wait for the sleep session to load.",
-                        Toast.LENGTH_LONG).show();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(final Void results) {
-            Toast.makeText(ReviewSleepActivity.this,
-                    getString(R.string.deleted_sleep_record),
-                    Toast.LENGTH_SHORT).show();
-
-            if (progress != null && progress.isShowing()) {
-                progress.dismiss();
-            }
-            finish();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            getSupportLoaderManager().destroyLoader(0);
-            if (progress == null) {
-                progress = new ProgressDialog(ReviewSleepActivity.this);
-            }
-            progress.setMessage(getString(R.string.deleting_sleep));
-            progress.show();
-        }
-    }
-
-    ProgressDialog progress;
+    private DeleteSleepTask mDeleteSleepTask;
 
     @Override
     protected int getContentAreaLayoutId() {
@@ -80,6 +38,8 @@ public class ReviewSleepActivity extends HostActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mDeleteSleepTask = new DeleteSleepTask(this);
+        
         Log.d(TAG, "Creating sleep fragment.");
         mSleepFragment = new ReviewSleepFragment();
         getSupportFragmentManager().beginTransaction()
@@ -134,8 +94,8 @@ public class ReviewSleepActivity extends HostActivity implements
                                 public void onClick(
                                         final DialogInterface dialog,
                                         final int id) {
-                                    new DeleteSleepTask().execute(null, null,
-                                            null);
+                                    mDeleteSleepTask.execute(ContentUris.parseId(getIntent().getData()),
+                                            null, null);
                                 }
                             })
                     .setNegativeButton(getString(R.string.cancel),
@@ -154,11 +114,8 @@ public class ReviewSleepActivity extends HostActivity implements
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        if (progress != null && progress.isShowing()) {
-            progress.dismiss();
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        mDeleteSleepTask.cancel(true);
     }
 }

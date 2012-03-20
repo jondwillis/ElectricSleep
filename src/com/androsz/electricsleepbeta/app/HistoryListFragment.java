@@ -31,6 +31,12 @@ import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
 public class HistoryListFragment extends AnalyticFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDeleteSleepTask.cancel(true);
+    }
+
     private final class ListOnItemClickListener implements OnItemClickListener {
         @Override
         public void onItemClick(final AdapterView<?> parent, final View view,
@@ -46,8 +52,9 @@ public class HistoryListFragment extends AnalyticFragment implements
         }
     }
 
-    /** Key used to mark what julian day to load a list for. Used by both the intent as well as the
-     * cursor loader bundle.
+    /**
+     * Key used to mark what julian day to load a list for. Used by both the
+     * intent as well as the cursor loader bundle.
      */
     public static final String EXTRA_JULIAN_DAY = "julian_day";
 
@@ -65,33 +72,40 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     private ListView mListView;
 
-    private SleepHistoryCursorAdapter sleepHistoryAdapter;
+    private SleepHistoryCursorAdapter mSleepHistoryAdapter;
+
+    private DeleteSleepTask mDeleteSleepTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mDeleteSleepTask = new DeleteSleepTask(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
-        //TODO doesn't seem possible without recreating the activity first.
-        final View root = inflater.inflate(R.layout.fragment_history_list, container, false);
+        getSherlockActivity()
+                .setSupportProgressBarIndeterminateVisibility(true);
+        // TODO doesn't seem possible without recreating the activity first.
+        final View root = inflater.inflate(R.layout.fragment_history_list,
+                container, false);
 
         mFlipper = (SafeViewFlipper) root.findViewById(R.id.content_flipper);
         mListView = (ListView) root.findViewById(R.id.list);
 
-        sleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
-        mListView.setAdapter(sleepHistoryAdapter);
+        mSleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
+        mListView.setAdapter(mSleepHistoryAdapter);
 
-       // mListView.setBackgroundColor(getActivity().getResources().getColor(R.color.background_light));
+        // mListView.setBackgroundColor(getActivity().getResources().getColor(R.color.background_light));
 
         final Intent intent = getActivity().getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            // A single sleep session requested. Load review sleep activity and exit list view.
-            final Intent reviewIntent = new Intent(getActivity(), ReviewSleepActivity.class);
+            // A single sleep session requested. Load review sleep activity and
+            // exit list view.
+            final Intent reviewIntent = new Intent(getActivity(),
+                    ReviewSleepActivity.class);
             reviewIntent.setData(intent.getData());
             startActivity(reviewIntent);
             getActivity().finish();
@@ -115,7 +129,7 @@ public class HistoryListFragment extends AnalyticFragment implements
         switch (id) {
         case LOADER_ALL:
             return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
-                                    null, null, null, SleepSession.SORT_ORDER);
+                    null, null, null, SleepSession.SORT_ORDER);
 
         case LOADER_JULIAN:
             final int julianDay = args.getInt(EXTRA_JULIAN_DAY);
@@ -123,10 +137,9 @@ public class HistoryListFragment extends AnalyticFragment implements
                 return null;
             }
             return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
-                                    null,
-                                    SleepSession.START_JULIAN_DAY + " =? ",
-                                    new String[] {Integer.toString(julianDay)},
-                                    SleepSession.SORT_ORDER);
+                    null, SleepSession.START_JULIAN_DAY + " =? ",
+                    new String[] { Integer.toString(julianDay) },
+                    SleepSession.SORT_ORDER);
         }
 
         return null;
@@ -139,11 +152,13 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        sleepHistoryAdapter.swapCursor(null);
+        mSleepHistoryAdapter.swapCursor(null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(
+                false);
         if (data != null) {
             if (data.getCount() == 0) {
                 mFlipper.setDisplayedChild(FLIPPER_NO_RECORDS);
@@ -151,17 +166,18 @@ public class HistoryListFragment extends AnalyticFragment implements
             } else if (data.getCount() == 1) {
                 data.moveToFirst();
                 final Intent reviewSleepIntent = new Intent(getActivity(),
-                                                            ReviewSleepActivity.class);
+                        ReviewSleepActivity.class);
 
-                // WARNING: there is an assumption here that cursor index 0 is the primary key.
+                // WARNING: there is an assumption here that cursor index 0 is
+                // the primary key.
                 final Uri uri = Uri.withAppendedPath(SleepSession.CONTENT_URI,
-                                                     String.valueOf(data.getLong(0)));
+                        String.valueOf(data.getLong(0)));
                 reviewSleepIntent.setData(uri);
-                reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                           Intent.FLAG_ACTIVITY_NEW_TASK);
+                reviewSleepIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
             }
 
-            sleepHistoryAdapter.swapCursor(data);
+            mSleepHistoryAdapter.swapCursor(data);
             mFlipper.setDisplayedChild(FLIPPER_LIST_RECORDS);
 
             mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -169,7 +185,8 @@ public class HistoryListFragment extends AnalyticFragment implements
                 @Override
                 public boolean onItemLongClick(final AdapterView<?> parent,
                         final View view, final int position, final long rowId) {
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity())
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(
+                            getActivity())
                             .setMessage(getString(R.string.delete_sleep_record))
                             .setPositiveButton(getString(R.string.ok),
                                     new DialogInterface.OnClickListener() {
@@ -177,11 +194,8 @@ public class HistoryListFragment extends AnalyticFragment implements
                                         public void onClick(
                                                 final DialogInterface dialog,
                                                 final int id) {
-
-                                            new DeleteSleepTask(getActivity(), new ProgressDialog(getActivity()))
-                                                    .execute(
-                                                            new Long[] { rowId },
-                                                            null, null);
+                                            mDeleteSleepTask.execute( rowId , null,
+                                                    null);
                                         }
                                     })
                             .setNegativeButton(getString(R.string.cancel),
@@ -203,14 +217,13 @@ public class HistoryListFragment extends AnalyticFragment implements
             mListView.setOnItemClickListener(new ListOnItemClickListener());
         }
 
-        getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_calendar:
-            ((FragmentActivity) getActivity()).getSupportFragmentManager()
+            getSherlockActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(android.R.id.content, new HistoryMonthFragment())
                     .commit();

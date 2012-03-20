@@ -428,7 +428,7 @@ public class HistoryMonthFragment extends AnalyticFragment implements
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_list:
-            ((FragmentActivity) getActivity()).getSupportFragmentManager()
+            getSherlockActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content, new HistoryListFragment())
                 .commit();
