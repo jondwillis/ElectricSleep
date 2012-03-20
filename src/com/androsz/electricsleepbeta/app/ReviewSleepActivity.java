@@ -1,17 +1,14 @@
 package com.androsz.electricsleepbeta.app;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
@@ -39,7 +36,7 @@ public class ReviewSleepActivity extends HostActivity implements
         super.onCreate(savedInstanceState);
 
         mDeleteSleepTask = new DeleteSleepTask(this);
-        
+
         Log.d(TAG, "Creating sleep fragment.");
         mSleepFragment = new ReviewSleepFragment();
         getSupportFragmentManager().beginTransaction()
