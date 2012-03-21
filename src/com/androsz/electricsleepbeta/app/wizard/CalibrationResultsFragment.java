@@ -15,6 +15,6 @@ public class CalibrationResultsFragment extends LayoutFragment
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("DUMMY", "unused");
+        outState.putInt("DUMMY", 0);
     }
 }

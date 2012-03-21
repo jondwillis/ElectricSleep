@@ -60,7 +60,7 @@ public class CheckForScreenBugFragment extends Calibrator {
         if (savedInstanceState != null) {
             mFlipper.setDisplayedChild(
                 savedInstanceState.getInt(FLIPPER_STATE, FLIPPER_INSTRUCTIONS));
-            mResults.setText(savedInstanceState.getString(
+            mResults.setText(savedInstanceState.getCharSequence(
                                  RESULTS_TXT,
                                  getString(R.string.completed_standby_test)));
         }
@@ -87,7 +87,7 @@ public class CheckForScreenBugFragment extends Calibrator {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(FLIPPER_STATE, mFlipper.getDisplayedChild());
-        outState.putString(RESULTS_TXT, (String) mResults.getText());
+        outState.putCharSequence(RESULTS_TXT, (String) mResults.getText());
     }
 
     /*
