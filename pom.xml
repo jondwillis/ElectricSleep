@@ -6,7 +6,7 @@
 	<groupId>com.androsz</groupId>
 	<artifactId>electricsleepbeta</artifactId>
 	<packaging>apk</packaging>
-	<version>1.1.0-rc35</version>
+	<version>1.1.0-rc37</version>
 
 	<name>ElectricSleep</name>
 	<description>Improving Sleep With Android</description>
@@ -241,7 +241,7 @@
 				<configuration>
 					<resourceDirectory>${project.build.directory}/filtered-res</resourceDirectory>
 					<manifest>
-						<debuggable>true</debuggable>
+						<debuggable>s</debuggable>
 					</manifest>
 				</configuration>
 				<executions>
@@ -406,8 +406,8 @@
 							</sign>
 							<zipalign>
 								<verbose>true</verbose>
-								<inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-								<outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
+								<inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk</inputApk>
+								<outputApk>${project.build.directory}/${project.artifactId}-${project.version}-signed-aligned.apk
 								</outputApk>
 							</zipalign>
 							<manifest>
@@ -415,7 +415,7 @@
 								<versionCodeAutoIncrement>true</versionCodeAutoIncrement>
 							</manifest>
 							<proguard>
-								<skip>false</skip>
+								<skip>true</skip>
 							</proguard>
 						</configuration>
 						<executions>

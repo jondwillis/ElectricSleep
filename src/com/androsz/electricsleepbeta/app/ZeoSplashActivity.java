@@ -35,10 +35,7 @@ public class ZeoSplashActivity extends HostActivity {
         final int prefsVersion = userPrefs.getInt(
                 SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
         if (prefsVersion == 0) {
-            finishAndStartHome();
-            startActivity(new Intent(ZeoSplashActivity.this,
-                    WelcomeTutorialWizardActivity.class).putExtra("required",
-                    true));
+            finishAndStartTutorial(true);
         } else if (prefsVersion < getResources().getInteger(
                 R.integer.prefs_version_electricsleep_renamed)) {
             // the first time a user who used ElectricSleep before it was
@@ -60,7 +57,7 @@ public class ZeoSplashActivity extends HostActivity {
 
                     @Override
                     public void onClick(View v) {
-                        finishAndStartTutorial();
+                        finishAndStartTutorial(false);
                     }
                 });
 
@@ -74,9 +71,11 @@ public class ZeoSplashActivity extends HostActivity {
                 });
     }
 
-    public void finishAndStartTutorial() {
-        startActivity(new Intent(this, WelcomeTutorialWizardActivity.class));
-        finish();
+    public void finishAndStartTutorial(boolean required) {
+        finishAndStartHome();
+        startActivity(new Intent(ZeoSplashActivity.this,
+                WelcomeTutorialWizardActivity.class).putExtra("required",
+                required));
     }
 
     @Override
