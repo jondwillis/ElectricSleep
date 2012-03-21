@@ -1,5 +1,15 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
+import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
+import com.androsz.electricsleepbeta.app.HomeActivity;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+import com.viewpagerindicator.TitleProvider;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,16 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.SettingsActivity;
-import com.viewpagerindicator.TitleProvider;
-
 public class WelcomeTutorialWizardActivity extends WizardActivity {
 
-	public static boolean enforceCalibrationBeforeStartingSleep(final Activity context) {
+    public static boolean enforceCalibrationBeforeStartingSleep(final Activity context) {
 
 		final SharedPreferences userPrefs = context.getSharedPreferences(
 				SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
@@ -114,7 +117,8 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
 	@Override
 	protected void onFinishWizardActivity() {
 		if (enforceCalibrationBeforeStartingSleep(this)) {
-			finish();
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
 		}
 	}
 
