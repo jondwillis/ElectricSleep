@@ -50,7 +50,7 @@
 			<id>github-project-site</id>
 			<name>GitHub Project Pages</name>
 			<url>gitsite:git@github.com/jondwillis/ElectricSleep/</url>
-			<!-- YOU MUST PUT THE FOLLOWING IN ~/.m2/settings.xml <servers> <server> 
+			<!-- YOU MUST PUT THE FOLLOWING IN ~/.m2/settings.xml <servers> <server>
 				<id>github-project-site</id> <username>git</username> </server> </servers> -->
 		</site>
 	</distributionManagement>
@@ -167,7 +167,7 @@
 					</configuration>
 					<extensions>true</extensions>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -337,7 +337,7 @@
 	<profiles>
 		<profile>
 			<id>development</id>
-			<!-- using this since activeByDefault does not work well with multiple 
+			<!-- using this since activeByDefault does not work well with multiple
 				profiles -->
 			<activation>
 				<property>
@@ -357,7 +357,7 @@
 		</profile>
 		<profile>
 			<id>release</id>
-			<!-- via this activation the profile is automatically used when the release 
+			<!-- via this activation the profile is automatically used when the release
 				is done with the maven release plugin -->
 			<activation>
 				<property>
@@ -383,7 +383,7 @@
 									<removeExistingSignatures>true</removeExistingSignatures>
 									<archiveDirectory />
 									<includes>
-										<include>${project.build.directory}/${project.artifactId}.apk</include>
+                                        <include>${project.build.directory}/${project.artifactId}-${project.version}.apk</include>
 									</includes>
 									<keystore>${sign.keystore}</keystore>
 									<alias>${sign.alias}</alias>
@@ -394,7 +394,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- the signed apk then needs to be zipaligned and we activate proguard 
+					<!-- the signed apk then needs to be zipaligned and we activate proguard
 						and we run the manifest update -->
 					<plugin>
 						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -406,17 +406,14 @@
 							</sign>
 							<zipalign>
 								<verbose>true</verbose>
-								<inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-								<outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
+								<inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk</inputApk>
+								<outputApk>${project.build.directory}/${project.artifactId}-${project.version}-signed-aligned.apk
 								</outputApk>
 							</zipalign>
 							<manifest>
 								<debuggable>false</debuggable>
 								<versionCodeAutoIncrement>true</versionCodeAutoIncrement>
 							</manifest>
-							<proguard>
-								<skip>false</skip>
-							</proguard>
 						</configuration>
 						<executions>
 							<execution>
@@ -435,18 +432,24 @@
 							</execution>
 						</executions>
 					</plugin>
+                    <plugin>
+                        <groupId>com.pyx4me</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <version>2.0.4</version>
+                    </plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.5</version>
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>${project.build.directory}/${project.artifactId}-signed-aligned.apk</file>
+                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-signed-aligned.apk</file>
 									<type>apk</type>
 									<classifier>signed-aligned</classifier>
 								</artifact>
 								<artifact>
-									<file>${project.build.directory}/proguard/mapping.txt</file>
+									<file>${project.build.directory}/proguard_map.txt</file>
 									<type>map</type>
 									<classifier>release</classifier>
 								</artifact>
