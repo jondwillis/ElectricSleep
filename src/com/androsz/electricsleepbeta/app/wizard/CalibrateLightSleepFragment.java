@@ -82,9 +82,6 @@ public class CalibrateLightSleepFragment extends Calibrator {
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar) {
 				saveCalibrationLevel(a);
-				if (calibrationStateListener != null) {
-					calibrationStateListener.onCalibrationComplete(true);
-				}
 			}
 		});
 		mSeekBar.setProgress(mAlarmTrigger);
@@ -94,16 +91,19 @@ public class CalibrateLightSleepFragment extends Calibrator {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			if (mSleepChart != null) {
-
-				mSleepChart.setVisibility(View.VISIBLE);
-				mSeekBar.setVisibility(View.VISIBLE);
-				mWarmingUp.setVisibility(View.GONE);
+                
 
 				if (mSleepChart.hasCalibrationLevel()) {
 					mSleepChart.sync(intent.getDoubleExtra(
 							SleepMonitoringService.EXTRA_X, 0), intent
 							.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
 							mAlarmTrigger);
+	                mSleepChart.setVisibility(View.VISIBLE);
+	                mSeekBar.setVisibility(View.VISIBLE);
+	                mWarmingUp.setVisibility(View.GONE);
+	                if (calibrationStateListener != null) {
+	                    calibrationStateListener.onCalibrationComplete(true);
+	                }
 				}
 			}
 		}
