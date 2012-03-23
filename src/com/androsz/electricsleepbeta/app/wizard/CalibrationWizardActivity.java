@@ -178,22 +178,6 @@ public class CalibrationWizardActivity extends WizardActivity {
     }
 
     @Override
-    protected void onStop() {
-        if (!mComingBack) {
-
-        }
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-
-    }
-
-    @Override
     protected void onPerformWizardAction(int index) {
         if (index == FRAG_LIGHT_SLEEP) {
             if (calibrateLightSleepFragment != null) {

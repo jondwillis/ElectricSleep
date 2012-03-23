@@ -1,10 +1,7 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.wizard.CheckForScreenBugAccelerometerService;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
 
 public class CheckForScreenBugFragment extends Calibrator {
@@ -108,13 +104,13 @@ public class CheckForScreenBugFragment extends Calibrator {
 
     @Override
     public void startCalibration(Activity context) {
-        if(SCREEN_BUG_STATE == null){
-        final Intent i = new Intent(context,
-                CheckForScreenBugAccelerometerService.class);
+        if (SCREEN_BUG_STATE == null) {
+            final Intent i = new Intent(context,
+                    CheckForScreenBugAccelerometerService.class);
 
-        context.startService(i);
-        ((TextView) context.findViewById(R.id.status_text))
-                .setText(R.string.notification_screenbug_ticker);
+            context.startService(i);
+            ((TextView) context.findViewById(R.id.status_text))
+                    .setText(R.string.notification_screenbug_ticker);
         }
     }
 
