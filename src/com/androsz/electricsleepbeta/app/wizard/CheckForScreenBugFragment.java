@@ -1,6 +1,7 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
 
 public class CheckForScreenBugFragment extends Calibrator {
@@ -46,6 +48,13 @@ public class CheckForScreenBugFragment extends Calibrator {
         return root;
     }
 
+    private static void updatePreference(Context c, boolean bugPresent) {
+        c.getSharedPreferences(SettingsActivity.PREFERENCES, 0)
+                .edit()
+                .putBoolean(c.getString(R.string.pref_force_screen), bugPresent)
+                .commit();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -54,11 +63,15 @@ public class CheckForScreenBugFragment extends Calibrator {
 
         if (calibrationStateListener != null && SCREEN_BUG_STATE != null) {
             // update displayed language
+            // and save preference
+
             if (SCREEN_BUG_STATE == SCREEN_BUG_PRESENT) {
+                updatePreference(getActivity(), true);
                 mResults.setText(getString(R.string.completed_standby_test)
                         + " "
                         + getString(R.string.identified_that_android_device_must_be_on));
             } else if (SCREEN_BUG_STATE == SCREEN_BUG_NOT_PRESENT) {
+                updatePreference(getActivity(), false);
                 mResults.setText(getString(R.string.completed_standby_test)
                         + " "
                         + getString(R.string.identified_screen_can_be_turned_off));
@@ -74,6 +87,7 @@ public class CheckForScreenBugFragment extends Calibrator {
              * getString(R.string.identified_screen_can_be_turned_off)); }
              */
             mFlipper.setDisplayedChild(FLIPPER_RESULTS);
+            SCREEN_BUG_STATE = null;
             calibrationStateListener.onCalibrationComplete(true);
         }
     }
@@ -122,7 +136,6 @@ public class CheckForScreenBugFragment extends Calibrator {
     @Override
     public void stopCalibration(Activity context) {
         // reset state
-        SCREEN_BUG_STATE = null;
 
         final Intent i = new Intent(context,
                 CheckForScreenBugAccelerometerService.class);

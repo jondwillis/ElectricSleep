@@ -157,14 +157,6 @@ public class CalibrationWizardActivity extends WizardActivity {
         }
     }
 
-    private boolean mComingBack = false;
-
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        mComingBack = true;
-        return super.onRetainCustomNonConfigurationInstance();
-    }
-
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
