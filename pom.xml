@@ -6,7 +6,7 @@
 	<groupId>com.androsz</groupId>
 	<artifactId>electricsleepbeta</artifactId>
 	<packaging>apk</packaging>
-	<version>1.1.0-rc35</version>
+	<version>1.1.0-rc39</version>
 
 	<name>ElectricSleep</name>
 	<description>Improving Sleep With Android</description>
@@ -414,6 +414,9 @@
 								<debuggable>false</debuggable>
 								<versionCodeAutoIncrement>true</versionCodeAutoIncrement>
 							</manifest>
+							<proguard>
+								<skip>true</skip>
+							</proguard>
 						</configuration>
 						<executions>
 							<execution>
