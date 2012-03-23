@@ -12,11 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService;
+import com.androsz.electricsleepbeta.app.wizard.CheckForScreenBugAccelerometerService;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
-
-import static com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService.ACTION_BUG_PRESENT;
-import static com.androsz.electricsleepbeta.app.CheckForScreenBugAccelerometerService.ACTION_BUG_NOT_PRESENT;
 
 public class CheckForScreenBugFragment extends Calibrator {
 
@@ -32,56 +29,58 @@ public class CheckForScreenBugFragment extends Calibrator {
     private TextView mResults;
     private SafeViewFlipper mFlipper;
 
-    private final BroadcastReceiver updateFlipperResults = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            final String action = intent.getAction();
-            if (ACTION_BUG_PRESENT.equals(action)) {
-                mResults.setText(
-                    getString(R.string.completed_standby_test) +
-                    " " +
-                    getString(R.string.identified_that_android_device_must_be_on));
-            } else if (ACTION_BUG_NOT_PRESENT.equals(action)) {
-                mResults.setText(
-                    getString(R.string.completed_standby_test) +
-                    " " +
-                    getString(R.string.identified_screen_can_be_turned_off));
-            }
-        }
-    };
+    // Ugly static-ness required because of custom lockscreens.
+    public static Integer SCREEN_BUG_STATE = null;
+    public final static int SCREEN_BUG_PRESENT = 0;
+    public final static int SCREEN_BUG_NOT_PRESENT = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         mResults = (TextView) root.findViewById(R.id.standby_test_results);
         mFlipper = (SafeViewFlipper) root.findViewById(R.id.content_flipper);
         if (savedInstanceState != null) {
-            mFlipper.setDisplayedChild(
-                savedInstanceState.getInt(FLIPPER_STATE, FLIPPER_INSTRUCTIONS));
-            mResults.setText(savedInstanceState.getString(
-                                 RESULTS_TXT,
-                                 getString(R.string.completed_standby_test)));
+            mFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_STATE,
+                    FLIPPER_INSTRUCTIONS));
+            mResults.setText(savedInstanceState.getString(RESULTS_TXT,
+                    getString(R.string.completed_standby_test)));
         }
 
-        IntentFilter filter = new IntentFilter(ACTION_BUG_PRESENT);
-        filter.addAction(ACTION_BUG_NOT_PRESENT);
-        getActivity().registerReceiver(updateFlipperResults, filter);
         return root;
     }
 
     @Override
-	public void onResume() {
-		super.onResume();
+    public void onResume() {
+        super.onResume();
+        // we cannot use a BroadcastReceiver because of custom
+        // lockscreens.
 
-        if (canBegin) {
-			if (calibrationStateListener != null) {
-                mFlipper.setDisplayedChild(FLIPPER_RESULTS);
-                calibrationStateListener.onCalibrationComplete(true);
-			}
-		}
-	}
+        if (calibrationStateListener != null && SCREEN_BUG_STATE != null) {
+            // update displayed language
+            if (SCREEN_BUG_STATE == SCREEN_BUG_PRESENT) {
+                mResults.setText(getString(R.string.completed_standby_test)
+                        + " "
+                        + getString(R.string.identified_that_android_device_must_be_on));
+            } else if (SCREEN_BUG_STATE == SCREEN_BUG_NOT_PRESENT) {
+                mResults.setText(getString(R.string.completed_standby_test)
+                        + " "
+                        + getString(R.string.identified_screen_can_be_turned_off));
+            } else {
+                throw new IllegalStateException("SCREEN_BUG_STATE");
+            }
+            /*
+             * if (ACTION_BUG_PRESENT.equals(action)) { mResults.setText(
+             * getString(R.string.completed_standby_test) + " " + getString(R
+             * .string.identified_that_android_device_must_be_on)); } else if
+             * (ACTION_BUG_NOT_PRESENT.equals(action)) { mResults.setText(
+             * getString(R.string.completed_standby_test) + " " +
+             * getString(R.string.identified_screen_can_be_turned_off)); }
+             */
+            mFlipper.setDisplayedChild(FLIPPER_RESULTS);
+            calibrationStateListener.onCalibrationComplete(true);
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -91,55 +90,50 @@ public class CheckForScreenBugFragment extends Calibrator {
     }
 
     /*
-	 * @Override public void onPause() { super.onPause();
-	 *
-	 * final Intent i = new Intent(getActivity(),
-	 * CheckForScreenBugAccelerometerService.class);
-	 *
-	 * // this replaces the need for broadcast receivers. // the service updates
-	 * BUG_PRESENT_INTENT, THEN our activity is // alerted. if
-	 * (BUG_PRESENT_INTENT != null) { stopService(i); BUG_PRESENT_INTENT = null;
-	 * } }
-	 */
+     * @Override public void onPause() { super.onPause();
+     * 
+     * final Intent i = new Intent(getActivity(),
+     * CheckForScreenBugAccelerometerService.class);
+     * 
+     * // this replaces the need for broadcast receivers. // the service updates
+     * BUG_PRESENT_INTENT, THEN our activity is // alerted. if
+     * (BUG_PRESENT_INTENT != null) { stopService(i); BUG_PRESENT_INTENT = null;
+     * } }
+     */
 
-	private boolean canBegin = false;
+    @Override
+    public int getLayoutResourceId() {
+        return R.layout.wizard_calibration_screenbug;
+    }
 
-	@Override
-	public int getLayoutResourceId() {
-		// TODO Auto-generated method stub
-		return R.layout.wizard_calibration_screenbug;
-	}
+    @Override
+    public void startCalibration(Activity context) {
+        if(SCREEN_BUG_STATE == null){
+        final Intent i = new Intent(context,
+                CheckForScreenBugAccelerometerService.class);
 
-	@Override
-	public void startCalibration(Activity context) {
-		if (!canBegin) {
-            canBegin = true;
+        context.startService(i);
+        ((TextView) context.findViewById(R.id.status_text))
+                .setText(R.string.notification_screenbug_ticker);
+        }
+    }
 
-			final Intent i = new Intent(context,
-					CheckForScreenBugAccelerometerService.class);
-
-			context.startService(i);
-			((TextView) context.findViewById(R.id.status_text))
-					.setText(R.string.notification_screenbug_ticker);
-		}
-	}
-
-	@Override
+    @Override
     public void onStop() {
         super.onStop();
     }
 
     @Override
-	public void stopCalibration(Activity context) {
-       // if (canBegin) {
-			canBegin = false;
-			final Intent i = new Intent(context,
-					CheckForScreenBugAccelerometerService.class);
+    public void stopCalibration(Activity context) {
+        // reset state
+        SCREEN_BUG_STATE = null;
 
-			if (context.stopService(i)) {
-				((TextView) context.findViewById(R.id.status_text))
-						.setText("Test Complete.");
-			}
-		//}
-	}
+        final Intent i = new Intent(context,
+                CheckForScreenBugAccelerometerService.class);
+
+        if (context.stopService(i)) {
+            ((TextView) context.findViewById(R.id.status_text))
+                    .setText("Test Complete.");
+        }
+    }
 }

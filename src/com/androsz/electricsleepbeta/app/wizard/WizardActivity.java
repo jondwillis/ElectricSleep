@@ -73,6 +73,7 @@ public abstract class WizardActivity extends HostActivity {
 
 	protected abstract PagerAdapter getPagerAdapter();
 
+	//WARNING: THIS WILL BREAK if FragmentPagerAdapter's same, internal string changes.
 	protected static String makeFragmentName(int index) {
 		return "android:switcher:" + R.id.wizardPager + ":" + index;
 	}
@@ -107,6 +108,7 @@ public abstract class WizardActivity extends HostActivity {
 		super.onResume();
 		Log.d(TAG, "evilonresume");
 		setupNavigationButtons(wizardPager.getCurrentItem());
+        onPerformWizardAction(wizardPager.getCurrentItem());
 	}
 
 	protected abstract void onFinishWizardActivity()

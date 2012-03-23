@@ -1,4 +1,4 @@
-package com.androsz.electricsleepbeta.app;
+package com.androsz.electricsleepbeta.app.wizard;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -16,6 +16,8 @@ import android.os.IBinder;
 import android.os.PowerManager;
 
 import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.Log;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 
 public class CheckForScreenBugAccelerometerService extends Service implements
@@ -64,7 +66,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 						.putBoolean(getString(R.string.pref_force_screen),
 								bugPresent).commit();
 				Log.d("ES", "bug is present");
-                sendBroadcast(new Intent(ACTION_BUG_PRESENT));
+	            CheckForScreenBugFragment.SCREEN_BUG_STATE = CheckForScreenBugFragment.SCREEN_BUG_PRESENT;
             }
             turnScreenOnAndStopSelf();
 		}
@@ -80,8 +82,8 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 
 		notification.flags = Notification.FLAG_ONGOING_EVENT;
 
-		final CharSequence contentTitle = getString(R.string.notification_sleep_title);
-		final CharSequence contentText = getString(R.string.notification_sleep_text);
+		final CharSequence contentTitle = getString(R.string.notification_screenbug_ticker);
+		final CharSequence contentText = getString(R.string.notification_screenbug_ticker);
 		Intent notificationIntent = new Intent();
 
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -134,7 +136,7 @@ public class CheckForScreenBugAccelerometerService extends Service implements
 					.putBoolean(getString(R.string.pref_force_screen), false)
 					.commit();
 			Log.d("ES", "bug not present.");
-            sendBroadcast(new Intent(ACTION_BUG_NOT_PRESENT));
+	        CheckForScreenBugFragment.SCREEN_BUG_STATE = CheckForScreenBugFragment.SCREEN_BUG_NOT_PRESENT;
             turnScreenOnAndStopSelf();
 		}
 	}

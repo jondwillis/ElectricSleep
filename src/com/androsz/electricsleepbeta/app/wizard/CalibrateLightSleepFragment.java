@@ -92,7 +92,6 @@ public class CalibrateLightSleepFragment extends Calibrator {
 		public void onReceive(final Context context, final Intent intent) {
 			if (mSleepChart != null) {
                 
-
 				if (mSleepChart.hasCalibrationLevel()) {
 					mSleepChart.sync(intent.getDoubleExtra(
 							SleepMonitoringService.EXTRA_X, 0), intent
