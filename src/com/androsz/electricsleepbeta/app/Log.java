@@ -48,7 +48,7 @@ public class Log {
     /** Set up logging to NOT include debug logs. */
     private static boolean sDebug = false;
 
-    private final static String LOGTAG = "Sleep101";
+    private final static String LOGTAG = "ElectricSleep";
 
     public static void d(String logMe) {
         if (sDebug) {
