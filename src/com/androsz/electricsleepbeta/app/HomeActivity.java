@@ -88,9 +88,9 @@ public class HomeActivity extends HostActivity implements
     }
 
     private void ensureShareVisibleWhenDataAvailable(Menu menu) {
-            MenuItem mi = menu.findItem(R.id.menu_item_share_sleep_record);
-            mi.setVisible(mSleepSession != null); // visible only if we have a
-                                                  // sleep session
+        MenuItem mi = menu.findItem(R.id.menu_item_share_sleep_record);
+        mi.setVisible(mSleepSession != null); // visible only if we have a
+                                              // sleep session
     }
 
     @Override
@@ -115,7 +115,10 @@ public class HomeActivity extends HostActivity implements
 
     @Override
     public void onLoaderReset(Loader<Cursor> arg0) {
-        
+
+        mSleepSession = null;
+        // so that share sleep visibility is re-processed.
+        invalidateOptionsMenu();
     }
 
     private SleepSession mSleepSession;
@@ -123,6 +126,7 @@ public class HomeActivity extends HostActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> arg0, final Cursor cursor) {
         if (cursor == null || cursor.getCount() == 0) {
+            mSleepSession = null;
             ViewFlipper flipper = (ViewFlipper) findViewById(R.id.content_view_flipper);
             flipper.setDisplayedChild(FLIP_NO_RECORDS);
         } else {
@@ -212,7 +216,7 @@ public class HomeActivity extends HostActivity implements
             flipper.setDisplayedChild(FLIP_RECENT_RECORD);
         }
 
-        //so that share sleep visibility is re-processed.
+        // so that share sleep visibility is re-processed.
         invalidateOptionsMenu();
     }
 
