@@ -88,7 +88,7 @@
                 <TextView
                   android:layout_height="wrap_content"
                   android:layout_width="wrap_content"
-                  android:text="@string/sleep_efficiency"
+                  android:text="@string/sleep_score"
                   android:textColor="@color/text_dark" />
                 <TextView
                   android:id="@+id/sleep_efficiency"

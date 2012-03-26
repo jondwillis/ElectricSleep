@@ -9,7 +9,7 @@
     <string name="track">Track</string>
     <string name="history">History</string>
     <string name="alarms">Alarms</string>
-    <string name="sleep_efficiency">Sleep Efficiency</string>
+    <string name="sleep_score">Sleep Score</string>
     <string name="to_get_started_tap_the_track_button">To get started, tap the Track button.</string>
     <string name="morning_feel">Morning Feel</string>
     <string name="oops_there_was_error_while_generating_image_for_sharing">Oops, there was an error generating image of sleep for sharing.</string>
@@ -617,7 +617,7 @@ of lack of room.
     <string name="recording_time">Recording time <b>
             <xliff:g id="time">%s</xliff:g>
         </b></string>
-            <string name="sleep_LINEBREAK_efficiency">Sleep\nEfficiency</string>
+            <string name="sleep_LINEBREAK_score">Sleep\nScore</string>
             <string name="there_s_nothing_here_to_get_started_track_some_sleep_">There\'s nothing here! To get started, track some sleep.</string>
             <string name="not_using_smartwake_">ElectricSleep is not using SmartWake Lite.</string>
             <string name="attempt_to_use_smartwake_">ElectricSleep will attempt to use SmartWake Lite.</string>
