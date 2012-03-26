@@ -34,10 +34,16 @@ public class CheckForScreenBugAccelerometerService extends Service implements
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 serviceHandler.postDelayed(setScreenIsOffRunnable, 6666);
                 serviceHandler.postDelayed(turnScreenOnFallbackRunnable, 12000);
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                if (didNotTurnScreenOn) {
+                    stopSelf();
+                    startService(mIntent);
+                }
             }
         }
     }
 
+    private Intent mIntent;
     private static final int NOTIFICATION_ID = 0x1337b;
 
     private boolean bugPresent = true;
@@ -77,7 +83,6 @@ public class CheckForScreenBugAccelerometerService extends Service implements
         final int icon = R.drawable.ic_stat_notify_track;
         final CharSequence tickerText = getString(R.string.notification_screenbug_ticker);
         final long when = System.currentTimeMillis();
-
         final Notification notification = new Notification(icon, tickerText,
                 when);
 
@@ -145,21 +150,18 @@ public class CheckForScreenBugAccelerometerService extends Service implements
     @Override
     public int onStartCommand(final Intent intent, final int flags,
             final int startId) {
-        if (startId == 1) {
-            Log.d("ES", "onStartCommand1");
-            bugPresent = true;
-            screenIsOff = false;
-            final IntentFilter filter = new IntentFilter(
-                    Intent.ACTION_SCREEN_ON);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            screenOnOffReceiver = new ScreenReceiver();
-            registerReceiver(screenOnOffReceiver, filter);
-            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            startForeground(NOTIFICATION_ID, createServiceNotification());
-            WakeLockManager.acquire(this, "screenBugPartial",
-                    PowerManager.PARTIAL_WAKE_LOCK);
-            registerAccelerometerListener();
-        }
+        mIntent = intent;
+        bugPresent = true;
+        screenIsOff = false;
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        screenOnOffReceiver = new ScreenReceiver();
+        registerReceiver(screenOnOffReceiver, filter);
+        powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        startForeground(NOTIFICATION_ID, createServiceNotification());
+        WakeLockManager.acquire(this, "screenBugPartial",
+                PowerManager.PARTIAL_WAKE_LOCK);
+        registerAccelerometerListener();
         return startId;
     }
 
