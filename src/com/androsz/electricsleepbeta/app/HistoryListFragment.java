@@ -1,5 +1,7 @@
 package com.androsz.electricsleepbeta.app;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
@@ -32,7 +34,9 @@ public class HistoryListFragment extends AnalyticFragment implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mDeleteSleepTask.cancel(true);
+        for (DeleteSleepTask dst : mDeleteSleepTasks) {
+            dst.cancel(true);
+        }
     }
 
     private final class ListOnItemClickListener implements OnItemClickListener {
@@ -72,13 +76,13 @@ public class HistoryListFragment extends AnalyticFragment implements
 
     private SleepHistoryCursorAdapter mSleepHistoryAdapter;
 
-    private DeleteSleepTask mDeleteSleepTask;
+    private ArrayList<DeleteSleepTask> mDeleteSleepTasks;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mDeleteSleepTask = new DeleteSleepTask(getActivity());
+        mDeleteSleepTasks = new ArrayList<DeleteSleepTask>();
     }
 
     @Override
@@ -93,7 +97,8 @@ public class HistoryListFragment extends AnalyticFragment implements
         mFlipper = (SafeViewFlipper) root.findViewById(R.id.content_flipper);
         mListView = (ListView) root.findViewById(R.id.list);
 
-        mSleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(), null);
+        mSleepHistoryAdapter = new SleepHistoryCursorAdapter(getActivity(),
+                null);
         mListView.setAdapter(mSleepHistoryAdapter);
 
         // mListView.setBackgroundColor(getActivity().getResources().getColor(R.color.background_light));
@@ -192,8 +197,10 @@ public class HistoryListFragment extends AnalyticFragment implements
                                         public void onClick(
                                                 final DialogInterface dialog,
                                                 final int id) {
-                                            mDeleteSleepTask.execute( rowId , null,
-                                                    null);
+                                            DeleteSleepTask dst = new DeleteSleepTask(
+                                                    getActivity());
+                                            dst.execute(rowId, null, null);
+                                            mDeleteSleepTasks.add(dst);
                                         }
                                     })
                             .setNegativeButton(getString(R.string.cancel),
