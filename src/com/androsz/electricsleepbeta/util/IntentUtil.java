@@ -124,14 +124,15 @@ public class IntentUtil {
                 ((TextView) view.findViewById(R.id.time_to_fall_asleep))
                         .setText(session.getTimeToFallAsleepText(activity
                                 .getResources()));
-
-                view.setLayoutParams(new LinearLayout.LayoutParams(600, 900));
+                int width = MathUtils.calculatePxFromDp(activity, 400);
+                int height = MathUtils.calculatePxFromDp(activity, 600);
+                view.setLayoutParams(new LinearLayout.LayoutParams(width, height));
 
                 // Begin process of drawing night sharing to bitmap.
-                view.measure(View.MeasureSpec.makeMeasureSpec(600,
+                view.measure(View.MeasureSpec.makeMeasureSpec(width,
                         View.MeasureSpec.EXACTLY), View.MeasureSpec
-                        .makeMeasureSpec(900, View.MeasureSpec.EXACTLY));
-                view.layout(0, 0, 600, 900);
+                        .makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+                view.layout(0, 0, width, height);
                 view.setBackgroundColor(activity.getResources().getColor(
                         R.color.background_light));
                 Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),

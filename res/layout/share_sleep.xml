@@ -8,7 +8,7 @@
 
     <TextView
       android:background="@color/actionbar_background"
-      android:drawableLeft="@drawable/logo_white"
+      android:drawableLeft="@drawable/ic_actionbar_logo"
       android:drawablePadding="15dp"
       android:gravity="center_vertical"
       android:layout_height="wrap_content"
@@ -41,7 +41,6 @@
 
         <com.androsz.electricsleepbeta.widget.SleepChart
           android:id="@+id/sleep_movement_chart"
-          android:layout_height="300dp"
           android:layout_width="800dp"
           android:orientation="horizontal"
           electricsleep:setScroll="false"
