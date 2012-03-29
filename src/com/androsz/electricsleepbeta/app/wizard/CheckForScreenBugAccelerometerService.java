@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.Log;
@@ -80,6 +81,8 @@ public class CheckForScreenBugAccelerometerService extends Service implements
     };
 
     private Notification createServiceNotification() {
+        Toast.makeText(this, R.string.notification_screenbug_ticker, Toast.LENGTH_LONG).show();
+        
         final int icon = R.drawable.ic_stat_notify_track;
         final CharSequence tickerText = getString(R.string.notification_screenbug_ticker);
         final long when = System.currentTimeMillis();
