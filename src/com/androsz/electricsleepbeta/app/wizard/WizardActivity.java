@@ -138,7 +138,7 @@ public abstract class WizardActivity extends HostActivity {
 		this.wizardPager.setPagingEnabled(enabled);
 	}
 
-	protected abstract void onPrepareLastSlide();
+	protected abstract void onPrepareLastSlide(Button rightButton);
 
 	public void onRightButtonClick(final View v) {
 
@@ -172,7 +172,7 @@ public abstract class WizardActivity extends HostActivity {
 			leftButton.setText(R.string.back);
 			rightButton.setText(R.string.finish);
 
-			onPrepareLastSlide();
+			onPrepareLastSlide(rightButton);
 		}
 	}
 }

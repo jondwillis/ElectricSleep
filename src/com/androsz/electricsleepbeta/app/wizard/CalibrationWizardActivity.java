@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
@@ -208,9 +209,7 @@ public class CalibrationWizardActivity extends WizardActivity {
     }
 
     @Override
-    protected void onPrepareLastSlide() {
-        // TODO Auto-generated method stub
-
+    protected void onPrepareLastSlide(Button rightButton) {
     }
 
 }

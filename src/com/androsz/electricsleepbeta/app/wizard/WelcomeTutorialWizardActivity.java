@@ -1,15 +1,5 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
-import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.SettingsActivity;
-import com.androsz.electricsleepbeta.app.HomeActivity;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-import com.viewpagerindicator.TitleProvider;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,6 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.androsz.electricsleepbeta.R;
+import com.androsz.electricsleepbeta.app.HomeActivity;
+import com.androsz.electricsleepbeta.app.SettingsActivity;
+import com.viewpagerindicator.TitleProvider;
 
 public class WelcomeTutorialWizardActivity extends WizardActivity {
 
@@ -99,12 +97,6 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
         }
     }
 
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-        }
-    }
-
     // Prevents options from showing up if required
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -129,7 +121,8 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
     protected void onFinishWizardActivity() {
         final int applicationFlags = getApplicationInfo().flags;
         // is android:debuggable is set to true?
-        if ((applicationFlags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 || !required) {
+        if ((applicationFlags & ApplicationInfo.FLAG_DEBUGGABLE) != 0
+                || !required) {
             if (enforceCalibrationBeforeStartingSleep(this)) {
                 startActivity(new Intent(this, HomeActivity.class));
                 finish();
@@ -138,6 +131,12 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
             startActivity(new Intent(this, CalibrationWizardActivity.class));
             finish();
         }
+    }
+
+    @Override
+    public void onRightButtonClick(View v) {
+        findViewById(R.id.leftButton).setVisibility(View.VISIBLE);
+        super.onRightButtonClick(v);
     }
 
     @Override
@@ -150,7 +149,10 @@ public class WelcomeTutorialWizardActivity extends WizardActivity {
     }
 
     @Override
-    protected void onPrepareLastSlide() {
+    protected void onPrepareLastSlide(Button rightButton) {
+        if (required) {
+            rightButton.setText(R.string.calibrate);
+        }
     }
 
     @Override
