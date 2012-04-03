@@ -18,7 +18,8 @@
             android:layout_alignParentTop="true"
             android:gravity="center_horizontal"
             android:text="@string/welcome_to_electricsleep" />
-
+        
+        <!--
         <TextView
             android:id="@+id/p1"
             style="@style/TextBody"
@@ -28,22 +29,32 @@
             android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:text="@string/returning_users_paragraph_one" />
+        -->
 
         <TextView
             android:id="@+id/p2"
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/p1"
+            android:layout_below="@id/welcome_header"
             android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:text="@string/returning_users_paragraph_two" />
+        
+        <TextView
+            android:id="@+id/changes"
+            style="@style/TextHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/p2"
+            android:gravity="center_horizontal"
+            android:text="What's New?" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
             android:layout_alignParentBottom="true"
+            android:layout_margin="10dip"
             android:orientation="vertical" >
 
             <Button
@@ -60,5 +71,15 @@
                 android:layout_margin="4dip"
                 android:text="Skip Tutorial" />
         </LinearLayout>
+
+        <fragment
+            android:name="com.androsz.electricsleepbeta.app.ChangeLogFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/changes"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp" />
+
     </RelativeLayout>
+
 </ScrollView>

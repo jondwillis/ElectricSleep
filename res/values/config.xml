@@ -2,6 +2,6 @@
 <resources>
 
     <integer name="prefs_version">7</integer>
-    <integer name="prefs_version_electricsleep_renamed">7</integer>
+    <!-- <integer name="prefs_version_electricsleep_renamed">8</integer> -->
 
 </resources>

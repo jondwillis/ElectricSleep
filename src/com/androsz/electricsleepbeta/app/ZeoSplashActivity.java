@@ -34,22 +34,28 @@ public class ZeoSplashActivity extends HostActivity {
                 SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE);
         final int prefsVersion = userPrefs.getInt(
                 SettingsActivity.PREFERENCES_ENVIRONMENT, 0);
-        if (prefsVersion == 0) {
+        final int currentPrefsVersion = getResources().getInteger(
+                R.integer.prefs_version);
+        Log.d("Current version: " + currentPrefsVersion + ", coming from " + prefsVersion);
+        
+        if(prefsVersion >= currentPrefsVersion)
+        {
+         // the user isn't new or returning. skip straight to the home screen.   
+            finishAndStartHome();
+            return;
+        } else if (prefsVersion == 0)
+        {
+            //the user is new, direct them to the start tutorial
             finishAndStartTutorial(true);
-        } else if (prefsVersion < getResources().getInteger(
-                R.integer.prefs_version_electricsleep_renamed)) {
-            // the first time a user who used ElectricSleep before it was
-            // renamed revisits the app, this will catch them, display this
-            // activity, and then do some maintenance of
-            // preferences.
+            return;
+        } else {
+            //the user has just upgraded from a previous version, show the change log
             userPrefs
                     .edit()
                     .remove(SettingsActivity.PREFERENCES_KEY_DONT_SHOW_ZEO)
                     .putInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
                             getResources().getInteger(R.integer.prefs_version))
                     .commit();
-        } else {
-            finishAndStartHome();
         }
 
         findViewById(R.id.button_continue_to_tutorial).setOnClickListener(
