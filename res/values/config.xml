@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="prefs_version">7</integer>
+    <integer name="prefs_version">13</integer>
     <!-- <integer name="prefs_version_electricsleep_renamed">8</integer> -->
 
 </resources>

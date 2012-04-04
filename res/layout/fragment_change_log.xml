@@ -1,125 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dip" >
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        style="@style/TextHeader"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:text="Version 1.1.0" >
+    </TextView>
 
-        <TextView
-            style="@style/TextHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Version 1.1.0" >
-        </TextView>
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UI overhaul" >
+    </TextView>
 
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="UI overhaul" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="'Track Sleep' Homescreen shortcut (Widget) re-added" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You can now share individual nights of sleep through other installed apps" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="More space has been added between Snooze and Dismiss to prevent accidental misbehavior when an alarm pops." >
-        </TextView>
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&apos;Track Sleep&apos; Homescreen shortcut (Widget) re-added" >
+    </TextView>
 
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fixed a bug where setting an alarm would cause crashes">
-        </TextView>
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can now share individual nights of sleep through other installed apps" >
+    </TextView>
 
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fixed a bug where viewing the graph on the home screen would cause a crash" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Viewing history defaults to a list - you can switch between month and list." >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="AChartEngine updated - should provide better sleep chart performance." >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sleep Score is calculated based on deep sleep, duration, user-provided rating, and time to fall asleep." >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Devices running Android 3.0+ will now have some UI animations" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Devices running Android 3.0+ will now have some UI animations" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Expert advice and Sleep store" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Warnings about battery, dim sleep and alarms are more apparent on Tracking screen" >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Large 'Stop Tracking' button added." >
-        </TextView>
-        
-        <TextView
-            style="@style/TextBulleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="The process of calibration has been revamped." >
-        </TextView>
-    </LinearLayout>
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More space has been added between Snooze and Dismiss to prevent accidental misbehavior when an alarm pops." >
+    </TextView>
 
-</ScrollView>
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fixed a bug where setting an alarm would cause crashes" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fixed a bug where viewing the graph on the home screen would cause a crash" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Viewing history defaults to a list - you can switch between month and list." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AChartEngine updated - should provide better sleep chart performance." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sleep Score is calculated based on deep sleep, duration, user-provided rating, and time to fall asleep." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Devices running Android 3.0+ will now have some UI animations" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expert advice and Sleep store links" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Warnings about battery, dim sleep and alarms are more apparent on Tracking screen" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Large &apos;Stop Tracking&apos; button added." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The process of calibration has been revamped." >
+    </TextView>
+
+</LinearLayout>
