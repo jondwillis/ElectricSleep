@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -35,17 +34,7 @@ public class ZeoSplashActivity extends HostActivity {
 		final ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
 
-		findViewById(R.id.button_continue_to_tutorial).setOnClickListener(
-				new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(this, "guh", Toast.LENGTH_LONG).show();
-						finishAndStartTutorial(false);
-					}
-				});
-
-		findViewById(R.id.button_skip_tutorial).setOnClickListener(
+		findViewById(R.id.button_get_started).setOnClickListener(
 				new OnClickListener() {
 
 					@Override
