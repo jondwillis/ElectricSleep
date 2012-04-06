@@ -77,7 +77,7 @@ public class HomeActivity extends HostActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, SleepSession.CONTENT_URI, null, null,
-                null, SleepSession.START_TIMESTAMP + " DESC");
+                null, SleepSession.SORT_ORDER_LIMIT_60);
     }
 
     @Override

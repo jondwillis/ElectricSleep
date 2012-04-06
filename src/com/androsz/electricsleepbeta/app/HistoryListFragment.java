@@ -132,7 +132,7 @@ public class HistoryListFragment extends AnalyticFragment implements
         switch (id) {
         case LOADER_ALL:
             return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
-                    null, null, null, SleepSession.SORT_ORDER);
+                    null, null, null, SleepSession.SORT_ORDER_LIMIT_60);
 
         case LOADER_JULIAN:
             final int julianDay = args.getInt(EXTRA_JULIAN_DAY);
@@ -142,7 +142,7 @@ public class HistoryListFragment extends AnalyticFragment implements
             return new CursorLoader(getActivity(), SleepSession.CONTENT_URI,
                     null, SleepSession.START_JULIAN_DAY + " =? ",
                     new String[] { Integer.toString(julianDay) },
-                    SleepSession.SORT_ORDER);
+                    SleepSession.SORT_ORDER_LIMIT_60);
         }
 
         return null;
