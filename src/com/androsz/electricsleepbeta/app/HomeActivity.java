@@ -202,7 +202,7 @@ public class HomeActivity extends HostActivity implements
 
                 @Override
                 protected void onPostExecute(Void result) {
-                    avgScoreText.setText(avgSleepScore + "%");
+                    avgScoreText.setText(avgSleepScore);
                     avgDurationText.setText(SleepSession.getTimespanText(
                             avgDuration, getResources()));
                     avgSpikesText.setText(avgSpikes + "");
