@@ -17,8 +17,7 @@
     <string name="i_am_sorry_but_cannot_share_zeo_sleep_without_sdcard">I\'m sorry but sharing Zeo sleep information requires an SD card be present in your phone (to share the image with other apps).</string>
     <string name="see_how_i_slept_on">See how I slept on</string>
     <string name="download_sleep_101_for_free">Download ElectricSleep for free at: <a href="www.myZeo.com/ElectricSleep">www.myZeo.com/ElectricSleep</a></string>
-    <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS
-ANYTHING.</string>
+    <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT leave this screen.</string>
     <string name="legend_light_sleep_trigger">SmartWake Lite Trigger</string>
     <string name="legend_movement">Movement</string>
     <string name="warming_up">Warming up sensors, please wait.</string>
