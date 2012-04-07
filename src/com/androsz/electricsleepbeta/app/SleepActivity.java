@@ -34,39 +34,57 @@ public class SleepActivity extends HostActivity {
 
 	private class DimScreenTask extends AsyncTask<Void, Void, Void> {
 
+		private boolean mScreenDimmed = false;
+		public boolean isScreenDimmed() {
+			return mScreenDimmed;
+		}
+
+		private int timer = 0;
+
 		@Override
 		protected Void doInBackground(final Void... params) {
 			// just wait without blocking the main thread!
-			try {
-				Thread.sleep(DIM_SCREEN_AFTER_MS);
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
+			while (!isCancelled() && timer < DIM_SCREEN_AFTER_MS) {
+				try {
+					timer += 1000;
+					Thread.sleep(1000);
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			return null;
 		}
 
 		@Override
+		protected void onCancelled() {
+			mScreenDimmed = false;
+			Log.d(TAG, "onCancelled");
+			super.onCancelled();
+		}
+
+		@Override
 		protected void onPostExecute(final Void results) {
-			// after we have waited, dim the screen on the main thread!
-			startActivity(new Intent(SleepActivity.this, DimSleepActivity.class));
+			Log.d(TAG, "onPostExecute");
+			if (!isCancelled()) {
+				Log.d(TAG, "!isCancelled");
+				mScreenDimmed = true;
+				// after we have waited, dim the screen on the main thread!
+				startActivity(new Intent(SleepActivity.this,
+						DimSleepActivity.class));
+			}
 		}
 
 		@Override
 		protected void onPreExecute() {
+			mScreenDimmed = false;
 			// notify the user that we've received that they need a dimmed
 			// screen
 			setToast(R.string.screen_will_dim);
 		}
 	}
 
-	private Toast mCurrentToast;
-
 	private void setToast(int stringId) {
-		if (mCurrentToast != null) {
-			mCurrentToast.cancel();
-		}
-		mCurrentToast = Toast.makeText(this, stringId, Toast.LENGTH_LONG);
-		mCurrentToast.show();
+		Toast.makeText(this, stringId, Toast.LENGTH_SHORT).show();
 	}
 
 	private static final int DIM_SCREEN_AFTER_MS = 15000;
@@ -87,7 +105,7 @@ public class SleepActivity extends HostActivity {
 
 	private SleepMonitoringService mMonitoringService = null;
 
-	AsyncTask<Void, Void, Void> dimScreenTask;
+	DimScreenTask dimScreenTask;
 
 	private SleepChart sleepChart;
 
@@ -189,32 +207,36 @@ public class SleepActivity extends HostActivity {
 		unregisterReceiver(airplaneModeChangedReceiver);
 		unregisterReceiver(updateChartReceiver);
 		unregisterReceiver(batteryChangedReceiver);
-		//we aren't showing the dim screen warning if force screen on isn't on, cancel all other toasts.
-		if (!mMonitoringService.getForceScreenOn()) {
-			if (mCurrentToast != null) {
-				mCurrentToast.cancel();
-			}
-		}
+		cancelDimScreenTask();
 		if (mServiceBound.compareAndSet(true, false)) {
 			unbindService(serviceConnection);
 		}
+		isUserLeaving = false;
 		super.onPause();
 	}
 
+	boolean isUserLeaving = false;
+
 	@Override
 	protected void onUserLeaveHint() {
-		cancelDimScreenTask();
+		Log.d(TAG, "onUserLeaveHint()");
+		isUserLeaving = true;
 		super.onUserLeaveHint();
 	}
 
 	private void cancelDimScreenTask() {
-		if (mMonitoringService.getForceScreenOn()) {
-			// cancel the dim screen task if it hasn't completed
-			if (dimScreenTask != null) {
-				dimScreenTask.cancel(true);
-			}
+		Log.d(TAG, "cancelDimScreenTask");
+		// cancel the dim screen task if it hasn't completed
+		if (dimScreenTask != null) {
+			Log.d(TAG, "dimScreenTask != null");
+			dimScreenTask.cancel(true);
 
-			setToast(R.string.warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_);
+			// only show this toast is the user is leaving and the screen has
+			// not been dimmed by the dimScreenTask.
+			if (!dimScreenTask.isScreenDimmed() && (isUserLeaving || isFinishing())) {
+				Log.d(TAG, "!screenDimmed && isUserLeaving");
+				setToast(R.string.warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_);
+			}
 		}
 	}
 
@@ -266,6 +288,20 @@ public class SleepActivity extends HostActivity {
 			sleepChart.sync(mMonitoringService.getData());
 			final boolean useAlarm = mMonitoringService.getUseAlarm();
 			final boolean forceScreenOn = mMonitoringService.getForceScreenOn();
+
+			// dims the screen while in this activity and
+			// forceScreenOn is
+			// enabled
+			if (forceScreenOn) {
+				buttonSleepDim.setVisibility(View.VISIBLE);
+
+				cancelDimScreenTask();
+				dimScreenTask = new DimScreenTask();
+				dimScreenTask.execute();
+
+			} else {
+				buttonSleepDim.setVisibility(View.GONE);
+			}
 
 			new AsyncTask<Void, Void, String[]>() {
 				@Override
@@ -329,20 +365,6 @@ public class SleepActivity extends HostActivity {
 							textAlarmStatus.setText(R.string.no_alarm);
 							textAlarmStatusSub.setText(R.string.sleep_no_alarm);
 						}
-					}
-
-					// dims the screen while in this activity and
-					// forceScreenOn is
-					// enabled
-					if (forceScreenOn) {
-						buttonSleepDim.setVisibility(View.VISIBLE);
-
-						cancelDimScreenTask();
-						dimScreenTask = new DimScreenTask();
-						dimScreenTask.execute();
-
-					} else {
-						buttonSleepDim.setVisibility(View.GONE);
 					}
 				}
 			}.execute();
