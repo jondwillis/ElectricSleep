@@ -10,16 +10,17 @@ public class VerticalSeekBar extends DecimalSeekBar {
 	private OnSeekBarChangeListener myListener;
 
 	public VerticalSeekBar(Context context) {
-		super(context);
+		this(context, null);
+	}
+	
+	public VerticalSeekBar(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
 	}
 
 	public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
-	public VerticalSeekBar(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(h, w, oldh, oldw);

@@ -27,10 +27,14 @@ public class SafeViewFlipper extends ViewFlipper {
     private static final String TAG = SafeViewFlipper.class.getSimpleName();
 
     public SafeViewFlipper(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public SafeViewFlipper(Context context, AttributeSet attrs) {
+    	this(context, attrs, 0);
+    }
+    
+    public SafeViewFlipper(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
     }
 
