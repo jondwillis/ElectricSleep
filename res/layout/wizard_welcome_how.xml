@@ -14,7 +14,7 @@
             style="@style/TextHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/electricsleep_about" />
+            android:text="@string/sleep101_about" />
 
         <TextView
             android:id="@+id/textSleep"

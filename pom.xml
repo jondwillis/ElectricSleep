@@ -8,7 +8,7 @@
 	<packaging>apk</packaging>
 	<version>1.1.0</version>
 
-	<name>ElectricSleep</name>
+	<name>Sleep101</name>
 	<description>Improving Sleep With Android</description>
 	<url>https://github.com/jondwillis/ElectricSleep/</url>
 	<inceptionYear>2010</inceptionYear>
