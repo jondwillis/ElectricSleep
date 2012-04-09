@@ -1,4 +1,4 @@
-/* @(#)ElectricSleepDatabase.java
+/* @(#)Sleep101Database.java
  *
  *========================================================================
  * Copyright 2011 by Zeo Inc. All Rights Reserved
@@ -34,14 +34,14 @@ import java.util.TimeZone;
  * @author Brandon Edens
  * @version $Revision$
  */
-public class ElectricSleepDatabase extends SQLiteOpenHelper {
+public class OldDatabase extends SQLiteOpenHelper {
 
-    private static final String TAG = ElectricSleepDatabase.class.getSimpleName();
+    private static final String TAG = OldDatabase.class.getSimpleName();
 
     private static final String DB_NAME = "sleephistory";
     private static final int DB_VERSION = 7;
 
-    public ElectricSleepDatabase(Context context) {
+    public OldDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
