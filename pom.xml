@@ -79,6 +79,7 @@
 		<googleanalytics.version>1.4.2</googleanalytics.version>
 		<achartengine.version>0.8.0-electricsleep</achartengine.version>
 		<actionbarsherlock-plugin-preference.version>3.5.1</actionbarsherlock-plugin-preference.version>
+		<sleep101-android-lib.version>1.0.0-SNAPSHOT</sleep101-android-lib.version>
 	</properties>
 
 	<dependencies>
@@ -117,6 +118,12 @@
 			<artifactId>analytics</artifactId>
 			<version>${googleanalytics.version}</version>
 			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.myzeo.android.sleep101</groupId>
+			<artifactId>library</artifactId>
+			<version>${sleep101-android-lib.version}</version>
+			<type>apklib</type>
 		</dependency>
 	</dependencies>
 
