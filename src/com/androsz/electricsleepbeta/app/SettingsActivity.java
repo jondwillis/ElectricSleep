@@ -28,6 +28,14 @@ public class SettingsActivity extends HostPreferenceActivity {
 	public void onBuildHeaders(List<Header> target) {
 		super.onBuildHeaders(target);
 
+
+		final SharedPreferences serviceIsRunningPrefs = getSharedPreferences(
+				SleepMonitoringService.SERVICE_IS_RUNNING, Context.MODE_PRIVATE);
+		if (serviceIsRunningPrefs.getBoolean("serviceIsRunning", false)) {
+			Toast.makeText(this, R.string.changes_made_to_these_settings,
+					Toast.LENGTH_LONG).show();
+		}
+		
 		try {
 			// Set the software version shown in the preference header.
 			PackageInfo packageInfo = getPackageManager().getPackageInfo(
@@ -70,6 +78,12 @@ public class SettingsActivity extends HostPreferenceActivity {
 
 	@Override
 	protected int getContentAreaLayoutId() {
+		final SharedPreferences serviceIsRunningPrefs = getSharedPreferences(
+				SleepMonitoringService.SERVICE_IS_RUNNING, Context.MODE_PRIVATE);
+		if (serviceIsRunningPrefs.getBoolean("serviceIsRunning", false)) {
+			Toast.makeText(this, R.string.changes_made_to_these_settings,
+					Toast.LENGTH_LONG).show();
+		}
 		return R.xml.settings;
 	}
 
@@ -197,13 +211,6 @@ public class SettingsActivity extends HostPreferenceActivity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		final SharedPreferences serviceIsRunningPrefs = getSharedPreferences(
-				SleepMonitoringService.SERVICE_IS_RUNNING, Context.MODE_PRIVATE);
-		if (serviceIsRunningPrefs.getBoolean("serviceIsRunning", false)) {
-			Toast.makeText(this, R.string.changes_made_to_these_settings,
-					Toast.LENGTH_LONG).show();
-		}
 
 		if (getNeedToLoadOldStylePreferences()) {
 			try {

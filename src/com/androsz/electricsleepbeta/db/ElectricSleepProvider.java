@@ -124,7 +124,7 @@ public class ElectricSleepProvider extends ContentProvider {
                 projection = SleepSession.PROJECTION;
             }
             if (sortOrder == null) {
-                sortOrder = SleepSession.SORT_ORDER;
+                sortOrder = SleepSession.DEFAULT_SORT_ORDER;
             }
 
             Cursor c = builder.where(selection, selectionArgs).query(db,

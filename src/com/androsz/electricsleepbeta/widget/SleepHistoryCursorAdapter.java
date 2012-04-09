@@ -35,7 +35,7 @@ public class SleepHistoryCursorAdapter extends ResourceCursorAdapter {
                 .getString(R.string.recording_time, session
                         .getTotalRecordAbbrevTime(context.getResources())));
         ((TextView) view.findViewById(R.id.efficiency)).setText(session
-                .getEfficiency() + "%");
+                .getEfficiency());
 
         final SleepChart sleepChart = (SleepChart) view
                 .findViewById(R.id.sleep_history_list_item_sleepchartview);

@@ -74,7 +74,7 @@
 		<android.platform>14</android.platform>
 		<android-support.version>r6</android-support.version>
 		<android-maven.version>3.1.1</android-maven.version>
-		<actionbarsherlock.version>4.0.0</actionbarsherlock.version>
+		<actionbarsherlock.version>4.0.1</actionbarsherlock.version>
 		<viewpagerindicator.version>2.2.3-electricsleep</viewpagerindicator.version>
 		<googleanalytics.version>1.4.2</googleanalytics.version>
 		<achartengine.version>0.8.0-electricsleep</achartengine.version>
