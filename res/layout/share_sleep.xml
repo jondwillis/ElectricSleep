@@ -152,5 +152,4 @@
           android:text="@string/download_sleep_101_for_free"
           android:textColor="@color/text_dark" />
     </LinearLayout>
-
 </LinearLayout>
