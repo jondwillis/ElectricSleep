@@ -27,6 +27,7 @@ import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.widget.SleepChart;
+import com.myzeo.android.Log;
 
 public class SleepActivity extends HostActivity {
 
