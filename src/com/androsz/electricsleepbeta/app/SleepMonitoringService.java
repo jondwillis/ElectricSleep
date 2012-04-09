@@ -6,9 +6,11 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.achartengine.model.PointD;
 
@@ -27,6 +29,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.IBinder;
@@ -42,6 +45,9 @@ import com.androsz.electricsleepbeta.util.WakeLockManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SleepMonitoringService extends Service implements SensorEventListener {
+
+    private static final String TAG = SleepMonitoringService.class.getSimpleName();
+
 	private final class UpdateTimerTask extends TimerTask {
 		@Override
 		public void run() {
@@ -82,7 +88,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		}
 	}
 
-	public static final String EXTRA_ALARM_WINDOW = "alarmWindow";
+    public static final String EXTRA_ALARM_WINDOW = "alarmWindow";
 
 	public static final String EXTRA_ID = "id";
 	public static final String EXTRA_NAME = "name";
@@ -91,19 +97,25 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	private final static int INTERVAL = 5000;
 	public static int MAX_POINTS_IN_A_GRAPH = 200;
 	private static final int NOTIFICATION_ID = 0x1337a;
-	public static final String POKE_SYNC_CHART = "com.androsz.electricsleepbeta.POKE_SYNC_CHART";
+
 	// Object for intrinsic lock
 	public static final Object[] DATA_LOCK = new Object[0];
 
 	public static final String SERVICE_IS_RUNNING = "serviceIsRunning";
 
 	public static final String SLEEP_DATA = "sleepData";
-	public static final String SLEEP_STOPPED = "com.androsz.electricsleepbeta.SLEEP_STOPPED";
+    public static final String SLEEP_START = "com.androsz.electricsleepbeta.SLEEP_START";
+    public static final String SLEEP_STOPPED = "com.androsz.electricsleepbeta.SLEEP_STOPPED";
 	public static final String STOP_AND_SAVE_SLEEP = "com.androsz.electricsleepbeta.STOP_AND_SAVE_SLEEP";
 
-	private boolean airplaneMode = false;
+    /** Handle that allows others to access the sleep monitoring service. */
+    private final IBinder mBinder = new ServiceBinder();
 
-	private double alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
+    private AtomicBoolean mRunning;
+
+    private boolean airplaneMode = false;
+
+	private float alarmTriggerSensitivity = SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
 	private int alarmWindow = 30;
 
 	final float alpha = 0.8f;
@@ -124,16 +136,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			final String action = intent.getAction();
-			if (action.equals(POKE_SYNC_CHART)) {
-				final Intent i = new Intent(SleepActivity.SYNC_CHART);
-				i.putExtra(SLEEP_DATA, sleepData);
-				i.putExtra(StartSleepReceiver.EXTRA_ALARM, alarmTriggerSensitivity);
-				i.putExtra(EXTRA_ALARM_WINDOW, alarmWindow);
-				i.putExtra(StartSleepReceiver.EXTRA_USE_ALARM, useAlarm);
-				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
-				i.putExtra(StartSleepReceiver.EXTRA_FORCE_SCREEN_ON, forceScreenOn);
-				sendBroadcast(i);
-			} else if (action.equals(STOP_AND_SAVE_SLEEP)) {
+            if (action.equals(STOP_AND_SAVE_SLEEP)) {
 				final Intent saveIntent = addExtrasToSaveSleepIntent(new Intent(
 						SleepMonitoringService.this, SaveSleepActivity.class));
 				startActivity(saveIntent);
@@ -147,8 +150,13 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 					}
 				} catch (final NullPointerException npe) {
 					// there are no enabled alarms
-				}
-				stopSelf();
+                    Log.d(TAG, "No enabled alarms.");
+                }
+				createSaveSleepNotification();
+                if (!mRunning.compareAndSet(true, false)) {
+                    Log.d(TAG, "Asked to stop and save sleep when not running.");
+                }
+                stopSelf();
 			} else {
 				if (action.equals(Alarms.CANCEL_SNOOZE)) {
 					final long now = System.currentTimeMillis();
@@ -161,10 +169,14 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 						}
 					} catch (final NullPointerException npe) {
 						// there are no enabled alarms
+                        Log.d(TAG, "No enabled alarms.");
 					}
 				}
 				createSaveSleepNotification();
-				stopSelf();
+                if (!mRunning.compareAndSet(true, false)) {
+                    Log.d(TAG, "Asked to cancel snooze when not running.");
+                }
+                stopSelf();
 			}
 		}
 	};
@@ -206,13 +218,13 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	private void createSaveSleepNotification() {
 		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-		final int icon = R.drawable.home_btn_sleep_pressed;
+		final int icon = R.drawable.ic_stat_notify_save;
 		final CharSequence tickerText = getText(R.string.notification_save_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
 		final Notification notification = new Notification(icon, tickerText, when);
 
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		//notification.flags = Notification.FLAG_AUTO_CANCEL;
 
 		final Context context = getApplicationContext();
 		final CharSequence contentTitle = getText(R.string.notification_save_sleep_title);
@@ -229,7 +241,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	}
 
 	private Notification createServiceNotification() {
-		final int icon = R.drawable.icon_small;
+		final int icon = R.drawable.ic_stat_notify_track;
 		final CharSequence tickerText = getText(R.string.notification_sleep_ticker);
 		final long when = System.currentTimeMillis();
 
@@ -276,17 +288,18 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 	@Override
 	public IBinder onBind(final Intent intent) {
-		return null;
+		return mBinder;
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		final IntentFilter filter = new IntentFilter(Alarms.ALARM_DISMISSED_BY_USER_ACTION);
+        mRunning = new AtomicBoolean();
+
+        final IntentFilter filter = new IntentFilter(Alarms.ALARM_DISMISSED_BY_USER_ACTION);
 		filter.addAction(Alarms.ALARM_SNOOZE_CANCELED_BY_USER_ACTION);
 		filter.addAction(STOP_AND_SAVE_SLEEP);
-		filter.addAction(POKE_SYNC_CHART);
 
 		registerReceiver(serviceReceiver, filter);
 
@@ -298,7 +311,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 	@Override
 	public void onDestroy() {
 
-		unregisterAccelerometerListener();
+        Log.d(TAG, "Destroying sleep monitoring service.");
+
+        unregisterAccelerometerListener();
 
 		WakeLockManager.release("sleepMonitoring");
 
@@ -344,6 +359,7 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 							} catch (IllegalStateException ise) {
 								// user stopped monitoring really quickly after
 								// starting.
+                                Log.d(TAG, "User stopped monitoring quickly after starting.");
 							}
 							gravity[0] = event.values[0];
 							gravity[1] = event.values[1];
@@ -372,8 +388,10 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId) {
-		if (intent != null && startId == 1) {
-			testModeRate = intent.getIntExtra("testModeRate", Integer.MIN_VALUE);
+        if (intent != null && mRunning.compareAndSet(false, true)) {
+            Log.d(TAG, "Starting sleep monitoring service: " + startId);
+
+            testModeRate = intent.getIntExtra("testModeRate", Integer.MIN_VALUE);
 
 			updateInterval = testModeRate == Integer.MIN_VALUE ? intent.getIntExtra("interval",
 					INTERVAL) : testModeRate;
@@ -381,8 +399,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 			sensorDelay = intent.getIntExtra(StartSleepReceiver.EXTRA_SENSOR_DELAY,
 					SensorManager.SENSOR_DELAY_FASTEST);
 
-			alarmTriggerSensitivity = intent.getDoubleExtra(StartSleepReceiver.EXTRA_ALARM,
-					SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+			alarmTriggerSensitivity = intent.getFloatExtra(
+                StartSleepReceiver.EXTRA_ALARM,
+                SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 			useAlarm = intent.getBooleanExtra(StartSleepReceiver.EXTRA_USE_ALARM, false);
 			alarmWindow = intent.getIntExtra(StartSleepReceiver.EXTRA_ALARM_WINDOW, 0);
@@ -418,10 +437,31 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 				}
 			}.execute();
 		}
-		return startId;
+
+		return START_STICKY;
 	}
 
-	private void registerAccelerometerListener() {
+    public float getAlarmTriggerSensitivity() {
+        return alarmTriggerSensitivity;
+    }
+
+    public int getAlarmWindow() {
+        return alarmWindow;
+    }
+
+    public List<PointD> getData() {
+        return sleepData;
+    }
+
+    public boolean getUseAlarm() {
+        return useAlarm;
+    }
+
+    public boolean getForceScreenOn() {
+        return forceScreenOn;
+    }
+
+    private void registerAccelerometerListener() {
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
 		sensorManager.registerListener(this,
@@ -479,4 +519,14 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 		final SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		sensorManager.unregisterListener(this);
 	}
+
+    /**
+     * An implementation of a binder that merely hands off the service its running within.
+     */
+    public class ServiceBinder extends Binder {
+        /** Return the service. */
+        public SleepMonitoringService getService() {
+            return SleepMonitoringService.this;
+        }
+    }
 }

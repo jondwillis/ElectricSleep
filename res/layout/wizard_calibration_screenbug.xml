@@ -1,18 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:indeterminateBehavior="cycle"
-        android:indeterminateOnly="true" >
+    <com.androsz.electricsleepbeta.widget.SafeViewFlipper
+      android:id="@+id/content_flipper"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:inAnimation="@android:anim/fade_in"
+      android:outAnimation="@android:anim/fade_out">
 
-    </ProgressBar>
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dip" >
 
-</LinearLayout>
+            <TextView
+              style="@style/TextHeader"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/check_your_screen_settings" />
+
+            <TextView
+              style="@style/TextBulleted"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/some_android_devices_will_prevent_this_app_from_working_while_the_screen_is_off_" />
+
+            <TextView
+              style="@style/TextBulleted"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/to_detect_if_this_occurs_on_your_device_put_your_device_in_standby_mode_usually_by_quickly_pressing_the_power_button_" />
+
+            <TextView
+              style="@style/TextBulleted"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_" />
+
+            <TextView
+              android:id="@+id/status_text"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical|center_horizontal|center"
+              android:text="@string/notification_screenbug_ticker" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:padding="8dip" >
+
+            <TextView
+              style="@style/TextHeader"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/standby_test_results"
+              />
+
+            <TextView
+              style="@style/TextBody"
+              android:id="@+id/standby_test_results"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/completed_standby_test"
+              />
+
+            <TextView
+              style="@style/TextBody"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/press_next_to_continue"
+              />
+        </LinearLayout>
+    </com.androsz.electricsleepbeta.widget.SafeViewFlipper>
+</ScrollView>

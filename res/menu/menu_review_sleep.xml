@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_item_export_sleep_record"
-        android:icon="@android:drawable/ic_menu_share"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/export"/>
+        android:id="@+id/menu_item_share_sleep_record"
+        android:icon="@drawable/ic_menu_share"
+        android:showAsAction="ifRoom"
+        android:title="@string/share"/>
 
     <item
         android:id="@+id/menu_item_delete_sleep_record"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:showAsAction="always|withText"
+        android:icon="@drawable/ic_menu_delete"
+        android:showAsAction="never"
         android:title="@string/delete"/>
 
 </menu>

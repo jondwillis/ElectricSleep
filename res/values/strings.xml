@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
-    <string name="sleep_efficiency">Sleep Efficiency</string>
+    <string name="title_rate">Rate</string>
+    <string name="title_version">Version</string>
+    <string name="calendar">Calendar</string>
+    <string name="times_disrupted">Times Disrupted</string>
+    <string name="total_averages">Total Averages</string>
+    <string name="total_recording_time">Total Recording Time</string>
+    <string name="track">Track</string>
+    <string name="history">History</string>
+    <string name="alarms">Alarms</string>
+    <string name="sleep_score">Sleep Score</string>
+    <string name="to_get_started_tap_the_track_button">To get started, tap the Track button.</string>
     <string name="morning_feel">Morning Feel</string>
     <string name="oops_there_was_error_while_generating_image_for_sharing">Oops, there was an error generating image of sleep for sharing.</string>
     <string name="unfortunately_no_sleep_record_was_available_for_sharing">Unfortunately, no sleep record was available for sharing</string>
     <string name="i_am_sorry_but_cannot_share_zeo_sleep_without_sdcard">I\'m sorry but sharing Zeo sleep information requires an SD card be present in your phone (to share the image with other apps).</string>
     <string name="see_how_i_slept_on">See how I slept on</string>
-    <string name="try_out_zeo">Try out Zeo: www.myZeo.com</string>
-    <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT PRESS
-		ANYTHING.</string>
-    <string name="legend_light_sleep_trigger">Light Sleep Trigger</string>
+    <string name="download_sleep_101_for_free">Download ElectricSleep for free at: <a href="www.myZeo.com/ElectricSleep">www.myZeo.com/ElectricSleep</a></string>
+    <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT leave this screen.</string>
+    <string name="legend_light_sleep_trigger">SmartWake Lite Trigger</string>
     <string name="legend_movement">Movement</string>
     <string name="warming_up">Warming up sensors, please wait.</string>
     <string name="go_into_standy">Press your device\'s standby button</string>
-    <string name="calibrate_directions_force_screen_on"><li>
-			A bug exists on some devices that prevents the accelerometer from
-			reporting changes while the screen is off.
-		</li>
-		\n
-		<li>
-			When prompted, put your device in standby and wait up to 10
-			seconds.
-		</li>
-		\n
-		<li>
-			Your screen will be automatically turned back on. Unlock your
-			phone if necessary.
-		</li>
-		\n
-		<li>Press next to begin.</li></string>
-    <string name="calibrate_description_force_screen_on"><b>Goal:</b>
-		Make sure that Force Screen On is enabled for devices that need it.
-	</string>
+    <string name="standby_test_results">Standby Test Results</string>
+    <string name="completed_standby_test">Completed standby test.</string>
+    <string name="identified_that_android_device_must_be_on">We\'ve determined that you cannot put your device in standby mode during sleep. To lower power consumption and to protect your screen, we\'ve enabled a dimming screensaver.</string>
+    <string name="identified_screen_can_be_turned_off">Good news: we\'ve determined that you can put your device in standby mode while you track your sleep.</string>
+    <string name="movement_calibration_instructions">Movement Calibration Instructions</string>
+    <string name="calibrate_movement_sensitivity">Calibrate Movement Sensitivity</string>
+    <string name="calibrate_directions_force_screen_on"><li>A bug exists on some devices that prevents the accelerometer from
+reporting changes while the screen is off.</li>\n<li>When prompted, put your device in standby and wait up to 10
+seconds.</li>\n<li>Your screen will be automatically turned back on. Unlock your
+phone if necessary.</li>\n<li>Press next to begin.</li></string>
+    <string name="calibrate_description_force_screen_on"><b>Goal:</b>Make sure that Force Screen On is enabled for devices that need it.</string>
     <string name="calibrate_title_force_screen_on">Force Screen On Calibration</string>
+    <string name="press_next_to_continue">Press next to continue.</string>
     <string name="analysis_y_axis_values">Y Axis Values</string>
     <string name="analysis_x_axis_values">X Axis Values</string>
     <string name="list">List</string>
     <string name="chart_view">Sleep Score Over Time</string>
     <string name="changes_made_to_these_settings">Changes to these settings will not take effect
-		during this session.</string>
+during this session.</string>
     <string name="gfx_designers">Graphic Designers</string>
     <string name="project_lead">Project Lead</string>
     <string name="developers">Developers</string>
     <string name="querying_sleep_database">Querying sleep database...</string>
-    <string name="share_electricsleep">Share SleepMate</string>
+    <string name="share_electricsleep">Share ElectricSleep</string>
     <string name="title_sleep_switches">Sleep Switches</string>
-    <string name="fell_asleep">Time to Fall Asleep</string>
+    <string name="time_to_fall_asleep">Time to Fall Asleep</string>
     <string name="note">Note</string>
+    <string name="notes">Notes</string>
     <string name="spikes">Spikes</string>
     <string name="duration">Duration</string>
     <string name="analysis">Analysis</string>
@@ -58,21 +60,17 @@
     <string name="tags_title">Tags (optional)</string>
     <string name="tags_hint">dreams, caffeine usage, exercise, etc."</string>
     <string name="summary_pref_sensor_delay">Try changing this if you\'re having problems with
-		sleep movement collection.</string>
+sleep movement collection.</string>
     <string name="title_pref_sensor_delay">Sensor Delay</string>
     <string name="how_review">Your sleep movement graph is saved for later
-		review. Analysis of sleep will be available for all records.</string>
+review. Analysis of sleep will be available for all records.</string>
     <string name="how_wake">Wake up! (With help of smart alarm or naturally.)</string>
-    <string name="how_sleep">
-		Place your Android device within a foot or two of you on your bed and
-		press sleep.
-		<br />
+    <string name="how_sleep">Place your Android device within a foot or two of you on your bed and
+press sleep.<br />
 <br />
-
-		Go to sleep!
-	</string>
+Go to sleep!</string>
     <string name="how_configure">Configure: set an optional smart alarm, adjust
-		sensitivity of accelerometer and more.</string>
+sensitivity of accelerometer and more.</string>
     <string name="title_report">Email Developer</string>
     <string name="summary_pref_analytics_off">Anonymous usage will not be uploaded</string>
     <string name="summary_pref_analytics_on">Anonymous usage will be uploaded</string>
@@ -85,32 +83,30 @@
     <string name="calibrate">Calibrate</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
-    <string name="account_creation">SleepMate Account Creation</string>
+    <string name="account_creation">ElectricSleep Account Creation</string>
     <string name="skip_tutorial">Skip Tutorial</string>
-    <string name="electricsleep_about">How SleepMate Works</string>
-    <string name="electricsleep_description">
-		\tSleepMate is a new way to sleep. After you
-		place your Android device within a foot or two of you on your
-		bed,
-		press sleep and
-		SleepMate
-		will record data from your device\'s
-		accelerometer all
-		night.\n\n
-		\tThe movements it records signify
-		sleep
-		cycles. Aside
-		from
-		providing analysis and insight into your sleep
-		patterns, you can
-		set
-		an alarm to wake you during light sleep, so you
-		wake more easily
-		than
-		with a traditional alarm.
-	</string>
+    <string name="electricsleep_about">How ElectricSleep Works</string>
+    <string name="electricsleep_description">\tElectricSleep is a new way to sleep. After you
+place your Android device within a foot or two of you on your
+bed,
+press sleep and
+ElectricSleep
+will record data from your device\'s
+accelerometer all
+night.\n\n
+\tThe movements it records signify
+sleep
+cycles. Aside
+from
+providing analysis and insight into your sleep
+patterns, you can
+set
+an alarm to wake you during light sleep, so you
+wake more easily
+than
+with a traditional alarm.</string>
     <string name="title_review_sleep">Review Sleep</string>
-    <string name="title_welcome">Welcome to SleepMate!</string>
+    <string name="title_welcome">Welcome to ElectricSleep!</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="ok">OK</string>
@@ -119,143 +115,104 @@
     <string name="about">About</string>
     <string name="welcome_tutorial">Welcome Tutorial</string>
     <string name="summary_pref_force_screen_off">Screen will be allowed to turn off during sleep.
-		If
-		you are having problems recording sleep throughout the night, enable
-		this.</string>
+If
+you are having problems recording sleep throughout the night, enable
+this.</string>
     <string name="summary_pref_force_screen_on">Screen will be forced on and dimmed during sleep.
-		If you are having problems recording sleep throughout the night,
-		enable this.</string>
+If you are having problems recording sleep throughout the night,
+enable this.</string>
     <string name="title_pref_force_screen">Force Screen On</string>
     <string name="summary_pref_airplane_mode_off">Airplane mode will not be automatically enabled
-		when sleeping</string>
+when sleeping</string>
     <string name="summary_pref_airplane_mode_on">Airplane mode will be automatically enabled when
-		sleeping</string>
+sleeping</string>
     <string name="title_pref_airplane_mode">Airplane Mode Sleep</string>
     <string name="summary_pref_silent_mode_off">Silent mode will not be automatically enabled
-		when
-		sleeping</string>
+when
+sleeping</string>
     <string name="summary_pref_silent_mode_on">Silent mode will be automatically enabled when
-		sleeping</string>
+sleeping</string>
     <string name="title_pref_silent_mode">Silent Mode Sleep</string>
     <string name="title_misc">Miscellaneous</string>
     <string name="rate_title">Rate how easily you awoke and how refreshed you
-		feel:</string>
+feel:</string>
     <string name="save">Save</string>
     <string name="discard">Discard</string>
-    <string name="home_last_sleep_title_text_empty">...</string>
-    <string name="home_last_sleep_title_text">Most Recent</string>
-    <string name="home_review_title_text_empty">No sleep to review...</string>
+    <string name="most_recent">Most Recent</string>
     <string name="home_review_title_text">Sleep Averages</string>
     <string name="to">to</string>
     <string name="summary_pref_calibration">Tap to calibrate movement sensitivities
-		automatically</string>
+automatically</string>
     <string name="title_pref_calibration">Calibration Wizard</string>
     <string name="pref_calibration">calibrationWizard</string>
-    <string name="summary_pref_alarms">Manage SleepMate\'s built-in alarms - these
-		are
-		persistent even if Light Sleep Pre-Alarm is disabled.</string>
+    <string name="summary_pref_alarms">Manage ElectricSleep\'s built-in alarms - these
+are
+persistent even if SmartWake Lite is disabled.</string>
     <string name="preset">Preset:</string>
-    <string name="summary_pref_use_alarm_off">SleepMate will not try to wake you up *before*
-		the next enabled alarm in sleep mode</string>
-    <string name="summary_pref_use_alarm_on">SleepMate is set to try to wake you up
-		*before*
-		the next
-		enabled alarm in sleep mode</string>
-    <string name="title_pref_use_alarm">Light Sleep Pre-Alarm</string>
+    <string name="summary_pref_use_alarm_off">ElectricSleep will not try to wake you up *before*
+the next enabled alarm in sleep mode</string>
+    <string name="summary_pref_use_alarm_on">ElectricSleep is set to try to wake you up
+*before*
+the next
+enabled alarm in sleep mode</string>
+    <string name="title_pref_use_alarm">SmartWake Lite</string>
     <string name="monitoring_sleep">Monitoring Sleep</string>
     <string name="movement_level_during_sleep">"&lt;-deep| Sleep |light->"</string>
     <string name="search">Search</string>
     <string name="invalid_settings">Your calibration settings are invalid. Please
-		manually configure settings or run the Calibration Wizard.</string>
-    <string name="message_recommend_calibration">
-		\n\nIt is required that you run the Calibration
-		Wizard or manually
-		configure your Settings now.</string>
+manually configure settings or run the Calibration Wizard.</string>
+    <string name="message_recommend_calibration">\n\nIt is required that you run the Calibration
+Wizard or manually
+configure your Settings now.</string>
     <string name="message_prefs_not_compatible">Your preferences are not compatible with this
-		version of SleepMate. They have been reset to the latest default
-		values to prevent errors.</string>
-    <string name="message_not_calibrated">You have not yet calibrated SleepMate to work
-		on your device.</string>
+version of ElectricSleep. They have been reset to the latest default
+values to prevent errors.</string>
+    <string name="message_not_calibrated">You have not yet calibrated ElectricSleep to work
+on your device.</string>
     <string name="alarm_trigger_sensitivity_set_to">Alarm trigger sensitivity set to: </string>
     <string name="move_once">Move once.</string>
     <string name="start_moving">Start moving.</string>
     <string name="remain_still">Remain still.</string>
     <string name="calibration_failed">Calibration failed. Try again.</string>
     <string name="starting_in">Starting in 5 seconds</string>
-    <string name="calibrate_title_results">Calibration Results</string>
+    <string name="calibrate_title_results">Calibration Complete</string>
     <string name="calibrate_directions_alarm"><li>
-
-			A window will appear with a
-			            <b>graph that
-				shows your movement</b>
-
-			, and a
-			            <b>slider that controls a white threshold line</b>
-
-			.
-		</li>
-		\n
-		<li>
-
-			Adjust the slider so that when you
-			            <b>move gently</b>
-
-			, the
-			            <b>green line goes just above the white line</b>
-
-			.
-		</li>
-		\n
-		<li>
-
-			Also ensure that when you
-			            <b>are still</b>
-
-			, the
-			            <b>green line is significantly below the white line.</b>
-        </li>
-		\n
-		<li>Press next to begin.</li></string>
-    <string name="calibrate_description_alarm"><b>Goal:</b>
-		identify the amount of
-		movement that signifies that you are in light
-		sleep and set off alarms if enabled.
-	</string>
+A window will appear with a                                    <b>graph that
+shows your movement</b>
+, and a                                    <b>slider that controls a white threshold line</b>
+.</li>\n<li>
+Adjust the slider so that when you                                    <b>move gently</b>
+, the                                    <b>green line goes just above the white line</b>
+.</li>\n<li>
+Also ensure that when you                                    <b>are still</b>
+, the                                    <b>green line is significantly below the white line.</b>
+        </li>\n<li>Press next to begin.</li></string>
+    <string name="calibrate_description_alarm"><b>Goal:</b>identify the amount of
+movement that signifies that you are in light
+sleep and set off alarms if enabled.</string>
     <string name="calibrate_title_alarm">Calibrate Light Sleep Sensitivity</string>
-    <string name="calibrate_description_placement">
-		SleepMate uses your device\'s accelerometer to record movement
-		during sleep. As such, your device must move slightly when you move
-		during the
-		night.\n\n
-		<li>
+    <string name="calibrate_description_placement">ElectricSleep uses your device\'s accelerometer to record movement
+during sleep. As such, your device must move slightly when you move
+during the
+night.\n\n<li>
             <b>DO</b>
-
-			place your device on within a foot or two of your body on your bed,
-			couch, etc. where it will absorb vibrations as you move...
-		</li>
-		\n
-		<li>
+place your device on within a foot or two of your body on your bed,
+couch, etc. where it will absorb vibrations as you move...</li>\n<li>
             <b>DO NOT</b>
-
-			place your device near edges, very far your body, or
-			cover
-			it if it is
-			charging.
-		</li>
-		\n
-		<li>
-
-			At this time,
-			            <b>situate yourself and your device exactly as you would when
-				sleeping.</b>
+place your device near edges, very far your body, or
+cover
+it if it is
+charging.</li>\n<li>
+At this time,                                    <b>situate yourself and your device exactly as you would when
+sleeping.</b>
         </li></string>
     <string name="calibrate_title_placement">Device Placement</string>
     <string name="calibrate_title_welcome">Movement Calibration Wizard</string>
     <string name="finish">Finish</string>
     <string name="back">Back</string>
     <string name="next">Next</string>
-    <string name="app_name">SleepMate</string>
-    <string name="description_logo">SleepMate</string>
+    <string name="app_name">ElectricSleep</string>
+    <string name="description_logo">ElectricSleep</string>
     <string name="description_home">Home</string>
     <string name="description_search">Search</string>
     <string name="description_map">Map</string>
@@ -263,62 +220,30 @@
     <string name="description_share">Share</string>
     <string name="description_export">Export</string>
     <string name="description_star">Star</string>
-    <string name="title_search_query">
-		Search for \'
-		<xliff:g id="query">%1$s</xliff:g>
-		\'
-	</string>
-    <string name="title_sleep">Sleep</string>
+    <string name="tracking">Tracking</string>
+    <string name="track_sleep">Track Sleep</string>
     <string name="title_calibrate">Calibration</string>
     <string name="title_settings">Settings</string>
-    <string name="title_history">History</string>
-    <string name="search_label">SleepMate</string>
+    <string name="search_label">ElectricSleep</string>
     <string name="search_hint">Date of Sleep</string>
     <string name="title_group_functions">Functions</string>
     <string name="title_group_statistics">Statistics</string>
     <string name="title_group_configuration">Configuration</string>
-    <string name="title_home">Electric Sleep Home</string>
-    <string name="notification_sleep_ticker">SleepMate is monitoring movements</string>
-    <string name="notification_sleep_title">SleepMate is active</string>
+    <string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
+    <string name="notification_sleep_title">ElectricSleep is active</string>
     <string name="notification_sleep_text">Select to interrupt or view progress</string>
     <string name="dialog_wait_for_sleep_data_message">Sleep well! (this area will display a chart
-		throughout the night)</string>
+throughout the night)</string>
     <string name="title_pref_alarm_trigger_sensitivity">Light Sleep Sensitivity</string>
     <string name="summary_alarm_trigger_sensitivity">Level of movement that signifies light sleep will
-		trigger alarm
-		to go off.</string>
+trigger alarm
+to go off.</string>
     <string name="exit">Exit</string>
-    <string name="calibrate_description_welcome">
-		This wizard will calibrate SleepMate. The process takes less than
-		a
-		minute and requires that you briefly simulate your sleeping
-		conditions.\nWhy?\n
-		<li>
-
-			There are many
-			            <b>different</b>
-
-			Android devices.
-		</li>
-		\n
-		<li>
-
-			There are even more
-			            <b>places to
-				sleep.</b>
-        </li>
-		\n
-		<li>
-
-			SleepMate needs to
-			            <b>tune itself</b>
-
-			on your unique device so it can
-			            <b>function correctly.</b>
-        </li></string>
-    <string name="calibrating">Calibrating...</string>
+    <string name="calibrate_description_welcome">This wizard helps you calibrate ElectricSleep to your unique sleeping conditions. The process takes less than a minute and is recommended because:</string>
+    <string name="calibrate_description_welcome_b1">There are many different Android devices.</string>
+    <string name="calibrate_description_welcome_b2">There are even more places to sleep.</string>
+    <string name="calibrate_description_welcome_b3">ElectricSleep works best when calibrated to your unique situation.</string>
     <string name="settings_description">Sleep results</string>
-    <string name="search_instructions">Tap search to search for previous sleep results</string>
     <string name="no_results">There is no saved sleep.</string>
 
     <string-array name="array_prefs_sensor_delay_friendly">
@@ -352,11 +277,8 @@
         <item>2 hours</item>
     </string-array>
 
-    <string name="title_pref_alarm_window">Pre-Alarm Window</string>
-    <string name="summary_pref_alarm_window">The window of time before the next enabled alarm
-		is
-		set to go
-		off during which SleepMate will try to wake you.</string>
+    <string name="title_pref_alarm_window">SmartWake Lite Window</string>
+    <string name="summary_pref_alarm_window">The window of time before the next enabled alarm which SmartWake Lite will be active</string>
     <string name="stop">Stop</string>
     <string name="donate">Donate</string>
     <string name="notification_save_sleep_title">Save sleep</string>
@@ -429,135 +351,79 @@
 
     <!--
          Alarm Alert screen: this message is shown after an alarm rung unattended
-		for a number of minutes. It tells the user that the alarm has been silenced.
+for a number of minutes. It tells the user that the alarm has been silenced.
     -->
-    <string name="alarm_alert_alert_silenced">
-		Alarm silenced after
-		<xliff:g id="minutes">%d</xliff:g>
-		minutes
-	</string>
+    <string name="alarm_alert_alert_silenced">Alarm silenced after<xliff:g id="minutes">%d</xliff:g> minutes</string>
 
     <!-- Button labels on the alarm dialog: Snooze -->
     <string name="alarm_alert_snooze_text">Snooze</string>
 
     <!--
          Toast that appears after Alarm is snoozed from the Alarm dialog. Says
-		the alarm will snooze for xxx minutes.
+the alarm will snooze for xxx minutes.
     -->
-    <string name="alarm_alert_snooze_set">
-		Snoozing for
-		<xliff:g id="minutes">%d</xliff:g>
-		minutes.
-	</string>
+    <string name="alarm_alert_snooze_set">Snoozing for<xliff:g id="minutes">%d</xliff:g> minutes.</string>
 
     <!--
          0: nothing 1: days 2: hours 3: days hours 4: minutes 5: days minutes
-		6: hours minutes 7: days hours minutes
+6: hours minutes 7: days hours minutes
     -->
     <skip />
 
     <!-- Alarm confirmation toast: Describes how long from now until alarm fires -->
     <string-array name="alarm_set">
         <item>This alarm is set for less than 1 minute from now.</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			and
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			and
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			and
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
-        <item>
-			This alarm is set for
-			<xliff:g id="DAYS" example="2 days">%1$s</xliff:g>
-			,
-			<xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>
-			, and
-			<xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g>
-			from now.
-		</item>
+        <item>This alarm is set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> from now.</item>
+        <item>This alarm is set for <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> from now.</item>
+        <item>This alarm is set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> and <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>from now.</item>
+        <item>This alarm is set for <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
+        <item>This alarm is set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g> and <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
+        <item>This alarm is set for <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g> and <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
+        <item>This alarm is set for <xliff:g id="DAYS" example="2 days">%1$s</xliff:g>, <xliff:g id="HOURS" example="2 hours">%2$s</xliff:g>, and <xliff:g id="MINUTES" example="2 minutes">%3$s</xliff:g> from now.</item>
     </string-array>
 
     <!-- Alarm confirmation toast: singular day -->
     <string name="day">"1 day"</string>
 
     <!-- Alarm confirmation toast: plural days -->
-    <string name="days">
-		"
-		<xliff:g id="days">%s</xliff:g>
-		days"
-	</string>
+    <string name="days">"<xliff:g id="days">%s</xliff:g> days"</string>
 
     <!-- Alarm confirmation toast: singular hour -->
     <string name="hour">1 hour</string>
 
     <!-- Alarm confirmation toast: plural hours -->
-    <string name="hours"><xliff:g id="hours">%s</xliff:g>
-		hours
-	</string>
+    <string name="hours"><xliff:g id="hours">%s</xliff:g> hours</string>
 
     <!-- Alarm confirmation toast: singular minute -->
     <string name="minute">"1 minute"</string>
 
     <!-- Alarm confirmation toast: plural minutes -->
-    <string name="minutes">
-		"
-		<xliff:g id="minutes">%s</xliff:g>
-		minutes"
-	</string>
+    <string name="minutes">"<xliff:g id="minutes">%s</xliff:g> minutes"</string>
 
     <!--
          Repeat options that appear under an alarm on main Alarm Clock screen
-		to identify repetition schedule: special case for when the alarm is set to
-		repeat every day
+to identify repetition schedule: special case for when the alarm is set to
+repeat every day
     -->
     <string name="every_day">every day</string>
 
     <!--
          Repeat options that appear under an alarm on main Alarm Clock screen
-		to identify repetition schedule: special case for when the alarm is set to
-		never repeat
+to identify repetition schedule: special case for when the alarm is set to
+never repeat
     -->
     <string name="never">Never</string>
 
     <!--
          Repeat options that appear under an alarm on main Alarm Clock screen
-		to identify repetition schedule: concatenate days with this character, i.e.
-		"Mon, Tue, Wed"
+to identify repetition schedule: concatenate days with this character, i.e.
+"Mon, Tue, Wed"
     -->
     <string name="day_concat">", "</string>
 
     <!--
          Appears at the top of the Clock Picker screen: Tell user to select
-		a clock to display
+a clock to display
     -->
     <string name="clock_instructions">Select a clock to display.</string>
 
@@ -569,8 +435,8 @@
 
     <!--
          Setting title for whether the alarm should play in silent mode. Usually,
-		silent mode only affects the ringer, but this setting will make the alarms
-		respect silent mode too.
+silent mode only affects the ringer, but this setting will make the alarms
+respect silent mode too.
     -->
     <string name="alarm_in_silent_mode_title">Alarm in silent mode</string>
 
@@ -582,7 +448,7 @@
 
     <!--
          Entries listed in the ListPreference when invoking the snooze duration
-		preference.
+preference.
     -->
     <string-array name="snooze_duration_entries">
         <item>5 minutes</item>
@@ -595,7 +461,7 @@
 
     <!--
          Values that are retrieved from the ListPreference. These must match
-		the snooze_duration_entries above.
+the snooze_duration_entries above.
     -->
     <string-array name="snooze_duration_values">
         <item>5</item>
@@ -628,16 +494,10 @@
     <string name="alarm_notify_text">Select to snooze or dismiss this alarm.</string>
 
     <!-- Text to display in the notification ticker and label -->
-    <string name="alarm_notify_snooze_label"><xliff:g id="label">%s</xliff:g>
-		(snoozed)
-	</string>
+    <string name="alarm_notify_snooze_label"><xliff:g id="label">%s</xliff:g> (snoozed)</string>
 
     <!-- Text to display in the notification when the alarm has been snoozed -->
-    <string name="alarm_notify_snooze_text">
-		Alarm set for
-		<xliff:g id="time">%s</xliff:g>
-		. Select to cancel.
-	</string>
+    <string name="alarm_notify_snooze_text">Alarm set for <xliff:g id="time">%s</xliff:g>. Select to cancel.</string>
 
     <!-- Title of the setting to change the volume/camera button behavior. -->
     <string name="volume_button_setting_title">Volume and Camera</string>
@@ -646,8 +506,7 @@
     <string name="volume_button_dialog_title">Button effect</string>
 
     <!-- The summary of the side button setting. -->
-    <string name="volume_button_setting_summary">Set what these buttons do when pressed during an
-		alarm</string>
+    <string name="volume_button_setting_summary">Set what these buttons do when pressed during an alarm</string>
 
     <!-- Entries listed in the setting for the side-button action. -->
     <string-array name="volume_button_setting_entries">
@@ -666,23 +525,16 @@
     <!-- Accessibility labels for Clock activity buttons -->
     <skip />
 
-    <string name="alarm_button_description">Alarms</string>
-    <string name="gallery_button_description">Gallery</string>
-    <string name="music_button_description">Music</string>
-    <string name="nightmode_button_description">Dim</string>
-    <string name="home_button_description">Launcher</string>
-    <string name="desk_clock_button_description">Clock Display</string>
-
     <!-- A short representation of charging information, e.g "34%" -->
     <string name="battery_charging_level"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
     <!--
          What to show the user if the weather widget exists but fails to respond.
-		This is a sign of an error; if the weather widget is not present on the device,
-		we show nothing at all.
+This is a sign of an error; if the weather widget is not present on the device,
+we show nothing at all.
     -->
     <string name="weather_fetch_failure">Weather information currently unavailable.</string>
-    <string msgid="9161438664257429372" name="menu_item_dock_settings">Dock settings</string>
+    <string name="menu_item_dock_settings" msgid="9161438664257429372">Dock settings</string>
     <!-- alarmclock end -->
     <plurals name="hour">
         <item quantity="one">%d hour</item>
@@ -707,37 +559,23 @@
     <string name="no_title_label">(No title)</string>
     <!--
          This string is used in a popup window when there are more events than
-		can be displayed so it displays the events that it can and then displays
-		this line so that the user knows how many more events there are that could
-		not be displayed. For example, if there are 6 events but we can only display
-		4 events then we will display the first 4 events and then show 'plus 2 more'
-		to indicate that there are two more events that we could not display because
-		of lack of room.
+can be displayed so it displays the events that it can and then displays
+this line so that the user knows how many more events there are that could
+not be displayed. For example, if there are 6 events but we can only display
+4 events then we will display the first 4 events and then show 'plus 2 more'
+to indicate that there are two more events that we could not display because
+of lack of room.
     -->
-    <string name="plus_N_more">
-		(plus
-		<xliff:g id="more_count">%d</xliff:g>
-		more \u2026)
-	</string>
-    <string name="sleep_dim">Your device does not support turning its screen
-		off
-		during sleep. The screen must stay on but will be dimmed.</string>
-    <string name="sleep_plugged_in">You are not connected to a charger. It is highly
-		recommended to plug in, or elsewise enter airplane mode to conserve
-		energy.</string>
-    <string name="not_bound_to_any_alarms">Not bound to any alarms.</string>
-    <string name="you_will_be_awoken_before">
-		Smart alarm will go off between
-		<xliff:g id="pre">%s</xliff:g>
-		and
-		<xliff:g id="post">%s</xliff:g></string>
-    <string name="sleep_no_alarm">No alarm has been set. SleepMate will not wake
-		you up.</string>
+    <string name="plus_N_more">(plus<xliff:g id="more_count">%d</xliff:g> more \u2026)</string>
+    <string name="sleep_dim">Do not turn the screen off.</string>
+    <string name="sleep_plugged_in">You are not connected to a charger.</string>
+    <string name="alarm_status_range"><xliff:g id="pre">%s</xliff:g> - <xliff:g id="post">%s</xliff:g></string>
+    <string name="sleep_no_alarm">ElectricSleep will not wake you up.</string>
     <string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
     <string name="export">Export</string>
     <string name="export_all">Export All</string>
     <string name="delete_all">Delete All</string>
-    <string name="failed_to_open_market">Failed to open market. Your Android Market may not be up to date.</string>
+    <string name="failed_to_open_market">Failed to open market. Your Play Market may not be up to date.</string>
     <string name="rate">Rate</string>
     <string name="sensors">Sensors</string>
     <string name="accelerometer">Accelerometer</string>
@@ -745,8 +583,43 @@
     <string name="your_rating">Your Rating</string>
     <string name="developer_email_body">Please indicate the nature of this email (Bug, Request, Help, Other):\n</string>
     <string name="zeo_message_two">Click \"Learn more about Zeo\" for information about how Zeo helps people take control of their sleep, and the Zeo Sleep Manager.</string>
-    <string name="notification_screenbug_ticker">Waiting for the phone to enter standby.</string>
-    <string name="welcome_to_electricsleep">Welcome to SleepMate</string>
-    <string name="development_is_now_supported_by">Development of SleepMate is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
-	<string name="rate_in_market">Rate SleepMate on the Android Market</string>
+    <string name="notification_screenbug_ticker">Waiting for the device to enter standby.</string>
+    <string name="welcome_to_electricsleep">Welcome to ElectricSleep</string>
+    <string name="development_is_now_supported_by">Development of ElectricSleep is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
+    <string name="rate_in_market">Rate ElectricSleep on the Play Market</string>
+    <string name="sleep_store">Sleep Store</string>
+    <string name="expert_advice">Expert Advice</string>
+    <string name="consultation">Consultation</string>
+    <string name="share">Share</string>
+    <string name="returning_users_paragraph_one">The same ElectricSleep that you know and love is still here, it was just given a little facelift.</string>
+    <string name="returning_users_paragraph_two">We plan on bringing you more features and a better sleep tracking experience as we continue making improvements to the app.</string>
+    <string name="welcome_paragraph_one">Place your Android device within a foot or two of you on your bed and start tracking.</string>
+    <string name="welcome_paragraph_two">ElectricSleep will provide analysis and insight into your sleep patterns. You can also set a SmartWake Lite alarm to help wake you up feeling more refreshed.</string>
+    <string name="welcome_how_track"><b>Track:</b> Press the Track icon and put your Android device about a foot from you on your bed to track your sleep.</string>
+    <string name="welcome_how_alarm"><b>Alarm:</b> Set a regular alarm, or try SmartWake Lite for a better morning.</string>
+    <string name="welcome_how_history"><b>History:</b> Your sleep movement graph and summary info is saved for you to review.</string>
+    <string name="welcome_how_settings">Adjust settings such as the SmartWake Lite alarm and tracking sensitivity by selecting \"Settings\" from the menu.</string>
+
+    <string name="adjust_the_slider_so_that_when_you_move_the_movement_line_orange_goes_just_above_the_white_calibration_line_">Adjust the slider so that when you move, the movement line (orange) goes just above the white calibration line.</string>
+    <string name="when_you_are_lying_still_the_orange_line_should_be_below_the_white_line_">When you are lying still, the orange line should be below the white line.</string>
+    <string name="check_your_screen_settings">Check Your Screen Settings</string>
+    <string name="some_android_devices_will_prevent_this_app_from_working_while_the_screen_is_off_">Some Android devices will prevent this app from working while the screen is off.</string>
+    <string name="to_detect_if_this_occurs_on_your_device_put_your_device_in_standby_mode_usually_by_quickly_pressing_the_power_button_">To detect if this occurs on your device, put your device in standby mode (usually by quickly pressing the power button).</string>
+    <string name="wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_">Gently move your device for 10 seconds or until your screen turns on and unlock if prompted.</string>
+    <string name="you_have_successfully_calibrated_sleep101_to_track_your_sleep_">You have successfully calibrated ElectricSleep to track your sleep.</string>
+    <string name="you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_">You may always re-calibrate if your sleep environment changes by choosing \'Calibrate\' from the menu.</string>
+    <string name="tracking_sleep">Tracking sleep...</string>
+    <string name="stop_tracking">Stop Tracking</string>
+    <string name="no_alarm">No Alarm</string>
+    <string name="sleep101_will_not_wake_you_up_">ElectricSleep will not wake you up.</string>
+    <string name="warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_">Warning: dim sleep mode can only occur on the Sleep screen.</string>
+    <string name="recording_time">Recording time <b>
+            <xliff:g id="time">%s</xliff:g>
+        </b></string>
+            <string name="sleep_LINEBREAK_score">Sleep\nScore</string>
+            <string name="there_s_nothing_here_to_get_started_track_some_sleep_">There\'s nothing here! To get started, track some sleep.</string>
+            <string name="not_using_smartwake_">ElectricSleep is not using SmartWake Lite.</string>
+            <string name="attempt_to_use_smartwake_">ElectricSleep will attempt to use SmartWake Lite.</string>
+            <string name="get_started">Get Started</string>
+
 </resources>

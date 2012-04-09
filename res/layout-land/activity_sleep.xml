@@ -1,94 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:animateLayoutChanges="true"
+    android:padding="6dip" >
 
     <ScrollView
         android:id="@+id/sleep_landscape_warnings"
-        android:layout_width="match_parent"
+        android:layout_width="180dip"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_weight="2"
-        android:padding="4dip" >
+        android:layout_alignParentLeft="true"
+        android:animateLayoutChanges="true" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/text_sleep_no_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:animateLayoutChanges="true"
-                android:drawableLeft="@drawable/exclamation"
-                android:gravity="left"
-                android:padding="5dp"
-                android:text="@string/sleep_no_alarm" />
-
-            <Button
+            <com.androsz.electricsleepbeta.widget.TintableButton
                 android:id="@+id/text_sleep_plugged_in"
-                android:layout_width="wrap_content"
+                style="@style/WarningButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:animateLayoutChanges="true"
-                android:drawableLeft="@drawable/exclamation"
-                android:gravity="left"
-                android:padding="5dp"
+                android:layout_margin="2dp"
+                android:gravity="left|center_vertical"
                 android:text="@string/sleep_plugged_in" />
 
-            <Button
+            <com.androsz.electricsleepbeta.widget.TintableButton
                 android:id="@+id/text_sleep_dim"
-                android:layout_width="wrap_content"
+                style="@style/WarningButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:animateLayoutChanges="true"
-                android:drawableLeft="@drawable/exclamation"
-                android:gravity="left"
-                android:padding="5dp"
+                android:layout_margin="2dp"
+                android:gravity="left|center_vertical"
                 android:text="@string/sleep_dim" />
+
+            <LinearLayout
+                android:id="@+id/layout_alarm_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/text_alarm_status"
+                    style="@android:style/TextAppearance.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dip"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/ic_alarm_none"
+                    android:drawablePadding="6dip"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:padding="2dip"
+                    android:text="@string/no_alarm"
+                    android:textColor="@color/text_light" />
+
+                <TextView
+                    android:id="@+id/text_alarm_status_sub"
+                    style="@android:style/TextAppearance.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dip"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:padding="2dip"
+                    android:text="@string/sleep101_will_not_wake_you_up_"
+                    android:textColor="@color/text_light" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <com.androsz.electricsleepbeta.widget.SleepChart
-        android:id="@+id/sleep_movement_chart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="4dip"
-        android:layout_weight="1"
-        android:animateLayoutChanges="true"
-        android:visibility="gone" />
+    <View
+        android:id="@+id/div"
+        android:layout_width="1dip"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/sleep_landscape_warnings"
+        android:background="@color/border_suggestions" />
 
-    <LinearLayout
-        android:id="@+id/wait_for_sleep_data"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center" >
+        android:layout_toRightOf="@id/div"
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/wait_for_sleep_data"
-            android:layout_width="wrap_content"
+            android:id="@+id/layout_tracking_progress"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:orientation="horizontal" >
 
             <ProgressBar
                 android:id="@+id/progress"
+                style="@style/TrackingProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:indeterminate="true" >
-            </ProgressBar>
+                android:indeterminate="true" />
 
             <TextView
+                style="@style/TextBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/dialog_wait_for_sleep_data_message" >
-            </TextView>
+                android:text="@string/tracking_sleep" />
         </LinearLayout>
-    </LinearLayout>
 
-</LinearLayout>
+        <com.androsz.electricsleepbeta.widget.SleepChart
+            android:id="@+id/sleep_movement_chart"
+            style="@style/SleepChart_Dark"
+            android:layout_width="match_parent"
+            android:layout_above="@id/button_tracking_stop"
+            android:layout_below="@id/layout_tracking_progress"
+            android:layout_margin="4dip"
+            electricsleepbeta:setScroll="false"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_tracking_stop"
+            style="@style/StopTrackingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClick"
+            android:text="@string/stop_tracking" />
+    </RelativeLayout>
+
+</RelativeLayout>

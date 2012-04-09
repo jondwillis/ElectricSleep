@@ -6,7 +6,7 @@
 	Unless required by applicable law or agreed to in writing, software distributed 
 	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
-	the specific language governing permissions and limitations under the License.
+	the specific language governing permissions and limitations under the License.
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,13 +20,13 @@
 		clock and the bar. 2. The normal checkbox has a really messed up layout. 
 		Using the button attribute produces a left-aligned image that has some kind 
 		of minimum height. If the bar is a checkbox, it is too tall and is clipped 
-		on the right.
+		on the right.
     -->
 
     <com.androsz.electricsleepbeta.alarmclock.DontPressWithParentLayout
         android:id="@+id/indicator"
         style="@style/alarm_list_left_column"
-        android:background="@drawable/clock_selector"
+        android:background="@null"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -35,23 +35,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/indicator_clock_onoff"
-            android:button="@null"
             android:clickable="false"
             android:duplicateParentState="true"
             android:focusable="false" />
-
-        <ImageView
-            android:id="@+id/bar_onoff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="4dip"
-            android:src="@drawable/ic_indicator_off" />
     </com.androsz.electricsleepbeta.alarmclock.DontPressWithParentLayout>
 
     <ImageView
-        android:layout_width="1px"
+        android:layout_width="1dp"
         android:layout_height="match_parent"
         android:paddingBottom="4dip"
         android:paddingTop="4dip"
@@ -60,7 +50,7 @@
 
     <!--
          A layout that displays the time. Shows time, am/pm (if 12-hour), and 
-		an optional line below, used for day/days of week
+		an optional line below, used for day/days of week
     -->
 
     <com.androsz.electricsleepbeta.alarmclock.DigitalClock

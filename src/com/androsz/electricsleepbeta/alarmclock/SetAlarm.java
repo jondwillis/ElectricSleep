@@ -21,7 +21,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -225,7 +224,7 @@ public class SetAlarm extends HostPreferenceActivity implements
 		// We have to do this to get the save/cancel buttons to highlight on
 		// their own.
 		getListView().setItemsCanFocus(true);
-		getListView().setBackgroundColor(getResources().getColor(R.color.background));
+		getListView().setBackgroundColor(getResources().getColor(R.color.background_dark));
 
 		// Attach actions to each button.
 		Button b = (Button) findViewById(R.id.alarm_save);
@@ -300,7 +299,7 @@ public class SetAlarm extends HostPreferenceActivity implements
 		// Asynchronously save the alarm since this method is called _before_
 		// the value of the preference has changed.
 		new AsyncTask<Void, Void, Void>() {
-			
+
 			@Override
 			protected void onPreExecute() {
 				// Editing any preference (except enable) enables the alarm.

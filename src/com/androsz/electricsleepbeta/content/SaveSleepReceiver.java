@@ -15,7 +15,6 @@ import android.net.Uri;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.db.SleepSession;
-import com.androsz.electricsleepbeta.db.SleepSessions;
 import com.androsz.electricsleepbeta.util.PointD;
 
 public class SaveSleepReceiver extends BroadcastReceiver {
@@ -34,8 +33,9 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 
 			@Override
 			public void run() {
-				final double alarm = intent.getDoubleExtra(StartSleepReceiver.EXTRA_ALARM,
-						SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
+				final float alarm =
+                    intent.getFloatExtra(StartSleepReceiver.EXTRA_ALARM,
+                                          SettingsActivity.DEFAULT_ALARM_SENSITIVITY);
 
 				final String name = intent.getStringExtra(SleepMonitoringService.EXTRA_NAME);
 				final int rating = intent.getIntExtra(EXTRA_RATING, 5);
@@ -159,11 +159,15 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 					final long endTime = Math.round(lessDetailedData.get(lessDetailedData.size() - 1).x);
 					final long startTime = Math.round(lessDetailedData.get(0).x);
 
-					final SleepSession session = new SleepSession(name, lessDetailedData,
-							SettingsActivity.DEFAULT_MIN_SENSITIVITY, alarm, rating, endTime
-									- startTime, numberOfSpikes, timeOfFirstSleep, note);
+					final SleepSession session =
+                        new SleepSession(startTime, endTime, lessDetailedData,
+                                         SettingsActivity.DEFAULT_MIN_SENSITIVITY, alarm, rating,
+                                         endTime - startTime, numberOfSpikes, timeOfFirstSleep,
+                                         note);
+                    createdUri =
+                        context.getContentResolver().insert(SleepSession.CONTENT_URI,
+                                                            session.toContentValues());
 
-					createdUri = SleepSessions.createSession(context, session);
 				} else {
 
 					final long endTime = Math.round(originalData.get(numberOfPointsOriginal - 1).x);
@@ -171,11 +175,11 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 
 					int numberOfSpikes = 0;
 					int numberOfConsecutiveNonSpikes = 0;
-					long timeOfFirstSleep = endTime;
+					long timeOfFirstSleep = 0;
 					for (int i = 0; i < numberOfPointsOriginal; i++) {
 						final double currentY = originalData.get(i).y;
 						if (currentY < alarm) {
-							if (timeOfFirstSleep == endTime && ++numberOfConsecutiveNonSpikes > 4) {
+							if (timeOfFirstSleep == 0 && ++numberOfConsecutiveNonSpikes > 4) {
 								final int lastIndex = originalData.size() - 1;
 
 								timeOfFirstSleep = Math.round(originalData.get(lastIndex).x);
@@ -185,12 +189,15 @@ public class SaveSleepReceiver extends BroadcastReceiver {
 							numberOfSpikes++;
 						}
 					}
-					final SleepSession session = new SleepSession(name, originalData,
-							SettingsActivity.DEFAULT_MIN_SENSITIVITY, alarm, rating, endTime
-									- startTime, numberOfSpikes, timeOfFirstSleep, note);
+					final SleepSession session = new SleepSession(
+                        startTime, endTime, originalData,
+                        SettingsActivity.DEFAULT_MIN_SENSITIVITY, alarm, rating,
+                        endTime - startTime, numberOfSpikes, timeOfFirstSleep, note);
 
-					createdUri = SleepSessions.createSession(context, session);
-				}
+					createdUri =
+                        context.getContentResolver().insert(SleepSession.CONTENT_URI,
+                                                            session.toContentValues());
+                }
 
 				final Intent saveSleepCompletedIntent = new Intent(SAVE_SLEEP_COMPLETED);
 				saveSleepCompletedIntent.putExtra(EXTRA_SUCCESS, true);

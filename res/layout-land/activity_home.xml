@@ -1,209 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:id="@+id/home_button_container"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="4dip"
-        android:orientation="vertical" >
+        android:layout_margin="0dip"
+        android:layout_toLeftOf="@id/fragment_suggestion"
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:padding="0dip" >
 
-        <Button
-            android:id="@+id/home_btn_sleep"
-            style="@style/HomeButton"
+        <LinearLayout
+            android:id="@+id/home_button_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:drawableTop="@drawable/home_btn_sleep"
-            android:onClick="onSleepClick" >
-        </Button>
-
-        <Button
-            android:id="@+id/home_btn_history"
-            style="@style/HomeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:drawableTop="@drawable/home_btn_history"
-            android:onClick="onHistoryClick" >
-        </Button>
-
-        <Button
-            android:id="@+id/home_btn_alarms"
-            style="@style/HomeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33"
-            android:drawableTop="@drawable/home_btn_alarms"
-            android:onClick="onAlarmsClick" >
-        </Button>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <ScrollView
-            android:id="@+id/home_stats_container"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
-            android:padding="5dp" >
+            android:layout_margin="0dip"
+            android:background="@color/background_dark"
+            android:orientation="vertical"
+            android:padding="0dip" >
 
-            <RelativeLayout
+            <Button
+                android:id="@+id/home_btn_sleep"
+                style="@style/HomeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:drawableTop="@drawable/home_btn_sleep"
+                android:onClick="onSleepClick"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:text="@string/track" />
+
+            <Button
+                android:id="@+id/home_btn_history"
+                style="@style/HomeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:drawableTop="@drawable/home_btn_history"
+                android:onClick="onHistoryClick"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:text="@string/history" />
+
+            <Button
+                android:id="@+id/home_btn_alarms"
+                style="@style/HomeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:drawableTop="@drawable/home_btn_alarms"
+                android:onClick="onAlarmsClick"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:text="@string/alarms" />
+        </LinearLayout>
+
+        <com.androsz.electricsleepbeta.widget.SafeViewFlipper
+            android:id="@+id/content_view_flipper"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out" >
+
+            <!-- 0 (permits initial fade-in) -->
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
+
+            <!-- 1 -->
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/grey_left_arrow"
+                android:drawablePadding="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="20dp"
+                android:text="@string/to_get_started_tap_the_track_button"
+                android:textAppearance="@style/TextHeader"
+                android:textColor="@color/faded_grey" />
 
-                <TextView
-                    android:id="@+id/home_review_title_text"
+            <!-- 2 -->
+
+            <ScrollView
+                android:id="@+id/home_stats_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:padding="5dp" >
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:text="@string/home_review_title_text_empty"
-                    android:textAppearance="@style/TextHeader" >
-                </TextView>
+                    android:layout_height="wrap_content" >
 
-                <TableLayout
-                    android:id="@+id/home_statistics_dashboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/home_review_title_text"
-                    android:visibility="gone" >
-
-                    <TableRow
+                    <TextView
+                        android:id="@+id/home_review_title_text"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:text="@string/total_averages"
+                        android:textStyle="bold" >
+                    </TextView>
 
-                        <TextView
-                            android:id="@+id/header_score_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_weight="1"
-                            android:text="@string/sleep_score" >
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/value_score_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:text="x" >
-                        </TextView>
-                    </TableRow>
-
-                    <TableRow
+                    <TableLayout
+                        android:id="@+id/home_statistics_dashboard"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/home_review_title_text" >
 
-                        <TextView
-                            android:id="@+id/header_duration_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_weight="1"
-                            android:text="@string/duration" >
-                        </TextView>
+                        <TableRow>
 
-                        <TextView
-                            android:id="@+id/value_duration_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:text="x" >
-                        </TextView>
-                    </TableRow>
+                            <TextView
+                                android:id="@+id/header_score_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="1"
+                                android:text="@string/sleep_score" >
+                            </TextView>
 
-                    <TableRow
+                            <TextView
+                                android:id="@+id/value_score_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:text="x" >
+                            </TextView>
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/header_duration_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="1"
+                                android:text="@string/total_recording_time" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/value_duration_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:text="x" >
+                            </TextView>
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/header_spikes_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="1"
+                                android:text="@string/times_disrupted" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/value_spikes_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:text="x" >
+                            </TextView>
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/header_fell_asleep_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|center_vertical"
+                                android:layout_weight="1"
+                                android:text="@string/time_to_fall_asleep" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/value_fell_asleep_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|center_vertical"
+                                android:text="x" >
+                            </TextView>
+                        </TableRow>
+                    </TableLayout>
+
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="1dip"
+                        android:layout_above="@+id/home_last_sleep_title_text"
+                        android:background="@color/background_dark" />
 
-                        <TextView
-                            android:id="@+id/header_spikes_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_weight="1"
-                            android:text="@string/spikes" >
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/value_spikes_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:text="x" >
-                        </TextView>
-                    </TableRow>
-
-                    <TableRow
+                    <TextView
+                        android:id="@+id/home_last_sleep_title_text"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/home_statistics_dashboard"
+                        android:text="@string/most_recent"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/header_fell_asleep_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_weight="1"
-                            android:text="@string/fell_asleep" >
-                        </TextView>
-
-                        <TextView
-                            android:id="@+id/value_fell_asleep_text"
-                            style="@style/TextHeaderTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:text="x" >
-                        </TextView>
-                    </TableRow>
-                </TableLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dip"
-                    android:layout_above="@+id/home_last_sleep_title_text"
-                    android:background="@color/background_transparent_lighten" />
-
-                <TextView
-                    android:id="@+id/home_last_sleep_title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/home_statistics_dashboard"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:text="@string/home_review_title_text_empty"
-                    android:textAppearance="@style/TextHeader" >
-                </TextView>
-
-                <com.androsz.electricsleepbeta.widget.ReviewSleepChart
-                    android:id="@+id/home_sleep_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/home_last_sleep_title_text"
-                    android:layout_marginLeft="-4dip"
-                    android:layout_marginRight="4dip"
-                    android:layout_marginTop="5dip"
-                    android:animateLayoutChanges="true"
-                    android:visibility="gone" />
-            </RelativeLayout>
-        </ScrollView>
+                    <com.androsz.electricsleepbeta.widget.SleepChart
+                        android:id="@+id/home_sleep_chart"
+                        style="@style/SleepChart_Light"
+                        android:layout_width="match_parent"
+                        android:layout_below="@+id/home_last_sleep_title_text"
+                        android:layout_marginLeft="-4dip"
+                        android:layout_marginRight="4dip"
+                        android:layout_marginTop="5dip"
+                        android:animateLayoutChanges="true"
+                        electricsleepbeta:setScroll="true" />
+                </RelativeLayout>
+            </ScrollView>
+        </com.androsz.electricsleepbeta.widget.SafeViewFlipper>
     </LinearLayout>
 
-</LinearLayout>
+    <fragment
+        android:id="@+id/fragment_suggestion"
+        android:layout_width="@dimen/fragment_suggestion_landscape_width"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        class="com.androsz.electricsleepbeta.app.SuggestionFragment" >
+
+        <!-- Preview: layout=@layout/fragment_suggestion -->
+    </fragment>
+
+</RelativeLayout>

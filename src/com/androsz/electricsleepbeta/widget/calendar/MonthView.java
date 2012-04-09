@@ -19,12 +19,11 @@ package com.androsz.electricsleepbeta.widget.calendar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,12 +31,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.BaseColumns;
 import android.text.format.Time;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -47,18 +45,18 @@ import android.view.ViewConfiguration;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HistoryActivity;
-import com.androsz.electricsleepbeta.app.HistoryMonthActivity;
+import com.androsz.electricsleepbeta.app.HistoryListFragment;
+import com.androsz.electricsleepbeta.app.HistoryMonthFragment;
 import com.androsz.electricsleepbeta.app.ReviewSleepActivity;
-import com.androsz.electricsleepbeta.db.SleepSessions;
+import com.androsz.electricsleepbeta.db.SleepSession;
 
 public class MonthView extends View {
 
-	private static int BUSY_BITS_MARGIN = 4;
+    private static final String TAG = MonthView.class.getSimpleName();
+
+    private static int BUSY_BITS_MARGIN = 4;
 	private static int BUSY_BITS_WIDTH = 10;
 	private static int EVENT_NUM_DAYS = 31;
-	private static int HORIZONTAL_FLING_THRESHOLD = 33;
-	private static float HOUR_GAP = 0f;
-	private static float MIN_EVENT_HEIGHT = 1f;
 	private static int MONTH_DAY_GAP = 1;
 	private static int MONTH_DAY_TEXT_SIZE = 20;
 	private static float mScale = 0; // Used for supporting different screen
@@ -89,7 +87,6 @@ public class MonthView extends View {
 	private Drawable mBoxPressed;
 
 	private Drawable mBoxSelected;
-	private int mBusybitsColor;
 	private Canvas mCanvas;
 	private int mCellHeight;
 
@@ -105,7 +102,14 @@ public class MonthView extends View {
 	// width/height.
 	private final SparseArray<Bitmap> mDayBitmapCache = new SparseArray<Bitmap>(4);
 
-	private ArrayList<Long[]> mSessions = new ArrayList<Long[]>(0);
+    // Index values into the mSessions array of longs
+    private static final int SESSION_START_TIMESTAMP = 0;
+    private static final int SESSION_END_TIMESTAMP = 1;
+    private static final int SESSION_START_JULIAN = 2;
+    private static final int SESSION_END_JULIAN = 3;
+    private static final int SESSION_ROW_ID = 4;
+
+    private List<Long[]> mSessions = new ArrayList<Long[]>(0);
 	/**
 	 * The first Julian day of the current month.
 	 */
@@ -115,22 +119,26 @@ public class MonthView extends View {
 	private boolean mLaunchDayView;
 	private int mMonthDayNumberColor;
 	// Cached colors
+    private int mMonthBackgroundColor;
+
 	private int mMonthOtherMonthColor;
 	private int mMonthOtherMonthDayNumberColor;
 
 	private int mMonthSaturdayColor;
+	private int mMonthWeekdayColor;
 	private int mMonthSundayColor;
 
 	private int mMonthTodayNumberColor;
 
-	// This Time object is used to set the time for the other Month view.
+    private int mEventOnColor;
+    private int mEventOffColor;
+
+    // This Time object is used to set the time for the other Month view.
 	private final Time mOtherViewCalendar = new Time();
-	private final HistoryMonthActivity mParentActivity;
+	private final HistoryMonthFragment mParentActivity;
 
 	// Pre-allocate and reuse
 	private final Rect mRect = new Rect();
-
-	private final RectF mRectF = new RectF();
 
 	private boolean mRedrawScreen = true;
 
@@ -149,19 +157,16 @@ public class MonthView extends View {
 
 	private Time mViewCalendar;
 
-	public MonthView(HistoryMonthActivity historyMonthActivity) {
-		super(historyMonthActivity);
+	public MonthView(HistoryMonthFragment historyMonthActivity) {
+		super(historyMonthActivity.getActivity());
 		if (mScale == 0) {
 			mScale = getContext().getResources().getDisplayMetrics().density;
 			if (mScale != 1) {
 				WEEK_GAP *= mScale;
 				MONTH_DAY_GAP *= mScale;
-				HOUR_GAP *= mScale;
 
 				MONTH_DAY_TEXT_SIZE *= mScale;
 				TEXT_TOP_MARGIN *= mScale;
-				HORIZONTAL_FLING_THRESHOLD *= mScale;
-				MIN_EVENT_HEIGHT *= mScale;
 				BUSY_BITS_WIDTH *= mScale;
 				BUSY_BITS_MARGIN *= mScale;
 			}
@@ -219,7 +224,7 @@ public class MonthView extends View {
 
 	/**
 	 * Draw a single box onto the canvas.
-	 * 
+	 *
 	 * @param day
 	 *            The Julian day.
 	 * @param weekNum
@@ -309,7 +314,13 @@ public class MonthView extends View {
 				final Drawable background = mTodayBackground;
 				background.setBounds(r);
 				background.draw(canvas);
-			}
+			} else {
+                // Background for dates that are within the month.
+                p.setStyle(Style.FILL);
+                p.setColor(mMonthBackgroundColor);
+                canvas.drawRect(r, p);
+            }
+
 			// Places events for that day
 			drawEvents(day, canvas, r, p, !isToday /* draw bb background */);
 		}
@@ -330,7 +341,7 @@ public class MonthView extends View {
 			} else if (Utils.isSaturday(column, mStartDay)) {
 				p.setColor(mMonthSaturdayColor);
 			} else {
-				p.setColor(mMonthDayNumberColor);
+				p.setColor(mMonthWeekdayColor);
 			}
 			// bolds the day if there's an event that day
 			p.setFakeBoldText(eventDay[day - mFirstJulianDay]);
@@ -348,67 +359,43 @@ public class MonthView extends View {
 		canvas.drawText(String.valueOf(mCursor.getDayAt(row, column)), textX, textY, p);
 	}
 
-	// Draw busybits for a single event
-	private RectF drawEventRect(Rect rect, SessionGeometry session, Canvas canvas, Paint p) {
-
-		p.setColor(mBusybitsColor);
-
-		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
-		final int bottom = rect.bottom - BUSY_BITS_MARGIN;
-
-		final RectF rf = mRectF;
-		rf.top = session.top;
-		// Make sure we don't go below the bottom of the bb bar
-		rf.bottom = Math.min(session.bottom, bottom);
-		rf.left = left;
-		rf.right = left + BUSY_BITS_WIDTH;
-
-		canvas.drawRect(rf, p);
-
-		return rf;
-	}
-
 	// /Create and draw the event busybits for this day
 	private void drawEvents(int date, Canvas canvas, Rect rect, Paint p, boolean drawBg) {
 		// The top of the busybits section lines up with the top of the day
 		// number
-		final int top = rect.top + TEXT_TOP_MARGIN + BUSY_BITS_MARGIN;
-		final int left = rect.right - BUSY_BITS_MARGIN - BUSY_BITS_WIDTH;
 
-		if (drawBg) {
-			final RectF rf = mRectF;
-			rf.left = left;
-			rf.right = left + BUSY_BITS_WIDTH;
-			rf.bottom = rect.bottom - BUSY_BITS_MARGIN;
-			rf.top = top;
+        Paint paint = new Paint();
+        paint.setColor(mEventOffColor);
+        for (Long[] session : mSessions) {
+            if (date == session[SESSION_START_JULIAN]) {
+                paint.setColor(mEventOnColor);
+                break;
+            }
+        }
 
-			p.setColor(this.mMonthOtherMonthColor);
-			p.setStyle(Style.FILL);
-			canvas.drawRect(rf, p);
-		}
+        final int height = Math.abs(rect.bottom - rect.top);
+        final int width = Math.abs(rect.right - rect.left);
+        Log.d(TAG, "width = " + width + " height = " + height);
+        int rx;
+        if (width < height) {
+            rx = (int) (width / 4);
+        } else {
+            rx = (int) (height / 4);
+        }
 
-		// SessionGeometry allGeometry = new SessionGeometry(new
-		// Long[]{0L,0L,0L,0L});
-		// allGeometry.setHourHeight((mCellHeight - BUSY_BITS_MARGIN * 2 -
-		// TEXT_TOP_MARGIN) / 24.0f);
-		// allGeometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-		// allGeometry.setHourGap(HOUR_GAP);
-		for (final Long[] session : mSessions) {
-			final SessionGeometry geometry = new SessionGeometry(session);
-			float hourHeight = (mCellHeight - BUSY_BITS_MARGIN * 2 - TEXT_TOP_MARGIN) / 24.0f;
-			geometry.setMinEventHeight(MIN_EVENT_HEIGHT);
-			geometry.setHourGap(HOUR_GAP);
-			geometry.setHourHeight(hourHeight);
-			if (geometry.computeEventRect(date, left, top, BUSY_BITS_WIDTH)) {
-				drawEventRect(rect, geometry, canvas, p);
-			}
-		}
+        // TODO the following places the indicator in the bottom center of the month marking but
+        //this does not work well if there is only enough space for the numbering.
+        //int cy = (int) (height / 1.4));
+        //int cx = (int) (rect.left + (width / 2));
 
-	}
+        int cy = (int) (rect.bottom - rx - (rx / 4));
+        int cx = (int) (rect.right - rx - (rx / 4));
+        canvas.drawCircle(cx, cy, rx, paint);
+    }
 
 	/**
 	 * Draw the grid lines for the calendar
-	 * 
+	 *
 	 * @param canvas
 	 *            The canvas to draw on.
 	 * @param p
@@ -455,7 +442,7 @@ public class MonthView extends View {
 		mBitmapRect.right = width;
 	}
 
-	public void forceReloadEvents(final ArrayList<Long[]> sessions) {
+	public void forceReloadEvents(final List<Long[]> sessions) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -472,8 +459,8 @@ public class MonthView extends View {
 				Arrays.fill(eventDay, false);
 				// Compute the new set of days with events
 				for (final Long[] session : mSessions) {
-					long startDay = session[2] - mFirstJulianDay;
-					long endDay = session[3] - mFirstJulianDay + 1;
+					long startDay = session[SESSION_START_JULIAN] - mFirstJulianDay;
+					long endDay = session[SESSION_END_JULIAN] - mFirstJulianDay + 1;
 					if (startDay < EVENT_NUM_DAYS || endDay >= 0) {
 						if (startDay < 0) {
 							startDay = 0;
@@ -602,15 +589,18 @@ public class MonthView extends View {
 
 		// Cache color lookups
 		final Resources res = getResources();
-		mMonthOtherMonthColor = res.getColor(R.color.month_other_month);
-		mMonthOtherMonthDayNumberColor = res.getColor(R.color.month_other_month_day_number);
-		mMonthDayNumberColor = res.getColor(R.color.month_day_number);
-		mMonthTodayNumberColor = res.getColor(R.color.month_today_number);
-		mMonthSaturdayColor = res.getColor(R.color.month_saturday);
-		mMonthSundayColor = res.getColor(R.color.month_sunday);
-		mBusybitsColor = res.getColor(R.color.primary1);
+        mMonthBackgroundColor = res.getColor(R.color.faded_grey);
+		mMonthOtherMonthColor = res.getColor(R.color.background_dark);
+		mMonthOtherMonthDayNumberColor = res.getColor(R.color.faded_grey);
+		mMonthDayNumberColor = res.getColor(R.color.text_light);
+		mMonthTodayNumberColor = res.getColor(R.color.primary1_transparent);
+		mMonthSaturdayColor = res.getColor(R.color.text_light);
+		mMonthWeekdayColor = res.getColor(R.color.text_light);
+		mMonthSundayColor = res.getColor(R.color.text_light);
+        mEventOnColor = res.getColor(R.color.primary_dark);
+        mEventOffColor = res.getColor(R.color.less_faded_grey);
 
-		mGestureDetector = new GestureDetector(getContext(),
+        mGestureDetector = new GestureDetector(getContext(),
 				new GestureDetector.SimpleOnGestureListener() {
 					@Override
 					public boolean onDown(MotionEvent e) {
@@ -676,7 +666,8 @@ public class MonthView extends View {
 							final int y = (int) e.getY();
 							final long millis = getSelectedMillisFor(x, y);
 
-							reviewSleepIfNecessary(millis);
+                            Log.d(TAG, "Possibly reviewing sleep at: " + millis);
+                            reviewSleepIfNecessary(millis);
 						}
 
 						return true;
@@ -891,6 +882,10 @@ public class MonthView extends View {
 
 	}
 
+    /**
+     * Method determines what activity to load when user presses a date square in the calendar view.
+     * Either loads a list view of a collection of nights (naps) OR a single night to review.
+     */
 	private void reviewSleepIfNecessary(final long millis) {
 		new AsyncTask<Void, Void, Void>() {
 
@@ -899,41 +894,42 @@ public class MonthView extends View {
 				//final ArrayList<Long[]> applicableEvents = new ArrayList<Long[]>();
 				final long ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-				int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
-				ArrayList<Long> applicableRowIds = new ArrayList<Long>();
+				final int julianDay = Time.getJulianDay(millis, new Time().gmtoff);
+				List<Long> applicableRowIds = new ArrayList<Long>();
 				for (final Long[] session : mSessions) {
-					if (julianDay >= session[2] && julianDay <= session[3]) {
-						applicableRowIds.add(session[4]);
+                    if (julianDay == session[SESSION_START_JULIAN]) {
+                        Log.d(TAG, "Adding session: " + session[SESSION_ROW_ID] +
+                              " to date: " + julianDay);
+                        applicableRowIds.add(session[SESSION_ROW_ID]);
 					}
 					/*
 					 * final long startTime = session[0] - thismillis; final
 					 * long endTime = session[1] - thismillis; if ((endTime > 0)
 					 * && ((startTime <= ONE_DAY_IN_MS && startTime > 0) ||
 					 * startTime < 0)) {
-					 * 
+					 *
 					 * applicableEvents.add(session); }
 					 */
 				}
 
 				if (applicableRowIds.size() == 1) {
+                    // Only one session so load night review.
 					final Intent reviewSleepIntent = new Intent(getContext(),
 							ReviewSleepActivity.class);
-					final Uri data = Uri.withAppendedPath(SleepSessions.MainTable.CONTENT_URI,
+					final Uri data = Uri.withAppendedPath(SleepSession.CONTENT_URI,
 							String.valueOf(applicableRowIds.get(0)));
 					reviewSleepIntent.setData(data);
 					getContext().startActivity(reviewSleepIntent);
 				} else if (applicableRowIds.size() > 1) {
-
-					final java.text.DateFormat sdf = java.text.DateFormat.getDateInstance(
-							java.text.DateFormat.SHORT, Locale.getDefault());
-					final Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(millis);
-					final String formattedMDY = sdf.format((calendar.getTime()));
-					getContext().startActivity(
-							new Intent(getContext(), HistoryActivity.class).putExtra(
-									HistoryActivity.SEARCH_FOR, formattedMDY));
+                    // TODO this probably needs to be smarter in how it attempts to discover sleep
+                    // for a given night. Its quite possible that the night of sleep for the user on
+                    // say a Friday began at say Saturday morning at 3am. We need to handle this
+                    // situation.
+                    getContext().startActivity(
+                        new Intent(getContext(), HistoryActivity.class).putExtra(
+                            HistoryListFragment.EXTRA_JULIAN_DAY, julianDay));
 				}
-				
+
 				return null;
 			}
 		}.execute();

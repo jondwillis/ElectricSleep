@@ -2,11 +2,11 @@ package com.androsz.electricsleepbeta.app;
 
 import java.lang.reflect.Field;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -14,20 +14,11 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 public class DimSleepActivity extends AnalyticActivity {
-
-    /** Constant that defines the version code for ICE_CREAM_SANDWICH
-     * (reproduced from: android.os.Build.VERSION_CODES)
-     * TODO: after switching to API 14 or 15 remove this constant and use the official one instead.
-     */
-    private static final int ICE_CREAM_SANDWICH = 14;
-
-    /** Constant taken from ICS defined at:
-     * android.view.View#SYSTEM_UI_FLAG_LOW_PROFILE
-     * (dimmed status bar and navigation)
-     * TODO: after switching to API 14 or 15 remove this constant and use the offical one instead.
-     */
-    private static final int SYSTEM_UI_FLAG_LOW_PROFILE = 1;
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+    
     @Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,16 +47,15 @@ public class DimSleepActivity extends AnalyticActivity {
 
 		win.setAttributes(winParams);
 
-		getSupportActionBar().setDisplayShowHomeEnabled(false);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		getSupportActionBar().hide();
 
 		final LinearLayout blackness = new LinearLayout(this);
 		blackness.setLayoutParams(new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 
-		if (Build.VERSION.SDK_INT > ICE_CREAM_SANDWICH) {
-			blackness.setSystemUiVisibility(SYSTEM_UI_FLAG_LOW_PROFILE);
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			blackness.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		} else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
 			blackness.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
 		}

@@ -21,8 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:numStars="5"
-            android:stepSize="1" >
+            style="@style/FiveStarRatingBar.Dark" >
         </RatingBar>
 
         <TextView
@@ -50,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:drawableLeft="@android:drawable/ic_menu_save"
+                android:drawableLeft="@drawable/ic_menu_save"
                 android:onClick="onSaveClick"
                 android:text="@string/save" >
             </Button>
@@ -61,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:drawableLeft="@android:drawable/ic_menu_delete"
+                android:drawableLeft="@drawable/ic_menu_delete"
                 android:onClick="onDiscardClick"
                 android:text="@string/discard" >
             </Button>

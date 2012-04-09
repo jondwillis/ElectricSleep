@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<com.androsz.electricsleepbeta.widget.ReviewSleepChart xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sleep_history_list_item_sleepchartview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp" />
+    android:background="@color/background_light"
+    android:orientation="vertical"
+    android:paddingBottom="10dip"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="10dip" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/text_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/text_dark" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                style="?android:attr/textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dip"
+                android:text="@string/sleep_LINEBREAK_score"
+                android:textColor="@color/text_dark" />
+
+            <TextView
+                android:id="@+id/efficiency"
+                style="@style/TextHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_dark"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <com.androsz.electricsleepbeta.widget.SleepChart
+            android:id="@+id/sleep_history_list_item_sleepchartview"
+            style="@style/SleepChart_Light"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/background_light"
+            electricsleepbeta:setScroll="true"
+            electricsleepbeta:showLabels="false"
+            electricsleepbeta:showLegend="false"
+            electricsleepbeta:showTitle="false" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+      android:inAnimation="@android:anim/fade_in"
+      android:outAnimation="@android:anim/fade_out" >
+
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        style="@style/Widget.ZeoTitlePageIndicator"
+      android:inAnimation="@android:anim/fade_in"
+      android:outAnimation="@android:anim/fade_out" />
+
+    <LinearLayout
+        android:id="@+id/day_names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_light"
+        android:orientation="horizontal"
+      android:inAnimation="@android:anim/fade_in"
+      android:outAnimation="@android:anim/fade_out" >
+
+        <TextView
+            android:id="@+id/day0"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day1"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day2"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day3"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day4"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day5"
+            style="@style/MonthView_DayLabel" />
+
+        <TextView
+            android:id="@+id/day6"
+            style="@style/MonthView_DayLabel" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@android:drawable/divider_horizontal_dark" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/monthpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+      android:inAnimation="@android:anim/fade_in"
+      android:outAnimation="@android:anim/fade_out" />
+
+</LinearLayout>

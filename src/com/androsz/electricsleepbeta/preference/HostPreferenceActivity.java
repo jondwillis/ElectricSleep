@@ -2,23 +2,20 @@ package com.androsz.electricsleepbeta.preference;
 
 import java.util.List;
 
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceActivity.Header;
-import android.support.v4.app.SherlockPreferenceActivity;
-import android.support.v4.view.MenuItem;
 import android.widget.ListView;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.AnalyticActivity;
-import com.androsz.electricsleepbeta.app.HostActivity;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsSessionHelper;
 import com.androsz.electricsleepbeta.util.GoogleAnalyticsTrackerHelper;
 
-public abstract class HostPreferenceActivity extends SherlockPreferenceActivity implements
-		GoogleAnalyticsTrackerHelper {
+public abstract class HostPreferenceActivity extends SherlockPreferenceActivity
+		implements GoogleAnalyticsTrackerHelper {
 
 	protected abstract int getContentAreaLayoutId();
 
@@ -36,17 +33,21 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 		}
 	}
 
+	protected boolean getNeedToLoadOldStylePreferences() {
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+				|| getHeadersResourceId() == NO_HEADERS;
+	}
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		final ListView lvw = getListView();
-		this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-		lvw.setBackgroundColor(getResources().getColor(R.color.background));
+		this.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_dark)));
+		lvw.setBackgroundColor(getResources().getColor(R.color.background_dark));
 
 		//if pre-honeycomb, don't try to use fragments and just load the old-style prefs
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || getHeadersResourceId() == NO_HEADERS)
-		{
+		if (getNeedToLoadOldStylePreferences()) {
 			addPreferencesFromResource(getContentAreaLayoutId());
 			//TODO is this needed anymore? it is inconsistent between API levels
 			//if (getPreferencesName() != null) {
@@ -54,7 +55,7 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 			//}
 		}
 
-		HostActivity.prepareActionBar(this);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -71,8 +72,8 @@ public abstract class HostPreferenceActivity extends SherlockPreferenceActivity 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY, getApplication())
-				.onStartSession();
+		GoogleAnalyticsSessionHelper.getInstance(AnalyticActivity.KEY,
+				getApplication()).onStartSession();
 
 		trackPageView(getClass().getSimpleName());
 	}

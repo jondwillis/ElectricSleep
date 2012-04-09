@@ -6,7 +6,7 @@
 	<groupId>com.androsz</groupId>
 	<artifactId>electricsleepbeta</artifactId>
 	<packaging>apk</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.0</version>
 
 	<name>ElectricSleep</name>
 	<description>Improving Sleep With Android</description>
@@ -27,7 +27,7 @@
 			<url>http://myzeo.com</url>
 			<timezone>-5</timezone>
 			<roles>
-				<role>lead developer</role>
+				<role>developer</role>
 			</roles>
 		</developer>
 	</developers>
@@ -50,7 +50,7 @@
 			<id>github-project-site</id>
 			<name>GitHub Project Pages</name>
 			<url>gitsite:git@github.com/jondwillis/ElectricSleep/</url>
-			<!-- YOU MUST PUT THE FOLLOWING IN ~/.m2/settings.xml <servers> <server> 
+			<!-- YOU MUST PUT THE FOLLOWING IN ~/.m2/settings.xml <servers> <server>
 				<id>github-project-site</id> <username>git</username> </server> </servers> -->
 		</site>
 	</distributionManagement>
@@ -70,20 +70,23 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>1.6</java.version>
-		<android.version>3.2_r1</android.version>
-		<android.platform>15</android.platform>
-		<actionbarsherlock.version>3.5.1</actionbarsherlock.version>
-		<viewpagerindicator.version>2.0.0-electricsleep</viewpagerindicator.version>
+		<android.version>4.0.1.2</android.version>
+		<android.platform>14</android.platform>
+		<android-support.version>r6</android-support.version>
+		<android-maven.version>3.1.1</android-maven.version>
+		<actionbarsherlock.version>4.0.1</actionbarsherlock.version>
+		<viewpagerindicator.version>2.2.3-electricsleep</viewpagerindicator.version>
 		<googleanalytics.version>1.4.2</googleanalytics.version>
-		<achartengine.version>0.7.0-electricsleep</achartengine.version>
+		<achartengine.version>0.8.0-electricsleep</achartengine.version>
+		<actionbarsherlock-plugin-preference.version>3.5.1</actionbarsherlock-plugin-preference.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>android</groupId>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
-			<scope>provided</scope>
 			<version>${android.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
@@ -94,7 +97,7 @@
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
 			<artifactId>plugin-preference</artifactId>
-			<version>${actionbarsherlock.version}</version>
+			<version>${actionbarsherlock-plugin-preference.version}</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
@@ -124,6 +127,11 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
 					<artifactId>maven-jarsigner-plugin</artifactId>
 					<version>1.2</version>
 				</plugin>
@@ -151,7 +159,7 @@
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
-					<version>3.0.2</version>
+					<version>${android-maven.version}</version>
 					<configuration>
 						<sdk>
 							<platform>${android.platform}</platform>
@@ -159,7 +167,7 @@
 					</configuration>
 					<extensions>true</extensions>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -177,7 +185,7 @@
 											android-maven-plugin
 										</artifactId>
 										<versionRange>
-											[3.0.2,)
+											[3.1.0,)
 										</versionRange>
 										<goals>
 											<goal>manifest-update</goal>
@@ -288,7 +296,23 @@
 				</dependencies>
 			</plugin>
 
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<failsOnError>true</failsOnError>
+					<configLocation>checkstyle.xml</configLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>checkstyle</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<extensions>
@@ -313,7 +337,7 @@
 	<profiles>
 		<profile>
 			<id>development</id>
-			<!-- using this since activeByDefault does not work well with multiple 
+			<!-- using this since activeByDefault does not work well with multiple
 				profiles -->
 			<activation>
 				<property>
@@ -333,7 +357,7 @@
 		</profile>
 		<profile>
 			<id>release</id>
-			<!-- via this activation the profile is automatically used when the release 
+			<!-- via this activation the profile is automatically used when the release
 				is done with the maven release plugin -->
 			<activation>
 				<property>
@@ -359,7 +383,7 @@
 									<removeExistingSignatures>true</removeExistingSignatures>
 									<archiveDirectory />
 									<includes>
-										<include>${project.build.directory}/${project.artifactId}.apk</include>
+                                        <include>${project.build.directory}/${project.artifactId}-${project.version}.apk</include>
 									</includes>
 									<keystore>${sign.keystore}</keystore>
 									<alias>${sign.alias}</alias>
@@ -370,7 +394,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- the signed apk then needs to be zipaligned and we activate proguard 
+					<!-- the signed apk then needs to be zipaligned and we activate proguard
 						and we run the manifest update -->
 					<plugin>
 						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -382,8 +406,8 @@
 							</sign>
 							<zipalign>
 								<verbose>true</verbose>
-								<inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
-								<outputApk>${project.build.directory}/${project.artifactId}-signed-aligned.apk
+								<inputApk>${project.build.directory}/${project.artifactId}-${project.version}.apk</inputApk>
+								<outputApk>${project.build.directory}/${project.artifactId}-${project.version}-signed-aligned.apk
 								</outputApk>
 							</zipalign>
 							<manifest>
@@ -391,7 +415,7 @@
 								<versionCodeAutoIncrement>true</versionCodeAutoIncrement>
 							</manifest>
 							<proguard>
-								<skip>false</skip>
+								<skip>true</skip>
 							</proguard>
 						</configuration>
 						<executions>
@@ -411,18 +435,24 @@
 							</execution>
 						</executions>
 					</plugin>
+                    <plugin>
+                        <groupId>com.pyx4me</groupId>
+                        <artifactId>proguard-maven-plugin</artifactId>
+                        <version>2.0.4</version>
+                    </plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.5</version>
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>${project.build.directory}/${project.artifactId}-signed-aligned.apk</file>
+                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-signed-aligned.apk</file>
 									<type>apk</type>
 									<classifier>signed-aligned</classifier>
 								</artifact>
 								<artifact>
-									<file>${project.build.directory}/proguard/mapping.txt</file>
+									<file>${project.build.directory}/proguard_map.txt</file>
 									<type>map</type>
 									<classifier>release</classifier>
 								</artifact>

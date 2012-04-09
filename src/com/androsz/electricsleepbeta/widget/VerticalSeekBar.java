@@ -4,23 +4,23 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.SeekBar;
 
 public class VerticalSeekBar extends DecimalSeekBar {
 
 	private OnSeekBarChangeListener myListener;
 
 	public VerticalSeekBar(Context context) {
-		super(context);
+		this(context, null);
+	}
+	
+	public VerticalSeekBar(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
 	}
 
 	public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
-	public VerticalSeekBar(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
 
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(h, w, oldh, oldw);
@@ -44,6 +44,12 @@ public class VerticalSeekBar extends DecimalSeekBar {
 		super.onDraw(c);
 	}
 
+    @Override
+    public synchronized void setProgress(final float progress) {
+        super.setProgress(progress);
+        onSizeChanged(getWidth(), getHeight(), 0, 0);
+    }
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (!isEnabled()) {
@@ -52,20 +58,24 @@ public class VerticalSeekBar extends DecimalSeekBar {
 
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			if (myListener != null)
-				myListener.onStartTrackingTouch(this);
-			break;
+            setPressed(true);
+            setSelected(true);
+			if (myListener != null) {
+                myListener.onStartTrackingTouch(this);
+            }
+            break;
 		case MotionEvent.ACTION_MOVE:
 			float dx = getFloatMax() - (getFloatMax() * event.getY() / getHeight());
-			setProgress(dx);
-			onSizeChanged(getWidth(), getHeight(), 0, 0);
 			myListener.onProgressChanged(this, (int) (dx*PRECISION), true);
+            setProgress(dx);
 			break;
 		case MotionEvent.ACTION_UP:
+            setPressed(false);
+            setSelected(false);
 			myListener.onStopTrackingTouch(this);
 			break;
-
 		case MotionEvent.ACTION_CANCEL:
+            setPressed(false);
 			break;
 		}
 		return true;

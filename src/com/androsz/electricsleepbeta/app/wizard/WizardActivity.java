@@ -9,12 +9,17 @@ import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HostActivity;
-import com.viewpagerindicator.TitlePageIndicator;
+import com.androsz.electricsleepbeta.app.Log;
+import com.androsz.electricsleepbeta.widget.DisablableTitlePageIndicator;
+import com.androsz.electricsleepbeta.widget.DisablableViewPager;
 
 public abstract class WizardActivity extends HostActivity {
 
-	private ViewPager wizardPager;
-	private TitlePageIndicator indicator;
+    private static final String TAG = WizardActivity.class.getSimpleName();
+
+    private DisablableViewPager wizardPager;
+	private DisablableTitlePageIndicator indicator;
+	private IndicatorPageChangeListener indicatorListener;
 
 	@Override
 	protected int getContentAreaLayoutId() {
@@ -26,26 +31,29 @@ public abstract class WizardActivity extends HostActivity {
 		onLeftButtonClick(null);
 	}
 
-	private final class IndicatorPageChangeListener implements OnPageChangeListener {
+	private final class IndicatorPageChangeListener implements
+			OnPageChangeListener {
 
-		private int lastSettledPosition = -1;
+		private int lastSettledPosition = 0;
 		private int lastPosition = -2;
 
 		@Override
-		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		//	lastPosition = position;
+		public void onPageScrolled(int position, float positionOffset,
+				int positionOffsetPixels) {
+			// lastPosition = position;
 		}
 
 		@Override
 		public void onPageScrollStateChanged(int state) {
 			// if we are settled on a new page...
-			if (state == ViewPager.SCROLL_STATE_IDLE && lastSettledPosition != lastPosition) {
+			if (state == ViewPager.SCROLL_STATE_IDLE
+					&& lastSettledPosition != lastPosition) {
 
 				lastSettledPosition = lastPosition;
 
-				onPerformWizardAction(lastPosition);
+				setupNavigationButtons(lastSettledPosition);
+				onPerformWizardAction(lastSettledPosition);
 
-				setupNavigationButtons();
 			}
 		}
 
@@ -53,57 +61,84 @@ public abstract class WizardActivity extends HostActivity {
 		public void onPageSelected(int position) {
 			lastPosition = position;
 		}
+
+		public int getLastSettledPosition() {
+			return lastSettledPosition;
+		}
+
+		public void setLastSettledPosition(int index) {
+			lastSettledPosition = index;
+		}
 	}
 
 	protected abstract PagerAdapter getPagerAdapter();
+
+	//WARNING: THIS WILL BREAK if FragmentPagerAdapter's same, internal string changes.
+	protected static String makeFragmentName(int index) {
+		return "android:switcher:" + R.id.wizardPager + ":" + index;
+	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		wizardPager = (ViewPager) findViewById(R.id.wizardPager);
+		wizardPager = (DisablableViewPager) findViewById(R.id.wizardPager);
 		wizardPager.setAdapter(getPagerAdapter());
 
+		indicator = (DisablableTitlePageIndicator) findViewById(R.id.indicator);
+		indicator.setFooterColor(getResources().getColor(R.color.primary1));
+		indicatorListener = new IndicatorPageChangeListener();
+		indicator.setOnPageChangeListener(indicatorListener);
+
 		int initialPosition = 0;
+		indicator.setViewPager(wizardPager, initialPosition);
+
+		Log.d(TAG, "this happens");
 		if (savedInstanceState != null) {
 			initialPosition = savedInstanceState.getInt("child");
-			wizardPager.setCurrentItem(initialPosition, false);
+			setCurrentWizardIndex(initialPosition);
+			indicatorListener.setLastSettledPosition(initialPosition);
+			Log.d(TAG, "and that happens");
 		}
-		
-		indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-		indicator.setFooterColor(getResources().getColor(R.color.primary1));
-		indicator.setOnPageChangeListener(new IndicatorPageChangeListener());
-		indicator.setViewPager(wizardPager, initialPosition);
 
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setupNavigationButtons();
-		onPerformWizardAction(getCurrentWizardIndex());
+		Log.d(TAG, "evilonresume");
+		setupNavigationButtons(wizardPager.getCurrentItem());
+        onPerformWizardAction(wizardPager.getCurrentItem());
 	}
 
-	protected abstract void onFinishWizardActivity() throws IllegalStateException;
+	protected abstract void onFinishWizardActivity()
+			throws IllegalStateException;
 
 	public void onLeftButtonClick(final View v) {
 
 		int currentItem = getCurrentWizardIndex();
 		if (currentItem != 0) {
-			wizardPager.setCurrentItem(currentItem - 1);
+			setCurrentWizardIndex(currentItem - 1);
 		} else {
 			super.onBackPressed();
 		}
 	}
 
+	protected void setCurrentWizardIndex(int index) {
+		indicator.setCurrentItem(index, true);
+		Log.d(TAG, "setCurrentWizardIndex to " + index);
+	}
+
 	protected int getCurrentWizardIndex() {
-		return wizardPager.getCurrentItem();
+		return indicatorListener.getLastSettledPosition();
 	}
 
 	protected void setPagingEnabled(boolean enabled) {
+		this.indicator.setPagingEnabled(enabled);
+		this.wizardPager.setPagingEnabled(enabled);
 	}
 
-	protected abstract void onPrepareLastSlide();
+	protected abstract void onPrepareLastSlide(Button rightButton);
 
 	public void onRightButtonClick(final View v) {
 
@@ -113,31 +148,31 @@ public abstract class WizardActivity extends HostActivity {
 		if (displayedChildIndex == lastPageIndex) {
 			onFinishWizardActivity();
 		} else {
-			wizardPager.setCurrentItem(displayedChildIndex + 1);
+			setCurrentWizardIndex(displayedChildIndex + 1);
 		}
 	}
 
 	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt("child", getCurrentWizardIndex());
-	}
+	protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("child", getCurrentWizardIndex());
+    }
 
-	protected abstract void onPerformWizardAction(int focusedIndex);
+    protected abstract void onPerformWizardAction(int focusedIndex);
 
-	protected void setupNavigationButtons() {
+	protected void setupNavigationButtons(int index) {
+		Log.d(TAG, "setupNavigationButtons "+index);
 		final Button leftButton = (Button) findViewById(R.id.leftButton);
 		final Button rightButton = (Button) findViewById(R.id.rightButton);
 		final int lastChildIndex = getPagerAdapter().getCount() - 1;
-		final int displayedChildIndex = getCurrentWizardIndex();
-		if (displayedChildIndex > -1 && displayedChildIndex < lastChildIndex) {
+		if (index > -1 && index < lastChildIndex) {
 			leftButton.setText(R.string.back);
 			rightButton.setText(R.string.next);
-		} else if (displayedChildIndex == lastChildIndex) {
+		} else if (index == lastChildIndex) {
 			leftButton.setText(R.string.back);
 			rightButton.setText(R.string.finish);
 
-			onPrepareLastSlide();
+			onPrepareLastSlide(rightButton);
 		}
 	}
 }

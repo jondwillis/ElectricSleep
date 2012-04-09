@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal" >
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button_get_started"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_horizontal"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/welcome_header"
+                style="@style/TextHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Welcome Back" />
+
+            <TextView
+                android:id="@+id/p1"
+                style="@style/TextBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/welcome_header"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/returning_users_paragraph_one" />
+
+            <TextView
+                android:id="@+id/p2"
+                style="@style/TextBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dip"
+                android:gravity="center_horizontal"
+                android:text="@string/returning_users_paragraph_two" />
+
+            <fragment
+                android:name="com.androsz.electricsleepbeta.app.ChangeLogFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dip" >
+
+                <!-- Preview: layout=@layout/fragment_change_log -->
+            </fragment>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button_get_started"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="4dip"
+        android:text="@string/get_started" />
+
+</RelativeLayout>

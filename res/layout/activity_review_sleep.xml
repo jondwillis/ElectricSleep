@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frags"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:electricsleepbeta="http://schemas.android.com/apk/res/com.androsz.electricsleepbeta"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-</LinearLayout>
+    <fragment
+        android:id="@+id/fragment_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        class="com.androsz.electricsleepbeta.app.SuggestionFragment" >
+
+        <!-- Preview: layout=@layout/fragment_suggestion -->
+    </fragment>
+
+    <LinearLayout
+        android:id="@+id/fragment_review_sleep"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/fragment_suggestion" />
+
+</RelativeLayout>

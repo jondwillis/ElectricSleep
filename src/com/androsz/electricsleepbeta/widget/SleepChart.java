@@ -2,220 +2,484 @@ package com.androsz.electricsleepbeta.widget;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.util.List;
 
 import org.achartengine.GraphicalView;
 import org.achartengine.chart.AbstractChart;
 import org.achartengine.chart.TimeChart;
+import org.achartengine.model.PointD;
 import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.graphics.Paint.Align;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
-import com.androsz.electricsleepbeta.app.SleepMonitoringService;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.util.MathUtils;
-import com.androsz.electricsleepbeta.util.PointD;
 
-public class SleepChart extends GraphicalView implements Parcelable {
+public class SleepChart extends GraphicalView {
 
-	protected double calibrationLevel;// =
-										// SettingsActivity.DEFAULT_ALARM_SENSITIVITY;
+    private static final String TAG = SleepChart.class.getSimpleName();
 
-	public int rating;
+    /** The default number of X label ticks. */
+    private static final int DEFAULT_X_LABEL_TICKS = 5;
 
-	public XYMultipleSeriesDataset xyMultipleSeriesDataset;
+    Context mContext;
 
-	public XYMultipleSeriesRenderer xyMultipleSeriesRenderer;
+    public int rating;
 
-	public XYSeries xySeriesCalibration;
-	public XYSeriesRenderer xySeriesCalibrationRenderer;
+    public TimeChart mChart;
 
-	public XYSeries xySeriesMovement;
+    public XYMultipleSeriesDataset mDataset;
 
-	public XYSeriesRenderer xySeriesMovementRenderer;
+    public XYMultipleSeriesRenderer mRenderer;
 
-	public SleepChart(final Context context) {
-		super(context);
-	}
+    private static final float INVALID_CALIBRATION = -1;
 
-	public SleepChart(final Context context, final AttributeSet attrs) {
-		super(context, attrs);
-	}
+    private int DEFAULT_BOTTOM_MARGIN = 20;
+    private int DEFAULT_LEFT_MARGIN = 25;
+    private int DEFAULT_TOP_MARGIN = 20;
 
-	public SleepChart(final Context context, Parcel in) {
-		super(context);
-		xyMultipleSeriesDataset = (XYMultipleSeriesDataset) in.readSerializable();
-		xyMultipleSeriesRenderer = (XYMultipleSeriesRenderer) in.readSerializable();
-		xySeriesMovement = (XYSeries) in.readSerializable();
-		xySeriesMovementRenderer = (XYSeriesRenderer) in.readSerializable();
-		xySeriesCalibration = (XYSeries) in.readSerializable();
-		xySeriesCalibrationRenderer = (XYSeriesRenderer) in.readSerializable();
-		calibrationLevel = in.readDouble();
-		rating = in.readInt();
-	}
+    int mBackgroundColor;
+    int mTextColor;
+    int mCalibrationBorderColor;
+    int mCalibrationColor;
+    int mGridColor;
+    int mMovementBorderColor;
+    int mMovementColor;
+    int mXLabelTicks;
+    boolean mSetBackgroundColor;
+    boolean mSetGridColor;
+    boolean mSetInScroll;
+    boolean mSetTextColor;
+    boolean mShowGrid;
+    boolean mShowLabels;
+    boolean mShowLegend;
+    boolean mShowTitle = true;
 
-	@Override
-	protected AbstractChart buildChart() {
-		if (xySeriesMovement == null) {
-			Context context = getContext();
-			// set up sleep movement series/renderer
-			xySeriesMovement = new XYSeries(context.getString(R.string.legend_movement));
-			xySeriesMovementRenderer = new XYSeriesRenderer();
+    /** Temporary storage for calibration level information prior to mData being initalized. */
+    private float mTempCalibrationLevel = INVALID_CALIBRATION;
 
-			xySeriesMovementRenderer.setFillBelowLine(true);
-			xySeriesMovementRenderer.setFillBelowLineColor(context.getResources().getColor(
-					R.color.primary_dark_transparent));
-			xySeriesMovementRenderer.setColor(context.getResources().getColor(R.color.primary_dark));
+    private String mAxisFormat;
 
-			// set up calibration line series/renderer
-			xySeriesCalibration = new XYSeries(
-					context.getString(R.string.legend_light_sleep_trigger));
-			xySeriesCalibrationRenderer = new XYSeriesRenderer();
-			xySeriesCalibrationRenderer.setFillBelowLine(true);
-			xySeriesCalibrationRenderer.setFillBelowLineColor(context.getResources().getColor(
-					R.color.background_transparent_lighten));
-			xySeriesCalibrationRenderer.setColor(context.getResources().getColor(R.color.white));
+    public SleepChartData mData;
 
-			// add series to the dataset
-			xyMultipleSeriesDataset = new XYMultipleSeriesDataset();
-			xyMultipleSeriesDataset.addSeries(xySeriesMovement);
-			xyMultipleSeriesDataset.addSeries(xySeriesCalibration);
+    int mDefStyle;
 
-			// set up the dataset renderer
-			xyMultipleSeriesRenderer = new XYMultipleSeriesRenderer();
-			xyMultipleSeriesRenderer.addSeriesRenderer(xySeriesMovementRenderer);
-			xyMultipleSeriesRenderer.addSeriesRenderer(xySeriesCalibrationRenderer);
+    AttributeSet mAttrs;
 
-			xyMultipleSeriesRenderer.setPanEnabled(false, false);
-			xyMultipleSeriesRenderer.setZoomEnabled(false, false);
-			final float textSize = MathUtils.calculatePxFromSp(context, 14);
-			xyMultipleSeriesRenderer.setChartTitleTextSize(textSize);
-			xyMultipleSeriesRenderer.setAxisTitleTextSize(textSize);
-			xyMultipleSeriesRenderer.setLabelsTextSize(textSize);
-			//xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
-			//		.calculatePxFromDp(context, 30) + textSize*3));
-			xyMultipleSeriesRenderer.setAntialiasing(true);
-			xyMultipleSeriesRenderer.setFitLegend(true);
-			int[] margins = xyMultipleSeriesRenderer.getMargins();
-			margins[2] += 20; // increase bottom margin
-			xyMultipleSeriesRenderer.setMargins(margins);
-			xyMultipleSeriesRenderer.setLegendTextSize(textSize);
-			xyMultipleSeriesRenderer.setShowLegend(true);
-			xyMultipleSeriesRenderer.setShowLabels(true);
-			xyMultipleSeriesRenderer.setXLabels(6);
-			xyMultipleSeriesRenderer.setYLabels(0);
-			xyMultipleSeriesRenderer.setShowGrid(true);
-			xyMultipleSeriesRenderer.setAxesColor(context.getResources().getColor(R.color.text));
-			xyMultipleSeriesRenderer.setLabelsColor(xyMultipleSeriesRenderer.getAxesColor());
-            xyMultipleSeriesRenderer.setBackgroundColor(Color.RED);
-            xyMultipleSeriesRenderer.setMarginsColor(Color.TRANSPARENT);
-            xyMultipleSeriesRenderer.setApplyBackgroundColor(true);
-			final TimeChart timeChart = new TimeChart(xyMultipleSeriesDataset,
-					xyMultipleSeriesRenderer);
-			timeChart.setDateFormat("h:mm:ss");
-			return timeChart;
-		}
-		return null;
-	}
+    public SleepChart(final Context context) {
+        this(context, null);
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    public SleepChart(final Context context, final AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
-	public double getCalibrationLevel() {
-		return calibrationLevel;
-	}
+    public SleepChart(final Context context, final AttributeSet attrs, int defStyle) {
+        super(context, attrs);
+        mContext = context;
+        mAttrs = attrs;
+        mDefStyle = defStyle;
 
-	public boolean makesSenseToDisplay() {
-		return xySeriesMovement.getItemCount() > 1;
-	}
+        // Now begin processing attributes
+        final Resources resources = mContext.getResources();
+        final TypedArray array =
+            mContext.obtainStyledAttributes(mAttrs, R.styleable.SleepChart, mDefStyle, 0);
 
-	public void reconfigure() {
-		if (makesSenseToDisplay()) {
-			final double firstX = xySeriesMovement.getX(0);
-			final double lastX = xySeriesMovement.getX(xySeriesMovement.getItemCount() - 1);
+        if (array.hasValue(R.styleable.SleepChart_android_background)) {
+            mSetBackgroundColor = true;
+            mBackgroundColor = array.getColor(R.styleable.SleepChart_android_background,
+                                                 R.color.background_dark);
+        }
 
-			//if (makesSenseToDisplay()) {
-				// reconfigure the calibration line..
-				xySeriesCalibration.clear();
+        if (array.hasValue(R.styleable.SleepChart_android_textColor)) {
+            mSetTextColor = true;
+            mTextColor = array.getColor(R.styleable.SleepChart_android_textColor,
+                                        R.color.text_dark);
+        }
 
-				xySeriesCalibration.add(firstX, calibrationLevel);
-				xySeriesCalibration.add(lastX, calibrationLevel);
-			//}
+        if (array.getBoolean(R.styleable.SleepChart_setScroll, false)) {
+            mSetInScroll = true;
+        }
 
-			final int MINUTE_IN_MS = 1000 * 60;
-			final int HOUR_IN_MS = MINUTE_IN_MS * 60;
-			/*if (lastX - firstX > HOUR_IN_MS*2) {
-				((TimeChart) mChart).setDateFormat("h");
-				xyMultipleSeriesRenderer.setXLabels(8);
-			}else if (lastX - firstX > MINUTE_IN_MS*3) {
-				((TimeChart) mChart).setDateFormat("h:mm");
-				xyMultipleSeriesRenderer.setXLabels(5);
-			}*/
+        if (array.hasValue(R.styleable.SleepChart_gridAxisColor)) {
+            mSetGridColor = true;
+            mGridColor = array.getColor(R.styleable.SleepChart_gridAxisColor,
+                                        R.color.sleepchart_axis);
+        }
 
-			xyMultipleSeriesRenderer.setXAxisMin(firstX);
-			xyMultipleSeriesRenderer.setXAxisMax(lastX);
+        mXLabelTicks = array.getInteger(R.styleable.SleepChart_xLabelTicks,
+                                        DEFAULT_X_LABEL_TICKS);
 
-			xyMultipleSeriesRenderer.setYAxisMin(0);
-			xyMultipleSeriesRenderer.setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
-		}
-	}
+        mMovementColor = array.getColor(R.styleable.SleepChart_movementColor,
+                                        R.color.sleepchart_movement_light);
 
-	public void setCalibrationLevel(final double calibrationLevel) {
-		this.calibrationLevel = calibrationLevel;
-	}
+        mMovementBorderColor = array.getColor(R.styleable.SleepChart_movementBorderColor,
+                                              R.color.sleepchart_movement_border_light);
 
-	public void sync(final Cursor cursor) throws StreamCorruptedException,
-			IllegalArgumentException, IOException, ClassNotFoundException {
-		sync(new SleepSession(cursor));
-	}
+        mCalibrationColor = array.getColor(R.styleable.SleepChart_calibrationColor,
+                                           R.color.sleepchart_calibration_light);
 
-	public void sync(final Double x, final Double y, final double alarm) {
-		if (xySeriesMovement.getItemCount() >= SleepMonitoringService.MAX_POINTS_IN_A_GRAPH) {
-			xySeriesMovement.add(x, y);
-			xySeriesMovement.remove(0);
-		} else {
-			xySeriesMovement.add(x, y);
-		}
-		reconfigure();
-		repaint();
-	}
+        mCalibrationBorderColor = array.getColor(R.styleable.SleepChart_calibrationBorderColor,
+                                                 R.color.sleepchart_calibration_border_light);
 
-	public void sync(final SleepSession sleepRecord) {
-		xySeriesMovement.setXY(PointD.convertToNew(sleepRecord.chartData));
-		calibrationLevel = sleepRecord.alarm;
+        mShowGrid = array.getBoolean(R.styleable.SleepChart_showGrid, true);
 
-		rating = sleepRecord.rating;
+        mShowLabels = array.getBoolean(R.styleable.SleepChart_showLabels, true);
+        mShowLegend = array.getBoolean(R.styleable.SleepChart_showLegend, true);
+        mShowTitle = array.getBoolean(R.styleable.SleepChart_showTitle, true);
+    }
 
-		xyMultipleSeriesRenderer.setChartTitle(sleepRecord.title);
-		reconfigure();
-		repaint();
-	}
+    @Override
+    protected AbstractChart buildChart() {
+        Log.d(TAG, "Attempting to build chart.");
+        if (mChart != null) {
+            Log.d(TAG, "Attempt to build chart when chart already exists.");
+            return null;
+        }
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeSerializable(xyMultipleSeriesDataset);
-		dest.writeSerializable(xyMultipleSeriesRenderer);
-		dest.writeSerializable(xySeriesMovement);
-		dest.writeSerializable(xySeriesMovementRenderer);
-		dest.writeSerializable(xySeriesCalibration);
-		dest.writeSerializable(xySeriesCalibrationRenderer);
-		dest.writeDouble(calibrationLevel);
-		dest.writeInt(rating);
-	}
+        mDataset = new XYMultipleSeriesDataset();
+        mRenderer = new XYMultipleSeriesRenderer();
+        // Set initial framing for renderer.
+        mRenderer.setYAxisMin(0);
+        mRenderer.setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
+        mRenderer.setXAxisMin(System.currentTimeMillis());
+        mRenderer.setXAxisMax(System.currentTimeMillis());
+        mRenderer.setPanEnabled(false, false);
+        mRenderer.setZoomEnabled(false, false);
+        mChart = new TimeChart(mDataset, mRenderer);
+        mChart.setDateFormat("h:mm:ss");
+        return mChart;
+    }
 
-	public void clear() {
-		xySeriesMovement.clear();
-		xySeriesCalibration.clear();
-	}
+    public void addPoint(double x, double y) {
+        synchronized (this) {
+            mData.add(x, y);
+        }
+    }
+
+    /**
+     * Return the calibration level if one is available; otherwise return INVALID_CALIBRATION.
+     *
+     * Callers of this method could call hasCalibrationLevel first to determine if information
+     * surrounding calibration is available prior to invoking this method.
+     */
+    public float getCalibrationLevel() {
+        if (mData != null) {
+            return mData.calibrationLevel;
+        } else if (mTempCalibrationLevel != INVALID_CALIBRATION) {
+            Log.d(TAG, "Returning the temporary calibration level.");
+            return mTempCalibrationLevel;
+        }
+        return INVALID_CALIBRATION;
+    }
+
+    /**
+     * Return true or false depending upon whether or not calibration level information is available
+     * either as contained in sleep chart data or in the temporary calibration level information.
+     */
+    public boolean hasCalibrationLevel() {
+        return (mData != null || mTempCalibrationLevel != INVALID_CALIBRATION);
+    }
+
+    public boolean makesSenseToDisplay() {
+        if (mData == null) {
+            return false;
+        }
+        return mData.xySeriesMovement.getItemCount() > 1;
+    }
+
+    public void reconfigure() {
+        if (makesSenseToDisplay()) {
+            final double firstX = mData.xySeriesMovement.getX(0);
+            final double lastX =
+                mData.xySeriesMovement.getX(mData.xySeriesMovement.getItemCount() - 1);
+
+            // if (makesSenseToDisplay()) {
+            // reconfigure the calibration line..
+            synchronized (this) {
+                mData.xySeriesCalibration.clear();
+
+                mData.xySeriesCalibration.add(firstX, mData.calibrationLevel);
+                mData.xySeriesCalibration.add(lastX, mData.calibrationLevel);
+            }
+
+            // }
+            /*
+             * if (lastX - firstX > HOUR_IN_MS*2) { ((TimeChart)
+             * mChart).setDateFormat("h");
+             * xyMultipleSeriesRenderer.setXLabels(8); }else if (lastX - firstX
+             * > MINUTE_IN_MS*3) { ((TimeChart) mChart).setDateFormat("h:mm");
+             * xyMultipleSeriesRenderer.setXLabels(5); }
+             */
+
+            mRenderer.setXAxisMin(firstX);
+            mRenderer.setXAxisMax(lastX);
+            mRenderer.setYAxisMin(0);
+            mRenderer.setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
+
+            setupChartAxisFormat();
+        } else {
+            Log.w(TAG, "Asked to reconfigure but it did not make sense to display.");
+        }
+    }
+
+    /**
+     * Set this sleep chart to the given data.
+     */
+    public void setData(SleepChartData data) {
+        synchronized (this) {
+            mData = data;
+            setupData();
+        }
+    }
+
+    public void setCalibrationLevel(final float calibrationLevel) {
+        if (mData == null) {
+            mTempCalibrationLevel = calibrationLevel;
+        } else {
+            synchronized (this) {
+                mData.calibrationLevel = calibrationLevel;
+            }
+            mTempCalibrationLevel = INVALID_CALIBRATION;
+        }
+        reconfigure();
+        repaint();
+    }
+
+    public void setScroll(boolean scroll) {
+        mSetInScroll = scroll;
+    }
+
+    public void sync(final Cursor cursor)
+        throws StreamCorruptedException, IllegalArgumentException,
+               IOException, ClassNotFoundException {
+        Log.d(TAG, "Attempting to sync with cursor: " + cursor);
+        this.sync(new SleepSession(cursor));
+    }
+
+    public void sync(final Double x, final Double y, final float calibrationLevel) {
+        synchronized (this) {
+            initCheckData();
+            mData.add(x, y, calibrationLevel);
+        }
+        reconfigure();
+        repaint();
+    }
+
+    public void sync(List<PointD> points)
+    {
+        synchronized (this) {
+            initCheckData();
+            clear();
+            for (PointD point : points) {
+                addPoint(point.x, point.y);
+            }
+        }
+        reconfigure();
+    }
+
+    public void sync(final SleepSession sleepRecord) {
+        Log.d(TAG, "Attempting to sync with sleep record: " + sleepRecord);
+
+        synchronized (this) {
+            initCheckData();
+            mData.set(com.androsz.electricsleepbeta.util.PointD.convertToNew(sleepRecord.getData()),
+                      sleepRecord.getCalibrationLevel());
+        }
+
+        // TODO this need to take into account timezone information.
+        if (mShowTitle) {
+            mRenderer.setChartTitle(sleepRecord.getTitle(mContext));
+        }
+        reconfigure();
+        repaint();
+    }
+
+    public void clear() {
+        synchronized (this) {
+            if (mData != null) {
+                mData.clear();
+                repaint();
+            }
+        }
+    }
+
+    /**
+     * Perform a check to see if data is initialized and if not then initialize it.
+     */
+    private void initCheckData() {
+        if (mData == null) {
+            synchronized (this) {
+                mData = new SleepChartData(mContext);
+                if (mTempCalibrationLevel != INVALID_CALIBRATION) {
+                    mData.calibrationLevel = mTempCalibrationLevel;
+                    mTempCalibrationLevel = INVALID_CALIBRATION;
+                }
+            }
+            setupData();
+        }
+    }
+
+    /**
+     * Set the chart's axis format based upon current duration of the data.
+     */
+    private void setupChartAxisFormat() {
+        if (mData == null) {
+            return;
+        }
+        final double duration = mData.getDuration();
+        String axisFormat;
+
+        final int MSEC_PER_MINUTE = 1000 * 60;
+        final int MSEC_PER_HOUR = MSEC_PER_MINUTE * 60;
+
+        if (duration > (15 * MSEC_PER_MINUTE)) {
+            axisFormat = "h:mm";
+        } else {
+            axisFormat = "h:mm:ss";
+        }
+        if (!axisFormat.equals(mAxisFormat)) {
+            mAxisFormat = axisFormat;
+            mChart.setDateFormat(mAxisFormat);
+        }
+    }
+
+    /**
+     * Helper method that initializes charting after insertion of data.
+     */
+    private void setupData() {
+        if (mData == null) {
+            Log.w(TAG, "Asked to setup data when it was not instantiated.");
+            return;
+        }
+
+        // remove all existing series
+        for (int i = 0; i < mDataset.getSeriesCount(); i++) {
+            mDataset.removeSeries(i);
+        }
+        for (int i = 0; i < mRenderer.getSeriesRendererCount(); i++) {
+            mRenderer.removeSeriesRenderer(mRenderer.getSeriesRendererAt(i));
+        }
+
+        // add series to the dataset
+        mDataset.addSeries(mData.xySeriesMovement);
+        mDataset.addSeries(mData.xySeriesCalibration);
+
+        // set up the dataset renderer
+        mRenderer.addSeriesRenderer(mData.xySeriesMovementRenderer);
+        mRenderer.addSeriesRenderer(mData.xySeriesCalibrationRenderer);
+
+        final float textSize = MathUtils.calculatePxFromSp(mContext, 14);
+        mRenderer.setChartTitleTextSize(textSize);
+        mRenderer.setAxisTitleTextSize(textSize);
+        mRenderer.setLabelsTextSize(textSize);
+        // xyMultipleSeriesRenderer.setLegendHeight((int) (MathUtils
+        // .calculatePxFromDp(context, 30) + textSize*3));
+        mRenderer.setAntialiasing(true);
+        mRenderer.setFitLegend(true);
+        mRenderer.setLegendTextSize(textSize);
+        mRenderer.setXLabels(mXLabelTicks);
+        mRenderer.setYLabels(8);
+        mRenderer.setYLabelsAlign(Align.RIGHT);
+
+        setupStyle();
+        setupChartAxisFormat();
+    }
+
+    /**
+     * Iterate over the known attributes for this view setting our chart to the desired settings.
+     */
+    private void setupStyle() {
+        // TODO remove comment
+        // After this point buildChart() should have been invoked and the
+        // various renders and series
+        // should have been populated.
+
+        if (mAttrs == null) {
+            Log.d(TAG, "No attributes nothing to process.");
+            return;
+        }
+
+        Log.d(TAG, "Processing attributes.");
+
+        // background color processing
+        if (mSetBackgroundColor) {
+            mRenderer.setBackgroundColor(mBackgroundColor);
+            mRenderer.setMarginsColor(mBackgroundColor);
+            mRenderer.setApplyBackgroundColor(true);
+        } else {
+            mRenderer.setBackgroundColor(Color.TRANSPARENT);
+            mRenderer.setMarginsColor(Color.TRANSPARENT);
+            mRenderer.setApplyBackgroundColor(true);
+        }
+
+        if (mSetTextColor) {
+            mRenderer.setLabelsColor(mTextColor);
+            mRenderer.setAxesColor(mTextColor);
+        }
+
+        // SleepChart_setScroll
+        mRenderer.setInScroll(mSetInScroll);
+
+        // SleepChart_gridAxisColor
+        if (mSetGridColor) {
+            mRenderer.setGridColor(mGridColor);
+        } else {
+            mRenderer.setGridColor(R.color.sleepchart_axis);
+        }
+
+        // SleepChart_movementColor
+        mData.xySeriesMovementRenderer.setFillBelowLineColor(mMovementColor);
+
+        // SleepChart_movementBorderColor
+        mData.xySeriesMovementRenderer.setColor(mMovementBorderColor);
+
+        // SleepChart_calibrationColor
+        mData.xySeriesCalibrationRenderer.setFillBelowLineColor(mCalibrationColor);
+
+        // SleepChart_calibrationBorderColor
+        mData.xySeriesCalibrationRenderer.setColor(mCalibrationBorderColor);
+
+        // SleepChart_showGrid
+        mRenderer.setShowGrid(mShowGrid);
+
+        Resources res = mContext.getResources();
+        int[] margins = mRenderer.getMargins();
+        mRenderer.setShowLabels(mShowLabels);
+        if (mShowLabels) {
+            try {
+                margins[1] += res.getDimension(R.dimen.sleep_chart_left_margin);
+            } catch (android.content.res.Resources.NotFoundException e) {
+                margins[1] += DEFAULT_LEFT_MARGIN; // increase left margin
+            }
+        }
+        mRenderer.setShowLegend(mShowLegend);
+        if (mShowLegend) {
+            try {
+                margins[2] += res.getDimension(R.dimen.sleep_chart_bottom_margin);
+            } catch (android.content.res.Resources.NotFoundException e) {
+                margins[2] += DEFAULT_BOTTOM_MARGIN; // increase bottom margin
+            }
+        }
+        if (mShowTitle) {
+            try {
+                margins[0] += res.getDimension(R.dimen.sleep_chart_top_margin);
+            } catch (android.content.res.Resources.NotFoundException e) {
+                margins[0] += DEFAULT_TOP_MARGIN; // increase top margin
+            }
+        }
+        mRenderer.setMargins(margins);
+
+        setupChartAxisFormat();
+    }
 }

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TextHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Version 1.1.0" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UI overhaul" >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&apos;Track Sleep&apos; Homescreen shortcut (Widget) re-added." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can now share individual nights of sleep through other installed apps." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More space has been added between Snooze and Dismiss to prevent accidental misbehavior when an alarm pops." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fixed a bug where setting an alarm would cause crashes." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fixed a bug where viewing the graph on the home screen would cause a crash." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Viewing history defaults to a list - you can switch between month and list." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AChartEngine updated - should provide better sleep chart performance." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sleep Score is calculated based on deep sleep, duration, user-provided rating, and time to fall asleep." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Devices running Android 3.0+ will now have some UI animations." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expert advice and Sleep store links added." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Warnings about battery, dim sleep and alarms are more apparent and accurate on Tracking screen." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Large &apos;Stop Tracking&apos; button added." >
+    </TextView>
+
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The process of calibration has been revamped." >
+    </TextView>
+    
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Updated to ActionBarSherlock 4.0.1 for better ActionBar backporting and consistency across Android versions." >
+    </TextView>
+    
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Limited Home Total averages and the History List to the 60 most recent sessions. Should make things faster and more stable for users with a lot of data." >
+    </TextView>
+    
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Google Analytics IP is now properly anonymized." >
+    </TextView>
+    
+    <TextView
+        style="@style/TextBulleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toasts on Tracking sleep screen and Settings screen are more accurate and less annoying." >
+    </TextView>
+
+</LinearLayout>

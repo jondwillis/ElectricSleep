@@ -1,3 +1,7 @@
-/bin
-/gen
-/target
+bin/
+gen/
+target/
+.settings/
+.externalToolBuilder/
+maven-eclipse.xml
+*~

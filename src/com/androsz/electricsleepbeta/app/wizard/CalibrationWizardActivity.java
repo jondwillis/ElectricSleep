@@ -1,16 +1,14 @@
 package com.androsz.electricsleepbeta.app.wizard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
@@ -18,140 +16,200 @@ import com.viewpagerindicator.TitleProvider;
 
 public class CalibrationWizardActivity extends WizardActivity {
 
-	public static final int LIGHT_SLEEP_CALIBRATION_INTERVAL = 500;
+    public static final int LIGHT_SLEEP_CALIBRATION_INTERVAL = 500;
 
-	public CalibrateLightSleepFragment calibrateLightSleepFragment;// =
-																	// instantiateFragment2(R.layout.wizard_calibration_lightsleep);
+    public CalibrateLightSleepFragment calibrateLightSleepFragment;
 
-	public CheckForScreenBugFragment checkForScreenBugFragment;// =
-																// instantiateFragment1(R.layout.wizard_calibration_screenbug);
+    public CheckForScreenBugFragment checkForScreenBugFragment;
 
-	double lightSleepTrigger;
+    private static final int FRAG_ABOUT = 0;
+    private static final int FRAG_LIGHT_SLEEP_INSTRUCT = 1;
+    private static final int FRAG_LIGHT_SLEEP = 2;
+    private static final int FRAG_SCREEN_BUG = 3;
+    private static final int FRAG_RESULTS = 4;
 
-	private boolean isScreenBugPresent;
+    private boolean mHasUserChangedCalibration;
+    private boolean mHasScreenBugCalibrated;
 
-	// hack-ish but necessary because lockscreens can differ
-	public static Intent BUG_PRESENT_INTENT = null;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mHasUserChangedCalibration = savedInstanceState
+                    .getBoolean("mHasUserChangedCalibration");
+            mHasScreenBugCalibrated = savedInstanceState
+                    .getBoolean("mHasScreenBugCalibrated");
+        } else {
+            mHasUserChangedCalibration = false;
+            mHasScreenBugCalibrated = false;
+        }
+    }
 
-	private class WizardPagerAdapter extends FragmentPagerAdapter implements TitleProvider {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("mHasUserChangedCalibration",
+                mHasUserChangedCalibration);
+        outState.putBoolean("mHasScreenBugCalibrated", mHasScreenBugCalibrated);
+    }
 
-		public WizardPagerAdapter(FragmentManager fm) {
-			super(fm);
-			calibrateLightSleepFragment = new CalibrateLightSleepFragment();
-			checkForScreenBugFragment = new CheckForScreenBugFragment();
-		}
+    private class WizardPagerAdapter extends FragmentPagerAdapter implements
+            TitleProvider {
 
-		private String[] titles = new String[] { "Why", "Instructions", "Light Sleep",
-				"Screen Test", "Done" };
+        public WizardPagerAdapter(FragmentManager manager) {
+            super(manager);
 
-		@Override
-		public String getTitle(int position) {
-			return titles[position];
-		}
+            calibrateLightSleepFragment = (CalibrateLightSleepFragment) manager
+                    .findFragmentByTag(makeFragmentName(FRAG_LIGHT_SLEEP));
 
-		@Override
-		public int getCount() {
-			return titles.length;
-		}
+            if (calibrateLightSleepFragment == null) {
+                calibrateLightSleepFragment = new CalibrateLightSleepFragment();
+            }
+            calibrateLightSleepFragment
+                    .setCalibratorStateListener(new CalibratorStateListener() {
+                        @Override
+                        public void onCalibrationComplete(boolean success) {
+                            setForwardNavigationEnabled(success);
+                            mHasUserChangedCalibration = true;
+                        }
+                    });
 
-		@Override
-		public Fragment getItem(int position) {
+            checkForScreenBugFragment = (CheckForScreenBugFragment) manager
+                    .findFragmentByTag(makeFragmentName(FRAG_SCREEN_BUG));
+            if (checkForScreenBugFragment == null) {
+                checkForScreenBugFragment = new CheckForScreenBugFragment();
+            }
+            checkForScreenBugFragment
+                    .setCalibratorStateListener(new CalibratorStateListener() {
+                        @Override
+                        public void onCalibrationComplete(boolean success) {
+                            //onRightButtonClick(null);
+                            setForwardNavigationEnabled(success);
+                            mHasScreenBugCalibrated = true;
+                        }
+                    });
+        }
 
-			switch (position) {
-			case 0:
-				return new CalibrationAboutFragment();
-			case 1:
-				return new CalibrationInstructionsFragment();
-			case 2:
-				return calibrateLightSleepFragment;
-			case 3:
-				return checkForScreenBugFragment;
-			case 4:
-				return new CalibrationResultsFragment();
+        private String[] titles = new String[] { "Calibration", "Placement",
+                "Sensitivity Test", "Standby Test", "Setup Complete" };
 
-			default:
-				throw new IllegalStateException("Could not find the correct fragment.");
-			}
-		}
-	}
+        @Override
+        public String getTitle(int position) {
+            return titles[position];
+        }
 
-	@Override
-	protected PagerAdapter getPagerAdapter() {
-		return new WizardPagerAdapter(getSupportFragmentManager());
-	}
+        @Override
+        public int getCount() {
+            return titles.length;
+        }
 
-	@Override
-	protected void onFinishWizardActivity() throws IllegalStateException {
-		final SharedPreferences.Editor ed = getSharedPreferences(SettingsActivity.PREFERENCES, 0)
-				.edit();
-		ed.putFloat(getString(R.string.pref_alarm_trigger_sensitivity), (float) lightSleepTrigger);
-		ed.putBoolean(getString(R.string.pref_force_screen), isScreenBugPresent);
-		ed.commit();
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+            case FRAG_ABOUT:
+                return new CalibrationAboutFragment();
+            case FRAG_LIGHT_SLEEP_INSTRUCT:
+                return new CalibrateLightSleepInstructionsFragment();
+            case FRAG_LIGHT_SLEEP:
+                return calibrateLightSleepFragment;
+            case FRAG_SCREEN_BUG:
+                return checkForScreenBugFragment;
+            case FRAG_RESULTS:
+                return new CalibrationResultsFragment();
+            default:
+                throw new IllegalStateException(
+                        "Could not find the correct fragment.");
+            }
+        }
+    }
 
-		if (ed.commit()) {
-			final SharedPreferences.Editor ed2 = getSharedPreferences(
-					SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE).edit();
-			ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT,
-					getResources().getInteger(R.integer.prefs_version));
-			ed2.commit();
+    private PagerAdapter mWizardPagerAdapter;
 
-			trackEvent("alarm-level", (int) Math.round(lightSleepTrigger * 100));
-			trackEvent("screen-bug", isScreenBugPresent ? 1 : 0);
-			finish();
-		} else {
-			trackEvent("calibration-fail", 0);
-		}
-	}
+    @Override
+    protected PagerAdapter getPagerAdapter() {
+        // check if we already have a cached copy, create it if not.
+        if (mWizardPagerAdapter == null) {
+            mWizardPagerAdapter = new WizardPagerAdapter(
+                    getSupportFragmentManager());
+        }
+        return mWizardPagerAdapter;
+    }
 
-	@Override
-	protected void onPrepareLastSlide() {
-		final TextView textViewAlarm = (TextView) findViewById(R.id.alarmResult);
-		textViewAlarm.setText(String.format("%.2f", lightSleepTrigger));
-		final TextView textViewScreen = (TextView) findViewById(R.id.screenResult);
-		textViewScreen.setText(isScreenBugPresent + "");
-	}
+    @Override
+    protected void onFinishWizardActivity() throws IllegalStateException {
+        final SharedPreferences.Editor ed2 = getSharedPreferences(
+                SettingsActivity.PREFERENCES_ENVIRONMENT, Context.MODE_PRIVATE)
+                .edit();
+        ed2.putInt(SettingsActivity.PREFERENCES_ENVIRONMENT, getResources()
+                .getInteger(R.integer.prefs_version));
+        ed2.commit();
 
-	@Override
-	protected void onRestoreInstanceState(final Bundle savedState) {
+        finish();
+    }
 
-		super.onRestoreInstanceState(savedState);
+    protected void setupNavigationButtons(int index) {
+        super.setupNavigationButtons(index);
+        if (index == FRAG_LIGHT_SLEEP) {
+            setForwardNavigationEnabled(mHasUserChangedCalibration);
+        } else if (index == FRAG_SCREEN_BUG) {
+            setForwardNavigationEnabled(mHasScreenBugCalibrated);
+        } else {
+            setForwardNavigationEnabled(true);
+        }
+    }
 
-		lightSleepTrigger = savedState.getDouble("alarm");
-		isScreenBugPresent = savedState.getBoolean("screenBug");
-	}
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (calibrateLightSleepFragment != null) {
+            calibrateLightSleepFragment.stopCalibration(this);
+        }
+        if (checkForScreenBugFragment != null && pm.isScreenOn()) {
+            checkForScreenBugFragment.stopCalibration(this);
+        }
+    }
 
-	@Override
-	protected void onSaveInstanceState(final Bundle outState) {
-		super.onSaveInstanceState(outState);
+    @Override
+    protected void onPerformWizardAction(int index) {
+        if (index == FRAG_LIGHT_SLEEP) {
+            if (calibrateLightSleepFragment != null) {
+                calibrateLightSleepFragment.startCalibration(this);
+            }
 
-		outState.putDouble("alarm", lightSleepTrigger);
-		outState.putBoolean("screenBug", isScreenBugPresent);
-	}
+            if (checkForScreenBugFragment != null) {
+                checkForScreenBugFragment.stopCalibration(this);
+            }
 
-	@Override
-	public void onLeftButtonClick(View v) {
-		super.onLeftButtonClick(v);
-	}
+        } else if (index == FRAG_SCREEN_BUG && !mHasScreenBugCalibrated) {
+            if (calibrateLightSleepFragment != null) {
+                calibrateLightSleepFragment.stopCalibration(this);
+            }
 
-	@Override
-	protected void onPerformWizardAction(int index) {
-		if (index == 2) {
-			calibrateLightSleepFragment.startCalibration(this);
+            if (checkForScreenBugFragment != null) {
+                checkForScreenBugFragment.startCalibration(this);
+            }
 
-			checkForScreenBugFragment.stopCalibration(this);
+        } else {
+            // not on a wizard page. stop all.
+            if (calibrateLightSleepFragment != null) {
+                calibrateLightSleepFragment.stopCalibration(this);
+            }
 
-		} else if (index == 3) {
+            if (checkForScreenBugFragment != null) {
+                checkForScreenBugFragment.stopCalibration(this);
+            }
 
-			checkForScreenBugFragment.startCalibration(this);
+        }
+    }
 
-			calibrateLightSleepFragment.stopCalibration(this);
+    private void setForwardNavigationEnabled(boolean enabled) {
+        findViewById(R.id.rightButton).setEnabled(enabled);
+        setPagingEnabled(enabled);
+    }
 
-		} else {
+    @Override
+    protected void onPrepareLastSlide(Button rightButton) {
+    }
 
-			calibrateLightSleepFragment.stopCalibration(this);
-
-			checkForScreenBugFragment.stopCalibration(this);
-
-		}
-	}
 }

@@ -2,15 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_item_stop_sleep"
-        android:icon="@drawable/ic_menu_stop"
-        android:showAsAction="always|withText"
-        android:title="@string/stop"></item>
-
-    <item
         android:id="@+id/menu_item_alarms"
-        android:icon="@drawable/ic_menu_alarm"
-        android:showAsAction="always|withText"
+        android:icon="@drawable/ic_alarm_neutral"
+        android:showAsAction="always"
         android:title="@string/alarm_list_title"></item>
 
 </menu>
