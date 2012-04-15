@@ -265,29 +265,35 @@ public class HistoryMonthFragment extends AnalyticFragment implements
 	};
 
 	void eventsChanged(final int whichPage) {
-		getActivity().runOnUiThread(new Runnable() {
+		try {
+			getActivity().runOnUiThread(new Runnable() {
 
-			@Override
-			public void run() {
-				// if (whichPage == -1) {
-				ViewPager vp = monthPager;
-				for (int i = 0; i < vp.getChildCount(); i++) {
-					final MonthView mv = (MonthView) monthPager.getChildAt(i);
-					Time t = mv.getTime();
-					mv.forceReloadEvents(mSessions);/*
-													 * getSessionsInInterval(t.
-													 * toMillis(true), 31));
-													 */
+				@Override
+				public void run() {
+					// if (whichPage == -1) {
+					ViewPager vp = monthPager;
+					for (int i = 0; i < vp.getChildCount(); i++) {
+						final MonthView mv = (MonthView) monthPager
+								.getChildAt(i);
+						Time t = mv.getTime();
+						mv.forceReloadEvents(mSessions);/*
+														 * getSessionsInInterval(
+														 * t. toMillis(true),
+														 * 31));
+														 */
+					}
+					// } else {
+					// final MonthView mv = (MonthView)
+					// monthPager.getChildAt(whichPage);
+					// Time t = mv.getTime();
+					// mv.forceReloadEvents(getSessionsInInterval(mv.getTime().toMillis(true),
+					// 31));
+					// }
 				}
-				// } else {
-				// final MonthView mv = (MonthView)
-				// monthPager.getChildAt(whichPage);
-				// Time t = mv.getTime();
-				// mv.forceReloadEvents(getSessionsInInterval(mv.getTime().toMillis(true),
-				// 31));
-				// }
-			}
-		});
+			});
+		} catch (NullPointerException npe) {
+			Log.d("getActivity() caused NPE in eventsChanged(...)");
+		}
 	}
 
 	public ArrayList<Long[]> getSessionsInInterval(long startMillis, int days) {
@@ -467,7 +473,7 @@ public class HistoryMonthFragment extends AnalyticFragment implements
 			try {
 				mSwitchToOtherHistoryTask.execute();
 			} catch (IllegalStateException ise) {
-				//the task is already running or has finished.
+				// the task is already running or has finished.
 			}
 			return true;
 		}
