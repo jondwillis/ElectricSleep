@@ -75,6 +75,7 @@ public class SettingsActivity extends HostPreferenceActivity {
 	// example: show the user a donate message once
 	public static final String PREFERENCES_ENVIRONMENT = "prefsVersion";
 	public static final String PREFERENCES_KEY_DONT_SHOW_ZEO = "dontShowZeoMessage";
+	public static final String PREFERENCES_KEY_HISTORY_VIEW_AS_LIST = "historyViewType";
 
 	@Override
 	protected int getContentAreaLayoutId() {
