@@ -473,7 +473,7 @@ public class HistoryMonthFragment extends AnalyticFragment implements
 			try {
 				mSwitchToOtherHistoryTask.execute();
 			} catch (IllegalStateException ise) {
-				// the task is already running or has finished.
+				Log.d(TAG, "the task is already running or has finished.");
 			}
 			return true;
 		}

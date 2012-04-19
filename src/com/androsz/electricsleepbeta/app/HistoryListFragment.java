@@ -12,8 +12,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -33,10 +31,14 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SafeViewFlipper;
 import com.androsz.electricsleepbeta.widget.SleepHistoryCursorAdapter;
+import com.myzeo.android.Log;
 
 public class HistoryListFragment extends AnalyticFragment implements
 		LoaderManager.LoaderCallbacks<Cursor> {
 
+	private static final String TAG = HistoryListFragment.class
+			.getSimpleName();
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -266,7 +268,7 @@ public class HistoryListFragment extends AnalyticFragment implements
 			try {
 				mSwitchToOtherHistoryTask.execute();
 			} catch (IllegalStateException ise) {
-				//the task is already running or has finished.
+				Log.d(TAG, "the task is already running or has finished.");
 			}
 			return true;
 		}
