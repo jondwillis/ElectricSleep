@@ -79,7 +79,9 @@ public class SleepMonitoringService extends Service implements SensorEventListen
 			final Intent i = new Intent(SleepActivity.UPDATE_CHART);
 			i.putExtra(EXTRA_X, x);
 			i.putExtra(EXTRA_Y, y);
-			i.putExtra(StartSleepReceiver.EXTRA_ALARM, alarmTriggerSensitivity);
+			
+			//TODO: ensure that this isn't needed anymore.
+			//i.putExtra(StartSleepReceiver.EXTRA_ALARM, alarmTriggerSensitivity);
 			sendBroadcast(i);
 
 			maxNetForce = 0;

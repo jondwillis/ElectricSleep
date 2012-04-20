@@ -25,7 +25,6 @@ import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.alarmclock.Alarm;
 import com.androsz.electricsleepbeta.alarmclock.AlarmClock;
 import com.androsz.electricsleepbeta.alarmclock.Alarms;
-import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.widget.SleepChart;
 
 public class SleepActivity extends HostActivity {
@@ -129,9 +128,7 @@ public class SleepActivity extends HostActivity {
 		public void onReceive(final Context context, final Intent intent) {
 			sleepChart.sync(intent.getDoubleExtra(
 					SleepMonitoringService.EXTRA_X, 0), intent.getDoubleExtra(
-					SleepMonitoringService.EXTRA_Y, 0), intent.getFloatExtra(
-					StartSleepReceiver.EXTRA_ALARM,
-					SettingsActivity.DEFAULT_ALARM_SENSITIVITY));
+					SleepMonitoringService.EXTRA_Y, 0));
 		}
 	};
 
@@ -283,7 +280,7 @@ public class SleepActivity extends HostActivity {
 			SleepMonitoringService.ServiceBinder binder = (SleepMonitoringService.ServiceBinder) iBinder;
 			mMonitoringService = binder.getService();
 
-			sleepChart.setCalibrationLevel(mMonitoringService
+			sleepChart.setCalibrationLevelAndRedraw(mMonitoringService
 					.getAlarmTriggerSensitivity());
 			sleepChart.sync(mMonitoringService.getData());
 			final boolean useAlarm = mMonitoringService.getUseAlarm();
