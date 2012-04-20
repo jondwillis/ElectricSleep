@@ -45,15 +45,15 @@
                 android:onClick="onClick"
                 android:orientation="vertical" >
 
-                <TextView
+                <Button
                     android:id="@+id/text_alarm_status"
                     style="@android:style/TextAppearance.Medium"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dip"
                     android:background="@null"
                     android:drawableLeft="@drawable/ic_alarm_none"
-                    android:drawablePadding="6dip"
+                    android:drawablePadding="0dip"
                     android:gravity="center"
                     android:onClick="onClick"
                     android:padding="2dip"
