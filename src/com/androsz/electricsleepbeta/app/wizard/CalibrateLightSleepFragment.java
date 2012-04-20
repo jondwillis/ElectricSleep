@@ -20,7 +20,7 @@ import com.androsz.electricsleepbeta.widget.SleepChart;
 import com.androsz.electricsleepbeta.widget.VerticalSeekBar;
 
 public class CalibrateLightSleepFragment extends Calibrator {
-	
+
 	private float mAlarmTrigger;
 
 	private VerticalSeekBar mSeekBar;
@@ -51,13 +51,13 @@ public class CalibrateLightSleepFragment extends Calibrator {
 		mSleepChart.clear();
 		mSeekBar = (VerticalSeekBar) a
 				.findViewById(R.id.calibration_level_seekbar);
-		
+
 		mWarmingUp = a.findViewById(R.id.warming_up_text);
 
 		mSleepChart.setVisibility(View.INVISIBLE);
 		mSeekBar.setVisibility(View.INVISIBLE);
 
-		mSleepChart.setCalibrationLevel(mAlarmTrigger);
+		mSleepChart.setCalibrationLevelAndRedraw(mAlarmTrigger);
 
 		mSeekBar.setMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
 		mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -71,7 +71,7 @@ public class CalibrateLightSleepFragment extends Calibrator {
 					mAlarmTrigger = Math.min(
 							SettingsActivity.MAX_ALARM_SENSITIVITY, progress
 									/ DecimalSeekBar.PRECISION);
-					mSleepChart.setCalibrationLevel(mAlarmTrigger);
+					mSleepChart.setCalibrationLevelAndRedraw(mAlarmTrigger);
 				}
 			}
 
@@ -91,18 +91,15 @@ public class CalibrateLightSleepFragment extends Calibrator {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			if (mSleepChart != null) {
-                
-				if (mSleepChart.hasCalibrationLevel()) {
-					mSleepChart.sync(intent.getDoubleExtra(
-							SleepMonitoringService.EXTRA_X, 0), intent
-							.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0),
-							mAlarmTrigger);
-	                mSleepChart.setVisibility(View.VISIBLE);
-	                mSeekBar.setVisibility(View.VISIBLE);
-	                mWarmingUp.setVisibility(View.GONE);
-	                if (calibrationStateListener != null) {
-	                    calibrationStateListener.onCalibrationComplete(true);
-	                }
+
+				mSleepChart.sync(intent.getDoubleExtra(
+						SleepMonitoringService.EXTRA_X, 0), intent
+						.getDoubleExtra(SleepMonitoringService.EXTRA_Y, 0));
+				mSleepChart.setVisibility(View.VISIBLE);
+				mSeekBar.setVisibility(View.VISIBLE);
+				mWarmingUp.setVisibility(View.GONE);
+				if (calibrationStateListener != null) {
+					calibrationStateListener.onCalibrationComplete(true);
 				}
 			}
 		}
