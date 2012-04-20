@@ -152,7 +152,12 @@ public class SleepChart extends GraphicalView {
 		mRenderer = new XYMultipleSeriesRenderer();
 		// Set initial framing for renderer.
 		mRenderer.setYAxisMin(0);
-		mRenderer.setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
+		// Referencing SettingsActivity.MAX_ALARM_SENSITIVITY causes errors in ADT.
+		if (isInEditMode()) {
+			mRenderer.setYAxisMax(1.0f);
+		} else {
+			mRenderer.setYAxisMax(SettingsActivity.MAX_ALARM_SENSITIVITY);
+		}
 		mRenderer.setXAxisMin(System.currentTimeMillis());
 		mRenderer.setXAxisMax(System.currentTimeMillis());
 		mRenderer.setPanEnabled(false, false);
@@ -310,7 +315,7 @@ public class SleepChart extends GraphicalView {
 		mRenderer.setChartTitleTextSize(textSize);
 		mRenderer.setAxisTitleTextSize(textSize);
 		mRenderer.setLabelsTextSize(textSize);
-		
+
 		mRenderer.setAntialiasing(true);
 		mRenderer.setFitLegend(true);
 		mRenderer.setLegendTextSize(textSize);
@@ -319,7 +324,7 @@ public class SleepChart extends GraphicalView {
 		mRenderer.setYLabelsAlign(Align.RIGHT);
 
 		setupStyle();
-		//this ensures that labels are not drawn until we have data.
+		// this ensures that labels are not drawn until we have data.
 		mRenderer.setShowLabels(false);
 	}
 
