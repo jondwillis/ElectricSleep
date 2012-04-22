@@ -1,4 +1,4 @@
-/* @(#)ElectricSleepProvider.java
+/* @(#)Sleep101Provider.java
  *
  *========================================================================
  * Copyright 2011 by Zeo Inc. All Rights Reserved
@@ -31,7 +31,7 @@ import java.util.TimeZone;
  * @author Brandon Edens
  * @version $Revision$
  */
-public class ElectricSleepProvider extends ContentProvider {
+public class OldProvider extends ContentProvider {
 
     public static final String CONTENT_AUTHORITY = "com.androsz.electricsleepbeta.db.electric_sleep_provider";
 
@@ -48,7 +48,7 @@ public class ElectricSleepProvider extends ContentProvider {
 
     private static final UriMatcher URI_MATCHER = buildUriMatcher();
 
-    private ElectricSleepDatabase mOpenHelper;
+    private OldDatabase mOpenHelper;
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -104,7 +104,7 @@ public class ElectricSleepProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new ElectricSleepDatabase(getContext());
+        mOpenHelper = new OldDatabase(getContext());
         return true;
     }
 

@@ -43,6 +43,7 @@ import com.androsz.electricsleepbeta.app.wizard.CalibrationWizardActivity;
 import com.androsz.electricsleepbeta.content.StartSleepReceiver;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.myzeo.android.Log;
 
 public class SleepMonitoringService extends Service implements SensorEventListener {
 

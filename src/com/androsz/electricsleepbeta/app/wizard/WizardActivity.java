@@ -9,9 +9,9 @@ import android.widget.Button;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.app.HostActivity;
-import com.androsz.electricsleepbeta.app.Log;
 import com.androsz.electricsleepbeta.widget.DisablableTitlePageIndicator;
 import com.androsz.electricsleepbeta.widget.DisablableViewPager;
+import com.myzeo.android.Log;
 
 public abstract class WizardActivity extends HostActivity {
 

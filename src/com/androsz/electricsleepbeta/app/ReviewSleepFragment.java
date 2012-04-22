@@ -26,6 +26,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
 import com.androsz.electricsleepbeta.widget.SleepChart;
+import com.myzeo.android.Log;
 
 /**
  * Fragment used to review a sleep record.

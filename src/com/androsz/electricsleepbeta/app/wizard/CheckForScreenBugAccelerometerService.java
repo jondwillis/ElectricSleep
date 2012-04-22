@@ -18,9 +18,9 @@ import android.os.PowerManager;
 import android.widget.Toast;
 
 import com.androsz.electricsleepbeta.R;
-import com.androsz.electricsleepbeta.app.Log;
 import com.androsz.electricsleepbeta.app.SettingsActivity;
 import com.androsz.electricsleepbeta.util.WakeLockManager;
+import com.myzeo.android.Log;
 
 public class CheckForScreenBugAccelerometerService extends Service implements
         SensorEventListener {

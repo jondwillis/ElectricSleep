@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import com.actionbarsherlock.view.MenuItem;
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.db.SleepSession;
+import com.myzeo.android.Log;
 
 public class ReviewSleepActivity extends HostActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {

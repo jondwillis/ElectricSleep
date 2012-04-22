@@ -1,11 +1,12 @@
 package com.androsz.electricsleepbeta.app;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.StrictMode;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.myzeo.android.Log;
 
 public class StrictModeWhenDebuggableApplication extends Application {
 

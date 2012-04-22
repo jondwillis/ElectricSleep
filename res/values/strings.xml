@@ -16,7 +16,7 @@
     <string name="unfortunately_no_sleep_record_was_available_for_sharing">Unfortunately, no sleep record was available for sharing</string>
     <string name="i_am_sorry_but_cannot_share_zeo_sleep_without_sdcard">I\'m sorry but sharing Zeo sleep information requires an SD card be present in your phone (to share the image with other apps).</string>
     <string name="see_how_i_slept_on">See how I slept on</string>
-    <string name="download_sleep_101_for_free">Download ElectricSleep for free at: <a href="www.myZeo.com/ElectricSleep">www.myZeo.com/ElectricSleep</a></string>
+    <string name="download_sleep_101_for_free">Download Sleep101 for free at: <a href="www.myZeo.com/Sleep101">www.myZeo.com/Sleep101</a></string>
     <string name="screen_will_dim">Screen will dim in 15 seconds. DO NOT leave this screen.</string>
     <string name="legend_light_sleep_trigger">SmartWake Lite Trigger</string>
     <string name="legend_movement">Movement</string>
@@ -45,7 +45,7 @@ during this session.</string>
     <string name="project_lead">Project Lead</string>
     <string name="developers">Developers</string>
     <string name="querying_sleep_database">Querying sleep database...</string>
-    <string name="share_electricsleep">Share ElectricSleep</string>
+    <string name="share_sleep101">Share Sleep101</string>
     <string name="title_sleep_switches">Sleep Switches</string>
     <string name="time_to_fall_asleep">Time to Fall Asleep</string>
     <string name="note">Note</string>
@@ -83,14 +83,14 @@ sensitivity of accelerometer and more.</string>
     <string name="calibrate">Calibrate</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
-    <string name="account_creation">ElectricSleep Account Creation</string>
+    <string name="account_creation">Sleep101 Account Creation</string>
     <string name="skip_tutorial">Skip Tutorial</string>
-    <string name="electricsleep_about">How ElectricSleep Works</string>
-    <string name="electricsleep_description">\tElectricSleep is a new way to sleep. After you
+    <string name="sleep101_about">How Sleep101 Works</string>
+    <string name="sleep101_description">\tSleep101 is a new way to sleep. After you
 place your Android device within a foot or two of you on your
 bed,
 press sleep and
-ElectricSleep
+Sleep101
 will record data from your device\'s
 accelerometer all
 night.\n\n
@@ -106,7 +106,7 @@ wake more easily
 than
 with a traditional alarm.</string>
     <string name="title_review_sleep">Review Sleep</string>
-    <string name="title_welcome">Welcome to ElectricSleep!</string>
+    <string name="title_welcome">Welcome to Sleep101!</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="ok">OK</string>
@@ -145,13 +145,13 @@ feel:</string>
 automatically</string>
     <string name="title_pref_calibration">Calibration Wizard</string>
     <string name="pref_calibration">calibrationWizard</string>
-    <string name="summary_pref_alarms">Manage ElectricSleep\'s built-in alarms - these
+    <string name="summary_pref_alarms">Manage Sleep101\'s built-in alarms - these
 are
 persistent even if SmartWake Lite is disabled.</string>
     <string name="preset">Preset:</string>
-    <string name="summary_pref_use_alarm_off">ElectricSleep will not try to wake you up *before*
+    <string name="summary_pref_use_alarm_off">Sleep101 will not try to wake you up *before*
 the next enabled alarm in sleep mode</string>
-    <string name="summary_pref_use_alarm_on">ElectricSleep is set to try to wake you up
+    <string name="summary_pref_use_alarm_on">Sleep101 is set to try to wake you up
 *before*
 the next
 enabled alarm in sleep mode</string>
@@ -165,9 +165,9 @@ manually configure settings or run the Calibration Wizard.</string>
 Wizard or manually
 configure your Settings now.</string>
     <string name="message_prefs_not_compatible">Your preferences are not compatible with this
-version of ElectricSleep. They have been reset to the latest default
+version of Sleep101. They have been reset to the latest default
 values to prevent errors.</string>
-    <string name="message_not_calibrated">You have not yet calibrated ElectricSleep to work
+    <string name="message_not_calibrated">You have not yet calibrated Sleep101 to work
 on your device.</string>
     <string name="alarm_trigger_sensitivity_set_to">Alarm trigger sensitivity set to: </string>
     <string name="move_once">Move once.</string>
@@ -191,7 +191,7 @@ Also ensure that when you                                    <b>are still</b>
 movement that signifies that you are in light
 sleep and set off alarms if enabled.</string>
     <string name="calibrate_title_alarm">Calibrate Light Sleep Sensitivity</string>
-    <string name="calibrate_description_placement">ElectricSleep uses your device\'s accelerometer to record movement
+    <string name="calibrate_description_placement">Sleep101 uses your device\'s accelerometer to record movement
 during sleep. As such, your device must move slightly when you move
 during the
 night.\n\n<li>
@@ -211,8 +211,8 @@ sleeping.</b>
     <string name="finish">Finish</string>
     <string name="back">Back</string>
     <string name="next">Next</string>
-    <string name="app_name">ElectricSleep</string>
-    <string name="description_logo">ElectricSleep</string>
+    <string name="app_name">Sleep101</string>
+    <string name="description_logo">Sleep101</string>
     <string name="description_home">Home</string>
     <string name="description_search">Search</string>
     <string name="description_map">Map</string>
@@ -224,13 +224,13 @@ sleeping.</b>
     <string name="track_sleep">Track Sleep</string>
     <string name="title_calibrate">Calibration</string>
     <string name="title_settings">Settings</string>
-    <string name="search_label">ElectricSleep</string>
+    <string name="search_label">Sleep101</string>
     <string name="search_hint">Date of Sleep</string>
     <string name="title_group_functions">Functions</string>
     <string name="title_group_statistics">Statistics</string>
     <string name="title_group_configuration">Configuration</string>
-    <string name="notification_sleep_ticker">ElectricSleep is monitoring movements</string>
-    <string name="notification_sleep_title">ElectricSleep is active</string>
+    <string name="notification_sleep_ticker">Sleep101 is monitoring movements</string>
+    <string name="notification_sleep_title">Sleep101 is active</string>
     <string name="notification_sleep_text">Select to interrupt or view progress</string>
     <string name="dialog_wait_for_sleep_data_message">Sleep well! (this area will display a chart
 throughout the night)</string>
@@ -239,10 +239,10 @@ throughout the night)</string>
 trigger alarm
 to go off.</string>
     <string name="exit">Exit</string>
-    <string name="calibrate_description_welcome">This wizard helps you calibrate ElectricSleep to your unique sleeping conditions. The process takes less than a minute and is recommended because:</string>
+    <string name="calibrate_description_welcome">This wizard helps you calibrate Sleep101 to your unique sleeping conditions. The process takes less than a minute and is recommended because:</string>
     <string name="calibrate_description_welcome_b1">There are many different Android devices.</string>
     <string name="calibrate_description_welcome_b2">There are even more places to sleep.</string>
-    <string name="calibrate_description_welcome_b3">ElectricSleep works best when calibrated to your unique situation.</string>
+    <string name="calibrate_description_welcome_b3">Sleep101 works best when calibrated to your unique situation.</string>
     <string name="settings_description">Sleep results</string>
     <string name="no_results">There is no saved sleep.</string>
 
@@ -570,7 +570,7 @@ of lack of room.
     <string name="sleep_dim">Do not turn the screen off.</string>
     <string name="sleep_plugged_in">You are not connected to a charger.</string>
     <string name="alarm_status_range"><xliff:g id="pre">%s</xliff:g> - <xliff:g id="post">%s</xliff:g></string>
-    <string name="sleep_no_alarm">ElectricSleep will not wake you up.</string>
+    <string name="sleep_no_alarm">Sleep101 will not wake you up.</string>
     <string name="dim_press_back_to_exit_">Dim: Press Back to Exit.</string>
     <string name="export">Export</string>
     <string name="export_all">Export All</string>
@@ -584,17 +584,17 @@ of lack of room.
     <string name="developer_email_body">Please indicate the nature of this email (Bug, Request, Help, Other):\n</string>
     <string name="zeo_message_two">Click \"Learn more about Zeo\" for information about how Zeo helps people take control of their sleep, and the Zeo Sleep Manager.</string>
     <string name="notification_screenbug_ticker">Waiting for the device to enter standby.</string>
-    <string name="welcome_to_electricsleep">Welcome to ElectricSleep</string>
-    <string name="development_is_now_supported_by">Development of ElectricSleep is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
-    <string name="rate_in_market">Rate ElectricSleep on the Play Market</string>
+    <string name="welcome_to_sleep101">Welcome to Sleep101</string>
+    <string name="development_is_now_supported_by">Development of Sleep101 is now supported by Zeo. We plan to bring you more features and an even better sleep tracking experience.</string>
+    <string name="rate_in_market">Rate Sleep101 on the Play Market</string>
     <string name="sleep_store">Sleep Store</string>
     <string name="expert_advice">Expert Advice</string>
     <string name="consultation">Consultation</string>
     <string name="share">Share</string>
-    <string name="returning_users_paragraph_one">The same ElectricSleep that you know and love is still here, it was just given a little facelift.</string>
+    <string name="returning_users_paragraph_one">The same Sleep101 that you know and love is still here, it was just given a little facelift.</string>
     <string name="returning_users_paragraph_two">We plan on bringing you more features and a better sleep tracking experience as we continue making improvements to the app.</string>
     <string name="welcome_paragraph_one">Place your Android device within a foot or two of you on your bed and start tracking.</string>
-    <string name="welcome_paragraph_two">ElectricSleep will provide analysis and insight into your sleep patterns. You can also set a SmartWake Lite alarm to help wake you up feeling more refreshed.</string>
+    <string name="welcome_paragraph_two">Sleep101 will provide analysis and insight into your sleep patterns. You can also set a SmartWake Lite alarm to help wake you up feeling more refreshed.</string>
     <string name="welcome_how_track"><b>Track:</b> Press the Track icon and put your Android device about a foot from you on your bed to track your sleep.</string>
     <string name="welcome_how_alarm"><b>Alarm:</b> Set a regular alarm, or try SmartWake Lite for a better morning.</string>
     <string name="welcome_how_history"><b>History:</b> Your sleep movement graph and summary info is saved for you to review.</string>
@@ -606,20 +606,20 @@ of lack of room.
     <string name="some_android_devices_will_prevent_this_app_from_working_while_the_screen_is_off_">Some Android devices will prevent this app from working while the screen is off.</string>
     <string name="to_detect_if_this_occurs_on_your_device_put_your_device_in_standby_mode_usually_by_quickly_pressing_the_power_button_">To detect if this occurs on your device, put your device in standby mode (usually by quickly pressing the power button).</string>
     <string name="wait_up_to_10_seconds_for_your_screen_to_automatically_turn_back_on_then_you_may_need_to_unlock_your_device_to_continue_">Gently move your device for 10 seconds or until your screen turns on and unlock if prompted.</string>
-    <string name="you_have_successfully_calibrated_sleep101_to_track_your_sleep_">You have successfully calibrated ElectricSleep to track your sleep.</string>
+    <string name="you_have_successfully_calibrated_sleep101_to_track_your_sleep_">You have successfully calibrated Sleep101 to track your sleep.</string>
     <string name="you_may_always_re_calibrate_if_your_sleep_environment_changes_by_choosing_calibrate_from_the_menu_">You may always re-calibrate if your sleep environment changes by choosing \'Calibrate\' from the menu.</string>
     <string name="tracking_sleep">Tracking sleep...</string>
     <string name="stop_tracking">Stop Tracking</string>
     <string name="no_alarm">No Alarm</string>
-    <string name="sleep101_will_not_wake_you_up_">ElectricSleep will not wake you up.</string>
+    <string name="sleep101_will_not_wake_you_up_">Sleep101 will not wake you up.</string>
     <string name="warning_dim_sleep_mode_can_only_occur_on_the_sleep_screen_">Warning: dim sleep mode can only occur on the Sleep screen.</string>
     <string name="recording_time">Recording time <b>
             <xliff:g id="time">%s</xliff:g>
         </b></string>
             <string name="sleep_LINEBREAK_score">Sleep\nScore</string>
             <string name="there_s_nothing_here_to_get_started_track_some_sleep_">There\'s nothing here! To get started, track some sleep.</string>
-            <string name="not_using_smartwake_">ElectricSleep is not using SmartWake Lite.</string>
-            <string name="attempt_to_use_smartwake_">ElectricSleep will attempt to use SmartWake Lite.</string>
+            <string name="not_using_smartwake_">Sleep101 is not using SmartWake Lite.</string>
+            <string name="attempt_to_use_smartwake_">Sleep101 will attempt to use SmartWake Lite.</string>
             <string name="get_started">Get Started</string>
 
 </resources>

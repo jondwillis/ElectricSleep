@@ -2,7 +2,7 @@ package com.androsz.electricsleepbeta.db;
 
 import com.androsz.electricsleepbeta.R;
 import com.androsz.electricsleepbeta.util.PointD;
-import static com.androsz.electricsleepbeta.db.ElectricSleepProvider.TimestampColumns;
+import static com.androsz.electricsleepbeta.db.OldProvider.TimestampColumns;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -43,7 +43,7 @@ public class SleepSession implements BaseColumns, SleepSessionKeys,
 	 */
 	public static final String PATH = "sleep_sessions";
 
-	public static final Uri CONTENT_URI = ElectricSleepProvider.BASE_CONTENT_URI
+	public static final Uri CONTENT_URI = OldProvider.BASE_CONTENT_URI
 			.buildUpon().appendPath(PATH).build();
 
 	/**
