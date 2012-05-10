@@ -307,9 +307,8 @@ public class AlarmAlertFullScreen extends AnalyticActivity {
 		protected Boolean[] doInBackground(Void... params) {
 			// both buttons should be unlocked by default
 			Boolean[] unlockButtons = new Boolean[] { true, true };
-			
+
 			FragmentManager manager = getSupportFragmentManager();
-			
 
 			final SharedPreferences userPrefs = AlarmAlertFullScreen.this
 					.getSharedPreferences(SettingsActivity.PREFERENCES,
@@ -318,7 +317,8 @@ public class AlarmAlertFullScreen extends AnalyticActivity {
 			String captchaType = userPrefs.getString("captchaType", "none");
 
 			if (captchaType.equals("none")) {
-				// the user is not using CAPTCHA, both buttons should be unlocked
+				// the user is not using CAPTCHA, both buttons should be
+				// unlocked
 				return unlockButtons;
 			}
 
@@ -337,18 +337,17 @@ public class AlarmAlertFullScreen extends AnalyticActivity {
 
 			// Set the default navigation mode as the history month fragment
 			Fragment captchaFragment = null;
-			
+
 			if (captchaType.equals("math")) {
 				captchaFragment = new MathCaptchaFragment();
-			}else if(captchaType.equals("gibberish")){
-				
-			}else if(captchaType.equals("game")){
-				
-			}else if(captchaType.equals("game")){
-				
+			} else if (captchaType.equals("gibberish")) {
+
+			} else if (captchaType.equals("game")) {
+
+			} else if (captchaType.equals("game")) {
+
 			}
-			manager.beginTransaction()
-					.add(android.R.id.content, captchaFragment).commit();
+			manager.beginTransaction().replace(android.R.id.content, captchaFragment).commit();
 
 			return unlockButtons;
 		}
