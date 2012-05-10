@@ -186,8 +186,12 @@ public class CheckForScreenBugAccelerometerService extends Service implements
                         | PowerManager.ON_AFTER_RELEASE, 5000);
 
         // try to disable lockscreen
+        try{
         ((KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE))
                 .newKeyguardLock("ES").disableKeyguard();
+        }catch(java.lang.SecurityException se){
+        	//Kindle Fire? just ignore. The user will have to unlock the device themselves.
+        }
 
         stopSelf();
     }
